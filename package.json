@@ -1,13 +1,14 @@
 {
   "name": "JournalApp",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "An app for journal entries.",
+  "main": "js/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Zachary Ishmael",
   "license": "ISC",
   "devDependencies": {
     "electron": "^10.1.3"

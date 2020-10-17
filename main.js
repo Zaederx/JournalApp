@@ -1,15 +1,17 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain, path } = require('electron')
 
 function createWindow () {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+        worldSafeExecuteJavaScript: true ,
+        contextIsolation: true,//otherwise WorldSafe.. message still appears
+        preload: path.join(__dirname, "preload.js")
     }
   })
 
-  win.loadFile('index.html')
+  win.loadFile('html/index.html')
   win.webContents.openDevTools()
 }
 
@@ -25,4 +27,11 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
+})
+
+// TODO: set up ipcMain
+ipcMain.on('new_content', function(e,content) {
+    console.log('ipcmina: New Content -' + content)
+
+    win.loadFile(content)
 })
