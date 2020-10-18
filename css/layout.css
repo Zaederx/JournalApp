@@ -1,0 +1,39 @@
+.navigation {
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 0;
+  width: 16%;
+  background-color: white;
+  position: relative;
+  height: 100%;
+  overflow: auto;
+  cursor: pointer;
+}
+
+.links div {
+  position: relative;
+  display: block;
+  color: #135e7c;
+  padding: 16px;
+  text-decoration: none;
+}
+
+.links div.active {
+  background-color: #fff56b;
+  color: #3c9e85;
+}
+
+.links div:hover:not(.active) {
+  background-color: #c9c3c3;
+  color: white;
+}
+
+.entry-view {
+  position: relative;
+  margin-left: 40%;
+  padding: 1px 16px;
+  height: 100%;
+}
+
+/*# sourceMappingURL=layout.css.map */

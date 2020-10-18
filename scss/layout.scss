@@ -1,0 +1,55 @@
+$brilliant-blue: #135e7c;
+$minty-green:#3c9e85;
+$lemony-yellow: #fff56b;
+$nav-width: 16%;
+$light-grey: #c9c3c3;
+
+// @font-face {
+//     font-family: OpenSans;
+//     src: url("../external/Open_Sans/OpenSans-Regular.ttf") format("ttf");
+// }
+// Navigation pane
+.navigation {
+    display: block;
+    float: left;
+    margin:0;
+    padding: 0;
+    width: $nav-width;
+    background-color: white;
+    position: relative;
+    height: 100%;
+    overflow: auto;
+    cursor: pointer;
+}
+
+//Links
+.links div {
+
+    position:relative;
+    display: block;
+    color: $brilliant-blue;
+    padding: 16px;
+    text-decoration: none;
+}
+
+// Active Link
+.links div.active {
+    background-color: $lemony-yellow;
+    color: $minty-green;
+}
+
+// Links on hover (except active)
+.links div:hover:not(.active) {
+    background-color: $light-grey;
+    color: white;
+}
+
+//Content of link div
+.entry-view{
+ 
+    position: relative;
+    margin-left: 40%;
+    padding: 1px 16px;
+    height: 100%;
+}
+
