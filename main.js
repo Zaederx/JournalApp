@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain, path } = require('electron')
 
 function createWindow () {
-  const win = new BrowserWindow({
+  const window = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -11,8 +11,8 @@ function createWindow () {
     }
   })
 
-  win.loadFile('html/index.html')
-  win.webContents.openDevTools()
+  window.loadFile('html/index.html')
+  window.webContents.openDevTools()
 }
 
 app.whenReady().then(createWindow)
@@ -33,5 +33,5 @@ app.on('activate', () => {
 ipcMain.on('new_content', function(e,content) {
     console.log('ipcmina: New Content -' + content)
 
-    win.loadFile(content)
+    window.loadFile(content)
 })
