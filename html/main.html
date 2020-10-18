@@ -2,10 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="../css/layout.css">
+    <title>Journal App</title>
 </head>
 <body>
     
+    <!-- Displays all Topics and Tags -->
+    <div id="topic-view" class="navigation">
+        <div id="topic-header" class="header">
+            <h3>Topics</h3>
+        </div>
+        <div id="topics" class="links">
+            <!-- DUMMY DATA -->
+            <div class="active">Topic 1</div>
+            <div>Topic 2</div>
+            <div>Topic 3</div>
+            <div>Topic 4</div>
+        </div>
+    </div>
+
+    <!-- Displays Files of the Selected Tag or Topic -->
+    <div id="file-view" class="navigation">
+        <div id="file-header" class="header">
+            <h3>File</h3>
+        </div>
+        <div id="files" class="links">
+            <!-- DUMMY DATA -->
+            <div class="active">Entry 1</div>
+            <div>Entry 2</div>
+            <div>Entry 3</div>
+            <div>Entry 4</div>
+        </div>
+    </div>
+
+    <!-- Displays the selected File Entry -->
+    <div id="entry-view" class="entry-view">
+        <div id="entry-header" class="header">
+            <h3>Journal Entry</h3>
+        </div>
+        <div id="entry">
+            <h4>Entry Title</h4>
+            <div>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias assumenda saepe repellendus quos velit provident ullam ipsa commodi eius quae? At, vitae illo sint quaerat culpa dolorem fugiat quibusdam impedit?</p>
+            </div>
+            <div class=tags>tag1, tag2, tag3, tag4</div>
+        </div>
+    </div>
+
+    <!-- Footer of entre application -->
+    <div id="footer">
+
+    </div>
 </body>
 </html>
