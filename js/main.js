@@ -29,9 +29,41 @@ app.on('activate', () => {
   }
 })
 
+/* IPC FUNCTIONS */
 // TODO: set up ipcMain
 ipcMain.on('new_content', function(e,content) {
     console.log('ipcmain: New Content -' + content)
 
     window.loadFile(content)
+})
+
+// TODO: set up ipcMain
+ipcMain.on('create_Entry', function(e,content) {
+  console.log('ipcmain: Creating new Entry -' + content)
+
+  
+})
+
+
+// TODO: set up ipcMain
+ipcMain.on('read_Entry', function(e,content) {
+  console.log('ipcmain: Reading new Entry -' + content)
+
+  
+})
+// TODO: set up ipcMain
+ipcMain.on('update_Entry', function(e,content) {
+  console.log('ipcmain: Updating Entry -' + content)
+
+  
+})
+// TODO: set up ipcMain
+ipcMain.on('delete_Entry', function(e,content) {
+  console.log('ipcmain: Deleting Entry -' + content)
+
+  
+})
+
+ipcMain.on('console', function (e,content) {
+  console.log('ipcMain: loging message to console:'+ content)
 })
