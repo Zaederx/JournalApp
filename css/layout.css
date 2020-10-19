@@ -1,3 +1,7 @@
+@font-face {
+  font-family: OpenSans;
+  src: url("../external/Open_Sans/OpenSans-Regular.ttf") format("ttf");
+}
 .navigation {
   display: block;
   float: left;

@@ -4,10 +4,10 @@ $lemony-yellow: #fff56b;
 $nav-width: 16%;
 $light-grey: #c9c3c3;
 
-// @font-face {
-//     font-family: OpenSans;
-//     src: url("../external/Open_Sans/OpenSans-Regular.ttf") format("ttf");
-// }
+@font-face {
+    font-family: OpenSans;
+    src: url("../external/Open_Sans/OpenSans-Regular.ttf") format("ttf");
+}
 // Navigation pane
 .navigation {
     display: block;
