@@ -8,6 +8,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/layout.css">
+    <script src="../js/app.js" defer></script>
+    <script src="../js/entry.js" defer></script>
     <title>Journal App</title>
 </head>
 <body>
@@ -52,6 +54,24 @@
             </div>
             <div class=tags>tag1, tag2, tag3, tag4</div>
         </div>
+    </div>
+
+    <div id="new-entry-view" class="entry-view">
+        <div id="new-entry-header" class="header">
+            <h3>New Jorunal Entry</h3>
+        </div>
+        <div id="new-entry">
+            <form>
+                <label for="new-entry-title">Title</label>
+                <input id="new-entry-title" name="title" type="text" class="title"><br>
+                <label for="new-entry-body">Entry</label>
+                <input id="new-entry-body" name="body" type="text" class="title"><br>
+                <label for="new-entry-tags">Topics</label>
+                <input id="new-entry-tags" name="tags" type="text" class="title"><br>
+                <button id="btn-submit">Save</button>
+            </form>
+        </div>
+
     </div>
 
     <!-- Footer of entre application -->
