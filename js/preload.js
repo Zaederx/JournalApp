@@ -18,6 +18,12 @@ contextBridge.exposeInMainWorld('CRUD',
             ipcRenderer.send('create_Entry', entry)
         }
     },
+    createresponse:  (channel, func) => {
+    if (channel == 'response-c') {
+        ipcRenderer.on('response-c',  (event, entry) =>  func(entry));
+        //which in this case is the same as win.webContents.send
+        }
+    },
     readEntry: (channel, entry) => {
         if (channel == 'read_Entry') {
             ipcRenderer.send('read_Entry', entry)
