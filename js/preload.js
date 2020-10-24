@@ -2,6 +2,9 @@ const {contextBridge, ipcRenderer} = require('electron');
 
 // For more on context isolation - https://www.electronjs.org/docs/tutorial/context-isolation
 // "The correct way to expose IPC-based APIs would instead be to provide one method per IPC message." - Electon.org
+
+
+/* View Controller API*/
 contextBridge.exposeInMainWorld('viewAPI', 
 {
     changeWindowContent: (channel, windowContent) => {
@@ -11,6 +14,8 @@ contextBridge.exposeInMainWorld('viewAPI',
     }
 });
 
+
+/* C.R.U.D. API */
 contextBridge.exposeInMainWorld('CRUD', 
 {
     // CREATE
@@ -33,11 +38,15 @@ contextBridge.exposeInMainWorld('CRUD',
             ipcRenderer.send('read_Entry', entry)
         }
     },
+
+    //UPDATE
     updateEntry: (channel, entry) => {
         if (channel == 'update_Entry') {
             ipcRenderer.send('update_Entry', entry)
         }
     },
+
+    //DELETE
     deleteEntry: (channel, entry) => {
         if (channel == 'delete_Entry') {
             ipcRenderer.send('delete_Entry', entry)
@@ -45,6 +54,9 @@ contextBridge.exposeInMainWorld('CRUD',
     }
 });
 
+
+
+/* Logging API */
 contextBridge.exposeInMainWorld('logAPI', 
 {
     message: (channel, message) => {
