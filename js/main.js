@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const fs = require('fs');
 const path = require('path');
-const helper = require('./helpers/create-entry.js');
+const helper = require('./helpers/create-entry');
 function createWindow () {
   const window = new BrowserWindow({
     width: 800,
@@ -43,7 +43,7 @@ ipcMain.on('new_content', function(e,content) {
 ipcMain.on('create_Entry', function(event,content) {
   console.log('ipcmain: Creating new Entry -' + content);
   //assuming only one entry per day
-  fileName = 'E'+ helper.dateStr+ ".json";
+  fileName = 'E'+ helper.dateStr() + ".json";
 
   fs.writeFile(fileName, content, (err) => {
     message = '';

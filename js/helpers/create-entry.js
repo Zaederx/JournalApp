@@ -1,4 +1,4 @@
-export function dateStr() {
+exports.dateStr = () => {
     var date = new Date();
     day = date.getDate();
     month = date.getMonth();
