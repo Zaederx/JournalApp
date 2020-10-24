@@ -13,28 +13,32 @@ contextBridge.exposeInMainWorld('viewAPI',
 
 contextBridge.exposeInMainWorld('CRUD', 
 {
+    // CREATE
     createEntry: (channel, entry) => {
         if (channel == 'create_Entry') {
             ipcRenderer.send('create_Entry', entry)
         }
     },
-    createresponse:  (channel, func) => {
+    createResponse:  (channel, func) => {
     if (channel == 'response-c') {
         ipcRenderer.on('response-c',  (event, entry) =>  func(entry));
         //which in this case is the same as win.webContents.send
         }
     },
+
+
+    // READ
     readEntry: (channel, entry) => {
         if (channel == 'read_Entry') {
             ipcRenderer.send('read_Entry', entry)
         }
     },
-    changeWindowContent: (channel, entry) => {
+    updateEntry: (channel, entry) => {
         if (channel == 'update_Entry') {
             ipcRenderer.send('update_Entry', entry)
         }
     },
-    changeWindowContent: (channel, entry) => {
+    deleteEntry: (channel, entry) => {
         if (channel == 'delete_Entry') {
             ipcRenderer.send('delete_Entry', entry)
         }
