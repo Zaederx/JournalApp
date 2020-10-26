@@ -14,7 +14,7 @@ function createWindow () {
   })
 
   window.loadFile('html/main.html')
-  window.webContents.openDevTools()
+  // window.webContents.openDevTools()
 }
 
 app.whenReady().then(createWindow)
@@ -48,11 +48,11 @@ ipcMain.on('create_Entry', function(event,content) {
   fs.writeFile(fileName, content, (err) => {
     message = '';
     if (err) {
-      message = "An error occured in saving the new entry.";
+      message = 'An error occured in saving the new entry.';
       console.log(message);
     }
     else {
-      message = "Entry saved succesffuly"
+      message = 'Entry saved succesfully';
       console.log(message);
       event.reply('response-c', message);
     }
@@ -60,6 +60,51 @@ ipcMain.on('create_Entry', function(event,content) {
   
 })
 
+// READ DIRECTORY
+ipcMain.on('read_Directories', function(event,content) {
+  console.log('ipcmain: Reading new Entry - ' + content);
+  var directory;
+  try {
+    directory = fs.readdirSync('entries/');
+
+  } catch (err) {
+    console.log('Entry folder could not be read.')
+  }
+
+  dirHTML = '';
+  try {
+    directory.forEach( subdirectory => {
+      dirHTML += '<div>'+subdirectory+'</div>\n';
+      event.reply('response-rD', dirHTML);
+    })
+  } catch (err) {
+    console.log('Problem presenting entries.');
+  }
+  
+})
+
+// READ DIRECTORY FILES
+ipcMain.on('read_DirectoryFiles', function(event,content) {
+  console.log('ipcmain: Reading new Entry - ' + content);
+  var directory;
+  try {
+    directory = fs.readdirSync('entries/'+content);
+
+  } catch (err) {
+    console.log('Entry folder could not be read.')
+  }
+
+  dirHTML = '';
+  try {
+    directory.forEach( file => {
+      dirHTML += '<div>'+file+'</div>\n';
+      event.reply('response-rD', dirHTML);
+    })
+  } catch (err) {
+    console.log('Problem presenting entries.');
+  }
+  
+})
 
 // TODO: set up ipcMain
 ipcMain.on('read_Entry', function(e,content) {
