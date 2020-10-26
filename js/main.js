@@ -42,10 +42,11 @@ ipcMain.on('new_content', function(e,content) {
 // TODO: set up ipcMain
 ipcMain.on('create_Entry', function(event,content) {
   console.log('ipcmain: Creating new Entry -' + content);
+  directory = "tagDirs/all/";
   //assuming only one entry per day
   fileName = 'E'+ helper.dateStr() + ".json";
 
-  fs.writeFile(fileName, content, (err) => {
+  fs.writeFile(directory+fileName, content, (err) => {
     message = '';
     if (err) {
       message = 'An error occured in saving the new entry.';
