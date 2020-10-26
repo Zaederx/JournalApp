@@ -1,29 +1,22 @@
 const btn_submit = document.querySelector('#btn-submit');
 const m = document.querySelector('#message-div');
 const form = document.querySelector('#entry-form');
-$(document).ready(function() {
-    window.CRUD.readDirectories('read_Directories', 'all');//reads tag directories
-
-    window.CRUD.readDResponse('readDResponse', function(dirHTML) {
-        document.querySelector('#topics').innerHTML = dirHTML;
-    })
-});
 
 btn_submit.onclick = function (event) {
-    window.logAPI.message('console', 'test');
+    window.logAPI.message('test');
     title = document.querySelector('#new-entry-title').value;
     body = document.querySelector('#new-entry-body').value;
     tags = document.querySelector('#new-entry-tags').value;
     message = 'title:' + title + ' body:' + body + ' tags:' + tags;
-    window.logAPI.message('console', message);
+    window.logAPI.message(message);
     entry = new Entry(title, body, tags);
     entryJSON = JSON.stringify(entry);
-    window.logAPI.message('console', entryJSON);
-    window.logAPI.message('console', 'test');
+    window.logAPI.message(entryJSON);
+    window.logAPI.message('test');
 
 
     //need to call method that creates entry file in file system
-    window.CRUD.createEntry('create_Entry', entryJSON);
+    window.CRUD.createEntry(entryJSON);
     event.preventDefault();//to disable postback - otherwise causes problems with updating content
 
     //call a method that symlinks the file to all tags folders
@@ -32,7 +25,7 @@ btn_submit.onclick = function (event) {
     
 }
 
-window.CRUD.createResponse('response-c', (message) => {
+window.CRUD.createResponse((message) => {
     m.innerHTML = message;
 });
 

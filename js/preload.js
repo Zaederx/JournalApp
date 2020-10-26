@@ -7,10 +7,8 @@ const {contextBridge, ipcRenderer} = require('electron');
 /* View Controller API */
 contextBridge.exposeInMainWorld('viewAPI', 
 {
-    changeWindowContent: (channel, windowContent) => {
-        if (channel == 'new_content') {
+    changeWindowContent: (windowContent) => {
             ipcRenderer.send('new_content', windowContent)
-        }
     }
 });
 
@@ -19,24 +17,19 @@ contextBridge.exposeInMainWorld('viewAPI',
 contextBridge.exposeInMainWorld('CRUD', 
 {
     // CREATE
-    createEntry: (channel, entry) => {
-        if (channel == 'create_Entry') {
-            ipcRenderer.send('create_Entry', entry)
-        }
+    createEntry: (entry) => {
+        ipcRenderer.send('create_Entry', entry)
     },
 
-    createResponse:  (channel, func) => {
-    // if (channel == 'response-c') {
-        ipcRenderer.on('response-c',  (event, message) => {
-          func(message);  
-        });
-        //which in this case is the same as win.webContents.send
-        // }
+    createResponse:  (func) => {
+            ipcRenderer.on('response-c',  (event, message) => {
+            func(message);  
+            });
     },
 
     //READ - Directory
     //dir = one of the topics
-    readDirectories: (channel, dir) => {
+    readDirectories: (dir) => {
         //TODO: if director is within /entries/*
         //to make sure they don't explore whole file system through the app
         // dirs.forEach(d => {
@@ -45,36 +38,28 @@ contextBridge.exposeInMainWorld('CRUD',
         //     }
         // });
 
-        if (channel == 'read_Directories') {
             ipcRenderer.send('read_Directories', dir);
-        }
 
     },
 
-    readDResponse: (channel, func) => {
+    readDResponse: (func) => {
         ipcRenderer.on('response-rD', (event,dirHTML) => func(dirHTML));
     }
     ,
 
     //READ - Entry
-    readEntry: (channel, entry) => {
-        if (channel == 'read_Entry') {
+    readEntry: (entry) => {
             ipcRenderer.send('read_Entry', entry)
-        }
     },
 
     //UPDATE - Entry
-    updateEntry: (channel, entry) => {
-        if (channel == 'update_Entry') {
+    updateEntry: (entry) => {
             ipcRenderer.send('update_Entry', entry)
-        }
     },
 
     //DELETE
     deleteEntry: (channel, entry) => {
-        if (channel == 'delete_Entry') {
             ipcRenderer.send('delete_Entry', entry)
-        }
     }
 });
 
@@ -83,9 +68,7 @@ contextBridge.exposeInMainWorld('CRUD',
 /* Logging API */
 contextBridge.exposeInMainWorld('logAPI', 
 {
-    message: (channel, message) => {
-        if (channel == 'console') {
-            ipcRenderer.send('console', message)
-        }
+    message: (message) => {
+            ipcRenderer.send('console', message);
     }
 });

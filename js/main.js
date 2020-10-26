@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const fs = require('fs');
 const path = require('path');
-const helper = require('./helpers/create-entry');
+const helper = require('./helpers/dateStr');
 function createWindow () {
   const window = new BrowserWindow({
     width: 800,
@@ -65,7 +65,7 @@ ipcMain.on('read_Directories', function(event,content) {
   console.log('ipcmain: Reading new Entry - ' + content);
   var directory;
   try {
-    directory = fs.readdirSync('entries/');
+    directory = fs.readdirSync('tagDirs/');
 
   } catch (err) {
     console.log('Entry folder could not be read.')
@@ -88,7 +88,7 @@ ipcMain.on('read_DirectoryFiles', function(event,content) {
   console.log('ipcmain: Reading new Entry - ' + content);
   var directory;
   try {
-    directory = fs.readdirSync('entries/'+content);
+    directory = fs.readdirSync('tagDirs/'+content);
 
   } catch (err) {
     console.log('Entry folder could not be read.')
