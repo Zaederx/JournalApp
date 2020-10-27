@@ -13,10 +13,10 @@ contextBridge.exposeInMainWorld('viewAPI',
 });
 
 
-/* C.R.U.D. API */
+/********* C.R.U.D. API *********/
 contextBridge.exposeInMainWorld('CRUD', 
 {
-    // CREATE
+    /** CREATE entries*/
     createEntry: (entry) => {
         ipcRenderer.send('create_Entry', entry)
     },
@@ -27,37 +27,35 @@ contextBridge.exposeInMainWorld('CRUD',
             });
     },
 
-    //READ - Directory
-    //dir = one of the topics
-    readDirectories: (dir) => {
-        //TODO: if director is within /entries/*
-        //to make sure they don't explore whole file system through the app
-        // dirs.forEach(d => {
-        //     if (dir == d) {
-                //matches entries 
-        //     }
-        // });
-
-            ipcRenderer.send('read_Directories', dir);
-
+    /**Reading all tag directories
+     * note: each dir = one of the topics
+     */
+    readDirectories: () => {
+        ipcRenderer.send('read_Directories');
     },
-
     readDResponse: (func) => {
         ipcRenderer.on('response-rD', (event,dirHTML) => func(dirHTML));
-    }
-    ,
+    },
 
-    //READ - Entry
+    /* Reading Directory's Files */
+    readDirectoryFiles: (dir) => {
+        ipcRenderer.send('readDirectoryFiles', dir);
+    },
+    readDFResponse: (func) => {
+        ipcRenderer.on('response-rDF', (event, filesHTML) => func(filesHTML));
+    },
+
+    /** READ entries */
     readEntry: (entry) => {
             ipcRenderer.send('read_Entry', entry)
     },
 
-    //UPDATE - Entry
+    /** Update entries */
     updateEntry: (entry) => {
             ipcRenderer.send('update_Entry', entry)
     },
 
-    //DELETE
+    /** Delete entries */
     deleteEntry: (channel, entry) => {
             ipcRenderer.send('delete_Entry', entry)
     }
