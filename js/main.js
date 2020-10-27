@@ -44,7 +44,7 @@ ipcMain.on('create_Entry', function(event,content) {
   console.log('ipcmain: Creating new Entry -' + content);
   directory = "tagDirs/all/";
   //assuming only one entry per day
-  fileName = 'E'+ helper.dateStr() + ".json";
+  fileName = 'E-'+ helper.dateStr() + ".json";
 
   fs.writeFile(directory+fileName, content, (err) => {
     message = '';
@@ -118,6 +118,23 @@ ipcMain.on('readDirectoryFiles', function(event,dir) {
 
     });
 });
+
+
+// Read single file
+ipcMain.on('readFile', (event,filename) => {
+  console.log('reading file')
+  var dir = 'tagDirs/all/';
+  fs.readdir(dir+filename, (error, file) => {
+    if (error) {
+      event.reply('Entry '+file+' could not be read.');
+      console.log('Entry could not be read.');
+    } else {
+      event.reply('response-rF', file);
+      console.log('File read successfully.');
+    }
+  })
+})
+
 
 // TODO: set up ipcMain
 ipcMain.on('read_Entry', function(e,content) {
