@@ -13,31 +13,31 @@ function createWindow () {
     }
   })
 
-  window.loadFile('html/main.html')
-  // window.webContents.openDevTools()
+  window.loadFile('html/main.html');
+  window.webContents.openDevTools()
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
-})
+});
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
+    createWindow();
   }
-})
+});
 
 /* IPC FUNCTIONS */
 // TODO: set up ipcMain
 ipcMain.on('new_content', function(e,content) {
-    console.log('ipcmain: New Content -' + content)
+    console.log('ipcmain: New Content -' + content);
 
     window.loadFile(content)
-})
+});
 
 // TODO: set up ipcMain
 ipcMain.on('create_Entry', function(event,content) {
@@ -57,75 +57,87 @@ ipcMain.on('create_Entry', function(event,content) {
       console.log(message);
       event.reply('response-c', message);
     }
-  }) 
+  }); 
   
-})
+});
 
-// READ DIRECTORY
-ipcMain.on('read_Directories', function(event,content) {
-  console.log('ipcmain: Reading new Entry - ' + content);
+// READ DIRECTORIES - lists all tag directories
+ipcMain.on('read_Directories', function(event) {
   var directory;
   try {
+    //using readdirSync - blocks IO until the read is done - will try sending event reply only once directories are loaded
     directory = fs.readdirSync('tagDirs/');
 
   } catch (err) {
-    console.log('Entry folder could not be read.')
+    console.log('Entry folder could not be read');
   }
 
   dirHTML = '';
+  var counter = 0;
   try {
     directory.forEach( subdirectory => {
-      dirHTML += '<div>'+subdirectory+'</div>\n';
-      event.reply('response-rD', dirHTML);
-    })
+      if (counter == 0) {
+        dirHTML += '<div class="active">'+subdirectory+'</div>\n';
+      }
+      else {
+        dirHTML += '<div>'+subdirectory+'</div>\n';
+      }
+    });
+    event.reply('response-rD', dirHTML);
   } catch (err) {
-    console.log('Problem presenting entries.');
+    console.log('Problem reading directories.');
   }
   
 })
 
-// READ DIRECTORY FILES
-ipcMain.on('read_DirectoryFiles', function(event,content) {
-  console.log('ipcmain: Reading new Entry - ' + content);
+// READ DIRECTORY FILES - files inside a directory
+ipcMain.on('readDirectoryFiles', function(event,dir) {
+  console.log('ipcMain: Reading new Entry - ' + dir);
   var directory;
-  try {
-    directory = fs.readdirSync('tagDirs/'+content);
+  var filesHTML = '';
+    fs.readdir('tagDirs/'+ dir+'/', (error, files)=> {
 
-  } catch (err) {
-    console.log('Entry folder could not be read.')
-  }
+      if (error) {
+        event.reply('Entry folder '+dir+' could not be read.');
+        console.log('Entry folder could not be read.');
+        return console.error(error);
+      }
+      else {
+        var count = 0;
+        files.forEach( file => {
+          if (count == 0) {
+            filesHTML += '<div class="active">'+file+'</div>\n';
+            count++;
+          } else {
+            filesHTML += '<div>'+file+'</div>\n';
+          }
+        });
+        event.reply('response-rDF', filesHTML);
+        
+      }
 
-  dirHTML = '';
-  try {
-    directory.forEach( file => {
-      dirHTML += '<div>'+file+'</div>\n';
-      event.reply('response-rD', dirHTML);
-    })
-  } catch (err) {
-    console.log('Problem presenting entries.');
-  }
-  
-})
+    });
+});
 
 // TODO: set up ipcMain
 ipcMain.on('read_Entry', function(e,content) {
-  console.log('ipcmain: Reading new Entry -' + content)
+  console.log('ipcmain: Reading new Entry -' + content);
 
-  
+  console.log('Problem presenting entries.');
 })
 // TODO: set up ipcMain
 ipcMain.on('update_Entry', function(e,content) {
-  console.log('ipcmain: Updating Entry -' + content)
+  console.log('ipcmain: Updating Entry -' + content);
 
   
 })
 // TODO: set up ipcMain
 ipcMain.on('delete_Entry', function(e,content) {
-  console.log('ipcmain: Deleting Entry -' + content)
+  console.log('ipcmain: Deleting Entry -' + content);
 
   
 })
 
 ipcMain.on('console', function (e,content) {
-  console.log('ipcMain: loging message to console:'+ content)
+  console.log('ipcMain: loging message to console:'+ content);
 })
