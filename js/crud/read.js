@@ -22,12 +22,18 @@ function getFiles() {
     $('#files').find('div').each(function() {
         var filename = this.innerHTML;
        
-        this.onclick = () => window.CRUD.readFile(filename);
-        
+        this.onclick = () => {
+            window.CRUD.readFile(filename)
+            var current = document.querySelector('.active.entry');
+            current.className = current.className.replace('active entry', '');
+            this.className += 'active entry';
+
+        };
     });
 });
 
 }
+
 
 // note to self $('#id') =! documetn.querySelector('#id')
 // the second returns the element, the first does not.

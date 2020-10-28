@@ -106,7 +106,7 @@ ipcMain.on('readDirectoryFiles', function(event,dir) {
         var count = 0;
         files.forEach( file => {
           if (count == 0) {
-            filesHTML += '<div class="active">'+file+'</div>\n';
+            filesHTML += '<div class="active entry">'+file+'</div>\n';
             count++;
           } else {
             filesHTML += '<div>'+file+'</div>\n';
