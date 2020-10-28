@@ -18,7 +18,9 @@ function getFiles() {
     document.querySelector('#files').innerHTML = filesHTML;
     $('#files').find('div').each(function() {
         var filename = this.innerHTML;
-        this.onclick = function () {window.CRUD.readFile(filename)};
+       
+        this.onclick = () => window.CRUD.readFile(filename);
+        
     });
 });
 
