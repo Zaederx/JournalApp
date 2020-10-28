@@ -122,7 +122,7 @@ ipcMain.on('readDirectoryFiles', function(event,dir) {
 
 // Read single file
 ipcMain.on('readFile', (event,filename) => {
-  console.log('reading file')
+  console.log('ipcMain: Reading file - '+filename);
   var dir = 'tagDirs/all/';
   fs.readdir(dir+filename, (error, file) => {
     if (error) {

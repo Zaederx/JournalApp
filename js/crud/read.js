@@ -15,17 +15,16 @@ function getTopics() {
 function getFiles() {
     window.CRUD.readDirectoryFiles('all');
     window.CRUD.readDFResponse(function(filesHTML) {
-        document.querySelector('#files').innerHTML = filesHTML;
-        $('#files').find('div').each(function() {
-
-            var filename = $(this).text();
-            $(this).attr(
-                {'onclick':'window.CRUD.readFile('+filename+')',
-            'name': filename});
-        });
+    document.querySelector('#files').innerHTML = filesHTML;
+    $('#files').find('div').each(function() {
+        var filename = this.innerHTML;
+        this.onclick = function () {window.CRUD.readFile(filename)};
     });
-    
+});
+
 }
+
+
 
 // an object with an event/trigger for reading from a file to begin
 
