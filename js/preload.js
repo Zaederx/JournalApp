@@ -51,7 +51,7 @@ contextBridge.exposeInMainWorld('CRUD',
         ipcRenderer.send('readFile',filename);
     },
     readFileResponse: (func) => {
-        ipcRenderer.on('response-rF', (event, message) => func(message));
+        ipcRenderer.on('response-rF', (event, fileContent) => func(fileContent));
     },
 
     /** READ entries */
