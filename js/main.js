@@ -45,7 +45,7 @@ ipcMain.on('new_content', function(e,content) {
 });
 
 // TODO: set up ipcMain
-ipcMain.on('create_Entry', (event,dir) => eCreate.Create(event,dir));
+ipcMain.on('create_Entry', (event,dir) => eCreate.create(event,dir));
 
 // READ DIRECTORIES - lists all tag directories
 ipcMain.on('read_Directories', (event) => eRead.readAllDirectories(event))
