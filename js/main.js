@@ -124,7 +124,7 @@ ipcMain.on('readDirectoryFiles', function(event,dir) {
 ipcMain.on('readFile', (event,filename) => {
   console.log('ipcMain: Reading file - '+filename);
   var dir = 'tagDirs/all/';
-  fs.readdir(dir+filename, (error, file) => {
+  fs.readFile(dir+filename, 'utf-8',(error, file) => {
     if (error) {
       event.reply('Entry '+file+' could not be read.');
       console.log('Entry could not be read.');
@@ -138,19 +138,19 @@ ipcMain.on('readFile', (event,filename) => {
 
 // TODO: set up ipcMain
 ipcMain.on('read_Entry', function(e,content) {
-  console.log('ipcmain: Reading new Entry -' + content);
+  console.log('ipcMain: Reading new Entry -' + content);
 
-  console.log('Problem presenting entries.');
+  console.log('ipcMain: Problem presenting entries.');
 })
 // TODO: set up ipcMain
 ipcMain.on('update_Entry', function(e,content) {
-  console.log('ipcmain: Updating Entry -' + content);
+  console.log('ipcMain: Updating Entry -' + content);
 
   
 })
 // TODO: set up ipcMain
 ipcMain.on('delete_Entry', function(e,content) {
-  console.log('ipcmain: Deleting Entry -' + content);
+  console.log('ipcMain: Deleting Entry -' + content);
 
   
 })
