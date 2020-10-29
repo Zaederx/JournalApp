@@ -45,33 +45,28 @@ ipcMain.on('new_content', function(e,content) {
 });
 
 // TODO: set up ipcMain
-ipcMain.on('create_Entry', (event,dir) => eCreate.create(event,dir));
+ipcMain.on('e-create', (event,dir) => eCreate.create(event,dir));
 
 // READ DIRECTORIES - lists all tag directories
-ipcMain.on('read_Directories', (event) => eRead.readAllDirectories(event))
+ipcMain.on('d-read', (event) => eRead.readAllDirectories(event))
 
 // READ DIRECTORY FILES - files inside a specific directory
-ipcMain.on('readDirectoryFiles', (event, dir) => eRead.readDirFiles(event, dir));
+ipcMain.on('de-read', (event, dir) => eRead.readDirFiles(event, dir));
 
 
 // Read single file
-ipcMain.on('readFile', (event,filename) => eRead.readSingleFile(event, filename))
+ipcMain.on('e-read', (event,filename) => eRead.readSingleFile(event, filename))
+
 
 
 // TODO: set up ipcMain
-ipcMain.on('read_Entry', function(e,content) {
-  console.log('ipcMain: Reading new Entry -' + content);
-
-  console.log('ipcMain: Problem presenting entries.');
-})
-// TODO: set up ipcMain
-ipcMain.on('update_Entry', function(e,content) {
+ipcMain.on('e-update', function(e,content) {
   console.log('ipcMain: Updating Entry -' + content);
 
   
 })
 // TODO: set up ipcMain
-ipcMain.on('delete_Entry', function(e,content) {
+ipcMain.on('e-delete', function(e,content) {
   console.log('ipcMain: Deleting Entry -' + content);
 
   

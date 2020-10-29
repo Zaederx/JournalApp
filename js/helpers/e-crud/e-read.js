@@ -27,7 +27,7 @@ try {
         dirHTML += '<div>'+subdirectory+'</div>\n';
     }
     });
-    event.reply('response-rD', dirHTML);
+    event.reply('response-d-read', dirHTML);
 } catch (err) {
     console.log('Problem reading directories.');
 }
@@ -55,7 +55,7 @@ function readDirFiles(event,dir) {
               filesHTML += '<div>'+file+'</div>\n';
             }
           });
-          event.reply('response-rDF', filesHTML);
+          event.reply('response-de-read', filesHTML);
           
         }
   
@@ -70,7 +70,7 @@ fs.readFile(dir+filename, 'utf-8',(error, file) => {
     event.reply('Entry '+file+' could not be read.');
     console.log('Entry could not be read.');
     } else {
-    event.reply('response-rF', file);
+    event.reply('response-e-read', file);
     console.log('File read successfully.');
     }
 })

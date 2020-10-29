@@ -16,58 +16,64 @@ contextBridge.exposeInMainWorld('viewAPI',
 /********* C.R.U.D. API *********/
 contextBridge.exposeInMainWorld('CRUD', 
 {
-    /** CREATE entries*/
+    /** CREATE ENTRY */
     createEntry: (entry) => {
-        ipcRenderer.send('create_Entry', entry)
+        ipcRenderer.send('e-create', entry)
     },
 
     createResponse:  (func) => {
-            ipcRenderer.on('response-c',  (event, message) => {
+            ipcRenderer.on('response-e-create',  (event, message) => {
             func(message);  
             });
     },
+    /** READ ENTRY */
+    readEntry: (filename) => {
+        ipcRenderer.send('e-read',filename);
+    },
+    readEntryResponse: (func) => {
+        ipcRenderer.on('response-e-read', (event, fileContent) => func(fileContent));
+    },
 
-    /**Reading all tag directories
+    /** UPDATE ENTRY */
+    updateEntry: (entry) => {
+            ipcRenderer.send('e-update', entry)
+    },
+    updateEntryResponse: (func) => {
+        ipcRenderer.send('response-e-update', (event, message) => func())
+    },
+
+
+    /** DELETE ENTRY */
+    deleteEntry: (channel, entry) => {
+            ipcRenderer.send('e-delete', entry)
+    },
+    
+
+    
+    /*** ADDTIONAL CRUD  ***/
+
+    /* Reading all tag directories -> directory names
      * note: each dir = one of the topics
      */
     readDirectories: () => {
-        ipcRenderer.send('read_Directories');
+        ipcRenderer.send('d-read');
     },
+    //dirHTML - list of directory name divs -> <div>dirName</div>
     readDResponse: (func) => {
-        ipcRenderer.on('response-rD', (event,dirHTML) => func(dirHTML));
+        ipcRenderer.on('response-d-read', (event,dirHTML) => func(dirHTML));
     },
 
-    /* Reading Directory's Files */
-    readDirectoryFiles: (dir) => {
-        ipcRenderer.send('readDirectoryFiles', dir);
+    /* Read Directory's Files (i.e. get all filenames of directory) */
+    readDirectoryEntries: (dir) => {
+        ipcRenderer.send('de-read', dir);
     },
-    readDFResponse: (func) => {
-        ipcRenderer.on('response-rDF', (event, filesHTML) => func(filesHTML));
-    },
-
-
-    /** Read a single file */
-    readFile: (filename) => {
-        ipcRenderer.send('readFile',filename);
-    },
-    readFileResponse: (func) => {
-        ipcRenderer.on('response-rF', (event, fileContent) => func(fileContent));
-    },
-
-    /** READ entries */
-    readEntry: (entry) => {
-            ipcRenderer.send('read_Entry', entry)
-    },
-
-    /** Update entries */
-    updateEntry: (entry) => {
-            ipcRenderer.send('update_Entry', entry)
-    },
-
-    /** Delete entries */
-    deleteEntry: (channel, entry) => {
-            ipcRenderer.send('delete_Entry', entry)
+    //dirHTML - list of directory filename in html divs -> <div>filename</div>
+    readDEResponse: (func) => {
+        ipcRenderer.on('response-de-read', (event, filesHTML) => func(filesHTML));
     }
+
+
+    
 });
 
 

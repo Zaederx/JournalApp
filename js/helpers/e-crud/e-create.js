@@ -15,7 +15,7 @@ exports.create =  function createEvent(event,content) {
       else {
         message = 'Entry saved succesfully';
         console.log(message);
-        event.reply('response-c', message);
+        event.reply('response-e-create', message);
       }
     }); 
     
