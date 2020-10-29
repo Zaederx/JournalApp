@@ -44,8 +44,23 @@ ipcMain.on('new_content', function(e,content) {
     window.loadFile(content)
 });
 
+/******************************************* */
 // TODO: set up ipcMain
 ipcMain.on('e-create', (event,dir) => eCreate.create(event,dir));
+
+// Read single file
+ipcMain.on('e-read', (event,filename) => eRead.readSingleFile(event, filename))
+
+
+// TODO: set up ipcMain
+ipcMain.on('e-update', function(e,content) {
+  console.log('ipcMain: Updating Entry -' + content);  
+})
+
+// TODO: set up ipcMain
+ipcMain.on('e-delete', (event, filename) => eDelete.delete(event, filename))
+
+/**************************************** */
 
 // READ DIRECTORIES - lists all tag directories
 ipcMain.on('d-read', (event) => eRead.readAllDirectories(event))
@@ -54,23 +69,6 @@ ipcMain.on('d-read', (event) => eRead.readAllDirectories(event))
 ipcMain.on('de-read', (event, dir) => eRead.readDirFiles(event, dir));
 
 
-// Read single file
-ipcMain.on('e-read', (event,filename) => eRead.readSingleFile(event, filename))
-
-
-
-// TODO: set up ipcMain
-ipcMain.on('e-update', function(e,content) {
-  console.log('ipcMain: Updating Entry -' + content);
-
-  
-})
-// TODO: set up ipcMain
-ipcMain.on('e-delete', function(e,content) {
-  console.log('ipcMain: Deleting Entry -' + content);
-
-  
-})
 
 ipcMain.on('console', function (e,content) {
   console.log('ipcMain: loging message to console:'+ content);

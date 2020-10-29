@@ -1,0 +1,7 @@
+The helpers folder is for any js files or modules that are used to carry out functions in the main. It's organised this way in order to reduce clutter in the main.js file as it has a lot of responsiblity (due to main's direct access to the file system) and the code can mount up quite quickly.
+
+Please do not confuse the crud folder with the e-crud folder found in the helpers folder.
+
+js/crud/ -  provides scripts for the main.html. These scripts use method exposed by preload.js via contextBridge in order to ipc message main to perform tasks that only the main has the filesystem access to perform.
+
+js/helpers/e-crud/ - provides scripts for main.js. These scripts provide functions needed to carry out ipc messages requesting for tasks to be performed on main. 

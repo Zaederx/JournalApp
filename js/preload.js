@@ -8,9 +8,33 @@ const {contextBridge, ipcRenderer} = require('electron');
 contextBridge.exposeInMainWorld('viewAPI', 
 {
     changeWindowContent: (windowContent) => {
-            ipcRenderer.send('new_content', windowContent)
+            ipcRenderer.send('new_content', windowContent);
     }
 });
+
+/** Var API*/
+contextBridge.exposeInMainWorld('current', {
+    entry:{
+        set: (filename) => {
+            channel = 'e-set-filename';
+            ipcRenderer.send(channel, filename);
+        },
+        get: (func) => {
+            channel = 'e-get-filename';
+            ipcRenderer.on(channel, (event, message) => func(message));
+        }
+    },
+    tagDir: {
+        set: (dir) => {
+            channel = 'd-set-directory';
+            ipcRenderer.send(channel, dir);
+        },
+        get: (func) => {
+            channel = 'd-get-directory';
+            ipcRenderer.on(channel, (event, message) => func(message));
+        }
+    }
+})
 
 
 /********* C.R.U.D. API *********/
@@ -18,7 +42,7 @@ contextBridge.exposeInMainWorld('CRUD',
 {
     /** CREATE ENTRY */
     createEntry: (entry) => {
-        ipcRenderer.send('e-create', entry)
+        ipcRenderer.send('e-create', entry);
     },
 
     createResponse:  (func) => {
@@ -44,8 +68,8 @@ contextBridge.exposeInMainWorld('CRUD',
 
 
     /** DELETE ENTRY */
-    deleteEntry: (channel, entry) => {
-            ipcRenderer.send('e-delete', entry)
+    deleteEntry: (channel, filename) => {
+            ipcRenderer.send('e-delete', filename)
     },
     
 
@@ -75,7 +99,6 @@ contextBridge.exposeInMainWorld('CRUD',
 
     
 });
-
 
 
 /* Logging API */

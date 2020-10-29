@@ -23,7 +23,7 @@ btn_submit.onclick = function (event) {
     form.reset();//because default are disabled
 
     getTopics();
-    getFiles();
+    getEntries();
     
 }
 
