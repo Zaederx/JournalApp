@@ -22,8 +22,8 @@ btn_submit.onclick = function (event) {
     //call a method that symlinks the file to all tags folders
     form.reset();//because default are disabled
 
-    getTopics();
-    getEntries();
+    getTopics();//from read.js
+    getEntries();//from read.js
     
 }
 
@@ -36,3 +36,4 @@ function retreiveFormData() {
 }
 
 //idea for later: Also should have a method for asychronously checking for tags being added and edit the look of comma separated tags
+console.log('width:',window.outerWidth, 'hieght:',window.outerHeight);

@@ -3,6 +3,7 @@ $minty-green:#3c9e85;
 $lemony-yellow: #fff56b;
 $nav-width: 16%;
 $light-grey: #c9c3c3;
+$royalRed: #812323;
 
 @font-face {
     font-family: OpenSans;
@@ -44,12 +45,26 @@ $light-grey: #c9c3c3;
     color: white;
 }
 
-//Content of link div
+//Where content of entry files is displayed
 .entry-view{
- 
     position: relative;
-    margin-left: 40%;
-    padding: 1px 16px;
+    // margin-left: 40%;
+    width: 60%;
+    float: left;
+    padding: 16px;
     height: 100%;
 }
 
+
+#e-delete {
+    color: $royalRed;
+    // margin-left: 40%;
+    margin-right:10px;
+    float: right;
+    display: inline;
+}
+#e-heading {
+    display: inline;
+    padding-left: 0;
+    
+}

@@ -35,9 +35,22 @@
 
 .entry-view {
   position: relative;
-  margin-left: 40%;
-  padding: 1px 16px;
+  width: 60%;
+  float: left;
+  padding: 16px;
   height: 100%;
+}
+
+#e-delete {
+  color: #812323;
+  margin-right: 10px;
+  float: right;
+  display: inline;
+}
+
+#e-heading {
+  display: inline;
+  padding-left: 0;
 }
 
 /*# sourceMappingURL=layout.css.map */

@@ -11,6 +11,8 @@ function createWindow () {
   const window = new BrowserWindow({
     width: 800,
     height: 600,
+    minWidth: 470,
+    minHeight: 500,
     webPreferences: {
         worldSafeExecuteJavaScript: true ,
         contextIsolation: true,//otherwise WorldSafe.. message still appears
