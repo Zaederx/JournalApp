@@ -36,7 +36,7 @@ function makeClickable(entryBtn) {
         eView.removeAttribute('hidden');
         neView.setAttribute('hidden','');//from create.js
         var filename = entryBtn.innerHTML;
-        
+        m.innerHTML = "";
         window.CRUD.readEntry(filename);
         setECurrent(filename);
         //handle css div-button styling
