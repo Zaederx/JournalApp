@@ -1,7 +1,17 @@
 const btn_submit = document.querySelector('#btn-submit');
+const btn_addEntry = document.querySelector('#e-create');
 const m = document.querySelector('#message-div');
 const form = document.querySelector('#entry-form');
+const eView = document.querySelector('#entry-view');
+const neView = document.querySelector('#new-entry-view');
+/********** Open New Entry View ********** */ 
+btn_addEntry.onclick = function(event) {
+    eView.setAttribute('hidden','')
+    neView.removeAttribute('hidden');
+}
 
+
+/********** Submit New Entry ********** */ 
 btn_submit.onclick = function (event) {
     window.logAPI.message('test');
     title = document.querySelector('#new-entry-title').value;
@@ -30,9 +40,5 @@ window.CRUD.createResponse((message) => {
     m.innerHTML = message;
 });
 
-function retreiveFormData() {
-
-}
-
 //idea for later: Also should have a method for asychronously checking for tags being added and edit the look of comma separated tags
-console.log('width:',window.outerWidth, 'hieght:',window.outerHeight);
+console.log('width:',window.outerWidth, 'height:',window.outerHeight);

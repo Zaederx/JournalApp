@@ -29,9 +29,13 @@ function getEntries() {
     });
 
 }
+
+
 /** Enables the button -> makes button functional and applies CSS styling */
 function makeClickable(entryBtn) {
     entryBtn.onclick = () => {
+        eView.removeAttribute('hidden');
+        neView.setAttribute('hidden','');//from create.js
         var filename = entryBtn.innerHTML;
         
         window.CRUD.readEntry(filename);
