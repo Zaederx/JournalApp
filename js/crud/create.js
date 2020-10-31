@@ -4,6 +4,7 @@ const m = document.querySelector('#message-div');
 const form = document.querySelector('#entry-form');
 const eView = document.querySelector('#entry-view');
 const neView = document.querySelector('#new-entry-view');
+
 /********** Open New Entry View ********** */ 
 btn_addEntry.onclick = function(event) {
     eView.setAttribute('hidden','')

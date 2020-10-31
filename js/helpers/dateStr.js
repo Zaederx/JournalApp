@@ -7,8 +7,6 @@ exports.dateStr = () => {
     mins = date.getMinutes();
     secs = date.getSeconds();
 
-
-
     str = day + '-' + month + '-' + year + '-' + hour + '-' + mins + '-' + secs;
 
     return str;

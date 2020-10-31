@@ -18,8 +18,7 @@ function getEntries() {
     var directoryName = 'all'
     window.CRUD.readDirectoryEntries(directoryName);
     window.CRUD.readDEResponse(function(filesHTML) {
-        document.querySelector('#files').innerHTML = filesHTML;
-
+    document.querySelector('#files').innerHTML = filesHTML;
         //to display a selected file on click
         //fills #files div with many -> <div>{filename}</div>
         $('#files').find('div').each(function() {
@@ -47,7 +46,7 @@ function makeClickable(entryBtn) {
     };
 }
 
-//conviience method
+//convience method
 function refresh() {
     getTopics();
     getEntries();
@@ -55,7 +54,7 @@ function refresh() {
 
 
 // note to self $('#id') =! documetn.querySelector('#id')
-// the second returns the element, the first does not.
+//the second returns the element, the first does not.
 
 /** Read the response to entries being clicked */
 window.CRUD.readEntryResponse(function (fileContent) {

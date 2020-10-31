@@ -4,7 +4,7 @@ exports.create =  function createEvent(event,content) {
     console.log('ipcmain: Creating new Entry -' + content);
     directory = "tagDirs/all/";
     //assuming only one entry per day
-    fileName = 'E-'+ eDate.dateStr() + ".json";
+    fileName = eDate.dateStr() + ".json";
   
     fs.writeFile(directory+fileName, content, (err) => {
       message = '';
