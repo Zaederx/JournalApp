@@ -1,8 +1,11 @@
 const btn_delete = document.querySelector('#e-delete');
 
-btn_delete.onclick = function (btnEvent) {
-    var filename = '';
-    window.CRUD.deleteEntry(filename);
-
-    btnEvent.preventDefault();
+btn_delete.onclick = function () {
+    console.log('delete button clicked')
+    var filename = getECurrent();
+   window.CRUD.deleteEntry(filename);
 }
+
+window.CRUD.deleteEntryResponse((message) => {
+    console.log(message);
+});

@@ -18,10 +18,12 @@ contextBridge.exposeInMainWorld('current', {
         set: (filename) => {
             channel = 'e-set-filename';
             ipcRenderer.send(channel, filename);
+            console.log('entry set');
         },
         get: (func) => {
             channel = 'e-get-filename';
-            ipcRenderer.on(channel, (event, message) => func(message));
+            ipcRenderer.on(channel, (event, message) => { return message});
+            console.log('entry get');
         }
     },
     tagDir: {
@@ -63,15 +65,19 @@ contextBridge.exposeInMainWorld('CRUD',
             ipcRenderer.send('e-update', entry)
     },
     updateEntryResponse: (func) => {
-        ipcRenderer.send('response-e-update', (event, message) => func())
+        ipcRenderer.send('response-e-update', (event, message) => func(message))
     },
 
 
     /** DELETE ENTRY */
-    deleteEntry: (channel, filename) => {
-            ipcRenderer.send('e-delete', filename)
+    deleteEntry: (filename) => {
+            ipcRenderer.send('e-delete', filename);
+            console.log('deleteEntry function activated')
     },
     
+    deleteEntryResponse: (func) => {
+        ipcRenderer.on('response-e-delete', (event, message) => func(message))
+    },
 
     
     /*** ADDTIONAL CRUD  ***/

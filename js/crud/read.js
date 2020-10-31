@@ -33,12 +33,17 @@ function getEntries() {
 function makeClickable(entryBtn) {
     entryBtn.onclick = () => {
         var filename = entryBtn.innerHTML;
+        
         window.CRUD.readEntry(filename);
-        var current = document.querySelector('.active.entry');
-        current.className = current.className.replace('active entry', '');
+        setECurrent(filename);
+        //handle css div-button styling
+        var lastActive = document.querySelector('.active.entry');
+        lastActive.className = lastActive.className.replace('active entry', '');
         entryBtn.className += 'active entry';
     };
 }
+
+
 
 // note to self $('#id') =! documetn.querySelector('#id')
 // the second returns the element, the first does not.

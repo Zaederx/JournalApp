@@ -6,6 +6,7 @@ const eCreate = require('./helpers/e-crud/e-create');
 const eRead = require('./helpers/e-crud/e-read');
 const eUpdate = require('./helpers/e-crud/e-update');
 const eDelete = require('./helpers/e-crud/e-delete');
+var filename = 'default';
 
 function createWindow () {
   const window = new BrowserWindow({
@@ -42,8 +43,7 @@ app.on('activate', () => {
 // TODO: set up ipcMain
 ipcMain.on('new_content', function(e,content) {
     console.log('ipcmain: New Content -' + content);
-
-    window.loadFile(content)
+    window.loadFile(content);
 });
 
 /******************************************* */

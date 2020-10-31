@@ -7,3 +7,4 @@ tagDirs/all/
 
 #FontAwesome
 external/fontawesome-free-5.15.1-web/
+*.code-workspace

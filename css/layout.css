@@ -46,6 +46,7 @@
   margin-right: 10px;
   float: right;
   display: inline;
+  cursor: pointer;
 }
 
 #e-heading {
