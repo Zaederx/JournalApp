@@ -3,14 +3,14 @@
   src: url("../external/Open_Sans/OpenSans-Regular.ttf") format("ttf");
 }
 .navigation {
-  display: block;
-  float: left;
-  margin: 0;
-  padding: 0;
-  width: 16%;
-  background-color: white;
   position: relative;
+  width: 16%;
+  float: left;
+  padding-top: 16px;
+  margin: 0;
   height: 100%;
+  display: block;
+  background-color: white;
   overflow: auto;
   cursor: pointer;
 }
@@ -31,27 +31,6 @@
 .links div:hover:not(.active) {
   background-color: #c9c3c3;
   color: white;
-}
-
-.entry-view {
-  position: relative;
-  width: 60%;
-  float: left;
-  padding: 16px;
-  height: 100%;
-}
-
-#e-delete {
-  color: #812323;
-  margin-right: 10px;
-  float: right;
-  display: inline;
-  cursor: pointer;
-}
-
-#e-heading {
-  display: inline;
-  padding-left: 0;
 }
 
 /*# sourceMappingURL=layout.css.map */

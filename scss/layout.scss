@@ -1,3 +1,4 @@
+
 $brilliant-blue: #135e7c;
 $minty-green:#3c9e85;
 $lemony-yellow: #fff56b;
@@ -11,14 +12,14 @@ $royalRed: #812323;
 }
 // Navigation pane
 .navigation {
-    display: block;
-    float: left;
-    margin:0;
-    padding: 0;
-    width: $nav-width;
-    background-color: white;
     position: relative;
+    width: $nav-width;
+    float: left;
+    padding-top: 16px;
+    margin:0;
     height: 100%;
+    display: block;
+    background-color: white;
     overflow: auto;
     cursor: pointer;
 }
@@ -43,26 +44,4 @@ $royalRed: #812323;
 .links div:hover:not(.active) {
     background-color: $light-grey;
     color: white;
-}
-
-//Where content of entry files is displayed
-.entry-view{
-    position: relative;
-    width: 60%;
-    float: left;
-    padding: 16px;
-    height: 100%;
-}
-
-
-#e-delete {
-    color: $royalRed;
-    margin-right:10px;
-    float: right;
-    display: inline;
-    cursor: pointer;
-}
-#e-heading {
-    display: inline;
-    padding-left: 0;
 }

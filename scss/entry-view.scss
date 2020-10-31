@@ -1,0 +1,24 @@
+
+$royalRed: #812323;
+//Where content of entry files is displayed
+.entry-view{
+    position: relative;
+    width: 60%;
+    float: left;
+    padding: 16px;
+    height: 100%;
+}
+
+.crud-btn {
+    color: $royalRed;
+    margin-right:10px;
+    padding: 0;
+    float: right;
+    display: inline;
+    cursor: pointer;
+}
+.heading {
+    display: inline;
+    padding-left: 0;
+}
+

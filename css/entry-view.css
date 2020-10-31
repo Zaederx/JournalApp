@@ -1,0 +1,23 @@
+.entry-view {
+  position: relative;
+  width: 60%;
+  float: left;
+  padding: 16px;
+  height: 100%;
+}
+
+.crud-btn {
+  color: #812323;
+  margin-right: 10px;
+  padding: 0;
+  float: right;
+  display: inline;
+  cursor: pointer;
+}
+
+.heading {
+  display: inline;
+  padding-left: 0;
+}
+
+/*# sourceMappingURL=entry-view.css.map */
