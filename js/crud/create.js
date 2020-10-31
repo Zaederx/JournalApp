@@ -22,8 +22,7 @@ btn_submit.onclick = function (event) {
     //call a method that symlinks the file to all tags folders
     form.reset();//because default are disabled
 
-    getTopics();//from read.js
-    getEntries();//from read.js
+    refresh();//from read.js
     
 }
 

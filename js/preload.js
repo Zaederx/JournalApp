@@ -12,32 +12,7 @@ contextBridge.exposeInMainWorld('viewAPI',
     }
 });
 
-/** Var API*/
-contextBridge.exposeInMainWorld('current', {
-    entry:{
-        set: (filename) => {
-            channel = 'e-set-filename';
-            ipcRenderer.send(channel, filename);
-            console.log('entry set');
-        },
-        get: (func) => {
-            channel = 'e-get-filename';
-            ipcRenderer.on(channel, (event, message) => { return message});
-            console.log('entry get');
-        }
-    },
-    tagDir: {
-        set: (dir) => {
-            channel = 'd-set-directory';
-            ipcRenderer.send(channel, dir);
-        },
-        get: (func) => {
-            channel = 'd-get-directory';
-            ipcRenderer.on(channel, (event, message) => func(message));
-        }
-    }
-})
-
+//idea - api for settings.json could go here later
 
 /********* C.R.U.D. API *********/
 contextBridge.exposeInMainWorld('CRUD', 

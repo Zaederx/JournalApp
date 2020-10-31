@@ -43,6 +43,11 @@ function makeClickable(entryBtn) {
     };
 }
 
+//conviience method
+function refresh() {
+    getTopics();
+    getEntries();
+}
 
 
 // note to self $('#id') =! documetn.querySelector('#id')

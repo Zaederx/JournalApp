@@ -46,20 +46,20 @@ ipcMain.on('new_content', function(e,content) {
     window.loadFile(content);
 });
 
-/******************************************* */
-// TODO: set up ipcMain
+/**************** C.R.U.D. METHODS ****************** */
+// Create Entry
 ipcMain.on('e-create', (event,dir) => eCreate.create(event,dir));
 
-// Read single file
+// Read Entry
 ipcMain.on('e-read', (event,filename) => eRead.readSingleFile(event, filename))
 
 
-// TODO: set up ipcMain
+// Update Entry
 ipcMain.on('e-update', function(e,content) {
   console.log('ipcMain: Updating Entry -' + content);  
 })
 
-// TODO: set up ipcMain
+// Delete Entry
 ipcMain.on('e-delete', (event, filename) => eDelete.delete(event, filename))
 
 /**************************************** */
