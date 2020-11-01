@@ -25,10 +25,10 @@
 
     <title>Journal App</title>
 </head>
-<body>
+<body class="bg-grey">
     
     <!-- Displays all Topics and Tags -->
-    <div id="topic-view" class="navigation">
+    <div id="topic-view" class="navigation nav1">
         <div id="topic-header" class="header">
             <h3 class="heading">Topics</h3>
             <i class="fas fa-plus-square fa-lg crud-btn"></i>
@@ -43,7 +43,7 @@
     </div>
 
     <!-- Displays Files of the Selected Tag or Topic -->
-    <div id="file-view" class="navigation">
+    <div id="file-view" class="navigation nav2">
         <div id="file-header" class="header">
             <h3 class="heading">File</h3>
             <i id="e-create"class="fas fa-plus-square fa-lg crud-btn"></i>
@@ -79,11 +79,11 @@
         <div id="message-div"></div>
         <div id="new-entry">
             <form id="entry-form">
-                <label for="new-entry-title">Title</label>
-                <input id="new-entry-title" name="title" type="text" class="title"><br>
+                <label for="new-entry-title" class="title">Title</label>
+                <input id="new-entry-title" name="title" type="text" ><br>
 
-                <label for="new-entry-body">Entry</label>
-                <textarea id="new-entry-body" name="body" rows="20" cols="80" class="title">Type your entry here...</textarea><br>
+                <label for="new-entry-body" class="title">Entry</label><br>
+                <textarea id="new-entry-body" name="body"  class="textarea">Type your entry here...</textarea><br>
                 
                 <label for="new-entry-tags">Topics</label>
                 <input id="new-entry-tags" name="tags" type="text" class="title"><br>

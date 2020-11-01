@@ -2,8 +2,10 @@
   position: relative;
   width: 60%;
   float: left;
+  margin-left: 10px;
   padding: 16px;
   height: 100%;
+  background-color: #e6e6e6;
 }
 
 .crud-btn {
@@ -18,6 +20,15 @@
 .heading {
   display: inline;
   padding-left: 0;
+}
+
+.left {
+  float: left;
+}
+
+.textarea {
+  width: 90%;
+  height: 120px;
 }
 
 /*# sourceMappingURL=entry-view.css.map */

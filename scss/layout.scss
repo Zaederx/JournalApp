@@ -2,31 +2,48 @@
 $brilliant-blue: #135e7c;
 $minty-green:#3c9e85;
 $lemony-yellow: #fff56b;
-$nav-width: 16%;
+$nav-width: 20%;
 $light-grey: #c9c3c3;
 $royalRed: #812323;
+$bg: rgb(230, 230, 230);
 
 @font-face {
     font-family: OpenSans;
     src: url("../external/Open_Sans/OpenSans-Regular.ttf") format("ttf");
 }
+body, html {
+    height: 90%;
+}
+.bg-grey {
+    background-color: $bg;
+}
+.full{
+    height: 100%;
+}
 // Navigation pane
 .navigation {
     position: relative;
-    width: $nav-width;
     float: left;
     padding-top: 16px;
     margin:0;
     height: 100%;
     display: block;
-    background-color: white;
+    background-color: $bg;
     overflow: auto;
     cursor: pointer;
 }
+.nav1 {
+    width: 10%;
+    min-width: 110px;
+}
+.nav2 {
+    width: 20%;
+    min-width: 200px;
+}
+
 
 //Links
 .links div {
-
     position:relative;
     display: block;
     color: $brilliant-blue;

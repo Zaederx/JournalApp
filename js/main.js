@@ -10,10 +10,10 @@ var filename = 'default';
 
 function createWindow () {
   const window = new BrowserWindow({
-    width: 800,
+    width: 896,
     height: 600,
-    minWidth: 470,
-    minHeight: 500,
+    minWidth: 896,
+    minHeight: 478,
     webPreferences: {
         worldSafeExecuteJavaScript: true ,
         contextIsolation: true,//otherwise WorldSafe.. message still appears

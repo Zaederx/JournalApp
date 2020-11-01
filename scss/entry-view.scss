@@ -1,14 +1,20 @@
 
 $royalRed: #812323;
+$fg: white;
+$bg: rgb(240, 240, 240);
+
 //Where content of entry files is displayed
 .entry-view{
     position: relative;
     width: 60%;
     float: left;
+    margin-left: 10px;
     padding: 16px;
     height: 100%;
+    background-color: rgb(230, 230, 230);
 }
 
+//
 .crud-btn {
     color: $royalRed;
     margin-right:10px;
@@ -17,8 +23,17 @@ $royalRed: #812323;
     display: inline;
     cursor: pointer;
 }
+
 .heading {
     display: inline;
     padding-left: 0;
 }
 
+.left {
+    float:left;
+}
+
+.textarea {
+    width: 90%;
+    height: 120px;
+}
