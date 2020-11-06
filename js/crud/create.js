@@ -13,16 +13,17 @@ btn_addEntry.onclick = function(event) {
 
 /********** Submit New Entry ********** */ 
 btn_submit.onclick = function (event) {
-    window.logAPI.message('test');
+    window.logAPI.message('form submit button clicked\n');
+
     title = document.querySelector('#new-entry-title').value;
     body = document.querySelector('#new-entry-body').value;
     tags = document.querySelector('#new-entry-tags').value;
     message = 'title:' + title + ' body:' + body + ' tags:' + tags;
+    console.log('message:',message);
     window.logAPI.message(message);
     entry = new Entry(title, body, tags);
     entryJSON = JSON.stringify(entry);
     window.logAPI.message(entryJSON);
-    window.logAPI.message('test');
 
 
     //need to call method that creates entry file in file system

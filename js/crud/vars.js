@@ -8,8 +8,6 @@ function getECurrent() {
 }
 
 function setECurrent(entry) {
-    
-
     console.log("vars:setECurrent")
     selectedEntry = entry;
 }

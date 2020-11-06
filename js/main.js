@@ -48,10 +48,10 @@ ipcMain.on('new_content', function(e,content) {
 
 /**************** C.R.U.D. METHODS ****************** */
 // Create Entry
-ipcMain.on('e-create', (event,dir) => eCreate.create(event,dir));
+ipcMain.on('e-create', (event,entry) => eCreate.create(event,entry));
 
 // Read Entry
-ipcMain.on('e-read', (event,filename) => eRead.readSingleFile(event, filename))
+ipcMain.on('e-read', (event,filename) => eRead.readSingleFile(event, filename));
 
 
 // Update Entry
@@ -73,5 +73,5 @@ ipcMain.on('de-read', (event, dir) => eRead.readDirFiles(event, dir));
 
 
 ipcMain.on('console', function (e,content) {
-  console.log('ipcMain: loging message to console:'+ content);
+  console.log('ipcMain: logging message to console:'+ content);
 })

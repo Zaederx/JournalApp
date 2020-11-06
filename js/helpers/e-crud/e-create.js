@@ -1,12 +1,15 @@
 const fs = require('fs');
 const eDate = require('../dateStr');
-exports.create =  function createEvent(event,content) {
-    console.log('ipcmain: Creating new Entry -' + content);
+exports.create =  (event,entry) => createEvent(event, entry);
+
+function createEvent(event,entry) {
+    console.log('ipcmain: Creating new Entry -' + entry);
     directory = "tagDirs/all/";
-    //assuming only one entry per day
+    
+  
     fileName = eDate.dateStr() + ".json";
   
-    fs.writeFile(directory+fileName, content, (err) => {
+    fs.writeFile(directory+fileName, entry, (err) => {
       message = '';
       if (err) {
         message = 'An error occured in saving the new entry.';

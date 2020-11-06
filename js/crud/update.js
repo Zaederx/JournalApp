@@ -14,7 +14,7 @@ btn_update.onclick = function update(event) {
     tags.value = entry.tags;
 
     //read fields for changes
-
+    
 
     //create entry of same name to replace original
 
