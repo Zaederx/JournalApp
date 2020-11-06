@@ -12,7 +12,9 @@ btn_addEntry.onclick = function(event) {
 
 
 /********** Submit New Entry ********** */ 
-btn_submit.onclick = function (event) {
+btn_submit.onclick = (event) => submit(event);
+
+function submit (event) {
     window.logAPI.message('form submit button clicked\n');
 
     var etitle = document.querySelector('#new-entry-title').value;
@@ -24,7 +26,6 @@ btn_submit.onclick = function (event) {
     entry = new Entry(etitle, ebody, etags);
     entryJSON = JSON.stringify(entry);
     window.logAPI.message(entryJSON);
-
 
     //need to call method that creates entry file in file system
     window.CRUD.createEntry(entryJSON);
