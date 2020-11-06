@@ -11,6 +11,7 @@ exports.create =  function createEvent(event,content) {
       if (err) {
         message = 'An error occured in saving the new entry.';
         console.log(message);
+        event.reply('response-e-create', message);
       }
       else {
         message = 'Entry saved succesfully';
