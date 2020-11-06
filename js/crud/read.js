@@ -33,20 +33,15 @@ function getEntries() {
 /** Enables the button -> makes button functional and applies CSS styling */
 function makeClickable(entryBtn) {
     entryBtn.onclick = () => {
-        displayNEView();
+        displayEView();
         var filename = entryBtn.innerHTML;
         m.innerHTML = "";
-        window.CRUD.readEntry(filename);
-        setECurrent(filename);
+        window.CRUD.readEntry(filename);       
         highlightActiveEntry(entryBtn);
        
     };
 }
 
-function displayNEView() {
-    eView.removeAttribute('hidden');
-    neView.setAttribute('hidden','');//from create.js
-}
 
 
 
@@ -65,6 +60,7 @@ function refresh() {
 window.CRUD.readEntryResponse(function (fileContent) {
     console.log('Entry recieved. Displaying entry...');
     var entry = JSON.parse(fileContent);
+    setECurrent(entry);//sets selectedEntry variable var.js
     displayEntry(entry);
     console.log('Entry "'+entry.title+'" displayed.');
 });

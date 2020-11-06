@@ -1,13 +1,15 @@
 /****Current Tag and Entry information*** */
-selectedEntry = 'default';
-selectedTag = 'default';
+var selectedEntry = new Entry('default','default','default');
+var selectedTag = '';
 
 function getECurrent() {
-    console.log("vars:getECurrent")
+    console.log("vars:getECurrent:"+selectedEntry.title)
     return selectedEntry;
 }
 
 function setECurrent(entry) {
+    
+
     console.log("vars:setECurrent")
     selectedEntry = entry;
 }
@@ -25,11 +27,11 @@ function setTagCurrent(tag) {
 
 /*** Entry and NewEntry Views ** */
 
-function displayNEView() {
+function displayEView() {
     eView.removeAttribute('hidden');
     neView.setAttribute('hidden','');//from create.js
 }
-function displayEView() {
+function displayNEView() {
     neView.removeAttribute('hidden');
     eView.setAttribute('hidden','');//from create.js
 }

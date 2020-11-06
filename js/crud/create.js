@@ -7,8 +7,7 @@ const neView = document.querySelector('#new-entry-view');
 
 /********** Open New Entry View ********** */ 
 btn_addEntry.onclick = function(event) {
-    eView.setAttribute('hidden','')
-    neView.removeAttribute('hidden');
+    displayNEView();
 }
 
 
