@@ -36,6 +36,7 @@ function displayEView() {
 
 /****** Highlight Active Entry or Tag **** */
 function highlightActiveEntry(entryBtn) {
+    console.log('highlightActiveEntry')
      //handle css div-button styling
      var lastActive = document.querySelector('.active.entry');
      lastActive.className = lastActive.className.replace('active entry', '');

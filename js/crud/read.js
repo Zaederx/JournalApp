@@ -33,18 +33,23 @@ function getEntries() {
 /** Enables the button -> makes button functional and applies CSS styling */
 function makeClickable(entryBtn) {
     entryBtn.onclick = () => {
-        eView.removeAttribute('hidden');
-        neView.setAttribute('hidden','');//from create.js
+        displayNEView();
         var filename = entryBtn.innerHTML;
         m.innerHTML = "";
         window.CRUD.readEntry(filename);
         setECurrent(filename);
-        //handle css div-button styling
-        var lastActive = document.querySelector('.active.entry');
-        lastActive.className = lastActive.className.replace('active entry', '');
-        entryBtn.className += 'active entry';
+        highlightActiveEntry(entryBtn);
+       
     };
 }
+
+function displayNEView() {
+    eView.removeAttribute('hidden');
+    neView.setAttribute('hidden','');//from create.js
+}
+
+
+
 
 //convience method
 function refresh() {
