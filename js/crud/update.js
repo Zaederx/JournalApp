@@ -1,7 +1,8 @@
 const btn_update = document.querySelector('#e-update');
-const title = document.querySelector('#new-entry-title');
-const body = document.querySelector('#new-entry-body');
-const tags = document.querySelector('#new-entry-tags');
+var etitle = document.querySelector('#new-entry-title');
+var ebody = document.querySelector('#new-entry-body');
+var etags = document.querySelector('#new-entry-tags');
+
 btn_update.onclick = function update(event) {
     //display 'new-entry-view'
     displayNEView();
@@ -9,9 +10,9 @@ btn_update.onclick = function update(event) {
     entry = getECurrent();//from vars.js
     
     //insert into fields
-    title.value =  entry.title;
-    body.value = entry.body;
-    tags.value = entry.tags;
+    etitle.value =  entry.title;
+    ebody.value = entry.body;
+    etags.value = entry.tags;
 
     //read fields for changes
     

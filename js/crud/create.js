@@ -15,13 +15,13 @@ btn_addEntry.onclick = function(event) {
 btn_submit.onclick = function (event) {
     window.logAPI.message('form submit button clicked\n');
 
-    title = document.querySelector('#new-entry-title').value;
-    body = document.querySelector('#new-entry-body').value;
-    tags = document.querySelector('#new-entry-tags').value;
-    message = 'title:' + title + ' body:' + body + ' tags:' + tags;
+    var etitle = document.querySelector('#new-entry-title').value;
+    var ebody = document.querySelector('#new-entry-body').value;
+    var etags = document.querySelector('#new-entry-tags').value;
+    message = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
     console.log('message:',message);
     window.logAPI.message(message);
-    entry = new Entry(title, body, tags);
+    entry = new Entry(etitle, ebody, etags);
     entryJSON = JSON.stringify(entry);
     window.logAPI.message(entryJSON);
 
