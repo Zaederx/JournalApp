@@ -2,7 +2,7 @@
 var selectedEntry = new Entry('default','default','default');
 var selectedTag = '';
 
-var selectedEntryFilepath = '';
+var selectedEntryFilename = '';
 
 function getECurrent() {
     console.log("vars:getECurrent:"+selectedEntry.title)
@@ -15,11 +15,11 @@ function setECurrent(entry) {
 }
 
 function getEntryFilename() {
-    return selectedEntryFilepath;
+    return selectedEntryFilename;
 }
 
 function setEntryFilename(path) {
-    selectedEntryFilepath = path;
+    selectedEntryFilename = path;
 }
 
 function getTagCurrent() {
