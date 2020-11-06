@@ -55,9 +55,7 @@ ipcMain.on('e-read', (event,filename) => eRead.readSingleFile(event, filename));
 
 
 // Update Entry
-ipcMain.on('e-update', function(e,content) {
-  console.log('ipcMain: Updating Entry -' + content);  
-})
+ipcMain.on('e-update', (event, entry, filename) => eUpdate.update(event, entry, filename))
 
 // Delete Entry
 ipcMain.on('e-delete', (event, filename) => eDelete.delete(event, filename))

@@ -36,8 +36,9 @@ contextBridge.exposeInMainWorld('CRUD',
     },
 
     /** UPDATE ENTRY */
-    updateEntry: (entry) => {
-            ipcRenderer.send('e-update', entry)
+    updateEntry: (entry, filename) => {
+            ipcRenderer.send('e-update', entry, filename);
+            console.log('updateEntry called');
     },
     updateEntryResponse: (func) => {
         ipcRenderer.send('response-e-update', (event, message) => func(message))
