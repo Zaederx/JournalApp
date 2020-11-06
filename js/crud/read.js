@@ -33,9 +33,11 @@ function getEntries() {
 /** Enables the button -> makes button functional and applies CSS styling */
 function makeClickable(entryBtn) {
     entryBtn.onclick = () => {
-        displayEView();
+        messageDiv.innerHTML = "";
         var filename = entryBtn.innerHTML;
-        m.innerHTML = "";
+        setEntryFilename(filename);
+        displayEView();
+        
         window.CRUD.readEntry(filename);       
         highlightActiveEntry(entryBtn);
        

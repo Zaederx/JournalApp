@@ -2,6 +2,8 @@
 var selectedEntry = new Entry('default','default','default');
 var selectedTag = '';
 
+var selectedEntryFilepath = '';
+
 function getECurrent() {
     console.log("vars:getECurrent:"+selectedEntry.title)
     return selectedEntry;
@@ -10,6 +12,14 @@ function getECurrent() {
 function setECurrent(entry) {
     console.log("vars:setECurrent")
     selectedEntry = entry;
+}
+
+function getEntryFilename() {
+    return selectedEntryFilepath;
+}
+
+function setEntryFilename(path) {
+    selectedEntryFilepath = path;
 }
 
 function getTagCurrent() {

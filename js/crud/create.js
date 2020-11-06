@@ -1,6 +1,6 @@
 const btn_submit = document.querySelector('#btn-submit');
 const btn_addEntry = document.querySelector('#e-create');
-const m = document.querySelector('#message-div');
+const messageDiv = document.querySelector('#message-div');
 const form = document.querySelector('#entry-form');
 const eView = document.querySelector('#entry-view');
 const neView = document.querySelector('#new-entry-view');
@@ -38,7 +38,7 @@ btn_submit.onclick = function (event) {
 }
 
 window.CRUD.createResponse((message) => {
-    m.innerHTML = message;
+    messageDiv.innerHTML = message;
 });
 
 //idea for later: Also should have a method for asychronously checking for tags being added and edit the look of comma separated tags
