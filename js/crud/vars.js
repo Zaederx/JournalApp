@@ -30,10 +30,12 @@ function setTagCurrent(tag) {
 function displayEView() {
     eView.removeAttribute('hidden');
     neView.setAttribute('hidden','');//from create.js
+    form.reset();
 }
 function displayNEView() {
     neView.removeAttribute('hidden');
     eView.setAttribute('hidden','');//from create.js
+    form.reset();
 }
 
 /****** Highlight Active Entry or Tag **** */
