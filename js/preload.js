@@ -90,3 +90,9 @@ contextBridge.exposeInMainWorld('logAPI',
             ipcRenderer.send('console', message);
     }
 });
+
+// This is only required if your tests are accessing any Electron APIs. You don't need to do this if you are only accessing the helpers on the client property which do not require Node integration.
+// Needed if testing 
+// if (process.env.NODE_ENV === 'test') {
+//     window.electronRequire = require
+//   }
