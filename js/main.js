@@ -9,6 +9,10 @@ const eDelete = require('./helpers/e-crud/e-delete');
 var filename = 'default';
 
 function createWindow () {
+  var integration = false;
+  if (process.env.NODE_ENV === 'test-main') {
+     integration = true;
+  }
   const window = new BrowserWindow({
     width: 896,
     height: 600,
@@ -17,21 +21,29 @@ function createWindow () {
     webPreferences: {
         worldSafeExecuteJavaScript: true ,
         contextIsolation: true,//otherwise WorldSafe.. message still appears
+        nodeIntegration: integration, //whether you can access node methods - e.g. requires, anywhere in the app's js
         preload: path.join(__dirname, "preload.js")
     }
   })
 
   window.loadFile('html/main.html');
-  window.webContents.openDevTools()
+  if (process.env.NODE_ENV === 'dev-tools') {
+    window.webContents.openDevTools();
+  }
 }
 
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  //quit completely even on darwin (mac) if it is a test
+  if (process.env.NODE_ENV === 'test') {
+    app.quit()
+  }
+  else if (process.platform !== 'darwin') {
     app.quit()
   }
 });
+
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {

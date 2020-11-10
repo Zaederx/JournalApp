@@ -91,6 +91,7 @@ contextBridge.exposeInMainWorld('logAPI',
     }
 });
 
+//https://github.com/electron-userland/spectron/tree/c527b4e5fd8ab89ed0c6454a4dfb69f0980e9e1d#node-integration
 // This is only required if your tests are accessing any Electron APIs. You don't need to do this if you are only accessing the helpers on the client property which do not require Node integration.
 // Needed if testing 
 // if (process.env.NODE_ENV === 'test') {

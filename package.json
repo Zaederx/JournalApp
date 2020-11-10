@@ -4,8 +4,9 @@
   "description": "An app for journal entries.",
   "main": "js/main.js",
   "scripts": {
-    "test": "mocha",
-    "start": "electron ."
+    "test": "export NODE_ENV='test'; mocha;",
+    "start": "export NODE_ENV=''; electron .;",
+    "dev-tools": "export NODE_ENV='dev-tools'; electron .;" 
   },
   "keywords": [],
   "author": "Zachary Ishmael",
