@@ -1,5 +1,6 @@
 
 exports.isViewHidden = (viewId) => isViewHidden(viewId);
+exports.sleep = (ms) => sleep(ms);
 
 
 function isViewHidden(viewId) {
@@ -7,3 +8,7 @@ function isViewHidden(viewId) {
     var hidden = view.hasAttribute('hidden');
     return hidden;
   };
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

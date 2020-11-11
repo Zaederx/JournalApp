@@ -1,11 +1,11 @@
 const Application = require('spectron').Application
-const assert = require('assert')
+const assert = require('assert')//from mocha
 const electronPath = require('electron') // Require Electron from the binaries included in node_modules.
 const path = require('path')
 const { isViewHidden } = require('./test-modules')
 
 describe('Application launch', function () {
-  this.timeout(10000)
+  this.timeout(20000)
 
   
   before('start application',function () {
@@ -38,7 +38,7 @@ describe('Application launch', function () {
 
 
 describe('Application checks', function () {
-  this.timeout(10000)
+  this.timeout(20000)/
   before('start application',function () {
     this.app = new Application({
 
@@ -114,12 +114,39 @@ describe('Application checks', function () {
 
     describe('CREATE', function () {
 
-      
-      // check number of entries
-      // click create 
-      // enter text input form field into fields
-      // click submit 
-      //check number of entries = original number + 1
+      it('creates an entry', function () {
+        
+        return this.app.client.execute(function () {
+          var pass = false;
+          // check number of entries
+          var count1 = $('#files').children.length;
+
+          // click create 
+          $('#e-create').click();
+          // test.slee(10);
+          // enter text input form field into fields
+          document.querySelector('#new-entry-body').value = "CREATE test successful :)";
+          // click submit 
+          $('#btn-submit').click();
+          var count2;
+         
+          function checkCount() {
+            //check number of entries = original number + 1
+            count2 = $('#files').children.length;
+            if (count1 + 1 == count2) {
+              pass = true;
+            }
+          }
+
+          test.sleep(100).then(() => {
+           pass = checkCount();
+           assert.equal(pass.true);
+          })
+        })
+        // .then((pass) => assert.equal(pass, true))
+        
+      })//end of function (){})
+     
 
     })
 

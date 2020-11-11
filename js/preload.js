@@ -102,6 +102,7 @@ if (process.env.NODE_ENV === 'test') {
     const test = require('../test/test-modules');
     contextBridge.exposeInMainWorld('test', 
     {
-        isViewHidden: (viewId) => test.isViewHidden(viewId)
+        isViewHidden: (viewId) => test.isViewHidden(viewId),
+        sleep : (ms) => test.sleep(ms)
     });
 }
