@@ -87,12 +87,12 @@ describe('Application checks', function () {
   })
   
   describe ('when add entry is clicked', function () {
-    before('create button clicked',function () {
+    before('create entry button clicked',function () {
       this.app.client.execute(function () {
         document.querySelector('#e-create').click();
       });
     })
-    it('shows entry view on e-create click', function() {
+    it('hides entry view', function() {
       return this.app.client.execute(function () {
         var pass = false;
         view = document.querySelector('#entry-view');
@@ -103,7 +103,7 @@ describe('Application checks', function () {
       }).then( (pass) => assert.equal(pass,true));
     })
 
-    it('hides new entry view form onclick', function () {
+    it('shows new entry view form', function () {
       return this.app.client.execute(function () {
       var pass = false;
       view = document.querySelector('#new-entry-view');
@@ -117,9 +117,11 @@ describe('Application checks', function () {
   })
   
 
-  //PIPELINE CHECK
-  // CRUD - emulate user C.R.U.D. input from front end js scripts
+  
+})//View
 
+//PIPELINE CHECK
+  
 
   // CRUD - preload.js checks - call preload methods directly
 
