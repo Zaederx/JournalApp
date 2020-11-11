@@ -2,6 +2,7 @@ const Application = require('spectron').Application
 const assert = require('assert')
 const electronPath = require('electron') // Require Electron from the binaries included in node_modules.
 const path = require('path')
+const { isViewHidden } = require('./test-modules')
 
 describe('Application launch', function () {
   this.timeout(10000)
@@ -64,25 +65,15 @@ describe('Application checks', function () {
       it('shows entry view', function() {
 
         return this.app.client.execute(function () {
-          var pass = false;
-          view = document.querySelector('#entry-view');
-          if (!view.hasAttribute('hidden')) {
-            pass = true;
-          }
-          return pass;
-        }).then((pass)=> assert.equal(pass, true));
+          return test.isViewHidden('#entry-view');
+        }).then((hidden)=> assert.equal(hidden, false));
         
       })
   
       it('hides new entry view form', function() {
         return this.app.client.execute(function () {
-          var pass = false;
-          view = document.querySelector('#new-entry-view');
-          if (view.hasAttribute('hidden')) {
-            pass = true;
-          }
-          return pass;
-        }).then((pass) => assert.equal(pass,true));
+          return test.isViewHidden('#new-entry-view');
+        }).then((hidden) => assert.equal(hidden,true));
       })
   })
   
@@ -94,24 +85,14 @@ describe('Application checks', function () {
     })
     it('hides entry view', function() {
       return this.app.client.execute(function () {
-        var pass = false;
-        view = document.querySelector('#entry-view');
-        if (view.hasAttribute('hidden')) {
-          pass = true;
-        }
-        return pass;
-      }).then( (pass) => assert.equal(pass,true));
+       return test.isViewHidden('#entry-view');
+      }).then( (hidden) => assert.equal(hidden,true));
     })
 
     it('shows new entry view form', function () {
       return this.app.client.execute(function () {
-      var pass = false;
-      view = document.querySelector('#new-entry-view');
-      if (!view.hasAttribute('hidden')) {
-        pass = true;
-      }
-      return pass;
-      }).then((pass) => assert.equal(pass,true));
+        return test.isViewHidden('#new-entry-view');
+      }).then((hidden) => assert.equal(hidden,false));
     })
 
   })
@@ -127,6 +108,34 @@ describe('Application checks', function () {
 
 
   // CRUD - MAIN.js checks - call main.js 
-})//View
+
+  // CRUD - emulate user C.R.U.D. input from front end js scripts
+  describe('ENTRY C.R.U.D.', function() {
+
+    describe('CREATE', function () {
+
+      
+      // check number of entries
+      // click create 
+      // enter text input form field into fields
+      // click submit 
+      //check number of entries = original number + 1
+
+    })
+
+    describe('READ', function () {
+
+    })
+
+    describe('UPDATE', function () {
+
+    })
+
+    describe('DELETE', function () {
+
+    })
+
+    
+  })
 
 })//Application

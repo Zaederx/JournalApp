@@ -6,6 +6,7 @@ const eCreate = require('./helpers/e-crud/e-create');
 const eRead = require('./helpers/e-crud/e-read');
 const eUpdate = require('./helpers/e-crud/e-update');
 const eDelete = require('./helpers/e-crud/e-delete');
+
 var filename = 'default';
 
 function createWindow () {

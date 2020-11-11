@@ -97,3 +97,11 @@ contextBridge.exposeInMainWorld('logAPI',
 // if (process.env.NODE_ENV === 'test') {
 //     window.electronRequire = require
 //   }
+
+if (process.env.NODE_ENV === 'test') {
+    const test = require('../test/test-modules');
+    contextBridge.exposeInMainWorld('test', 
+    {
+        isViewHidden: (viewId) => test.isViewHidden(viewId)
+    });
+}
