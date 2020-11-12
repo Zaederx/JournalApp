@@ -2,6 +2,7 @@ const Application = require('spectron').Application
 const assert = require('assert')//from mocha
 const electronPath = require('electron') // Require Electron from the binaries included in node_modules.
 const path = require('path')
+const { update } = require('../js/helpers/e-crud/e-update')
 const { isViewHidden } = require('./test-modules')
 
 describe('Application launch', function () {
@@ -38,7 +39,7 @@ describe('Application launch', function () {
 
 
 describe('Application checks', function () {
-  this.timeout(20000)/
+  this.timeout(20000)
   before('start application',function () {
     this.app = new Application({
 
@@ -172,7 +173,48 @@ describe('Application checks', function () {
     })
 
     describe('UPDATE', function () {
+      it('updates entry', function () {
+        return this.app.client.execute( async function () {
+          var pass = false;
+          var read = '#e-body';
+          var write = '#new-entry-body'
 
+          //click active entry 
+          $('#files .active.entry').click();
+          await test.sleep(5);// GUI - wait for file info to be retrieved
+          
+          // check text - read
+          var text =  document.querySelector(read).innerHTML;
+          console.log('test: update entry - var text:', text)
+          // click update
+          $('#e-update').click();
+          await test.sleep(5); //GUI - wait for info update
+
+          // enter change - write 
+          var updatedText = " Update to the entry test.";
+          document.querySelector(write).value = updatedText;
+          console.log('test: update entry - var updatedText:', updatedText)
+          await test.sleep(5);
+
+          //click submit update
+          // $('#btn-submit-update').click();
+          $('#btn-submit-update').click();
+          await test.sleep(5);//wait for GUI updates
+
+          //select active entry
+          $('#files .active.entry').click();
+
+          await test.sleep(5);
+          // ensure entry body matches newText - read
+          var text2 = document.querySelector(read).innerHTML;
+          console.log('test: update entry - var text:', text2)
+
+          if (text2 == updatedText) {
+            pass = true;
+          }
+          return pass;
+        }).then((pass => assert.equal(pass, true))); 
+      })
     })
 
     describe('DELETE', function () {
