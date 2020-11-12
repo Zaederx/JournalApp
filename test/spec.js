@@ -131,7 +131,7 @@ describe('Application checks', function () {
          
           
 
-          await test.sleep(100);
+          await test.sleep(10);
           function checkCount() {
             //check number of entries = original number + 1
             var count2 = document.querySelector('#files').children.length;
@@ -151,7 +151,24 @@ describe('Application checks', function () {
     })
 
     describe('READ', function () {
+      it('reads entry', function () {
+        return this.app.client.execute(async function() {
+          var pass = false;
+  
+          //click on last entry
+          $('#files .active.entry').click();
 
+          await test.sleep(10);
+            //entry body should contant test of CREATE test
+          var text = document.querySelector('#e-body').innerHTML;
+          console.log('test: read entry - var text:', text);
+          if (text == "CREATE test successful :)") {
+            pass = true;
+          }
+          return pass;
+          
+        }).then((pass) => assert.equal(pass,true));
+      })
     })
 
     describe('UPDATE', function () {
