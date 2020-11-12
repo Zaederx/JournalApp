@@ -1,9 +1,11 @@
 const Application = require('spectron').Application
 const assert = require('assert')//from mocha
+const { create } = require('domain')
+const { app } = require('electron')
 const electronPath = require('electron') // Require Electron from the binaries included in node_modules.
 const path = require('path')
 const { update } = require('../js/helpers/e-crud/e-update')
-const { isViewHidden } = require('./test-modules')
+const { isViewHidden, createEntry } = require('./test-modules')
 
 describe('Application launch', function () {
   this.timeout(20000)
@@ -124,15 +126,14 @@ describe('Application checks', function () {
           console.log('test: create entry - var count1:', count1);
           // click create 
           $('#e-create').click();
-          // test.slee(10);
+          await test.sleep(10);
           // enter text input form field into fields
           document.querySelector('#new-entry-body').value = "CREATE test successful :)";
           // click submit 
           $('#btn-submit').click();
-         
-          
 
-          await test.sleep(10);
+
+          //check if number of files has increase by 1
           function checkCount() {
             //check number of entries = original number + 1
             var count2 = document.querySelector('#files').children.length;
@@ -143,7 +144,10 @@ describe('Application checks', function () {
             }
             return pass;
           }
-          return checkCount();
+          
+         pass = await test.sleep(10).then(() => {return checkCount();});
+          
+          return pass;
         }).then((pass) => assert.equal(pass, true))
         
       })//end of function (){})
@@ -160,7 +164,8 @@ describe('Application checks', function () {
           $('#files .active.entry').click();
 
           await test.sleep(10);
-            //entry body should contant test of CREATE test
+            
+          //entry body should contant test of CREATE test
           var text = document.querySelector('#e-body').innerHTML;
           console.log('test: read entry - var text:', text);
           if (text == "CREATE test successful :)") {
@@ -219,6 +224,48 @@ describe('Application checks', function () {
 
     describe('DELETE', function () {
 
+      
+      it('deletes an entry', function () {
+
+        return this.app.client.execute( async function () {
+          var pass = false;
+          var testText = "DELETE entry test";
+          //create and entry
+          $('#e-create').click();
+          await test.sleep(10);
+          // enter text input form field into fields
+          document.querySelector('#new-entry-body').value = testText;
+          // click submit 
+          $('#btn-submit').click();
+          
+
+        
+          //click active entry
+          $('#files .active.entry').click();
+          await test.sleep(5)
+          //click delete
+          $('e-delete').click();
+  
+          //check that entry has been deleted
+          await test.sleep(5);
+          $('#files .active.entry').click();
+  
+          await test.sleep(5);//wait for GUI update
+          
+          //Is the entry with the test text still there?
+          var text = document.querySelector('#e-body').value;
+  
+          if (text != testText) {
+            pass = true;
+          }
+          return pass;
+        }).then((pass) => assert.equal(pass, true));
+        
+      })
+      
+
+
+      
     })
 
     

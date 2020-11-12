@@ -103,6 +103,6 @@ if (process.env.NODE_ENV === 'test') {
     contextBridge.exposeInMainWorld('test', 
     {
         isViewHidden: (viewId) => test.isViewHidden(viewId),
-        sleep : (ms) => test.sleep(ms)
+        sleep : (ms) => test.sleep(ms),
     });
 }
