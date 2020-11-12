@@ -52,11 +52,11 @@ describe('Application checks', function () {
   })
 
   
-  after('close application',function () {
-    if (this.app && this.app.isRunning()) {
-      return this.app.stop();
-    }
-  })
+  // after('close application',function () {
+  //   if (this.app && this.app.isRunning()) {
+  //     return this.app.stop();
+  //   }
+  // })
 
   describe ('View' , function() {
     // Test preload.js & main.js
@@ -116,11 +116,11 @@ describe('Application checks', function () {
 
       it('creates an entry', function () {
         
-        return this.app.client.execute(function () {
+        return this.app.client.execute(async function () {
           var pass = false;
           // check number of entries
-          var count1 = $('#files').children.length;
-
+          var count1 = document.querySelector('#files').children.length;
+          console.log('test: create entry - var count1:', count1);
           // click create 
           $('#e-create').click();
           // test.slee(10);
@@ -128,22 +128,22 @@ describe('Application checks', function () {
           document.querySelector('#new-entry-body').value = "CREATE test successful :)";
           // click submit 
           $('#btn-submit').click();
-          var count2;
          
+          
+
+          await test.sleep(100);
           function checkCount() {
             //check number of entries = original number + 1
-            count2 = $('#files').children.length;
-            if (count1 + 1 == count2) {
+            var count2 = document.querySelector('#files').children.length;
+            console.log('test: create entry - var count1:', count1);
+            console.log('test: create entry - var count2:', count2);
+            if ((++count1) == count2) {
               pass = true;
             }
+            return pass;
           }
-
-          test.sleep(100).then(() => {
-           pass = checkCount();
-           assert.equal(pass.true);
-          })
-        })
-        // .then((pass) => assert.equal(pass, true))
+          return checkCount();
+        }).then((pass) => assert.equal(pass, true))
         
       })//end of function (){})
      
