@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const fs = require('fs');
 const path = require('path');
-const helper = require('./helpers/dateStr');
+// const helper = require('./helpers/dateStr');
 const eCreate = require('./helpers/e-crud/e-create');
 const eRead = require('./helpers/e-crud/e-read');
 const eUpdate = require('./helpers/e-crud/e-update');
@@ -15,9 +15,9 @@ function createWindow () {
      integration = true;
   }
   const window = new BrowserWindow({
-    width: 896,
+    width: 921,
     height: 600,
-    minWidth: 896,
+    minWidth: 921,
     minHeight: 478,
     webPreferences: {
         worldSafeExecuteJavaScript: true ,
