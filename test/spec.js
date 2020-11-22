@@ -5,7 +5,7 @@ const { app } = require('electron')
 const electronPath = require('electron') // Require Electron from the binaries included in node_modules.
 const path = require('path')
 const { update } = require('../js/helpers/e-crud/e-update')
-const { isViewHidden, createEntry } = require('./test-modules')
+
 
 describe('Application launch', function () {
   this.timeout(20000)
@@ -238,24 +238,25 @@ describe('Application checks', function () {
           // click submit 
           $('#btn-submit').click();
           
-
+          await test.sleep(15)//wait for entry to be submitted and gui to update
         
           //click active entry
           $('#files .active.entry').click();
-          await test.sleep(5)
+          await test.sleep(10)
           //click delete
           $('e-delete').click();
-  
+          
           //check that entry has been deleted
-          await test.sleep(5);
+          await test.sleep(10);
           $('#files .active.entry').click();
   
-          await test.sleep(5);//wait for GUI update
+          await test.sleep(10);//wait for GUI update
           
           //Is the entry with the test text still there?
           var text = document.querySelector('#e-body').value;
-  
-          if (text != testText) {
+          console.log('TEST.js: Delete Entry : #e-body value = ', text);
+          // if the Text doesn't macth - it should be sucessfully deleted
+          if (text != testText && text != undefined ) {
             pass = true;
           }
           return pass;
