@@ -6,10 +6,10 @@ const electronPath = require('electron') // Require Electron from the binaries i
 const path = require('path')
 const { update } = require('../js/helpers/e-crud/e-update')
 
+// note for console css styling - global var cannot be accessed from mocha context const css = 'color: green; font-style: italic; font-size:30px';
 
 describe('Application launch', function () {
   this.timeout(20000)
-
   
   before('start application',function () {
     this.app = new Application({
@@ -123,7 +123,8 @@ describe('Application checks', function () {
           var pass = false;
           // check number of entries
           var count1 = document.querySelector('#files').children.length;
-          console.log('test: create entry - var count1:', count1);
+          
+          console.log('%c TEST.js: Create Entry : #e-body value : var count1 = '+ count1, 'color: green; font-style: italic; font-size:10px');
           // click create 
           $('#e-create').click();
           await test.sleep(10);
@@ -137,8 +138,12 @@ describe('Application checks', function () {
           function checkCount() {
             //check number of entries = original number + 1
             var count2 = document.querySelector('#files').children.length;
-            console.log('test: create entry - var count1:', count1);
-            console.log('test: create entry - var count2:', count2);
+            
+          console.log('%c TEST.js: Create Entry : #e-body value : var count1 = '+ count1, 'color: green; font-style: italic; font-size:10px');
+
+            
+            console.log('%c TEST.js: Create Entry : #e-body value : var count2 = '+ count2, 'color: green; font-style: italic; font-size:10px');
+
             if ((++count1) == count2) {
               pass = true;
             }
@@ -167,7 +172,9 @@ describe('Application checks', function () {
             
           //entry body should contant test of CREATE test
           var text = document.querySelector('#e-body').innerHTML;
-          console.log('test: read entry - var text:', text);
+          
+          console.log('%c TEST.js: Read Entry : #e-body value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
+
           if (text == "CREATE test successful :)") {
             pass = true;
           }
@@ -190,15 +197,17 @@ describe('Application checks', function () {
           
           // check text - read
           var text =  document.querySelector(read).innerHTML;
-          console.log('test: update entry - var text:', text)
+          console.log('%c TEST.js: Update Entry : #e-body value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
+
           // click update
           $('#e-update').click();
           await test.sleep(5); //GUI - wait for info update
 
           // enter change - write 
           var updatedText = " Update to the entry test.";
-          document.querySelector(write).value = updatedText;
-          console.log('test: update entry - var updatedText:', updatedText)
+          document.querySelector(write).innerHTML = updatedText;
+          console.log('%c TEST.js: Update Entry : #e-body value : var updateText = '+ updateText, 'color: green; font-style: italic; font-size:10px');
+
           await test.sleep(5);
 
           //click submit update
@@ -212,7 +221,9 @@ describe('Application checks', function () {
           await test.sleep(5);
           // ensure entry body matches newText - read
           var text2 = document.querySelector(read).innerHTML;
-          console.log('test: update entry - var text:', text2)
+          
+          console.log('%c TEST.js: Update Entry : #e-body.innerHTML : var text2 = '+ text2, 'color: green; font-style: italic; font-size:10px');
+
 
           if (text2 == updatedText) {
             pass = true;
@@ -224,7 +235,6 @@ describe('Application checks', function () {
 
     describe('DELETE', function () {
 
-      
       it('deletes an entry', function () {
 
         return this.app.client.execute( async function () {
@@ -253,8 +263,8 @@ describe('Application checks', function () {
           await test.sleep(10);//wait for GUI update
           
           //Is the entry with the test text still there?
-          var text = document.querySelector('#e-body').value;
-          console.log('TEST.js: Delete Entry : #e-body value = ', text);
+          var text = document.querySelector('#e-body').innerHTML;
+          console.log('%c TEST.js: Delete Entry : #e-body value = '+ text, 'color: green; font-style: italic; font-size:10px');
           // if the Text doesn't macth - it should be sucessfully deleted
           if (text != testText && text != undefined ) {
             pass = true;
