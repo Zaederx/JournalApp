@@ -13,7 +13,7 @@ try {
     directory = fs.readdirSync('tagDirs/');
 
 } catch (err) {
-    console.log('Entry folder could not be read');
+    console.error('Entry folder could not be read');
 }
 
 dirHTML = '';
@@ -29,7 +29,7 @@ try {
     });
     event.reply('response-d-read', dirHTML);
 } catch (err) {
-    console.log('Problem reading directories.');
+    console.error('Problem reading directories.');
 }
 
 }
@@ -68,10 +68,10 @@ var dir = 'tagDirs/all/';
 fs.readFile(dir+filename, 'utf-8',(error, file) => {
     if (error) {
     event.reply('Entry '+file+' could not be read.');
-    console.log('Entry could not be read.');
+    console.error('Entry could not be read.');
     } else {
     event.reply('response-e-read', file);
-    console.log('File read successfully.');
+    console.info('File read successfully.');
     }
 })
 }
