@@ -18,10 +18,10 @@ function partition(arr:number[], s:number, e:number): number {
     for(var j = start; j < end - 1; j++ ) {
         if (a[j] <= pivot) {
             i++;
-            swap(a, a[i], a[j]);
+            swap(a, i, j);
         }
     }
-    swap(a ,a[i+1], a[end]);
+    swap(a ,i+1, end);
     return i+1;
 }
 
