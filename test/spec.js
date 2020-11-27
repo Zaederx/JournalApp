@@ -205,8 +205,8 @@ describe('Application checks', function () {
 
           // enter change - write 
           var updatedText = " Update to the entry test.";
-          document.querySelector(write).innerHTML = updatedText;
-          console.log('%c TEST.js: Update Entry : #e-body value : var updateText = '+ updateText, 'color: green; font-style: italic; font-size:10px');
+          document.querySelector(write).value = updatedText;
+          console.log('%c TEST.js: Update Entry : #e-body value : var updateText = '+ updatedText, 'color: green; font-style: italic; font-size:10px');
 
           await test.sleep(5);
 
