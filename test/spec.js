@@ -114,7 +114,8 @@ describe('Application checks', function () {
 
   // CRUD - emulate user C.R.U.D. input from front end js scripts
   describe('ENTRY C.R.U.D.', function() {
-
+    //each CRUD test assumes that the last entry created is at the top of the list as the active element
+    //tests will fail if this is not the case
     describe('CREATE', function () {
 
       it('creates an entry', function () {
@@ -125,6 +126,7 @@ describe('Application checks', function () {
           var count1 = document.querySelector('#files').children.length;
           
           console.log('%c TEST.js: Create Entry : #e-body value : var count1 = '+ count1, 'color: green; font-style: italic; font-size:10px');
+          
           // click create 
           $('#e-create').click();
           await test.sleep(10);
@@ -144,8 +146,11 @@ describe('Application checks', function () {
             
             console.log('%c TEST.js: Create Entry : #e-body value : var count2 = '+ count2, 'color: green; font-style: italic; font-size:10px');
 
-            if ((++count1) == count2) {
+            if ( count1+1 == count2) {
               pass = true;
+            }
+            else {
+              console.error('CREATE: count1=',count1,'count2=',count2);
             }
             return pass;
           }
@@ -161,11 +166,45 @@ describe('Application checks', function () {
     })
 
     describe('READ', function () {
-      it('reads entry', function () {
+      it('reads active entry', function () {
+        return this.app.client.execute( async function () {
+          var pass = false;
+
+          //click on active entry
+          $('#files .active.entry').click();
+
+          await test.sleep(10);
+            
+          //entry body should contant test of CREATE test
+          var text = document.querySelector('#e-body').innerHTML;
+          
+          console.log('%c TEST.js: Read Entry : #e-body value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
+
+          if (text != null) {
+            pass = true;
+          }
+          return pass;
+
+        })
+      })
+      it('reads last entry', function () {
         return this.app.client.execute(async function() {
           var pass = false;
-  
-          //click on last entry
+
+
+          //create and entry
+          $('#e-create').click();
+          await test.sleep(10);
+          // enter text input form field into fields
+          document.querySelector('#new-entry-body').value = testText;
+
+          await test.sleep(10);
+          // click submit 
+          $('#btn-submit').click();
+
+          await test.sleep(10);
+
+          //click on active entry
           $('#files .active.entry').click();
 
           await test.sleep(10);
@@ -178,6 +217,9 @@ describe('Application checks', function () {
           if (text == "CREATE test successful :)") {
             pass = true;
           }
+          else {
+            console.error('READ: last entry: text=',text);
+          }
           return pass;
           
         }).then((pass) => assert.equal(pass,true));
@@ -185,15 +227,16 @@ describe('Application checks', function () {
     })
 
     describe('UPDATE', function () {
-      it('updates entry', function () {
+
+      it('updates active entry', function () {
         return this.app.client.execute( async function () {
           var pass = false;
           var read = '#e-body';
-          var write = '#new-entry-body'
+          var write = '#new-entry-body';
 
           //click active entry 
           $('#files .active.entry').click();
-          await test.sleep(5);// GUI - wait for file info to be retrieved
+          await test.sleep(5);// GUI - wait for file.log to be retrieved
           
           // check text - read
           var text =  document.querySelector(read).innerHTML;
@@ -201,12 +244,12 @@ describe('Application checks', function () {
 
           // click update
           $('#e-update').click();
-          await test.sleep(5); //GUI - wait for info update
+          await test.sleep(5); //GUI - wait for.log update
 
           // enter change - write 
           var updatedText = " Update to the entry test.";
           document.querySelector(write).value = updatedText;
-          console.log('%c TEST.js: Update Entry : #e-body value : var updateText = '+ updatedText, 'color: green; font-style: italic; font-size:10px');
+          console.log('%c TEST.js: Update Entry : #e-body value set to : var updateText = '+ updatedText, 'color: green; font-style: italic; font-size:10px');
 
           await test.sleep(5);
 
@@ -227,6 +270,8 @@ describe('Application checks', function () {
 
           if (text2 == updatedText) {
             pass = true;
+          } else {
+            console.error('text2 did not match updatedText- text2=', text2);
           }
           return pass;
         }).then((pass => assert.equal(pass, true))); 
@@ -234,12 +279,13 @@ describe('Application checks', function () {
     })
 
     describe('DELETE', function () {
-
-      it('deletes an entry', function () {
-
-        return this.app.client.execute( async function () {
+      it ('deletes active entry', function () {
+        return this.app.client.execute(async function() {
           var pass = false;
-          var testText = "DELETE entry test";
+          var count1 = document.querySelector('#files').children.length;
+          var testText = "DELETE an entry test";
+
+          /******** Mock User Action Sequence: DELETE  */
           //create and entry
           $('#e-create').click();
           await test.sleep(10);
@@ -254,8 +300,60 @@ describe('Application checks', function () {
           $('#files .active.entry').click();
           await test.sleep(10)
           //click delete
-          $('e-delete').click();
+          $('#e-delete').click();
+          /*********************************** */
+
+          await test.sleep(5);
+          var count2 = document.querySelector('#files').children.length;
+
+          if (count1 > count2) {
+            pass = true;
+          }
+          else {
+            console.error('DELETE : count1=',count1,'count2=',count2);
+          }
+          return pass;
+        }).then((pass) => assert.equal(pass,true))
+      })
+        
+      it('deletes last entry', function () {
+
+        return this.app.client.execute( async function () {
+          var pass = false;
+          var testText1 = "DELETE last entry test";
+          var testText2 = "SHOULD BE DELETED";
+
+          /******** Mock User Action Sequence: CREATE 2, DELETE 1  */
+
+          /**CREATE 2 Entries */
+          //create and entry
+          $('#e-create').click();
+          await test.sleep(10);
+          // enter text input form field into fields
+          document.querySelector('#new-entry-body').value = testText1;
+          // click submit 
+          $('#btn-submit').click();
+
+          await test.sleep(20);
+          //create and entry
+          $('#e-create').click();
+          await test.sleep(10);
+          // enter text input form field into fields
+          document.querySelector('#new-entry-body').value = testText2;
+          // click submit 
+          $('#btn-submit').click();
           
+          await test.sleep(15)//wait for entry to be submitted and gui to update
+        
+          /** DELETE 1 Entry */
+          // click active entry
+          $('#files .active.entry').click();
+          await test.sleep(10)
+          //click delete
+          $('#e-delete').click();
+          /*********************************** */
+
+          /**** Test Whether Delete is Succesful */
           //check that entry has been deleted
           await test.sleep(10);
           $('#files .active.entry').click();
@@ -266,20 +364,21 @@ describe('Application checks', function () {
           var text = document.querySelector('#e-body').innerHTML;
           console.log('%c TEST.js: Delete Entry : #e-body value = '+ text, 'color: green; font-style: italic; font-size:10px');
           // if the Text doesn't macth - it should be sucessfully deleted
-          if (text != testText && text != undefined ) {
+          if (text == testText1 || text == undefined ) {
             pass = true;
+          }
+          else {
+            console.error('DELETE: last entry: text=',text, 'testText2=',testText2);
           }
           return pass;
         }).then((pass) => assert.equal(pass, true));
         
       })
       
-
-
       
-    })
+    })//describe Entry CRUD
 
     
-  })
+  }) //described View
 
 })//Application
