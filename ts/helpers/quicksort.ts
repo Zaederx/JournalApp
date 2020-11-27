@@ -1,7 +1,7 @@
 function swap(arr:number[], i:number, j:number) {
     var x:number = arr[i];
     arr[i] = arr[j];
-    arr[i] = x;
+    arr[j] = x;
 }
 
 // arr = array of integers
