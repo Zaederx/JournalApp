@@ -1,7 +1,9 @@
 /**
- * Functions for performing sorting on biarrays instead of 
- * single arrays.
+ * Functions for performing sorting on biarrays where the secons *  column is a number to be sorted, and the first coulnm is an *   attribute of importance.
  */
+
+ 
+//  exports.sort = (arr:[string & number[]],start:number,end:number):[string & number[]] => sort(arr,start,end);
 
 /**
  * 
@@ -37,7 +39,13 @@ function bipartition(arr:[string & number[]], s:number, e:number): number {
 }
 
 //repetedly calls partition around a pivot points in order to sort arr elements
-function sort(arr:[string & number[]], start:number, end:number):[string & number[]] {
+
+/**
+ * @param arr 
+ * @param start 
+ * @param end 
+ */
+export function sort(arr:[string & number[]], start:number, end:number):[string & number[]] {
     var a:[string & number[]] = arr;
     if (start < end){
         var partitionIndex = bipartition(a, start, end);
