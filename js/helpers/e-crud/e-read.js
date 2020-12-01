@@ -7,6 +7,7 @@ const process = require("child_process");
 const EntryDate_1 = require("../../classes/EntryDate");
 /**
  * Read all tag Directories.
+ * Used to fill tag directory side bar/panel
  * @param event - An Electron Event
  */
 function readAllDirectories(event) {
@@ -18,7 +19,7 @@ function readAllDirectories(event) {
         var counter = 0;
         directory.forEach(subdirectory => {
             if (counter == 0) {
-                dirHTML += '<div class="active tag">' + subdirectory + '</div>\n';
+                dirHTML += '<div class="active tag">' + subdirectory + '</div>\n'; //must be active tag!
                 counter++;
             }
             else {
@@ -50,17 +51,14 @@ function readDirFiles(event, dir) {
             return console.error(error);
         }
         else {
-            files.forEach(file => {
-                fetchBtime(prefix, file, arr);
-                // filesHTML += '<div class="active entry">'+file+'</div>\n';
-            });
+            files.forEach(file => fetchBtime(prefix, file, arr));
             var start = 0;
             var end = arr.length - 1;
             var newArr = entrySort.sort(arr, start, end);
             var i = 0;
             newArr.forEach(entryDate => {
                 if (i == 0) {
-                    filesHTML += '<div class="active entry">' + entryDate.name + '</div>\n';
+                    filesHTML += '<div class="active entry">' + entryDate.name + '</div>\n'; //class must be active entry!
                     i++;
                 }
                 else {
@@ -101,7 +99,7 @@ exports.readSingleFile = readSingleFile;
  */
 function fetchBtime(prefix, file, arr) {
     /**
-     * From ZSH manual under stat:
+     * From ZSH manual under 'stat' - see zsh terminal command 'man stat':
      *
      *  -f format
                  Display information using the specified format.  See the FORMATS
