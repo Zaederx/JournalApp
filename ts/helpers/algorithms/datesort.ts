@@ -15,4 +15,3 @@ export function sort(arr:[string&number[]], reversed) {
     }
     return a;
 }
-exports.sort = sort;
