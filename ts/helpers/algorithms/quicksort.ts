@@ -6,7 +6,7 @@ function swap(arr:number[], i:number, j:number) {
 
 // arr = array of integers
 // s = start index = 0
-// e = end index
+// e = end index usually arr.length-1
 //returns - partitionIndex = index of the partition variable after the partition is performed - required by quicksort
 function partition(arr:number[], s:number, e:number): number {
     var a:number[] = arr;
@@ -15,7 +15,7 @@ function partition(arr:number[], s:number, e:number): number {
     var pivot:number = a[end];
     var i: number = start - 1;
 
-    for(var j = start; j < end - 1; j++ ) {
+    for(var j = start; j < end; j++ ) {
         if (a[j] <= pivot) {
             i++;
             swap(a, i, j);
