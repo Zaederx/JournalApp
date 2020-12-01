@@ -2,7 +2,7 @@
   "name": "journal-app",
   "version": "1.0.0",
   "description": "An app for journal entries.",
-  "main": "js/main.ts",
+  "main": "js/main.js",
   "scripts": {
     "test": "export NODE_ENV='test'; mocha;",
     "start": "export NODE_ENV=''; electron .;",
