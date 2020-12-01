@@ -5,6 +5,8 @@ node_modules
 # JSON entry files
 tagDirs/all/
 
+#New JS files - converting project to TS
+js/
 #FontAwesome
 external/fontawesome-free-5.15.1-web/
 *.code-workspace
