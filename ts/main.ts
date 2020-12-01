@@ -2,7 +2,7 @@ const {app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 // const helper = require('./helpers/dateStr');
 const eCreate = require('./helpers/e-crud/e-create');
-const eRead = require('./helpers/e-crud/e-read');
+import * as eRead from './helpers/e-crud/e-read';
 const eUpdate = require('./helpers/e-crud/e-update');
 const eDelete = require('./helpers/e-crud/e-delete');
 let win:typeof BrowserWindow;//use win instead of window to avoid conflicts with ts block scope varible "window" & typeof to avoid another naming conflict for value 'BrowserWindow'
