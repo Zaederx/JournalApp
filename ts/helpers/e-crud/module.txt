@@ -1,0 +1,2 @@
+E-CRUD -> Event object Creat Read Update Delete
+This folder holds modules for performing each of these methods needed by the main. Done this way to prevent code from becoming overly cluttered in main.js
