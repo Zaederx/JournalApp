@@ -1,17 +1,22 @@
-const btn_update = document.querySelector('#e-update');
-var etitle = document.querySelector('#new-entry-title');
-var ebody = document.querySelector('#new-entry-body');
-var etags = document.querySelector('#new-entry-tags');
-const btn_submit_update = document.querySelector('#btn-submit-update');
+/** Button used to open the update entry view (by displaying the #new-entry-view div) */
+const btn_update:HTMLElement|null = document.querySelector('#e-update');//btn to open update view
+/** Button used to submit update changes. */
+const btn_submit_update:HTMLElement|null = document.querySelector('#btn-submit-update');
+const etitle:HTMLInputElement|null = document.querySelector('#new-entry-title');
+const ebody:HTMLInputElement|null = document.querySelector('#new-entry-body');
+const etags:HTMLInputElement|null = document.querySelector('#new-entry-tags');
 
-btn_submit_update.onclick = (event) => {updateFile(event)};
+
+if(btn_submit_update != null)
+    btn_submit_update.onclick = (event) => {updateFile(event)};
+else console.error('update.ts: var btn_submit_update = null');
 
 function updateFile(event) {
     window.logAPI.message('form submit button clicked\n');
 
-    var etitle = document.querySelector('#new-entry-title').value;
-    var ebody = document.querySelector('#new-entry-body').value;
-    var etags = document.querySelector('#new-entry-tags').value;
+    var etitle = (document.querySelector('#new-entry-title') as HTMLInputElement).value;
+    var ebody = (document.querySelector('#new-entry-body') as HTMLInputElement).value;
+    var etags = (document.querySelector('#new-entry-tags') as HTMLInputElement).value;
     var message = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
     console.log('message:',message);
     window.logAPI.message(message);
@@ -28,29 +33,30 @@ function updateFile(event) {
     event.preventDefault();//to disable postback - otherwise causes problems with updating content
 
     //call a method that symlinks the file to all tags folders
+    if (form != null)
     form.reset();//because default are disabled
 
     refresh();//from read.js
 }
-btn_update.onclick = (event) => updateForm(event);
+if (btn_update != null)
+btn_update.onclick = (event) => getUpdateForm(event);
 
-function updateForm(event) {
+/** Displays the update form.
+ * Also fills that form with information of the 
+ * currently selected Entry */
+function getUpdateForm(event) {
     //display 'new-entry-view'
     displayNEView();
     //read entry
-    entry = getECurrent();//from vars.js
+    var entry:Entry = getECurrent();//from vars.js
     
     //insert into fields
-    etitle.value =  entry.title;
-    ebody.value = entry.body;
-    etags.value = entry.tags;
+    if(etitle != null) etitle.value =  entry.title;
+    else console.error('update.ts: const etitle = null')
 
-    //read fields for changes
-    
+    if(ebody != null) ebody.value = entry.body;
+    else console.error('update.ts: const ebody = null')
 
-    //create entry of same name to replace original
-
-    //delete original?
-
-    //save new entry
+    if(etags != null) etags.value = entry.tags;
+    else console.error('update.ts: const etags = null')
 }

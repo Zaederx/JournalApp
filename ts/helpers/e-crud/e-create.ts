@@ -1,16 +1,13 @@
-const fs = require('fs');
-const eDate = require('../dateStr');
-exports.create =  (event,entry) => createEvent(event, entry);
+import * as fs from 'fs';
+import * as eDate from '../dateStr';
 
-function createEvent(event,entry) {
-    console.log('ipcmain: Creating new Entry -' + entry);
-    directory = "tagDirs/all/";
-    
+export function createEvent(event:any,entryJson:string) {
+    console.log('ipcmain: Creating new Entry -' + entryJson);
+    var directory:string = "tagDirs/all/";
+    var fileName:string = eDate.dateStr() + ".json";
   
-    fileName = eDate.dateStr() + ".json";
-  
-    fs.writeFile(directory+fileName, entry, (err) => {
-      message = '';
+    fs.writeFile(directory+fileName, entryJson, (err) => {
+    var message:string = '';
       if (err) {
         message = 'An error occured in saving the new entry.';
         console.log(message);

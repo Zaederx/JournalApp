@@ -4,42 +4,66 @@ $(document).ready(function() {
     getEntries();
 });
 
-//retrieves and dsiplays Topics names in Topics sidepanel
+/**
+ * Retrieves and displays Topic/Tag names.
+ * These are the names displayed in the Topics/Tags 
+ * (#topics div) sidepanel of main.html.
+ */
 function getTopics() {
     window.CRUD.readDirectories();//reads tag directories
     //return topics to html side panel
     window.CRUD.readDResponse(function(dirHTML) {
-        document.querySelector('#topics').innerHTML = dirHTML;
+        var topics:HTMLElement|null = document.querySelector('#topics');
+        if (topics !=null) topics.innerHTML = dirHTML;
+        else console.error('read.ts: var topics = null')
+        
     });
 }
-//retrieves and displays all Entry filenames from default directory
+
+/**
+ * Retrieves and displays all Entry filenames from default directory.
+ * These entries are displayed on the Entry File panel/sidebar.
+ * This function also calls makeClickable() on each entryfile div
+ * (allowing these div's to act like buttons that display file contents when clicked,
+ *  and has one button highlighted as active).
+ * 
+ * Note: here the use of #files refers to the div containing the list
+ * all entry filenames on main.html. This list can be clicked like buttons
+ * in order to display each cooresponding file's contents.
+ */
 function getEntries() {
     //fill side panel with file names
-    var directoryName = 'all'
+    var directoryName:string = 'all';
     window.CRUD.readDirectoryEntries(directoryName);
     window.CRUD.readDEResponse(function(filesHTML) {
-    document.querySelector('#files').innerHTML = filesHTML;
-        //to display a selected file on click
+    var files:HTMLElement|null = document.querySelector('#files');
+    if (files != null) files.innerHTML = filesHTML;
+    else console.error('read.ts: var files = null');
+        //needed to display a selected file on click
         //fills #files div with many -> <div>{filename}</div>
         $('#files').find('div').each(function() {
-            entryBtn = this;
-            makeClickable(entryBtn);
+            var entryDiv:HTMLDivElement = this;
+            makeClickable(entryDiv);
         });
     });
 
 }
 
 
-/** Enables the button -> makes button functional and applies CSS styling */
-function makeClickable(entryBtn) {
-    entryBtn.onclick = () => {
-        messageDiv.innerHTML = "";
-        var filename = entryBtn.innerHTML;
+/** Enables the button -> makes button functional and applies CSS styling.
+ * This allows these div's to act like buttons that display file contents when clicked,
+ * and have one button highlighted as active.
+ */
+function makeClickable(entryDiv:HTMLDivElement) {
+    entryDiv.onclick = () => {
+        if(messageDiv != null) messageDiv.innerHTML = "";
+        else console.log('read.ts: var messageDiv = null');
+        var filename:string = entryDiv.innerHTML;
         setEntryFilename(filename);
         displayEView();
         
         window.CRUD.readEntry(filename);       
-        highlightActiveEntry(entryBtn);
+        highlightActiveEntry(entryDiv);
        
     };
 }
@@ -49,6 +73,9 @@ function makeClickable(entryBtn) {
 
 
 //convience method
+/**
+ * Calls methods getTopics() and getEntries().
+ */
 function refresh() {
     getTopics();
     getEntries();
@@ -68,7 +95,7 @@ window.CRUD.readEntryResponse(function (fileContent) {
 });
 
 function displayEntry(entry) {
-    document.querySelector('#e-title').innerHTML = entry.title;
-    document.querySelector('#e-body').innerHTML = entry.body;
-    document.querySelector('#e-tags').innerHTML = entry.tags;
+    (document.querySelector('#e-title') as HTMLInputElement).innerHTML = entry.title;
+    (document.querySelector('#e-body') as HTMLInputElement).innerHTML = entry.body;
+    (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = entry.tags;
 }

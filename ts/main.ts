@@ -54,7 +54,6 @@ app.on('activate', () => {
 });
 
 /* IPC FUNCTIONS */
-// TODO: set up ipcMain
 ipcMain.on('new_content', function(e,content) {
     console.log('ipcmain: New Content -' + content);
    win.loadFile(content);

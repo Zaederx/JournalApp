@@ -1,25 +1,47 @@
-/****Current Tag and Entry information*** */
+/*Current Tag and Entry information*/
+/** Variable for information of the currently selected entry*/
 var selectedEntry = new Entry('default','default','default');
+/** Variable for information of the currently selected tag*/
 var selectedTag = '';
+/** Variable for the filename of the currently selected entry */ 
+var selectedEntryFilename = '';//TODO souldn't this just be in the Entry class ????
 
-var selectedEntryFilename = '';
-
-function getECurrent() {
+/**
+ * Returns the currently selected entry.
+ * This will be the entry selected by a user 
+ * in the Entry panel/sidebar list on main.html.
+ * @return selectedEntry
+ */
+function getECurrent():Entry {
     console.log("vars:getECurrent:"+selectedEntry.title)
     return selectedEntry;
 }
 
-function setECurrent(entry) {
+/**
+ * Sets the current Entry variable.
+ * @param entry 
+ */
+function setECurrent(entry:Entry) {
     console.log("vars:setECurrent")
     selectedEntry = entry;
 }
 
-function getEntryFilename() {
+/**
+ * Returns the selectedEntries filename.
+ */
+function getEntryFilename():string {
     return selectedEntryFilename;
 }
 
-function setEntryFilename(path) {
-    selectedEntryFilename = path;
+/**
+ * Sets the selectedEntryFilename variable.
+ * Is set to be called the within the 
+ * onclick event function of every entry.
+ * (see read.ts makeclickable function)
+ * @param filename the name of the entry's file
+ */
+function setEntryFilename(filename:string) {
+    selectedEntryFilename = filename;
 }
 
 function getTagCurrent() {
@@ -33,31 +55,45 @@ function setTagCurrent(tag) {
     selectedTag = tag;
 }
 
-/*** Entry and NewEntry Views ** */
+/*Entry and NewEntry Views ** */
 
 function displayEView() {
-    eView.removeAttribute('hidden');
-    neView.setAttribute('hidden','');//from create.js
-    form.reset();
+    if (eView != null) eView.removeAttribute('hidden');
+    else console.error('vars.ts: var eView = null');
+
+    if (neView != null) neView.setAttribute('hidden','');//from create.js
+    else console.error('vars.ts: var neView = null');
+    
+    if (form != null) form.reset();
+    else console.error('vars.ts: var form = null');
 }
 function displayNEView() {
-    neView.removeAttribute('hidden');
-    eView.setAttribute('hidden','');//from create.js
-    form.reset();
+    if (neView != null) neView.removeAttribute('hidden');
+    else console.error('vars.ts: var neView = null');
+
+    if (eView != null) eView.setAttribute('hidden','');//from create.js
+    else console.error('vars.ts: var eView = null');
+
+    if (form != null) form.reset();
+    else console.error('vars.ts: var form = null');
 }
 
-/****** Highlight Active Entry or Tag **** */
+/* Highlight Active Entry or Tag **** */
 function highlightActiveEntry(entryBtn) {
     console.log('highlightActiveEntry')
      //handle css div-button styling
      var lastActive = document.querySelector('.active.entry');
-     lastActive.className = lastActive.className.replace('active entry', '');
+     if(lastActive !=null)
+        lastActive.className = lastActive.className.replace('active entry', '');
+     else console.error('vars.ts: var lastActive = null');
      entryBtn.className += 'active entry';
 }
 
 function highlightActiveTag(tagBtn) {
     //handle css div-button styling
     var lastActive = document.querySelector('.active.tag');
-    lastActive.className = lastActive.className.replace('active tag', '');
+    if (lastActive != null)
+        lastActive.className = lastActive.className.replace('active tag', '');
+    else console.error('vars.ts: var lastActive = null');
     tagBtn.className += 'active tag';
 }

@@ -1,10 +1,10 @@
-const fs = require('fs');
+import * as fs from 'fs';
 const directory = require('../directory');
-exports.update = (event, entry, filename) => updateEntry(event, entry, filename);
 
 
-function updateEntry(event, entry, filename) {
-    filepath = directory.all + filename;
+
+export function updateEntry(event:Electron.IpcMainEvent, entry:string, filename:string) {
+    var filepath:string = directory.all + filename;
     fs.writeFile(filepath, entry, function(err) {
         if (err) {
             var message = 'updateEntry(): Error in updating entry file: '+err;

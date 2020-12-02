@@ -1,4 +1,2 @@
-var directoryAllEntries  = 'tagDirs/all/';
-var directoryTags = 'tagDirs/';
-exports.all = directoryAllEntries;
-exports.tags = directoryTags;
+export var all  = 'tagDirs/all/';//directoryAllEntries
+export var tags  = 'tagDirs/';//directoryTags

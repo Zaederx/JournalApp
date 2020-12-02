@@ -1,13 +1,13 @@
-exports.dateStr = () => {
+export function dateStr() {
     var date = new Date();
-    day = date.getDate();
-    month = date.getMonth();
-    year = date.getFullYear();
-    hour = date.getHours();
-    mins = date.getMinutes();
-    secs = date.getSeconds();
+    var day = date.getDate();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+    var hour = date.getHours();
+    var mins = date.getMinutes();
+    var secs = date.getSeconds();
 
-    str = day + '-' + month + '-' + year + '-' + hour + '-' + mins + '-' + secs;
+    var str = day + '-' + month + '-' + year + '-' + hour + '-' + mins + '-' + secs;
 
     return str;
 }

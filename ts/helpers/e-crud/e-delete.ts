@@ -1,18 +1,20 @@
-const fs = require('fs');
-const directory = require('../directory');
+import * as fs from 'fs';
+import * as directory from '../directory';
 
-exports.delete = (event, filename) => deleteEntry(event, filename);
-
-
-function deleteEntry(event, filename) {
+/**
+ * Functions used by main to delete Entries.
+ * @param event 
+ * @param filename 
+ */
+export function deleteEntry(event:Electron.IpcMainEvent, filename:string) {
     
-    path = directory.all + filename;
+    var path:fs.PathLike = directory.all + filename;
     console.log('e-delete.js:file path:'+path);
-    callback = function (error) {
+    var callback:fs.NoParamCallback = function (error:NodeJS.ErrnoException|null) {
         if (error) {
             console.log('Error deleting file:'+error);
-            channel = 'response-e-delete';
-            message = 'Error deleting file:'+filename;
+            var channel:string = 'response-e-delete';
+            var message:string = 'Error deleting file:'+filename;
             event.reply(channel, message);
             // throw error;
         }
