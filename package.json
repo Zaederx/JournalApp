@@ -4,7 +4,7 @@
   "description": "An app for journal entries.",
   "main": "js/main.js",
   "scripts": {
-    "test": "export NODE_ENV='test'; mocha;",
+    "test": "export NODE_ENV='test'; tsc && mocha;",
     "start": "export NODE_ENV=''; tsc && electron .;",
     "dev-tools": "export NODE_ENV='dev-tools'; electron .;"
   },
