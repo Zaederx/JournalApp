@@ -104,5 +104,10 @@ if (process.env.NODE_ENV === 'test') {
     {
         isViewHidden: (viewId:string) => test.isViewHidden(viewId),
         sleep : (ms:number) => test.sleep(ms),
+        createEntryResponse: (func:Function) => ipcRenderer.on('test-create-entry', () => func),
+        readEntryReponse: (func:Function) => ipcRenderer.on('test-read-entry', () => func),
+        updateEntryReponse: (func:Function) => ipcRenderer.on('test-update-entry', () => func),
+        deleteEntryReponse: (func:Function) => ipcRenderer.on('test-delete-entry', () => func)
+        
     });
 }
