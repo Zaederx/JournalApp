@@ -12,7 +12,7 @@ $(document).ready(function() {
 function getTopics() {
     window.CRUD.readDirectories();//reads tag directories
     //return topics to html side panel
-    window.CRUD.readDResponse(function(dirHTML) {
+    window.CRUD.readDResponse(function(dirHTML:string) {
         var topics:HTMLElement|null = document.querySelector('#topics');
         if (topics !=null) topics.innerHTML = dirHTML;
         else console.error('read.ts: var topics = null')
@@ -35,7 +35,7 @@ function getEntries() {
     //fill side panel with file names
     var directoryName:string = 'all';
     window.CRUD.readDirectoryEntries(directoryName);
-    window.CRUD.readDEResponse(function(filesHTML) {
+    window.CRUD.readDEResponse(function(filesHTML:string) {
     var files:HTMLElement|null = document.querySelector('#files');
     if (files != null) files.innerHTML = filesHTML;
     else console.error('read.ts: var files = null');
