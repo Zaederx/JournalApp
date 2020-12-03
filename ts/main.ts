@@ -1,9 +1,10 @@
-import {app, BrowserWindow, ipcMain } from 'electron';
+import {app, BrowserWindow, ipcMain,ipcRenderer } from 'electron';
 import path = require('path');
 import * as eCreate from './helpers/e-crud/e-create';
 import * as eRead from './helpers/e-crud/e-read';
 import * as  eUpdate from './helpers/e-crud/e-update';
 import * as  eDelete from './helpers/e-crud/e-delete';
+import { windowsStore } from 'process';
 let window:BrowserWindow;
 
 var filename = 'default';
@@ -60,17 +61,33 @@ ipcMain.on('new_content', function(e,htmlFilename:string) {
 
 /**************** C.R.U.D. METHODS ****************** */
 // Create Entry
-ipcMain.on('e-create', (event:Electron.IpcMainEvent, entry:string) => eCreate.createEvent(event,entry));
+ipcMain.on('e-create', (event:Electron.IpcMainEvent, entry:string) => {
+  eCreate.createEvent(event,entry);
+  //TODO Try to implement an better ansynchronous testing
+  // window.webContents.send('test-create-entry', 'done');
+});
 
 // Read Entry
-ipcMain.on('e-read', (event:Electron.IpcMainEvent, filename:string) => eRead.readSingleFile(event, filename));
+ipcMain.on('e-read', (event:Electron.IpcMainEvent, filename:string) => {
+  eRead.readSingleFile(event, filename);
+  //TODO Try to implement an better ansynchronous testing
+  // window.webContents.send('test-read-entry', 'done');
+});
 
 
 // Update Entry
-ipcMain.on('e-update', (event:Electron.IpcMainEvent, entryJson:string, filename:string) => eUpdate.updateEntry(event, entryJson, filename))
+ipcMain.on('e-update', (event:Electron.IpcMainEvent, entryJson:string, filename:string) => {
+  eUpdate.updateEntry(event, entryJson, filename);
+  //TODO Try to implement an better ansynchronous testing
+  // window.webContents.send('test-update-entry', 'done');
+})
 
 // Delete Entry
-ipcMain.on('e-delete', (event:Electron.IpcMainEvent, filename:string) => eDelete.deleteEntry(event, filename))
+ipcMain.on('e-delete', (event:Electron.IpcMainEvent, filename:string) => {
+  eDelete.deleteEntry(event, filename);
+  //TODO Try to implement an better ansynchronous testing
+  // window.webContents.send('test-delete-entry', 'done');
+})
 
 /**************************************** */
 

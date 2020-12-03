@@ -1,4 +1,3 @@
-import { ipcMain, ipcRenderer } from 'electron';
 import * as fs from 'fs';
 import * as eDate from '../dateStr';
 
@@ -17,7 +16,6 @@ export function createEvent(event:any,entryJson:string) {
       }
       console.log(message);
       event.reply('response-e-create', message);
-      ipcRenderer.send('test-create-entry', 'done');
     }); 
   }
 
