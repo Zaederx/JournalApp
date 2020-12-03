@@ -1,11 +1,10 @@
-const {app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
-// const helper = require('./helpers/dateStr');
-const eCreate = require('./helpers/e-crud/e-create');
+import {app, BrowserWindow, ipcMain } from 'electron';
+import path = require('path');
+import * as eCreate from './helpers/e-crud/e-create';
 import * as eRead from './helpers/e-crud/e-read';
-const eUpdate = require('./helpers/e-crud/e-update');
-const eDelete = require('./helpers/e-crud/e-delete');
-let win:typeof BrowserWindow;//use win instead of window to avoid conflicts with ts block scope varible "window" & typeof to avoid another naming conflict for value 'BrowserWindow'
+import * as  eUpdate from './helpers/e-crud/e-update';
+import * as  eDelete from './helpers/e-crud/e-delete';
+let window:BrowserWindow;
 
 var filename = 'default';
 
@@ -15,7 +14,7 @@ function createWindow () {
      integration = true;
 }
 
-  win = new BrowserWindow({
+  window = new BrowserWindow({
     width: 921,
     height: 600,
     minWidth: 921,
@@ -28,9 +27,9 @@ function createWindow () {
     }
   })
 
-  win.loadFile('html/main.html');
+  window.loadFile('html/main.html');
   if (process.env.NODE_ENV === 'dev-tools') {
-    win.webContents.openDevTools();
+    window.webContents.openDevTools();
   }
 }
 
@@ -54,35 +53,35 @@ app.on('activate', () => {
 });
 
 /* IPC FUNCTIONS */
-ipcMain.on('new_content', function(e,content) {
-    console.log('ipcmain: New Content -' + content);
-   win.loadFile(content);
+ipcMain.on('new_content', function(e,htmlFilename:string) {
+    console.log('ipcmain: New Content -' + htmlFilename);
+   window.loadFile(htmlFilename);
 });
 
 /**************** C.R.U.D. METHODS ****************** */
 // Create Entry
-ipcMain.on('e-create', (event,entry) => eCreate.create(event,entry));
+ipcMain.on('e-create', (event:Electron.IpcMainEvent, entry:string) => eCreate.createEvent(event,entry));
 
 // Read Entry
-ipcMain.on('e-read', (event,filename) => eRead.readSingleFile(event, filename));
+ipcMain.on('e-read', (event:Electron.IpcMainEvent, filename:string) => eRead.readSingleFile(event, filename));
 
 
 // Update Entry
-ipcMain.on('e-update', (event, entry, filename) => eUpdate.update(event, entry, filename))
+ipcMain.on('e-update', (event:Electron.IpcMainEvent, entryJson:string, filename:string) => eUpdate.updateEntry(event, entryJson, filename))
 
 // Delete Entry
-ipcMain.on('e-delete', (event, filename) => eDelete.delete(event, filename))
+ipcMain.on('e-delete', (event:Electron.IpcMainEvent, filename:string) => eDelete.deleteEntry(event, filename))
 
 /**************************************** */
 
 // READ DIRECTORIES - lists all tag directories
-ipcMain.on('d-read', (event) => eRead.readAllDirectories(event))
+ipcMain.on('d-read', (event:Electron.IpcMainEvent) => eRead.readAllDirectories(event))
 
 // READ DIRECTORY FILES - files inside a specific directory
-ipcMain.on('de-read', (event, dir) => eRead.readDirFiles(event, dir));
+ipcMain.on('de-read', (event:Electron.IpcMainEvent, dir:string) => eRead.readDirFiles(event, dir));
 
 
 
-ipcMain.on('console', function (e,content) {
-  console.log('ipcMain: logging message to console:'+ content);
+ipcMain.on('console', function (event:Electron.IpcMainEvent, message:string) {
+  console.log('ipcMain: logging message to console:'+ message);
 })
