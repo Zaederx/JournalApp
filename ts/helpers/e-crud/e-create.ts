@@ -1,3 +1,4 @@
+import { ipcMain, ipcRenderer } from 'electron';
 import * as fs from 'fs';
 import * as eDate from '../dateStr';
 
@@ -10,15 +11,12 @@ export function createEvent(event:any,entryJson:string) {
     var message:string = '';
       if (err) {
         message = 'An error occured in saving the new entry.';
-        console.log(message);
-        event.reply('response-e-create', message);
       }
       else {
         message = 'Entry saved succesfully';
-        console.log(message);
-        event.reply('response-e-create', message);
       }
+      console.log(message);
+      event.reply('response-e-create', message);
     }); 
-    
   }
 
