@@ -129,12 +129,13 @@ describe('Application checks', function () {
           
           // click create 
           $('#e-create').click();
-          await test.sleep(10);
+          await test.sleep(10)
           // enter text input form field into fields
           document.querySelector('#new-entry-body').value = "CREATE test successful :)";
           // click submit 
           $('#btn-submit').click();
 
+          
 
           //check if number of files has increase by 1
           function checkCount() {
@@ -146,7 +147,7 @@ describe('Application checks', function () {
             
             console.log('%c TEST.js: Create Entry : #e-body value : var count2 = '+ count2, 'color: green; font-style: italic; font-size:10px');
 
-            if ( count1+1 == count2) {
+            if ( ++count1 == count2) {
               pass = true;
             }
             else {
@@ -154,16 +155,17 @@ describe('Application checks', function () {
             }
             return pass;
           }
-          
-         pass = await test.sleep(10).then(() => {return checkCount();});
-          
+          //TODO - Try to implement an better ansynchronous testing
+          // test.createEntryResponse(() => {return checkCount()});
+         pass = await test.sleep(300).then(() => {return checkCount();});
+
           return pass;
         }).then((pass) => assert.equal(pass, true))
         
       })//end of function (){})
      
 
-    })
+    })//Describe Create Ends
 
     describe('READ', function () {
       it('reads active entry', function () {
