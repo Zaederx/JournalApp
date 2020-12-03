@@ -1,56 +1,56 @@
-const btn_update = document.querySelector('#e-update');
-var etitle = document.querySelector('#new-entry-title');
-var ebody = document.querySelector('#new-entry-body');
-var etags = document.querySelector('#new-entry-tags');
+"use strict";
+/** Button used to open the update entry view (by displaying the #new-entry-view div) */
+const btn_update = document.querySelector('#e-update'); //btn to open update view
+/** Button used to submit update changes. */
 const btn_submit_update = document.querySelector('#btn-submit-update');
-
-btn_submit_update.onclick = (event) => {updateFile(event)};
-
+const etitle = document.querySelector('#new-entry-title');
+const ebody = document.querySelector('#new-entry-body');
+const etags = document.querySelector('#new-entry-tags');
+if (btn_submit_update != null)
+    btn_submit_update.onclick = (event) => { updateFile(event); };
+else
+    console.error('update.ts: var btn_submit_update = null');
 function updateFile(event) {
     window.logAPI.message('form submit button clicked\n');
-
     var etitle = document.querySelector('#new-entry-title').value;
     var ebody = document.querySelector('#new-entry-body').value;
     var etags = document.querySelector('#new-entry-tags').value;
     var message = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
-    console.log('message:',message);
+    console.log('message:', message);
     window.logAPI.message(message);
-
-
     var entry = new Entry(etitle, ebody, etags);
     var entryJSON = JSON.stringify(entry);
     window.logAPI.message(entryJSON);
-
-    var filename = getEntryFilename();//from vars.js
-    
+    var filename = getEntryFilename(); //from vars.js
     //need to call method that creates entry file in file system
     window.CRUD.updateEntry(entryJSON, filename);
-    event.preventDefault();//to disable postback - otherwise causes problems with updating content
-
+    event.preventDefault(); //to disable postback - otherwise causes problems with updating content
     //call a method that symlinks the file to all tags folders
-    form.reset();//because default are disabled
-
-    refresh();//from read.js
+    if (form != null)
+        form.reset(); //because default are disabled
+    refresh(); //from read.js
 }
-btn_update.onclick = (event) => updateForm(event);
-
-function updateForm(event) {
+if (btn_update != null)
+    btn_update.onclick = (event) => getUpdateForm(event);
+/** Displays the update form.
+ * Also fills that form with information of the
+ * currently selected Entry */
+function getUpdateForm(event) {
     //display 'new-entry-view'
     displayNEView();
     //read entry
-    entry = getECurrent();//from vars.js
-    
+    var entry = getECurrent(); //from vars.js
     //insert into fields
-    etitle.value =  entry.title;
-    ebody.value = entry.body;
-    etags.value = entry.tags;
-
-    //read fields for changes
-    
-
-    //create entry of same name to replace original
-
-    //delete original?
-
-    //save new entry
+    if (etitle != null)
+        etitle.value = entry.title;
+    else
+        console.error('update.ts: const etitle = null');
+    if (ebody != null)
+        ebody.value = entry.body;
+    else
+        console.error('update.ts: const ebody = null');
+    if (etags != null)
+        etags.value = entry.tags;
+    else
+        console.error('update.ts: const etags = null');
 }

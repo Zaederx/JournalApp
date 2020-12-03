@@ -1,13 +1,13 @@
-const fs = require('fs');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateEntry = void 0;
+const fs = require("fs");
 const directory = require('../directory');
-exports.update = (event, entry, filename) => updateEntry(event, entry, filename);
-
-
 function updateEntry(event, entry, filename) {
-    filepath = directory.all + filename;
-    fs.writeFile(filepath, entry, function(err) {
+    var filepath = directory.all + filename;
+    fs.writeFile(filepath, entry, function (err) {
         if (err) {
-            var message = 'updateEntry(): Error in updating entry file: '+err;
+            var message = 'updateEntry(): Error in updating entry file: ' + err;
             console.log(message);
             event.reply('response-e-update', message);
         }
@@ -16,5 +16,6 @@ function updateEntry(event, entry, filename) {
             console.log(message);
             event.reply('response-e-update', message);
         }
-    })
+    });
 }
+exports.updateEntry = updateEntry;

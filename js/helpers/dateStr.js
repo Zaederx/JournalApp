@@ -1,13 +1,15 @@
-exports.dateStr = () => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.dateStr = void 0;
+function dateStr() {
     var date = new Date();
-    day = date.getDate();
-    month = date.getMonth();
-    year = date.getFullYear();
-    hour = date.getHours();
-    mins = date.getMinutes();
-    secs = date.getSeconds();
-
-    str = day + '-' + month + '-' + year + '-' + hour + '-' + mins + '-' + secs;
-
+    var day = date.getDate();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+    var hour = date.getHours();
+    var mins = date.getMinutes();
+    var secs = date.getSeconds();
+    var str = day + '-' + month + '-' + year + '-' + hour + '-' + mins + '-' + secs;
     return str;
 }
+exports.dateStr = dateStr;
