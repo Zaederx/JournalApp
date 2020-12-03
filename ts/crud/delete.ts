@@ -8,6 +8,6 @@ btn_delete.onclick = function () {
     refresh();//from read.ts
 }
 
-window.CRUD.deleteEntryResponse((message) => {
+window.CRUD.deleteEntryResponse((message:string) => {
     console.log(message);
 });
