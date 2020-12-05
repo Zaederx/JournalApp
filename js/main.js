@@ -54,22 +54,26 @@ electron_1.ipcMain.on('new_content', function (e, htmlFilename) {
 // Create Entry
 electron_1.ipcMain.on('e-create', (event, entry) => {
     eCreate.createEvent(event, entry);
-    window.webContents.send('test-create-entry', 'done');
+    //TODO Try to implement an better ansynchronous testing
+    // window.webContents.send('test-create-entry', 'done');
 });
 // Read Entry
 electron_1.ipcMain.on('e-read', (event, filename) => {
     eRead.readSingleFile(event, filename);
-    window.webContents.send('test-read-entry', 'done');
+    //TODO Try to implement an better ansynchronous testing
+    // window.webContents.send('test-read-entry', 'done');
 });
 // Update Entry
 electron_1.ipcMain.on('e-update', (event, entryJson, filename) => {
     eUpdate.updateEntry(event, entryJson, filename);
-    window.webContents.send('test-update-entry', 'done');
+    //TODO Try to implement an better ansynchronous testing
+    // window.webContents.send('test-update-entry', 'done');
 });
 // Delete Entry
 electron_1.ipcMain.on('e-delete', (event, filename) => {
     eDelete.deleteEntry(event, filename);
-    window.webContents.send('test-delete-entry', 'done');
+    //TODO Try to implement an better ansynchronous testing
+    // window.webContents.send('test-delete-entry', 'done');
 });
 /**************************************** */
 // READ DIRECTORIES - lists all tag directories
