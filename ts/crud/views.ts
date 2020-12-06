@@ -74,7 +74,7 @@ function highlightActiveEntry(entryBtn:HTMLDivElement) {
 
 
 
-function highlightActiveTag(tagBtn) {
+function highlightActiveTag(tagBtn:HTMLDivElement) {
     //handle css div-button styling
     var lastActive = document.querySelector('.active.tag');
     if (lastActive != null)
