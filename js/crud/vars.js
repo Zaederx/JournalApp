@@ -50,32 +50,30 @@ function setTagCurrent(tag) {
 }
 /*Entry and NewEntry Views ** */
 function displayEView() {
-    if (eView != null)
-        eView.removeAttribute('hidden');
-    else
-        console.error('vars.ts: var eView = null');
-    if (neView != null)
-        neView.setAttribute('hidden', ''); //from create.js
-    else
-        console.error('vars.ts: var neView = null');
+    $('#entry-view').toggle();
+    $('#new-entry-view').toggle();
+    // if (eView != null) eView.removeAttribute('hidden');
+    // else console.error('vars.ts: var eView = null');
+    // if (neView != null) neView.setAttribute('hidden','');//from create.js
+    // else console.error('vars.ts: var neView = null');
     if (form != null)
         form.reset();
     else
         console.error('vars.ts: var form = null');
 }
+/**
+ * Displayed hidden New Entry View html.
+ * Hides other visible views at the same time.
+ */
 function displayNEView() {
-    if (neView != null)
-        neView.removeAttribute('hidden');
-    else
-        console.error('vars.ts: var neView = null');
-    if (eView != null)
-        eView.setAttribute('hidden', ''); //from create.js
-    else
-        console.error('vars.ts: var eView = null');
-    if (form != null)
-        form.reset();
-    else
-        console.error('vars.ts: var form = null');
+    $('#entry-view').toggle();
+    $('#new-entry-view').toggle();
+    // if (neView != null) neView.removeAttribute('hidden');
+    // else console.error('vars.ts: var neView = null');
+    // if (eView != null && eView.hasAttribute('hidden')) eView.setAttribute('hidden','');//from create.js
+    // else console.error('vars.ts: var eView = null');
+    // if (form != null) form.reset();
+    // else console.error('vars.ts: var form = null');
 }
 /* Highlight Active Entry or Tag **** */
 function highlightActiveEntry(entryBtn) {
@@ -87,6 +85,9 @@ function highlightActiveEntry(entryBtn) {
     else
         console.error('vars.ts: var lastActive = null');
     entryBtn.className += 'active entry';
+}
+function hideElement() {
+    // view
 }
 function highlightActiveTag(tagBtn) {
     //handle css div-button styling
