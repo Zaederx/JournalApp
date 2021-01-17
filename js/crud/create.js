@@ -2,11 +2,6 @@
 const btn_submit = document.querySelector('#btn-submit');
 const btn_addEntry = document.querySelector('#e-create');
 const messageDiv = document.querySelector('#message-div');
-/** Form for submitting entries and entry updates */
-const form = document.querySelector('#entry-form');
-/** #entry-view */
-const eView = document.querySelector('#entry-view');
-const neView = document.querySelector('#new-entry-view');
 /********** Open New Entry View ********** */
 if (btn_addEntry != null)
     btn_addEntry.onclick = (event) => displayNEView();
