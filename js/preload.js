@@ -64,6 +64,17 @@ electron_1.contextBridge.exposeInMainWorld('CRUD', {
         electron_1.ipcRenderer.on('response-de-read', (event, filesHTML) => func(filesHTML));
     }
 });
+/*  Tag C.R.U.D **/
+electron_1.contextBridge.exposeInMainWorld('tagCRUD', {
+    create: (tagname) => { },
+    createR: () => { },
+    read: (tagname) => { },
+    readR: () => { },
+    update: (tagname) => { },
+    updateR: () => { },
+    delete: (tagname) => { },
+    deleteR: () => { }
+});
 /* Logging API */
 electron_1.contextBridge.exposeInMainWorld('logAPI', {
     message: (message) => {
