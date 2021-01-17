@@ -16,6 +16,15 @@ interface Window {
         readDResponse: (func:Function) => void;
         readDirectoryEntries: (dir:string) => void;
         readDEResponse: (func:Function) => void;
-
+    }
+    tagCRUD: {
+        create: (tagname:string) => void,
+        createR: () => void,
+        read: (tagname:string) => void,
+        readR: () => void,
+        update: (tagname:string) => void,
+        updateR: () => void,
+        delete: (tagname:string) => void,
+        deleteR: () => void
     }
 }
