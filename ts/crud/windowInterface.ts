@@ -4,7 +4,7 @@ interface Window {
     }
     CRUD: {
         createEntry: (entryJson:string) => void;
-        createEntryResponse: Function;
+        createEntryResponse: (func: Function) => void;
         readEntry: (filename:string) => void;
         readEntryResponse: (func:Function) => void;
         updateEntry: (entryJson:string, filename:string) => void;
