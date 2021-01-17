@@ -27,7 +27,7 @@ function submit(event) {
     //need to call method that creates entry file in file system
     window.CRUD.createEntry(entryJSON);
     event.preventDefault(); //to disable postback - otherwise causes problems with updating content
-    //call a method that symlinks the file to all tags folders
+    //TODO call a method that symlinks the file to all tags folders
     if (form != null)
         form.reset(); //because default are disabled
     refresh(); //from read.js
@@ -36,5 +36,5 @@ window.CRUD.createEntryResponse((message) => {
     if (messageDiv != null)
         messageDiv.innerHTML = message;
 });
-//idea for later: Also should have a method for asychronously checking for tags being added and edit the look of comma separated tags
+//TODO idea for later: Also should have a method for asychronously checking for tags being added and edit the look of comma separated tags
 console.log('width:', window.outerWidth, 'height:', window.outerHeight);
