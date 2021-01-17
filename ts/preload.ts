@@ -77,11 +77,20 @@ contextBridge.exposeInMainWorld('CRUD',
     readDEResponse: (func:Function) => {
         ipcRenderer.on('response-de-read', (event, filesHTML) => func(filesHTML));
     }
-
-
-    
 });
 
+/*  Tag C.R.U.D **/
+
+contextBridge.exposeInMainWorld('tagCRUD', {
+    create: (tagname:string) => {},
+    createR: () => {},
+    read: (tagname:string) => {},
+    readR: () => {},
+    update: (tagname:string) => {},
+    updateR: () => {},
+    delete: (tagname:string) => {},
+    deleteR: () => {}
+})
 
 /* Logging API */
 contextBridge.exposeInMainWorld('logAPI', 
