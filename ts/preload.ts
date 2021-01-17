@@ -23,9 +23,7 @@ contextBridge.exposeInMainWorld('CRUD',
     },
 
     createEntryResponse:  (func:Function) => {
-            ipcRenderer.on('response-e-create',  (event, message) => {
-            func(message);  
-            });
+            ipcRenderer.on('response-e-create',  (event, message) => func(message));
     },
     /** READ ENTRY */
     readEntry: (filename:string) => {
@@ -41,7 +39,7 @@ contextBridge.exposeInMainWorld('CRUD',
             console.log('updateEntry called');
     },
     updateEntryResponse: (func:Function) => {
-        ipcRenderer.send('response-e-update', (event, message) => func(message))
+        ipcRenderer.on('response-e-update', (event, message) => func(message))
     },
 
 
@@ -69,7 +67,7 @@ contextBridge.exposeInMainWorld('CRUD',
         ipcRenderer.on('response-d-read', (event,dirHTML) => func(dirHTML));
     },
 
-    /* Read Directory's Files (i.e. get all filenames of directory) */
+    /* Read Directory's Entries (de-read) (i.e. get all filenames of directory) */
     readDirectoryEntries: (dir:string) => {
         ipcRenderer.send('de-read', dir);
     },
@@ -80,16 +78,31 @@ contextBridge.exposeInMainWorld('CRUD',
 });
 
 /*  Tag C.R.U.D **/
-
 contextBridge.exposeInMainWorld('tagCRUD', {
-    create: (tagname:string) => {},
-    createR: () => {},
-    read: (tagname:string) => {},
-    readR: () => {},
-    update: (tagname:string) => {},
-    updateR: () => {},
-    delete: (tagname:string) => {},
-    deleteR: () => {}
+    create: (tagName:string) => {
+        ipcRenderer.send('t-create', tagName);
+    },
+    createR: (func:Function) => {
+        ipcRenderer.on('response-t-create', (event, message) => func(message));
+    },
+    read: (tagName:string) => {
+        ipcRenderer.send('t-read', tagName);
+    },
+    readR: (func:Function) => {
+        ipcRenderer.on('response-t-read', (event, message) => func(message));
+    },
+    update: (tagName:string) => {
+        ipcRenderer.send('t-update',tagName)
+    },
+    updateR: (func:Function) => {
+        ipcRenderer.on('response-t-update', (event, message) => func(message));
+    },
+    delete: (tagName:string) => {
+        ipcRenderer.send('t-delete', tagName);
+    },
+    deleteR: (func:Function) => {
+        ipcRenderer.on('response-t-delete', (event, message) => func(message));
+    }
 })
 
 /* Logging API */
