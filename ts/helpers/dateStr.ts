@@ -7,7 +7,7 @@ export function dateStr() {
     var mins = date.getMinutes();
     var secs = date.getSeconds();
 
-    var str = day + '-' + month + '-' + year + '-' + hour + '-' + mins + '-' + secs;
+    var str = day + '-' + (month+1) + '-' + year + '-' + hour + '-' + mins + '-' + secs;
 
     return str;
 }
