@@ -96,6 +96,6 @@ window.CRUD.readEntryResponse(function (fileContent) {
 
 function displayEntry(entry) {
     (document.querySelector('#e-title') as HTMLInputElement).innerHTML = entry.title;
-    (document.querySelector('#e-body') as HTMLInputElement).innerHTML = entry.body;
+    (document.querySelector('#e-body') as HTMLInputElement).innerHTML = '<pre>'+entry.body+'</pre>';
     (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = entry.tags;
 }
