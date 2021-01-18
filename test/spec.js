@@ -189,8 +189,9 @@ describe('Application checks', function () {
 
         })
       })
-      it('reads last entry', function () {
+      it('reads last entry saved (i.e.check that last entry is active entry)', function () {
         return this.app.client.execute(async function() {
+          var testText = "Last Entry";
           var pass = false;
 
 
@@ -204,7 +205,7 @@ describe('Application checks', function () {
           // click submit 
           $('#btn-submit').click();
 
-          await test.sleep(10);
+          await test.sleep(30);
 
           //click on active entry
           $('#files .active.entry').click();
@@ -216,7 +217,7 @@ describe('Application checks', function () {
           
           console.log('%c TEST.js: Read Entry : #e-body value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
 
-          if (text == "CREATE test successful :)") {
+          if (text == '<pre>'+testText+'</pre>') {
             pass = true;
           }
           else {
