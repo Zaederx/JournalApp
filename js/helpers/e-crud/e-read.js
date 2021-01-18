@@ -35,8 +35,10 @@ function readAllDirectories(event) {
 exports.readAllDirectories = readAllDirectories;
 /**
  * Read names of all the files in a directory.
+ * Then returns these in a list of `<div>Entry Name</div>`
  * @param event Electron Event
  * @param dir (path of) directory to be read
+ * @return html `div` list of entry names
  */
 function readDirFiles(event, dir) {
     console.log('ipcMain: Reading new Entry - ' + dir);
@@ -71,7 +73,7 @@ function readDirFiles(event, dir) {
 }
 exports.readDirFiles = readDirFiles;
 /**
- *
+ * Reads a single file from a directory.
  * @param event
  * @param filename
  */
