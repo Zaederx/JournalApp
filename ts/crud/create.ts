@@ -19,8 +19,8 @@ function submit (event) {
     window.logAPI.message('form submit button clicked\n');
     // var neTitle:HTMLElement|null = document.querySelector('#new-entry-title');
     var etitle:string|null = (document.querySelector('#new-entry-title') as HTMLInputElement).value;
-    var ebody:string|null = (document.querySelector('#new-entry-body')as HTMLInputElement).value;
-    var etags:string|null = (document.querySelector('#new-entry-tags')as HTMLInputElement).value;
+    var ebody:string|null = (document.querySelector('#new-entry-body') as HTMLInputElement).value;
+    var etags:string|null = (document.querySelector('#new-entry-tags') as HTMLInputElement).value;
     var message:string = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
     console.log('message:',message);
     window.logAPI.message(message);
