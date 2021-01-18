@@ -8,7 +8,7 @@ import {EntryDate} from '../../classes/EntryDate';
  * Used to fill tag directory side bar/panel
  * @param event - An Electron Event
  */
-export function readAllDirectories(event) {
+export function readAllDirectories(event:Electron.IpcMainEvent) {
   var directory:string[];
   var dirHTML = '';
   try {
