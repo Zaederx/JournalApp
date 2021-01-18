@@ -4,7 +4,6 @@ import * as eCreate from './helpers/e-crud/e-create';
 import * as eRead from './helpers/e-crud/e-read';
 import * as  eUpdate from './helpers/e-crud/e-update';
 import * as  eDelete from './helpers/e-crud/e-delete';
-import { windowsStore } from 'process';
 let window:BrowserWindow;
 
 var filename = 'default';
