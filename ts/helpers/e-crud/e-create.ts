@@ -1,7 +1,11 @@
 import * as fs from 'fs';
 import * as eDate from '../dateStr';
-
-export function createEvent(event:any,entryJson:string) {
+/**
+ * Writes a entry's json to the file system.
+ * @param event IpcMainEvent
+ * @param entryJson json String of entry details
+ */
+export function createEvent(event:Electron.IpcMainEvent, entryJson:string) {
     console.log('ipcmain: Creating new Entry -' + entryJson);
     var directory:string = "tagDirs/all/";
     var fileName:string = eDate.dateStr() + ".json";
