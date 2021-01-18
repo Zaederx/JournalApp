@@ -86,6 +86,6 @@ window.CRUD.readEntryResponse(function (fileContent) {
 });
 function displayEntry(entry) {
     document.querySelector('#e-title').innerHTML = entry.title;
-    document.querySelector('#e-body').innerHTML = entry.body;
+    document.querySelector('#e-body').innerHTML = '<pre>' + entry.body + '</pre>';
     document.querySelector('#e-tags').innerHTML = entry.tags;
 }

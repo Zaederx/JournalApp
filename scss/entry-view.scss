@@ -4,7 +4,7 @@ $fg: white;
 $bg: rgb(240, 240, 240);
 
 //Where content of entry files is displayed
-.entry-view{
+.entry-view {
     position: relative;
     width: 60%;
     float: left;
@@ -12,6 +12,10 @@ $bg: rgb(240, 240, 240);
     padding: 16px;
     height: 100%;
     background-color: rgb(230, 230, 230);
+}
+
+.e-body > pre{
+    white-space: pre-wrap;
 }
 
 //

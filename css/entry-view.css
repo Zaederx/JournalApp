@@ -8,6 +8,10 @@
   background-color: #e6e6e6;
 }
 
+.e-body > pre {
+  white-space: pre-wrap;
+}
+
 .crud-btn {
   color: #812323;
   margin-right: 10px;
