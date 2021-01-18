@@ -3,6 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createEvent = void 0;
 const fs = require("fs");
 const eDate = require("../dateStr");
+/**
+ * Writes a entry's json to the file system.
+ * @param event IpcMainEvent
+ * @param entryJson json String of entry details
+ */
 function createEvent(event, entryJson) {
     console.log('ipcmain: Creating new Entry -' + entryJson);
     var directory = "tagDirs/all/";
