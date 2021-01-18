@@ -17,9 +17,7 @@ electron_1.contextBridge.exposeInMainWorld('CRUD', {
         electron_1.ipcRenderer.send('e-create', entryJson);
     },
     createEntryResponse: (func) => {
-        electron_1.ipcRenderer.on('response-e-create', (event, message) => {
-            func(message);
-        });
+        electron_1.ipcRenderer.on('response-e-create', (event, message) => func(message));
     },
     /** READ ENTRY */
     readEntry: (filename) => {
@@ -34,7 +32,7 @@ electron_1.contextBridge.exposeInMainWorld('CRUD', {
         console.log('updateEntry called');
     },
     updateEntryResponse: (func) => {
-        electron_1.ipcRenderer.send('response-e-update', (event, message) => func(message));
+        electron_1.ipcRenderer.on('response-e-update', (event, message) => func(message));
     },
     /** DELETE ENTRY */
     deleteEntry: (filename) => {
@@ -55,7 +53,7 @@ electron_1.contextBridge.exposeInMainWorld('CRUD', {
     readDResponse: (func) => {
         electron_1.ipcRenderer.on('response-d-read', (event, dirHTML) => func(dirHTML));
     },
-    /* Read Directory's Files (i.e. get all filenames of directory) */
+    /* Read Directory's Entries (de-read) (i.e. get all filenames of directory) */
     readDirectoryEntries: (dir) => {
         electron_1.ipcRenderer.send('de-read', dir);
     },
@@ -66,14 +64,30 @@ electron_1.contextBridge.exposeInMainWorld('CRUD', {
 });
 /*  Tag C.R.U.D **/
 electron_1.contextBridge.exposeInMainWorld('tagCRUD', {
-    create: (tagname) => { },
-    createR: () => { },
-    read: (tagname) => { },
-    readR: () => { },
-    update: (tagname) => { },
-    updateR: () => { },
-    delete: (tagname) => { },
-    deleteR: () => { }
+    create: (tagName) => {
+        electron_1.ipcRenderer.send('t-create', tagName);
+    },
+    createR: (func) => {
+        electron_1.ipcRenderer.on('response-t-create', (event, message) => func(message));
+    },
+    read: (tagName) => {
+        electron_1.ipcRenderer.send('t-read', tagName);
+    },
+    readR: (func) => {
+        electron_1.ipcRenderer.on('response-t-read', (event, message) => func(message));
+    },
+    update: (tagName) => {
+        electron_1.ipcRenderer.send('t-update', tagName);
+    },
+    updateR: (func) => {
+        electron_1.ipcRenderer.on('response-t-update', (event, message) => func(message));
+    },
+    delete: (tagName) => {
+        electron_1.ipcRenderer.send('t-delete', tagName);
+    },
+    deleteR: (func) => {
+        electron_1.ipcRenderer.on('response-t-delete', (event, message) => func(message));
+    }
 });
 /* Logging API */
 electron_1.contextBridge.exposeInMainWorld('logAPI', {
