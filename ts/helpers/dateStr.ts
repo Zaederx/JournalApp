@@ -1,4 +1,8 @@
-export function dateStr() {
+/**
+ * Returns the current date as a string.
+ * @return date as a string
+ */
+export function dateStr():string {
     var date = new Date();
     var day = date.getDate();
     var month = date.getMonth();
