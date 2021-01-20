@@ -29,7 +29,6 @@ export function readAllDirectories(event:Electron.IpcMainEvent) {
   } catch (err) {
       console.error('Entry folder could not be read');
   }
-  
 }
 
 
@@ -41,7 +40,7 @@ export function readAllDirectories(event:Electron.IpcMainEvent) {
  * @param dir (path of) directory to be read
  * @return html `div` list of entry names
  */
-export function readDirFiles(event,dir) {
+export function readDirFiles(event:Electron.IpcMainEvent,dir:string) {
     console.log('ipcMain: Reading new Entry - ' + dir);
     var directory;
     var filesHTML = '';
@@ -82,7 +81,7 @@ export function readDirFiles(event,dir) {
  * @param event 
  * @param filename 
  */
-export function readSingleFile(event,filename) {
+export function readSingleFile(event:Electron.IpcMainEvent, filename:string) {
 
   console.log('ipcMain: Reading file - '+filename);
 
@@ -104,14 +103,15 @@ export function readSingleFile(event,filename) {
 }
 
 /**
- * Finds birthtime of a subdirectories.
- * Once the birthtime is known, it creates an EntryDate
+ * Finds birthtime of an entry.
+ * Once the birthtime is known, it creates an {@link EntryDate}
  * and adds it to the given array.
  * @param file name of the subdirectory - i.e. tagDirectory 
  * @param arr an array of EntryDate
+ * @see EntryDate
  */
 function fetchBtime(prefix:string,file:string, arr:EntryDate[]) {
-  /**
+  /*
    * From ZSH manual under 'stat' - see zsh terminal command 'man stat':
    * 
    *  -f format
