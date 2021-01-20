@@ -1,17 +1,19 @@
+
+
 const Application = require('spectron').Application
 const assert = require('assert')//from mocha
-const { create } = require('domain')
-const { app } = require('electron')
+// const { create } = require('domain')
+const { app } = require('electron')//required - ignore linter
 const electronPath = require('electron') // Require Electron from the binaries included in node_modules.
 const path = require('path')
-const { update } = require('../js/helpers/e-crud/e-update')
+// const { update } = require('../js/helpers/e-crud/e-update')
 
 // note for console css styling - global var cannot be accessed from mocha context const css = 'color: green; font-style: italic; font-size:30px';
 
 describe('Application launch', function () {
   this.timeout(20000)
   
-  before('start application',function () {
+  before('start application', function () {
     this.app = new Application({
 
       path: electronPath,
@@ -23,12 +25,19 @@ describe('Application launch', function () {
     return this.app.start()
   })
 
-  
-  after('close application',function () {
+  /**
+   * Dont use lambda callback function for mocha callbacks.
+   * Causes undefined behaviours.
+   * e.g. using () => for the after callback causes 
+   * first test to not work properly and fails, 
+   * while others pass. Strange...
+   */
+  after('close application',function () { 
     if (this.app && this.app.isRunning()) {
       return this.app.stop();
     }
   })
+
 
   it('shows an initial window', function () {
     return this.app.client.getWindowCount().then(function (count) {
@@ -142,10 +151,10 @@ describe('Application checks', function () {
             //check number of entries = original number + 1
             var count2 = document.querySelector('#files').children.length;
             
-          console.log('%c TEST.js: Create Entry : #e-body value : var count1 = '+ count1, 'color: green; font-style: italic; font-size:10px');
+          console.log('%c TEST.js: Create Entry : #files count : var count1 = '+ count1, 'color: green; font-style: italic; font-size:10px');
 
             
-            console.log('%c TEST.js: Create Entry : #e-body value : var count2 = '+ count2, 'color: green; font-style: italic; font-size:10px');
+            console.log('%c TEST.js: Create Entry : #files count : var count2 = '+ count2, 'color: green; font-style: italic; font-size:10px');
 
             if ( ++count1 == count2) {
               pass = true;
@@ -175,12 +184,16 @@ describe('Application checks', function () {
           //click on active entry
           $('#files .active.entry').click();
 
+          // var element = document;
+          // element.addEventListener('', function () {
+
+          // })
           await test.sleep(10);
             
           //entry body should contant test of CREATE test
-          var text = document.querySelector('#e-body').innerHTML;
+          var text = document.querySelector('#e-body-text').innerHTML;
           
-          console.log('%c TEST.js: Read Entry : #e-body value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
+          console.log('%c TEST.js: Read Entry : #e-body-text value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
 
           if (text != null) {
             pass = true;
@@ -193,7 +206,7 @@ describe('Application checks', function () {
         return this.app.client.execute(async function() {
           var testText = "Last Entry";
           var pass = false;
-
+          console.log('%c TEST.js: Read Entry - Expect : #e-body-text value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
 
           //create and entry
           $('#e-create').click();
@@ -205,7 +218,7 @@ describe('Application checks', function () {
           // click submit 
           $('#btn-submit').click();
 
-          await test.sleep(30);
+          await test.sleep(60);
 
           //click on active entry
           $('#files .active.entry').click();
@@ -213,11 +226,11 @@ describe('Application checks', function () {
           await test.sleep(10);
             
           //entry body should contant test of CREATE test
-          var text = document.querySelector('#e-body').innerHTML;
+          var text = document.querySelector('#e-body-text').innerHTML;
           
-          console.log('%c TEST.js: Read Entry : #e-body value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
+          console.log('%c TEST.js: Read Entry - Actual : #e-body-text value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
 
-          if (text == '<pre>'+testText+'</pre>') {
+          if (text == testText) {
             pass = true;
           }
           else {
@@ -234,7 +247,7 @@ describe('Application checks', function () {
       it('updates active entry', function () {
         return this.app.client.execute( async function () {
           var pass = false;
-          var read = '#e-body';
+          var read = '#e-body-text';
           var write = '#new-entry-body';
 
           //click active entry 
@@ -243,7 +256,7 @@ describe('Application checks', function () {
           
           // check text - read
           var text =  document.querySelector(read).innerHTML;
-          console.log('%c TEST.js: Update Entry : #e-body value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
+          console.log('%c TEST.js: Update Entry : #e-body-text value : var text = '+ text, 'color: green; font-style: italic; font-size:10px');
 
           // click update
           $('#e-update').click();
@@ -252,14 +265,14 @@ describe('Application checks', function () {
           // enter change - write 
           var updatedText = " Update to the entry test.";
           document.querySelector(write).value = updatedText;
-          console.log('%c TEST.js: Update Entry : #e-body value set to : var updateText = '+ updatedText, 'color: green; font-style: italic; font-size:10px');
+          console.log('%c TEST.js: Update Entry : #e-body-text value set to : var updateText = '+ updatedText, 'color: green; font-style: italic; font-size:10px');
 
           await test.sleep(5);
 
           //click submit update
           // $('#btn-submit-update').click();
           $('#btn-submit-update').click();
-          await test.sleep(5);//wait for GUI updates
+          await test.sleep(60);//wait for GUI updates
 
           //select active entry
           $('#files .active.entry').click();
@@ -268,7 +281,7 @@ describe('Application checks', function () {
           // ensure entry body matches newText - read
           var text2 = document.querySelector(read).innerHTML;
           
-          console.log('%c TEST.js: Update Entry : #e-body.innerHTML : var text2 = '+ text2, 'color: green; font-style: italic; font-size:10px');
+          console.log('%c TEST.js: Update Entry : #e-body-text.innerHTML : var text2 = '+ text2, 'color: green; font-style: italic; font-size:10px');
 
 
           if (text2 == updatedText) {
@@ -291,22 +304,22 @@ describe('Application checks', function () {
           /******** Mock User Action Sequence: DELETE  */
           //create and entry
           $('#e-create').click();
-          await test.sleep(10);
+          await test.sleep(20);
           // enter text input form field into fields
           document.querySelector('#new-entry-body').value = testText;
           // click submit 
           $('#btn-submit').click();
           
-          await test.sleep(15)//wait for entry to be submitted and gui to update
+          await test.sleep(30)//wait for entry to be submitted and gui to update
         
           //click active entry
           $('#files .active.entry').click();
-          await test.sleep(10)
+          await test.sleep(20)
           //click delete
           $('#e-delete').click();
           /*********************************** */
 
-          await test.sleep(5);
+          await test.sleep(30);//wait for gui update
           var count2 = document.querySelector('#files').children.length;
 
           if (count1 > count2) {
@@ -329,16 +342,16 @@ describe('Application checks', function () {
           /******** Mock User Action Sequence: CREATE 2, DELETE 1  */
 
           /**CREATE 2 Entries */
-          //create and entry
-          $('#e-create').click();
-          await test.sleep(10);
-          // enter text input form field into fields
-          document.querySelector('#new-entry-body').value = testText1;
-          // click submit 
-          $('#btn-submit').click();
+          // ** create entry 1 **
+          // $('#e-create').click();
+          // await test.sleep(10);
+          // // enter text input form field into fields
+          // document.querySelector('#new-entry-body').value = testText1;
+          // // click submit 
+          // $('#btn-submit').click();
+          // await test.sleep(60);
 
-          await test.sleep(20);
-          //create and entry
+          // ** create entry 2 **
           $('#e-create').click();
           await test.sleep(10);
           // enter text input form field into fields
@@ -346,7 +359,7 @@ describe('Application checks', function () {
           // click submit 
           $('#btn-submit').click();
           
-          await test.sleep(15)//wait for entry to be submitted and gui to update
+          await test.sleep(60)//wait for entry to be submitted and gui to update
         
           /** DELETE 1 Entry */
           // click active entry
@@ -364,14 +377,14 @@ describe('Application checks', function () {
           await test.sleep(10);//wait for GUI update
           
           //Is the entry with the test text still there?
-          var text = document.querySelector('#e-body').innerHTML;
-          console.log('%c TEST.js: Delete Entry : #e-body value = '+ text, 'color: green; font-style: italic; font-size:10px');
+          var text = document.querySelector('#e-body-text').innerHTML;
+          console.log('%c TEST.js: Delete Entry : #e-body-text value = '+ text, 'color: green; font-style: italic; font-size:10px');
           // if the Text doesn't macth - it should be sucessfully deleted
-          if (text == testText1 || text == undefined ) {
+          if (text == testText1 || text == undefined) {
             pass = true;
           }
           else {
-            console.error('DELETE: last entry: text=',text, 'testText2=',testText2);
+            console.error('DELETE: last entry: text=', text, 'testText2=',testText2);
           }
           return pass;
         }).then((pass) => assert.equal(pass, true));
@@ -381,7 +394,6 @@ describe('Application checks', function () {
       
     })//describe Entry CRUD
 
-    
   }) //described View
 
 })//Application
