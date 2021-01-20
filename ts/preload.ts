@@ -59,20 +59,20 @@ contextBridge.exposeInMainWorld('CRUD',
     /* Reading all tag directories -> directory names
      * note: each dir = one of the topics
      */
-    readDirectories: () => {
+    readTags: () => {
         ipcRenderer.send('d-read');
     },
     //dirHTML - list of directory name divs -> <div>dirName</div>
-    readDResponse: (func:Function) => {
+    readTResponse: (func:Function) => {
         ipcRenderer.on('response-d-read', (event,dirHTML) => func(dirHTML));
     },
 
     /* Read Directory's Entries (de-read) (i.e. get all filenames of directory) */
-    readDirectoryEntries: (dir:string) => {
+    readTagDirectory: (dir:string) => {
         ipcRenderer.send('de-read', dir);
     },
     //dirHTML - list of directory filename in html divs -> <div>filename</div>
-    readDEResponse: (func:Function) => {
+    readTDResponse: (func:Function) => {
         ipcRenderer.on('response-de-read', (event, filesHTML) => func(filesHTML));
     }
 });
