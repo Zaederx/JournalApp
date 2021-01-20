@@ -122,7 +122,7 @@ function fetchBtime(prefix:string,file:string, arr:EntryDate[]) {
                stat will refer to the target of file, if file is a symbolic
                link, and not to file itself.
    */
-  
+  //Addtionally - %B inserts File BirthTime (Creation Date)
     var stat_birth = process.spawnSync('stat',['-f','%B', '-L', prefix+file]);
     console.log('output',stat_birth.output);
     var bString:string = stat_birth.stdout;
