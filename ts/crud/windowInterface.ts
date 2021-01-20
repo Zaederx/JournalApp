@@ -12,10 +12,10 @@ interface Window {
         deleteEntry: (filename:string) => void;
         deleteEntryResponse: (func:Function) => void;
 
-        readDirectories: () => void;
-        readDResponse: (func:Function) => void;
-        readDirectoryEntries: (dir:string) => void;
-        readDEResponse: (func:Function) => void;
+        readTags: () => void;
+        readTResponse: (func:Function) => void;
+        readTagDirectory: (dir:string) => void;
+        readTDResponse: (func:Function) => void;
     }
     tagCRUD: {
         create: (tagname:string) => void,
