@@ -19,12 +19,12 @@ interface Window {
     }
     tagCRUD: {
         create: (tagname:string) => void,
-        createR: () => void,
+        createR: (func:Function) => void,
         read: (tagname:string) => void,
-        readR: () => void,
+        readR: (func:Function) => void,
         update: (tagname:string) => void,
-        updateR: () => void,
+        updateR: (func:Function) => void,
         delete: (tagname:string) => void,
-        deleteR: () => void
+        deleteR: (func:Function) => void
     }
 }
