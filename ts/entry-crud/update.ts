@@ -11,7 +11,7 @@ if(btn_submit_update != null)
     btn_submit_update.onclick = (event) => {updateFile(event)};
 else console.error('update.ts: var btn_submit_update = null');
 
-function updateFile(event) {
+function updateFile(event:Event) {
     window.logAPI.message('form submit button clicked\n');
 
     var etitle = (document.querySelector('#new-entry-title') as HTMLInputElement).value;
@@ -44,7 +44,7 @@ btn_update.onclick = (event) => getUpdateForm(event);
 /** Displays the update form.
  * Also fills that form with information of the 
  * currently selected Entry */
-function getUpdateForm(event) {
+function getUpdateForm(event:Event) {
     //display 'new-entry-view'
     displayNEView();
     //read entry
