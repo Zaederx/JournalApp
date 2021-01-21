@@ -7,13 +7,20 @@ import {EntryDate} from '../../classes/EntryDate';
  * Read all tag Directories.
  * Used to fill tag directory side bar/panel
  * @param event - An Electron Event
+ * 
+ * Note: node has problem with fs.readdirSync (withFileTypes: false) option </br>
+ * @see {@link https://github.com/electron/electron/pull/24062#issuecomment-687702317}
+ * 
+ * {@link https://github.com/electron/electron/issues/19074}}
  */
 export function readAllDirectories(event:Electron.IpcMainEvent) {
   var directory:string[]|Buffer[];
   var dirHTML:string = '';
   try {
       //using readdirSync - blocks IO until the read is done - will try sending event reply only once directories are loaded
-      directory = fs.readdirSync('tagDirs/');
+      directory = fs.readdirSync('tagDirs/', {
+        withFileTypes: false
+      });
       var counter:number = 0;
       directory.forEach( subdirectory => {
       if(subdirectory.charAt(0) == '.') {/*DO NOT ADD*/}//so it doesn't add .DS_Store files etc
