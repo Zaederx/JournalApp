@@ -1,10 +1,5 @@
 import {EntryDate} from '../../classes/EntryDate'
 /**
- * Functions for performing sorting on biarrays where the secons *  column is a number to be sorted, and the first coulnm is an *   attribute of importance.
- */
-
-
-/**
  * 
  * @param arr 
  * @param i 
