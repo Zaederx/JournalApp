@@ -16,15 +16,22 @@
     <script src="../external/jQuery/jquery-3.5.1.js" defer></script>
 
     <!-- App Scripts -->
-    <script src="../js/crud/windowInterface.js" defer></script>
-    <script src="../js/crud/views.js" defer></script>
+    <script src="../js/entry-crud/windowInterface.js" defer></script>
+    <script src="../js/entry-crud/views.js" defer></script>
     <script src="../js/classes/entry.js" defer></script>
-    <script src="../js/crud/vars.js" defer></script>
-    <script src="../js/crud/create.js" defer></script>
-    <script src="../js/crud/read.js" defer></script>
-    <script src="../js/crud/update.js" defer></script>
-    <script src="../js/crud/delete.js" defer></script>
+
+    <!-- Entry C.R.U.D. Scripts -->
+    <script src="../js/entry-crud/vars.js" defer></script>
+    <script src="../js/entry-crud/create.js" defer></script>
+    <script src="../js/entry-crud/read.js" defer></script>
+    <script src="../js/entry-crud/update.js" defer></script>
+    <script src="../js/entry-crud/delete.js" defer></script>
     
+    <!-- Tag C.R.U.D Scripts-->
+    <script src="../js/tag-crud/tag-create.js" defer></script>
+    <script src="../js/tag-crud/tag-read.js" defer></script>
+    <script src="../js/tag-crud/tag-update.js" defer></script>
+    <script src="../js/tag-crud/tag-delete.js" defer></script>
 
     <title>Journal App</title>
 </head>
@@ -34,7 +41,7 @@
     <div id="topic-view" class="navigation nav1">
         <div id="topic-header" class="header">
             <h3 class="heading">Topics</h3>
-            <i class="fas fa-plus-square fa-lg crud-btn"></i>
+            <i id="t-create" class="fas fa-plus-square fa-lg crud-btn"></i>
         </div>
         <div id="topics" class="links">
             <!-- DUMMY DATA -->
@@ -49,7 +56,7 @@
     <div id="file-view" class="navigation nav2">
         <div id="file-header" class="header">
             <h3 class="heading">File</h3>
-            <i id="e-create"class="fas fa-plus-square fa-lg crud-btn"></i>
+            <i id="e-create" class="fas fa-plus-square fa-lg crud-btn"></i>
         </div>
         <div id="files" class="links">
             <!-- DUMMY DATA -->
@@ -99,14 +106,19 @@
     </div>
 
     <div id="new-tag-view" class="tag-view" hidden>
-        <label for="tag-label"></label>
+        <label for="tag-label">Search</label>
         <input type="text" name="tag-label" id="tag-label">
 
-        <table>
-            <tr>
-                <th>Tags</th>
-            </tr>
-            <!-- return <tr><td>tagname</td></tr> -->
+        <table id="tag-table">
+            <table-head>
+                <tr>
+                    <th>Current Tags</th>
+                </tr>
+            </table-head>
+            <table-body id="tag-table-body">
+                <!-- return <tr><td>tagName</td></tr> -->
+            </table-body>
+            
         </table>
     </div>
 
