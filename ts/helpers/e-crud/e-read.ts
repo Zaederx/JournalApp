@@ -9,8 +9,8 @@ import {EntryDate} from '../../classes/EntryDate';
  * @param event - An Electron Event
  */
 export function readAllDirectories(event:Electron.IpcMainEvent) {
-  var directory:string[];
-  var dirHTML = '';
+  var directory:string[]|Buffer[];
+  var dirHTML:string = '';
   try {
       //using readdirSync - blocks IO until the read is done - will try sending event reply only once directories are loaded
       directory = fs.readdirSync('tagDirs/');
