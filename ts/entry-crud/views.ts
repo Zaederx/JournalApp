@@ -59,6 +59,8 @@ function displayTagView() {
     //hide #entry-view
     if (eView != null) eView.setAttribute('hidden','');
     else console.error('view.ts: const eView = null');
+
+    loadTagTable();//fetches tag table tagsnames
 }
 
 /* Highlight Active Entry or Tag **** */
