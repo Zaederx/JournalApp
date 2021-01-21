@@ -16,7 +16,8 @@ export function readAllDirectories(event:Electron.IpcMainEvent) {
       directory = fs.readdirSync('tagDirs/');
       var counter:number = 0;
       directory.forEach( subdirectory => {
-        if (counter == 0) {
+      if(subdirectory.charAt(0) == '.') {/*DO NOT ADD*/}//so it doesn't add .DS_Store files etc
+        else if (counter == 0) {
             dirHTML += '<div class="active tag">'+subdirectory+'</div>\n';//must be active tag!
             counter++;
         }
