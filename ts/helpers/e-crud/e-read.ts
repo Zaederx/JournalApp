@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as entrySort from '../algorithms/entrysort';
 import * as process from 'child_process';
-import {EntryDate} from '../../classes/EntryDate';
+import {EntryDate} from '../../classes/entrydate';
 
 /**
  * Read all tag Directories.
@@ -9,9 +9,9 @@ import {EntryDate} from '../../classes/EntryDate';
  * @param event - An Electron Event
  * 
  * Note: node has problem with fs.readdirSync (withFileTypes: false) option </br>
- * @see {@link https://github.com/electron/electron/pull/24062#issuecomment-687702317}
+ * @see:{@link https://github.com/electron/electron/pull/24062#issuecomment-687702317}
  * 
- * {@link https://github.com/electron/electron/issues/19074}}
+ * @see:{@link https://github.com/electron/electron/issues/19074}
  */
 export function readAllDirectories(event:Electron.IpcMainEvent) {
   var directory:string[]|Buffer[];
