@@ -1,10 +1,10 @@
 /* Constants  */
 const btn_submit_tag:HTMLButtonElement|null = document.querySelector('#btn-submit-tag');
 const tag_input:HTMLInputElement|null = document.querySelector('#tag-input');
-
+var newTaglist:string[] = [];
 /* Null Checks */
 if(btn_submit_tag == null) console.error('Problem with: Submit New Tag Button')
-else btn_submit_tag.onclick = submitTag;
+else {btn_submit_tag.onclick = () => submitTag();}
 
 if(tag_input == null) console.error('Problem with: Submit New Tag Button');
 
@@ -15,9 +15,12 @@ if(tag_input == null) console.error('Problem with: Submit New Tag Button');
  */
 function submitTag() {
     //get tag from form
-    var tagname:string = tag_input? tag_input.value: '';
+    var tagname:string = tag_input ? tag_input.value : '';
+    console.log('tagname:'+tagname);
     //add Tag
     addTag(tagname);
+    newTaglist = [];//clear list after submitting
+
 }
 
 /**
@@ -27,10 +30,15 @@ function submitTag() {
 function addTag(tagname:string) {
     if (tagname != '') {
         //add tag folder to tagDirs
-        window.tagCRUD.create(tagname);
-        window.tagCRUD.createR((response:string) => {
-            //IMPORTANT improve this 
-            console.log(response);
+        newTaglist.push(tagname);
+
+        window.tagCRUD.createPromise(newTaglist,(successful:boolean) => {
+            console.log(successful);
+            if(successful) displayTagView();
+            else console.error('Failed to create tag:'+tagname);
         });
+
     }
+    else console.error('tagname cannot be empty');
+    //TODO add user alert for this
 }
