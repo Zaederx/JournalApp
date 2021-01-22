@@ -79,11 +79,15 @@ contextBridge.exposeInMainWorld('CRUD',
 
 /*  Tag C.R.U.D **/
 contextBridge.exposeInMainWorld('tagCRUD', {
-    create: (tagName:string) => {
-        ipcRenderer.send('t-create', tagName);
+    create: (newTagList:string[]) => {
+        ipcRenderer.send('t-create', newTagList);
     },
     createR: (func:Function) => {
         ipcRenderer.on('response-t-create', (event, message) => func(message));
+    },
+    /** Esentially the same as create except that this returns a Promise using invoke */
+    createPromise: (newTagList:string[], func:Function) => {
+        ipcRenderer.invoke('t-create-promise',newTagList).then((success) => func(success));
     },
     /**
      * Read all tag names and perform a specified function.
