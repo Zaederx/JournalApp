@@ -85,10 +85,26 @@ contextBridge.exposeInMainWorld('tagCRUD', {
     createR: (func:Function) => {
         ipcRenderer.on('response-t-create', (event, message) => func(message));
     },
-    read: (tagName:string) => {
+    /**
+     * Read all tag names and perform a specified function.
+     * Passes returns `string[]` of tag names - no HTML included.
+     * @param func callback function
+     */
+    readAllTags: (func:Function) => {
+        ipcRenderer.invoke('t-read-all').then((tags:string[])=>func(tags));
+    },
+    /**
+     * Read a single tag's entries.
+     * @param tagName tag's name
+     */
+    readTagEntries: (tagName:string) => {
         ipcRenderer.send('t-read', tagName);
     },
-    readR: (func:Function) => {
+    /**
+     * 
+     * @param func 
+     */
+    readTagEntriesR: (func:Function) => {
         ipcRenderer.on('response-t-read', (event, message) => func(message));
     },
     update: (tagName:string) => {
