@@ -10,10 +10,6 @@ const tagTableBody:HTMLTableElement|null = document.querySelector('#tag-table-bo
 if(btn_addTag != null)
 btn_addTag.onclick = () => displayTagView();
 
-
-
-
-
 /**
  * Fills tag table with all tags.
  */
@@ -22,9 +18,33 @@ function loadTagTable() {
     window.CRUD.readTags(); 
     //wait for for ipc response -> load tag table
     window.tagCRUD.readAllTags((tags:string[]) => {
-        tags.forEach( tag => {
-            if(tagTableBody != null)
-            tagTableBody.innerHTML =  '<tr><td>'+tag+'</td></tr>';
-        })
+        
+        if(tagTableBody != null)
+        tagTableBody.innerHTML =  tagsToHtml(tags);
     });
+}
+
+/**
+ * Encloses tag names in html.
+ * This is used in preparation for being added
+ * to html table body.
+ * 
+ * i.e.:
+ * ``` 
+ * var html:string = '';
+ * tags.forEach( tag => {
+ *     html += '<tr><td>'+tag+'</td></tr>\n';
+ * });
+ * return html;
+ * ```
+ * @param tags array of tagnames
+ * @return html
+ */
+function tagsToHtml(tags:string[]):string {
+    var html:string = '';
+    tags.forEach( tag => {
+        if (tag.charAt(0) == '.') {/* Do not add .DS_STORE / System files*/}
+        else html += '<tr><td>'+tag+'</td></tr>\n';
+    });
+    return html;
 }
