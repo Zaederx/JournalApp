@@ -6,6 +6,9 @@ var selectedTag = '';
 /** Variable for the filename of the currently selected entry */ 
 var selectedEntryFilename = '';//TODO souldn't this just be in the Entry class ????
 
+//TODO Work on Entry and Tag Cache - to increase efficiency
+var EntryCache:Entry[];
+var TagCache:Tag[];
 /**
  * Returns the currently selected entry.
  * This will be the entry selected by a user 
@@ -50,7 +53,7 @@ function getTagCurrent() {
 }
 
 
-function setTagCurrent(tag) {
+function setTagCurrent(tag:string) {
     console.log("vars:setTagCurrent")
     selectedTag = tag;
 }
