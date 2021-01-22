@@ -112,6 +112,15 @@ ipcMain.on('console', function (event:Electron.IpcMainEvent, message:string) {
 
 
 /** Tag C.R.U.D Handlers */
+
+ipcMain.on('t-create', (event:Electron.IpcMainEvent,tagnames:string[]) => tCreate.createTags(event,tagnames));
+
+ipcMain.handle('t-create-promise', async(event:Electron.IpcMainInvokeEvent, tagNames:string[]) => {
+  var success = tCreate.createTagsInvoke(tagNames); 
+  console.error(success);//TODO remove when no longer neeed for debuggging
+  console.log(success);//TODO remove when no longer needed for debugging
+  return success
+});
 ipcMain.handle('t-read-all', async (event:Electron.IpcMainInvokeEvent) => {
   //read all
   var allTags:string[] = tRead.readTagDir();
@@ -124,3 +133,5 @@ ipcMain.handle('t-delete', async (event:Electron.IpcMainInvokeEvent,tagname:stri
   
   return message;
 });
+
+
