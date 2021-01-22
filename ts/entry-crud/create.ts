@@ -1,7 +1,15 @@
-const btn_submit:HTMLElement|null = document.querySelector('#btn-submit');
-const btn_addEntry:HTMLElement|null = document.querySelector('#e-create');
+//TODO - Later will have to reorganise - could be considered mainly reading code here
+// It is intertwined obviously, but should still try to have more clear distinction
+/**
+ * Displays entry view - with loaded entry
+ */
+const btn_addEntry:HTMLElement|null = document.querySelector('#e-view');
+/**
+ * Used to display messages.
+ */
 const messageDiv:HTMLElement|null = document.querySelector('#message-div');
-
+/** Used to save new entries */
+const btn_submit:HTMLElement|null = document.querySelector('#btn-submit');
 
 /********** Open New Entry View ********** */ 
 if (btn_addEntry != null)
@@ -15,7 +23,7 @@ else console.error('create.ts: var btn_submit = null');
 
 
 
-function submit (event) {
+function submit (event:Event) {
     window.logAPI.message('form submit button clicked\n');
     // var neTitle:HTMLElement|null = document.querySelector('#new-entry-title');
     var etitle:string|null = (document.querySelector('#new-entry-title') as HTMLInputElement).value;
@@ -40,6 +48,10 @@ function submit (event) {
     
 }
 
+/**
+ * Recieves and displays success of failure messages.
+ * i.e. Whether Entry saved succesfully or not.
+ */
 window.CRUD.createEntryResponse((message:string) => {
     if (messageDiv != null) messageDiv.innerHTML = message;
 });
