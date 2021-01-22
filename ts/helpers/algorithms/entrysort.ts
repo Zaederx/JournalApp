@@ -1,4 +1,4 @@
-import {EntryDate} from '../../classes/EntryDate'
+import {EntryDate} from '../../classes/entrydate'
 /**
  * 
  * @param arr 
