@@ -1,9 +1,17 @@
 import {app, BrowserWindow, ipcMain,ipcRenderer } from 'electron';
 import path = require('path');
+// Entry C.R.U.D
 import * as eCreate from './helpers/e-crud/e-create';
 import * as eRead from './helpers/e-crud/e-read';
 import * as  eUpdate from './helpers/e-crud/e-update';
 import * as  eDelete from './helpers/e-crud/e-delete';
+
+// Tag C.R.U.D
+import * as tCreate from './helpers/t-crud/t-create';
+import * as tRead from './helpers/t-crud/t-read';
+// import * as tUpdate from './helpers/t-crud/t-update';
+import * as tDelete from './helpers/t-crud/t-delete';
+
 let window:BrowserWindow;
 
 var filename = 'default';
@@ -101,3 +109,18 @@ ipcMain.on('de-read', (event:Electron.IpcMainEvent, dir:string) => eRead.readDir
 ipcMain.on('console', function (event:Electron.IpcMainEvent, message:string) {
   console.log('ipcMain: logging message to console:'+ message);
 })
+
+
+/** Tag C.R.U.D Handlers */
+ipcMain.handle('t-read-all', async (event:Electron.IpcMainInvokeEvent) => {
+  //read all
+  var allTags:string[] = tRead.readTagDir();
+  //return result
+  return allTags;
+})
+
+ipcMain.handle('t-delete', async (event:Electron.IpcMainInvokeEvent,tagname:string) => {
+  var message:string = tDelete.deleteTag(tagname);
+  
+  return message;
+});
