@@ -20,7 +20,7 @@ interface Window {
     tagCRUD: {
         create: (tagname:string) => void,
         createR: (func:Function) => void,
-        readAllTags: (func:Function) => void,
+        readAllTags: (func:Function) => string[],
         read: (tagname:string) => void,
         readR: (func:Function) => void,
         update: (tagname:string) => void,
