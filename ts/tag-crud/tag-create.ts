@@ -1,27 +1,36 @@
-const btn_addTag:HTMLElement|null = document.querySelector('#t-create');
-const tagTableBody:HTMLTableElement|null = document.querySelector('#tag-table-body');
+/* Constants  */
+const btn_submit_tag:HTMLButtonElement|null = document.querySelector('#btn-submit-tag');
+const tag_input:HTMLInputElement|null = document.querySelector('#tag-input');
 
-//TODO Add a succesful message/alert box adding a new tag
+/* Null Checks */
+if(btn_submit_tag == null) console.error('Problem with: Submit New Tag Button')
+else btn_submit_tag.onclick = submitTag;
 
-if(btn_addTag != null)
-btn_addTag.onclick = () => displayTagView();
+if(tag_input == null) console.error('Problem with: Submit New Tag Button');
 
-
-function addTag(tagname:string) {
-    //add tag folder to tagDirs
-    window.tagCRUD.create(tagname);
+/* Functions */
+/**
+ * Submit tag to be added.
+ * Triggered by clicking tag submission button (#btn-submit-tag).
+ */
+function submitTag() {
+    //get tag from form
+    var tagname:string = tag_input? tag_input.value: '';
+    //add Tag
+    addTag(tagname);
 }
 
-
 /**
- * Fills tag table with all tags.
+ * Sends tag to be created/added to list of tags.
+ * @param tagname tag to be added
  */
-function loadTagTable() {
-    //ipcMessage - requests tag to be read
-    window.CRUD.readTags(); 
-    //wait for for ipc response -> load tag table
-    window.CRUD.readTResponse((tagsHTML:string) => {
-        if (tagTableBody != null)
-        tagTableBody.innerHTML = tagsHTML;
-    });
+function addTag(tagname:string) {
+    if (tagname != '') {
+        //add tag folder to tagDirs
+        window.tagCRUD.create(tagname);
+        window.tagCRUD.createR((response:string) => {
+            //IMPORTANT improve this 
+            console.log(response);
+        });
+    }
 }
