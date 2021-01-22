@@ -86,7 +86,7 @@ function refresh() {
 //the second returns the element, the first does not.
 
 /** Read the response to entries being clicked */
-window.CRUD.readEntryResponse(function (fileContent) {
+window.CRUD.readEntryResponse(function (fileContent:string) {
     console.log('Entry recieved. Displaying entry...');
     var entry = JSON.parse(fileContent);
     setECurrent(entry);//sets selectedEntry variable var.js
@@ -94,6 +94,10 @@ window.CRUD.readEntryResponse(function (fileContent) {
     console.log('Entry "'+entry.title+'" displayed.');
 });
 
+/**
+ * Displays an entry on the screen.
+ * @param entry Entry to be displayed
+ */
 function displayEntry(entry:Entry) {
     (document.querySelector('#e-title') as HTMLInputElement).innerHTML = entry.title;
     (document.querySelector('#e-body-text') as HTMLInputElement).innerHTML = entry.body;
