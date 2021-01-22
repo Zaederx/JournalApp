@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/entry-view.css">
+    <link rel="stylesheet" href="../css/view.css">
     <link rel="stylesheet" href="../external/fontawesome-free-5.15.1-web/css/all.css">
 
     <!-- External Dependency Scripts -->
@@ -19,6 +19,7 @@
     <script src="../js/entry-crud/windowInterface.js" defer></script>
     <script src="../js/entry-crud/views.js" defer></script>
     <script src="../js/classes/entry.js" defer></script>
+    <script src="../js/classes/tag.js" defer></script>
 
     <!-- Entry C.R.U.D. Scripts -->
     <script src="../js/entry-crud/vars.js" defer></script>
@@ -41,7 +42,7 @@
     <div id="topic-view" class="navigation nav1">
         <div id="topic-header" class="header">
             <h3 class="heading">Topics</h3>
-            <i id="t-create" class="fas fa-plus-square fa-lg crud-btn"></i>
+            <i id="t-view" class="fas fa-plus-square fa-lg crud-btn"></i>
         </div>
         <div id="topics" class="links">
             <!-- DUMMY DATA -->
@@ -56,7 +57,7 @@
     <div id="file-view" class="navigation nav2">
         <div id="file-header" class="header">
             <h3 class="heading">File</h3>
-            <i id="e-create" class="fas fa-plus-square fa-lg crud-btn"></i>
+            <i id="e-view" class="fas fa-plus-square fa-lg crud-btn"></i>
         </div>
         <div id="files" class="links">
             <!-- DUMMY DATA -->
@@ -68,7 +69,7 @@
     </div>
 
     <!-- Displays the selected File Entry -->
-    <div id="entry-view" class="entry-view">
+    <div id="entry-view" class="view">
         <div id="entry-header" class="header">
             <h3 class="heading">Journal Entry</h3>
             <i id="e-delete" class="fas fa-trash-alt fa-lg crud-btn"></i>
@@ -84,7 +85,7 @@
         </div>
     </div>
 
-    <div id="new-entry-view" class="entry-view" hidden>
+    <div id="new-entry-view" class="view" hidden>
         <div id="new-entry-header" class="header">
             <h3 class="heading">New Journal Entry</h3>
         </div>
