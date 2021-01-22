@@ -106,21 +106,21 @@
         </div>
     </div>
 
-    <div id="new-tag-view" class="tag-view" hidden>
-        <label for="tag-label">Search</label>
-        <input type="text" name="tag-label" id="tag-label">
-
-        <table id="tag-table">
-            <table-head>
-                <tr>
-                    <th>Current Tags</th>
-                </tr>
-            </table-head>
-            <table-body id="tag-table-body">
-                <!-- return <tr><td>tagName</td></tr> -->
-            </table-body>
-            
-        </table>
+    <div id="new-tag-view" class="view" hidden>
+        <label for="tag-input">Search</label>
+        <input type="text" name="tag-input" id="tag-input"> <button id="btn-submit-tag">Submit New Tag</button>
+        <div>
+            <table id="tag-table">
+                <table-head>
+                    <tr>
+                        <th>Current Tags</th>
+                    </tr>
+                </table-head>
+                <table-body id="tag-table-body" class="table-body">
+                    <!-- return <tr><td>tagName</td></tr> -->
+                </table-body>
+            </table>
+        </div>
     </div>
 
     <!-- Footer of entire application -->
