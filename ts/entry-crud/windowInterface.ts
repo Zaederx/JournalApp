@@ -18,8 +18,9 @@ interface Window {
         readTDResponse: (func:Function) => void;
     }
     tagCRUD: {
-        create: (tagname:string) => void,
+        create: (newTagList:string[]) => void,
         createR: (func:Function) => void,
+        createPromise: (newTagList:string[],func:Function) => void,
         readAllTags: (func:Function) => string[],
         read: (tagname:string) => void,
         readR: (func:Function) => void,
