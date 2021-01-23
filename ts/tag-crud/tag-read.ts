@@ -4,11 +4,11 @@
  */
 const btn_addTag:HTMLElement|null = document.querySelector('#t-view');
 const tagTableBody:HTMLTableElement|null = document.querySelector('#tag-table-body');
-
+tag_input ? tag_input.onkeyup = filterTable : null;
 //TODO Add a succesful message/alert box adding a new tag
 
-if(btn_addTag != null)
-btn_addTag.onclick = () => displayTagView();
+
+btn_addTag ? btn_addTag.onclick =  displayTagView : null;
 
 /**
  * Fills tag table with all tags.
@@ -18,7 +18,6 @@ function loadTagTable() {
     window.CRUD.readTags(); 
     //wait for for ipc response -> load tag table
     window.tagCRUD.readAllTags((tags:string[]) => {
-        
         if(tagTableBody != null)
         tagTableBody.innerHTML =  tagsToHtml(tags);
     });
@@ -44,7 +43,51 @@ function tagsToHtml(tags:string[]):string {
     var html:string = '';
     tags.forEach( tag => {
         if (tag.charAt(0) == '.') {/* Do not add .DS_STORE / System files*/}
-        else html += '<tr><td>'+tag+'</td></tr>\n';
+        else html += '<tr>\n'+
+        '<td>'+tag+'</td>\n' + 
+        '<td>'+'default'+'</td>\n' + 
+        '<td>'+'default'+'</td>\n'
+        +'</tr>\n';
     });
     return html;
 }
+
+/**
+ * Filters html table against input.
+ * Returns result of the search as a string.
+ * Loops thorugh each `<tr>` and checks if any `td` cell
+ * matches the input. If a match if found in any cell, display that entire row,
+ * otherwise hide the entire row that the cell belongs to.
+ * @return res string of html rows that match
+ */
+function filterTable() {
+    //Ensure search value is not undefined, then displayTagView() if an empty string
+    var searchValue:string =  tag_input?.value.toLowerCase() == undefined ? '' : tag_input.value.toLocaleLowerCase();
+    searchValue == ''? displayTagView() : '';
+
+    //Get all rows
+    var rows = tagTableBody?.querySelectorAll('tr');
+    var res = '';
+    
+    //In each row, check if any cells have a match
+    rows?.forEach ( row => {
+        var matchFound:boolean = false;
+        var cells = row.querySelectorAll('td');//could also use row.cells
+        cells.forEach ( cell => {
+            matchFound = cell.innerHTML.toLowerCase().indexOf(searchValue) > -1 ?  true : matchFound; 
+        });
+        // matchFound = cells[0].innerText.toLowerCase().indexOf(searchValue) > -1 ?  true : matchFound; 
+        //if matchFound in any cell of a row, add the whole row to results
+        
+        // @ts-ignore - tsc thinks it will always evaluate to false...It doesn't...
+        matchFound == true ?  row.style.display = '' : row.style.display = 'none';
+    });
+}
+
+//TODO - filter by individaul topic - cell[i] - where i is the coloumn number
+
+//TODO - Be able to select tag - from sidebar 
+
+//TODO - Be able to select tag - from TagTable
+
+//TODO 
