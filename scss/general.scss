@@ -1,0 +1,38 @@
+$default: #e0ddd2;
+
+// @font-face {
+//     font-family: OpenSans;
+//     src:url("../external/Open_Sans/OpenSans-Light.ttf") format("ttf")
+//     // src:url("../external/Open_Sans-svg/OpenSans-Light.svg#OpenSans") format("svg")
+// }
+body, html ,h1 , tr, div {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+input:not(button) {
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+button {
+    
+}
+
+// Table Styles
+table {
+    // font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+td, th {
+border: 1px solid $default;
+text-align: left;
+padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: $default;
+  
+}
+
