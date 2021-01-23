@@ -109,7 +109,11 @@
     </div>
 
     <div id="new-tag-view" class="view" hidden>
-
+        <div id="entry-header" class="header">
+            <h3 class="heading">Add New Tags</h3>
+            <i id="t-delete" class="fas fa-trash-alt fa-lg crud-btn"></i>
+            <i id="t-update" class="fas fa-pen-square fa-lg crud-btn"></i>
+        </div>
         <!-- Tag Input/Search Bar -->
         <label for="tag-input">Search</label>
         <input type="text" name="tag-input" id="tag-input"> <button id="btn-submit-tag">Submit New Tag</button>
@@ -120,6 +124,8 @@
             <table id="tag-table">
                 <thead class="table-head">
                         <th>Current Tags</th>
+                        <th>Entry Count</th>
+                        <th>Creation Date</th>
                 </thead>
                 <tbody id="tag-table-body" class="table-body">
                     <!-- return <tr><td>tagName</td></tr> -->
