@@ -36,38 +36,35 @@ function getEntries() {
     var directoryName:string = 'all';
     window.CRUD.readTagDirectory(directoryName);
     window.CRUD.readTDResponse(function(filesHTML:string) {
-    var files:HTMLElement|null = document.querySelector('#files');
-    if (files != null) files.innerHTML = filesHTML;
-    else console.error('read.ts: var files = null');
-        //needed to display a selected file on click
         //fills #files div with many -> <div>{filename}</div>
-        $('#files').find('div').each(function() {
-            var entryDiv:HTMLDivElement = this;
-            makeClickable(entryDiv);
-        });
+        var files:HTMLElement|null = document.querySelector('#files');
+        if (files != null) files.innerHTML = filesHTML;
+        else console.error('read.ts: var files = null');
+        files?.childNodes.forEach( entry => makeClickable(entry as HTMLDivElement,highlightActiveEntry));
     });
 
 }
 
 
 /** Enables the button -> makes button functional and applies CSS styling.
- * This allows these div's to act like buttons that display file contents when clicked,
+ * This allows these div's to act like buttons 
+ * that display file contents when clicked,
  * and have one button highlighted as active.
+ * @param element   element to be made clickable
+ * @param highlightActive   function for highlighting the element
+ * i.e. `highlightActiveEntry` or `highlightActiveTag`
  */
-function makeClickable(entryDiv:HTMLDivElement) {
-    entryDiv.onclick = () => {
+function makeClickable(element:HTMLDivElement, highlightActive:Function) {
+    element.onclick = () => {
         if(messageDiv != null) messageDiv.innerHTML = "";
         else console.log('read.ts: var messageDiv = null');
-        var filename:string = entryDiv.innerHTML;
+        var filename:string = element.innerHTML;
         setEntryFilename(filename);
-        displayEView();
-        
+        displayEView(); 
         window.CRUD.readEntry(filename);       
-        highlightActiveEntry(entryDiv);
-       
+        highlightActive(element);
     };
 }
-
 
 
 
