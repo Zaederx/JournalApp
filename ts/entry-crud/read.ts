@@ -12,9 +12,9 @@ $(document).ready(function() {
 function getTopics() {
     window.CRUD.readTags();//reads tag directories
     //return topics to html side panel
-    window.CRUD.readTResponse(function(dirHTML:string) {
-        var topics:HTMLElement|null = document.querySelector('#topics');
-        if (topics !=null) topics.innerHTML = dirHTML;
+    window.CRUD.readTResponse(function(tagsHTML:string) {
+        var tags:HTMLElement|null = document.querySelector('#topics');
+        if (tags !=null) tags.innerHTML = tagsHTML;
         else console.error('read.ts: var topics = null')
         
     });
@@ -35,12 +35,12 @@ function getEntries() {
     //fill side panel with file names
     var directoryName:string = 'all';
     window.CRUD.readTagDirectory(directoryName);
-    window.CRUD.readTDResponse(function(filesHTML:string) {
+    window.CRUD.readTDResponse(function(entriesHTML:string) {
         //fills #files div with many -> <div>{filename}</div>
-        var files:HTMLElement|null = document.querySelector('#files');
-        if (files != null) files.innerHTML = filesHTML;
+        var entries:HTMLElement|null = document.querySelector('#files');
+        if (entries != null) entries.innerHTML = entriesHTML;
         else console.error('read.ts: var files = null');
-        files?.childNodes.forEach( entry => makeClickable(entry as HTMLDivElement,highlightActiveEntry));
+        entries?.childNodes.forEach( entry => makeClickable(entry as HTMLDivElement,highlightActiveEntry));
     });
 
 }
