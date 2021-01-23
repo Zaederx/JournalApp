@@ -16,7 +16,7 @@ function getTopics() {
         var tags:HTMLElement|null = document.querySelector('#topics');
         if (tags !=null) tags.innerHTML = tagsHTML;
         else console.error('read.ts: var topics = null')
-        
+        tags?.childNodes.forEach(tag => makeClickable(tag as HTMLDivElement, highlightActiveTag))
     });
 }
 
