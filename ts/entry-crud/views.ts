@@ -11,6 +11,10 @@ const ntView:HTMLDivElement|null = document.querySelector('#new-tag-view');
 Note for display functions - //attribute hidden does not take a boolean argument, but is itself either present or not present. Thats why : View.setAttribute('hidden',''); sets the view as 
 */
 
+/**
+ * Displays the entry view.
+ * Also hides other views at the smae time.
+ */
 function displayEView() {
     //display #entry-view
     if (eView != null) eView.removeAttribute('hidden');
@@ -63,7 +67,10 @@ function displayTagView() {
     loadTagTable();//fetches tag table tagsnames
 }
 
-/* Highlight Active Entry or Tag **** */
+/** 
+ * Used to highlight element as the Active Entry
+ * @param entryBtn  entry to be highlighted
+ */
 function highlightActiveEntry(entryBtn:HTMLDivElement) {
     console.log('highlightActiveEntry')
      //handle css div-button styling
@@ -75,7 +82,10 @@ function highlightActiveEntry(entryBtn:HTMLDivElement) {
 }
 
 
-
+/** 
+ * Used to highlight element as the Active Tag
+ * @param tagBtn  tag to be highlighted
+ */
 function highlightActiveTag(tagBtn:HTMLDivElement) {
     //handle css div-button styling
     var lastActive = document.querySelector('.active.tag');
