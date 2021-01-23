@@ -8,7 +8,7 @@ import * as dir from '../directory'
 export function deleteTag(tagname:string):string {
     var success:string = 'Tag '+ tagname+' deleted'; 
     var failure:string = 'Error: Tag '+ tagname +' not deleted';
-    fs.rmdir(dir.tags+tagname,{
+    fs.rmdir(dir.tagDirectory+tagname,{
         recursive: true
     }, () => {
         console.log(success);

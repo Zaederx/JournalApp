@@ -1,2 +1,2 @@
 export var all  = 'tagDirs/all/';//directoryAllEntries
-export var tags  = 'tagDirs/';//directoryTags
+export var tagDirectory  = 'tagDirs/';//directoryTags
