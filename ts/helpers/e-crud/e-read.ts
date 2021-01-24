@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import * as entrySort from '../algorithms/entrysort';
 import * as process from 'child_process';
 import {EntryDate} from '../../classes/entrydate';
+import * as dirs from '../directory';
+import { ipcRenderer } from 'electron';
 
 /**
  * Read all tag Directories.
@@ -48,40 +50,59 @@ export function readAllDirectories(event:Electron.IpcMainEvent) {
  * @param dir (path of) directory to be read
  * @return html `div` list of entry names
  */
-export function readDirFiles(event:Electron.IpcMainEvent,dir:string) {
-    console.log('ipcMain: Reading new Entry - ' + dir);
-    var directory;
-    var filesHTML = '';
-    var arr:EntryDate[] = [];
-    var prefix:string = 'tagDirs/'+ dir+'/';
-      fs.readdir(prefix, (error, files)=> {
-        if (error) {
-          event.reply('Entry folder '+dir+' could not be read.');
-          console.log('Entry folder could not be read.');
-          return console.error(error);
-        }
-        else {
-          
-          files.forEach( file => fetchBtime(prefix,file,arr));
-          var start:number = 0;
-          var end:number = arr.length-1;
-          var newArr = entrySort.sort(arr,start,end);
+export function readDirFilesEvent(event:Electron.IpcMainEvent,dir?:string) {
+  readDirFiles(dirs.tagDirectory + (dir? dir+'/':''),event, 'response-de-read');
+  /**note: must have slash after dir for fetchBtime() work - 
+   * as it is also called from this function and needs the slash at the ned of the path */
+}
 
-          var i:number = 0;
-          newArr.forEach(entryDate => {
-            if (i == 0) {
-              filesHTML += '<div class="active entry">'+entryDate.name+'</div>\n';//class must be active entry!
-              i++;
-            } 
-            else {
-              filesHTML += '<div>'+entryDate.name+'</div>\n';
-            }
-          });
-          event.reply('response-de-read', filesHTML);
-         
+
+
+/**
+ * Returns filenames read from a directory  as a string of 
+ * -> ```<div>{filename}<div>```'s
+ * @param dir main directory path
+ * @param event Electron.IpcMainEvent
+ * @param address where to send the event reply i.e.
+ * ``` event.reply(address, message);```
+ * 
+ * Note:
+ * ```
+ * readDir('./hello', 'there') -> path looks like './hello/there'
+ * ```
+ */
+export function readDirFiles(dir:string,  event?:Electron.IpcMainEvent, address?:string) {
+  console.log('ipcMain: Reading new Entry - ' + dir);
+  var filesHTML = '';
+  var arr:EntryDate[] = [];
+  
+  var prefix:string = dir;// (and ? '/'+and : '/');
+  fs.readdir(prefix, (error, files)=> {
+    if (error) {
+      console.error('Entry folder '+dir+' could not be read.');
+      return console.error(error);
+    }
+    else {
+      
+      files.forEach( file => fetchBtime(prefix,file,arr));
+      var start:number = 0;
+      var end:number = arr.length-1;
+      var newArr = entrySort.sort(arr,start,end);
+
+      var i:number = 0;
+      newArr.forEach(entryDate => {
+        if (i == 0) {
+          filesHTML += '<div class="active entry">'+entryDate.name+'</div>\n';//class must be active entry!
+          i++;
+        } 
+        else {
+          filesHTML += '<div>'+entryDate.name+'</div>\n';
         }
       });
-  
+      event?.reply(address, filesHTML);
+    }
+  });
+ 
 }
 
 /**
@@ -144,4 +165,4 @@ function fetchBtime(prefix:string,file:string, arr:EntryDate[]) {
 
     var code:number|null = stat_birth.status;
     console.log('child process: "stat_birth" exited with code',code);
-  }
+}
