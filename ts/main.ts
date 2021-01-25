@@ -1,5 +1,7 @@
 import {app, BrowserWindow, ipcMain,ipcRenderer } from 'electron';
 import path = require('path');
+import * as dirs from './helpers/directory';
+
 // Entry C.R.U.D
 import * as eCreate from './helpers/e-crud/e-create';
 import * as eRead from './helpers/e-crud/e-read';
@@ -102,7 +104,7 @@ ipcMain.on('e-delete', (event:Electron.IpcMainEvent, filename:string) => {
 ipcMain.on('d-read', (event:Electron.IpcMainEvent) => eRead.readAllDirectories(event))
 
 // READ DIRECTORY FILES - files inside a specific directory
-ipcMain.on('de-read', (event:Electron.IpcMainEvent, dir:string) => eRead.readDirFiles(event, dir));
+ipcMain.on('de-read', (event:Electron.IpcMainEvent, dir:string) => eRead.readDirFiles( dirs.tagDirectory+(dir ? dir+'/':''), event, 'response-de-read'));
 
 
 
@@ -117,8 +119,6 @@ ipcMain.on('t-create', (event:Electron.IpcMainEvent,tagnames:string[]) => tCreat
 
 ipcMain.handle('t-create-promise', async(event:Electron.IpcMainInvokeEvent, tagNames:string[]) => {
   var success = tCreate.createTagsInvoke(tagNames); 
-  console.error(success);//TODO remove when no longer neeed for debuggging
-  console.log(success);//TODO remove when no longer needed for debugging
   return success
 });
 ipcMain.handle('t-read-all', async (event:Electron.IpcMainInvokeEvent) => {
@@ -127,6 +127,8 @@ ipcMain.handle('t-read-all', async (event:Electron.IpcMainInvokeEvent) => {
   //return result
   return allTags;
 })
+
+ipcMain.on('t-read', (event:Electron.IpcMainEvent, tagName:string) => tRead.readTagEntries(event,tagName));
 
 ipcMain.handle('t-delete', async (event:Electron.IpcMainInvokeEvent,tagname:string) => {
   var message:string = tDelete.deleteTag(tagname);
