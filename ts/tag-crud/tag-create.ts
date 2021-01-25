@@ -33,8 +33,8 @@ function addTag(tagname:string) {
         newTaglist.push(tagname);
 
         window.tagCRUD.createPromise(newTaglist,(successful:boolean) => {
-            console.log(successful);
-            if(successful) displayTagView();
+            
+            if(successful) {displayTagView(); console.log('Tag created successfully.');}
             else console.error('Failed to create tag:'+tagname);
         });
 
