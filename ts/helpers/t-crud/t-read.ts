@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 import * as dir from '../directory';
+import * as eSort from '../algorithms/entrysort'
+import {readDirFiles} from '../e-crud/e-read';
 
 /**
  * Returns array of `tagDir` contents (not recursively).
@@ -38,8 +40,8 @@ export function readAllTags():string[] {
     return tags;
 }
 
-export function readTagEntries(tagName:string):string[] {
-    return readDir(dir.tagDirectory, tagName);
+export function readTagEntries(event:Electron.IpcMainEvent,tagName:string) {
+   readDirFiles(dir.tagDirectory+(tagName ? tagName+'/':''),event,'response-t-read');
 }
 
 /**
@@ -48,7 +50,7 @@ export function readTagEntries(tagName:string):string[] {
  * @param and optional addition to the path
  * 
  * ```
- * readDir('./hello', 'there') => path looks like './hello/there'
+ * readDir('./hello', 'there') -> path looks like './hello/there'
  * ```
  */
 function readDir(dir:string, and?:string):string[] {
