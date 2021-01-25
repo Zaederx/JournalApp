@@ -57,6 +57,7 @@ function makeClickable(element:HTMLDivElement, readFunction:Function,highlightAc
         if(messageDiv != null) messageDiv.innerHTML = "";
         else console.log('read.ts: var messageDiv = null');
         var filename:string = element.innerHTML;
+        setEntryFilename(filename);//needs to be set - important for file deletion
         displayEView(); 
         readFunction(filename);       
         highlightActive(element);
