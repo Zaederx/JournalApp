@@ -46,30 +46,22 @@ export function readAllDirectories(event:Electron.IpcMainEvent) {
 /**
  * Read names of all the files in a directory.
  * Then returns these in a list of `<div>Entry Name</div>`
- * @param event Electron Event
+ * in an `event.reply()` to the specified address.
  * @param dir (path of) directory to be read
- * @return html `div` list of entry names
- */
-export function readDirFilesEvent(event:Electron.IpcMainEvent,dir?:string) {
-  readDirFiles(dirs.tagDirectory + (dir? dir+'/':''),event, 'response-de-read');
-  /**note: must have slash after dir for fetchBtime() work - 
-   * as it is also called from this function and needs the slash at the ned of the path */
-}
-
-
-
-/**
- * Returns filenames read from a directory  as a string of 
- * -> ```<div>{filename}<div>```'s
- * @param dir main directory path
- * @param event Electron.IpcMainEvent
+ * @param event Electron Event
  * @param address where to send the event reply i.e.
  * ``` event.reply(address, message);```
+ * @return html `div` list of entry names
  * 
  * Note:
  * ```
  * readDir('./hello', 'there') -> path looks like './hello/there'
  * ```
+ * .
+ * 
+ * .
+ * 
+ * .
  */
 export function readDirFiles(dir:string,  event?:Electron.IpcMainEvent, address?:string) {
   console.log('ipcMain: Reading new Entry - ' + dir);
