@@ -57,7 +57,7 @@ function readDir(dir:string, and?:string):string[] {
     var directory:string[] = [];
     try {
         //using readdirSync - blocks IO until the read is done
-        var directory = fs.readdirSync(dir+'/'+and, {
+        var directory = fs.readdirSync(dir+(and?and+'/':''), {
             encoding: 'utf8',/* Note: thoguh the default, setting encoding to 'utf8' explicitly informs typescript -> only string[] not string[]|Buffer[] to be returned*/
             withFileTypes: false
         });
