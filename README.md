@@ -1,6 +1,7 @@
 # JournalApp
  Jounalling App
 
+[Trello Page](https://trello.com/b/CXi4WL52)
 
 Images Attributed to:
 
