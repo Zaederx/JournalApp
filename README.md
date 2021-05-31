@@ -3,7 +3,7 @@
 
 [Trello Page](https://trello.com/b/CXi4WL52)
 
-https://user-images.githubusercontent.com/38586415/105251411-57f56a00-5b73-11eb-9cd9-cfa911de121f.png
+<img width="927" alt="image" src="https://user-images.githubusercontent.com/38586415/105251411-57f56a00-5b73-11eb-9cd9-cfa911de121f.png">
 
 Images Attributed to:
 
