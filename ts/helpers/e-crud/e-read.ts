@@ -153,7 +153,7 @@ function fetchBtime(prefix:string,file:string, arr:EntryDate[]) {
     console.log('bString',bString);
     console.log('btime',btime);
     var err:string = stat_birth.stderr;
-    console.error('File Birthtime error:',err);
+    err != '' ? console.error('File Birthtime error:',err) : null;
 
     var code:number|null = stat_birth.status;
     console.log('child process: "stat_birth" exited with code',code);
