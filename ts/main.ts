@@ -31,7 +31,7 @@ function createWindow () {
     minHeight: 478,
     webPreferences: {
         worldSafeExecuteJavaScript: true ,
-        contextIsolation: true,//otherwise WorldSafe.. message still appears
+        contextIsolation: true,//otherwise "WorldSafe".. message still appears
         nodeIntegration: integration, //whether you can access node methods - e.g. requires, anywhere in the app's js
         preload: path.join(__dirname, "preload.js")
     }
