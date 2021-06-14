@@ -14,12 +14,60 @@ btn_addTag ? btn_addTag.onclick =  displayTagView : null;
  * Fills tag table with all tags.
  */
 function loadTagTable() {
+    
     //ipcMessage - requests tag to be read
     window.CRUD.readTags(); 
     //wait for for ipc response -> load tag table
     window.tagCRUD.readAllTags((tags:string[]) => {
-        if(tagTableBody != null)
-        tagTableBody.innerHTML =  tagsToHtml(tags);
+        // if(tagTableBody != null)
+        // var promise = new Promise<HTMLTableElement|null>((resolve) => {
+        //     tagTableBody!.innerHTML =  tagsToHtml(tags);
+        //     resolve(tagTableBody);
+        // });
+        var promise = new Promise<HTMLTableElement|null>((resolve, reject) => {
+            tagTableBody? tagTableBody.innerHTML =  tagsToHtml(tags) : reject();
+            resolve(tagTableBody);
+        });
+
+        promise.then((tagTableBody) => {
+            var rows = tagTableBody?.querySelectorAll('tr');
+            rows?.forEach( row => {
+                makeTTRowClickable(row as HTMLTableRowElement);
+            }); 
+        });
+    });
+}
+
+/**
+ * 
+ * @param row HTMLTableRowElement
+ */
+function makeTTRowClickable(row:HTMLTableRowElement) {
+    const plain = 'rgb(224, 221, 210)';//'#e0ddd2'//only works with rgb - becuase style.backgroundColor propertt is returned in rgb
+    const highlighted = 'rgb(255, 245, 107)' //'#fff56b';
+    const clicked = 'rgb(240, 92, 53)'//'#f05c35';
+    console.log('\n\n\n\n\n**********row:'+row+'*************\n\n\n\n\n\n\n');
+    const toRemove = '#f05c35';  //#86f9d6
+
+    row.addEventListener('mouseover', function (event) {
+        console.log('mouseover:'+highlighted);
+        if (row.style.backgroundColor == clicked) {console.log('backgroundColor == clicked');row.style.backgroundColor = clicked;}
+        else {
+            row.style.backgroundColor = (row.style.backgroundColor != clicked && row.style.backgroundColor != highlighted) ?  highlighted : row.style.backgroundColor;
+        }
+        
+    });
+
+    row.addEventListener('mouseleave',function(event) {
+        console.log('left:'+plain);
+            console.log('\n\n\n\n\n**********row:'+row.style.backgroundColor+'*************\n\n\n\n\n\n\n')
+        if (row.style.backgroundColor == clicked) {console.log('backgroundColor == clicked');row.style.backgroundColor = clicked;}
+        else {row.style.backgroundColor = row.style.backgroundColor == highlighted ?  plain: row.style.backgroundColor;}
+    });
+
+    row.addEventListener('click',function() {
+        console.log('clicked:'+clicked);
+        row.style.backgroundColor = row.style.backgroundColor != clicked ? clicked : plain;
     });
 }
 
@@ -76,10 +124,8 @@ function filterTable() {
         cells.forEach ( cell => {
             matchFound = cell.innerHTML.toLowerCase().indexOf(searchValue) > -1 ?  true : matchFound; 
         });
-        // matchFound = cells[0].innerText.toLowerCase().indexOf(searchValue) > -1 ?  true : matchFound; 
-        //if matchFound in any cell of a row, add the whole row to results
-        
-        // @ts-ignore - tsc thinks it will always evaluate to false...It doesn't...
+        /*if matchFound in any cell of a row, add the whole row to results
+        @ts-ignore - tsc thinks it will always evaluate to false...It doesn't...*/
         matchFound == true ?  row.style.display = '' : row.style.display = 'none';
     });
 }
