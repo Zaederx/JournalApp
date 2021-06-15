@@ -11,6 +11,7 @@ if(btn_submit_update != null)
     btn_submit_update.onclick = (event) => {updateFile(event)};
 else console.error('update.ts: var btn_submit_update = null');
 
+var e = new Entry()//FOR ACCESS TO CONVERSION METHODS/FUNCTIONS
 function updateFile(event:Event) {
     window.logAPI.message('form submit button clicked\n');
 
@@ -22,7 +23,7 @@ function updateFile(event:Event) {
     window.logAPI.message(message);
 
 
-    var entry = new Entry(etitle, ebody, etags);
+    var entry = new Entry(etitle, ebody, e.stringToArr(etags));
     var entryJSON = JSON.stringify(entry);
     window.logAPI.message(entryJSON);
 
@@ -57,6 +58,7 @@ function getUpdateForm(event:Event) {
     if(ebody != null) ebody.value = entry.body;
     else console.error('update.ts: const ebody = null')
 
-    if(etags != null) etags.value = entry.tags;
+    
+    if(etags != null) etags.value = entry.tagsToStringCSV();
     else console.error('update.ts: const etags = null')
 }

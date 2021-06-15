@@ -97,7 +97,7 @@ window.tagCRUD.readTagEntriesR(function (tagEntriesHTML:string) {
 function displayEntry(entry:Entry) {
     (document.querySelector('#e-title') as HTMLInputElement).innerHTML = entry.title;
     (document.querySelector('#e-body-text') as HTMLInputElement).innerHTML = entry.body;
-    (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = entry.tags;
+    (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = entry.tagsToStringCSV();
 }
 
 //  SECTION - Loading Functions - for Tag & Entry

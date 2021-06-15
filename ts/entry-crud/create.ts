@@ -22,6 +22,7 @@ if(btn_submit != null)
 else console.error('create.ts: var btn_submit = null');
 
 
+var e = new Entry()//for access to conversion methods
 
 function submit (event:Event) {
     window.logAPI.message('form submit button clicked\n');
@@ -32,7 +33,7 @@ function submit (event:Event) {
     var message:string = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
     console.log('message:',message);
     window.logAPI.message(message);
-    var entry = new Entry(etitle, ebody, etags);
+    var entry = new Entry(etitle, ebody, e.stringToArr(etags));
     var entryJSON:string = JSON.stringify(entry);
     window.logAPI.message(entryJSON);
 

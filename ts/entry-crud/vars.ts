@@ -1,6 +1,6 @@
 /*Current Tag and Entry information*/
 /** Variable for information of the currently selected entry*/
-var selectedEntry = new Entry('default','default','default');
+var selectedEntry = new Entry('default','default',[]);
 /** Variable for information of the currently selected tag*/
 var selectedTag = '';
 /** Variable for the filename of the currently selected entry */ 
