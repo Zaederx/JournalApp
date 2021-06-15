@@ -50,6 +50,7 @@ function displayNEView() {
     //reset form
     if (form != null) form.reset();
     else console.error('view.ts: const form = null');
+    loadTagTable(tagDropTableBody)
 }
 
 /** Displays tag view - hide other views */

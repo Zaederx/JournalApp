@@ -3,18 +3,18 @@
  * READs tag data and presents in the Tag Creation View.
  */
 const btn_addTag:HTMLElement|null = document.querySelector('#t-view');
-const tagTableBody:HTMLTableElement|null = document.querySelector('#tag-table-body');
+const tagTableBody1:HTMLTableElement = document.querySelector('#tag-table-body') as HTMLTableElement;
 
-tag_input ? tag_input.onkeyup = filterTable : null;
+tag_input ? tag_input.onkeyup = ()=>filterTable() : console.log('tag_input is null');
 //TODO Add a succesful message/alert box adding a new tag
 
 
-btn_addTag ? btn_addTag.onclick =  displayTagView : null;
+btn_addTag ? btn_addTag.onclick =  displayTagView : console.log('btn_addTag is null');
 
 /**
  * Fills tag table with all tags.
  */
-function loadTagTable() {
+function loadTagTable(tagTableBody:HTMLTableElement=tagTableBody1) {
     
     //ipcMessage - requests tag to be read
     window.CRUD.readTags(); 
@@ -114,7 +114,7 @@ function tagsToHtml(tags:string[]):string {
  * otherwise hide the entire row that the cell belongs to.
  * @return res string of html rows that match
  */
-function filterTable() {
+function filterTable(tagTableBody:HTMLTableElement=tagTableBody1) {
     //Ensure search value is not undefined, then displayTagView() if an empty string
     var searchValue:string =  tag_input?.value.toLowerCase() == undefined ? '' : tag_input.value.toLocaleLowerCase();
     searchValue == ''? displayTagView() : '';
