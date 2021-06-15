@@ -68,7 +68,7 @@ ipcMain.on('new_content', function(e,htmlFilename:string) {
    window.loadFile(htmlFilename);
 });
 
-/**************** C.R.U.D. METHODS ****************** */
+//SECTION C.R.U.D. METHODS ****************** */
 // Create Entry
 ipcMain.on('e-create', (event:Electron.IpcMainEvent, entry:string) => {
   eCreate.createEvent(event,entry);
@@ -100,7 +100,7 @@ ipcMain.on('e-delete', (event:Electron.IpcMainEvent, filename:string) => {
 
 /**************************************** */
 
-// READ DIRECTORIES - lists all tag directories
+//SECTION READ DIRECTORIES - lists all tag directories
 ipcMain.on('d-read', (event:Electron.IpcMainEvent) => eRead.readAllDirectories(event))
 
 // READ DIRECTORY FILES - files inside a specific directory
@@ -113,7 +113,7 @@ ipcMain.on('console', function (event:Electron.IpcMainEvent, message:string) {
 })
 
 
-/** Tag C.R.U.D Handlers */
+//SECTION ** Tag C.R.U.D Handlers */
 
 ipcMain.on('t-create', (event:Electron.IpcMainEvent,tagnames:string[]) => tCreate.createTags(event,tagnames));
 

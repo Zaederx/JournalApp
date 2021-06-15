@@ -4,6 +4,7 @@
  */
 const btn_addTag:HTMLElement|null = document.querySelector('#t-view');
 const tagTableBody:HTMLTableElement|null = document.querySelector('#tag-table-body');
+
 tag_input ? tag_input.onkeyup = filterTable : null;
 //TODO Add a succesful message/alert box adding a new tag
 
@@ -43,7 +44,7 @@ function loadTagTable() {
  * @param row HTMLTableRowElement
  */
 function makeTTRowClickable(row:HTMLTableRowElement) {
-    const plain = 'rgb(224, 221, 210)';//'#e0ddd2'//only works with rgb - becuase style.backgroundColor propertt is returned in rgb
+    const plain = 'rgb(224, 221, 210)';//'#e0ddd2'//only works with rgb - becuase style.backgroundColor property is returned in rgb
     const highlighted = 'rgb(255, 245, 107)' //'#fff56b';
     const clicked = 'rgb(240, 92, 53)'//'#f05c35';
     console.log('\n\n\n\n\n**********row:'+row+'*************\n\n\n\n\n\n\n');
@@ -65,9 +66,14 @@ function makeTTRowClickable(row:HTMLTableRowElement) {
         else {row.style.backgroundColor = row.style.backgroundColor == highlighted ?  plain: row.style.backgroundColor;}
     });
 
-    row.addEventListener('click',function() {
+    row.addEventListener('click',function(event) {
         console.log('clicked:'+clicked);
         row.style.backgroundColor = row.style.backgroundColor != clicked ? clicked : plain;
+
+        //get text of selected row - to be passed to delete function - tag-delete.ts -> selectedDropdownTag
+        if (row.style.backgroundColor == clicked) {
+            selectedDropdownTag = row.cells[0].textContent as string
+         }
     });
 }
 
@@ -130,10 +136,20 @@ function filterTable() {
     });
 }
 
-//TODO - filter by individaul topic - cell[i] - where i is the coloumn number
+//TODO - filter by individual topic - cell[i] - where i is the coloumn number
 
 //TODO - Be able to select tag - from sidebar 
 
 //TODO - Be able to select tag - from TagTable
 
-//TODO 
+//TODO Add tag to entry
+// const btn_addTag = document.querySelector('#btn-add-tag') as HTMLButtonElement
+// var highlightedRow:HTMLTableRowElement
+// btn_addTag ? btn_addTag.onclick = () => addTagToEntry() : null
+
+// function addTagToEntry() {
+//     var text = highlightedRow.cells[0].textContent
+//     var tagText = '\n<span>'+text+'</span>\n'
+//     var tagPins = document.querySelector('#tags-pins') as HTMLElement
+//     tagPins.innerHTML += tagText
+// }

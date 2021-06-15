@@ -117,8 +117,9 @@ contextBridge.exposeInMainWorld('tagCRUD', {
     updateR: (func:Function) => {
         ipcRenderer.on('response-t-update', (event, message) => func(message));
     },
-    delete: (tagName:string) => {
-        ipcRenderer.send('t-delete', tagName);
+    delete: async (tagName:string) => {
+        var message = await (ipcRenderer.invoke('t-delete', tagName));
+        return message;
     },
     deleteR: (func:Function) => {
         ipcRenderer.on('response-t-delete', (event, message) => func(message));
