@@ -36,7 +36,7 @@
     <script src="../js/tag-crud/tag-update.js" defer></script>
     <script src="../js/tag-crud/tag-delete.js" defer></script>
     <script src="../js/tag-crud/tag-select.js"defer></script>
-    <script src="../js/tag-crud/add-tag-dropdown-searchbar.js"defer></script>
+    <script src="../js/tag-crud/add-tag-searchbar.js"defer></script>
 
     <title>Journal App</title>
 </head>
@@ -103,7 +103,9 @@
                 <textarea id="new-entry-body" name="body"  class="textarea">Type your entry here...</textarea><br>
                 
                 <label for="new-entry-tags">Topics</label>
-                <input id="new-entry-tags" name="tags" type="text" class="title"><br>
+                <div id="new-entry-tags" class="new-entry-tags">
+
+                </div>
                 <button id="btn-submit">Save</button>
                 <button id="btn-submit-update">Update</button>
             </form>
