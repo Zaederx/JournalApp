@@ -4,7 +4,7 @@ const btn_update:HTMLElement|null = document.querySelector('#e-update');//btn to
 const btn_submit_update:HTMLElement|null = document.querySelector('#btn-submit-update');
 const etitle:HTMLInputElement|null = document.querySelector('#new-entry-title');
 const ebody:HTMLInputElement|null = document.querySelector('#new-entry-body');
-const etags:HTMLInputElement|null = document.querySelector('#new-entry-tags');
+const etags:HTMLElement|null = document.querySelector('#new-entry-tags');
 
 
 if(btn_submit_update != null)
@@ -17,7 +17,7 @@ function updateFile(event:Event) {
 
     var etitle = (document.querySelector('#new-entry-title') as HTMLInputElement).value;
     var ebody = (document.querySelector('#new-entry-body') as HTMLInputElement).value;
-    var etags = (document.querySelector('#new-entry-tags') as HTMLInputElement).value;
+    var etags = tags
     var message = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
     console.log('message:',message);
     window.logAPI.message(message);
@@ -44,8 +44,10 @@ btn_update.onclick = (event) => getUpdateForm(event);
 
 /** Displays the update form.
  * Also fills that form with information of the 
- * currently selected Entry */
+ * currently selected Entry 
+ * note event is user event - i.e. mouseEvent*/
 function getUpdateForm(event:Event) {
+    console.log('*** getUpdateForm called ***')
     //display 'new-entry-view'
     displayNEView();
     //read entry
@@ -58,7 +60,16 @@ function getUpdateForm(event:Event) {
     if(ebody != null) ebody.value = entry.body;
     else console.error('update.ts: const ebody = null')
 
-    var tags = entry.tagsToStringCSV()
-    if(etags != null) etags.value = tags;
+    var tags = csvToSpan(entry.tags)
+    console.log('getUpdateForms: tags',tags)
+    if(etags != null) etags.innerHTML = tags;
     else console.error('update.ts: const etags = null')
+}
+
+function csvToSpan(tags:string[]) {
+    var html = ''
+    tags.forEach((tag)=>{
+        html += '<span>'+tag+'</span>'
+    })
+    return html
 }

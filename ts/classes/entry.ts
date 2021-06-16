@@ -26,6 +26,7 @@ class Entry {
         tags.forEach((e)=> {
             if (count == 0){
                 entryTags += e
+                count++
             }
             else {
                 entryTags += ','+e

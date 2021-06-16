@@ -34,7 +34,8 @@ const newTagDiv = document.querySelector('#new-entry-tags') as HTMLDivElement
   */
  var tags = ''
  /**
-  * 
+  * Adds all tags selected (highlighted in the searchable tag table)
+  * to the onscreen entry (in new entry / edit view)
   */
  function addAllHighlightedTags() {
     console.log('*** addAllHighlightedTags function called ***')
@@ -51,12 +52,13 @@ const newTagDiv = document.querySelector('#new-entry-tags') as HTMLDivElement
                 tags = row.cells[0].innerHTML
             }
             else {
-                tags = ','+row.cells[0].innerHTML
+                tags += ','+row.cells[0].innerHTML
             }
             count++
         }
     })
     console.log('htmlTags:',htmlTags)
+    console.log('tags',tags)
     newTagDiv.innerHTML =  htmlTags
  }
 
