@@ -58,7 +58,7 @@ function getUpdateForm(event:Event) {
     if(ebody != null) ebody.value = entry.body;
     else console.error('update.ts: const ebody = null')
 
-    
-    if(etags != null) etags.value = entry.tagsToStringCSV();
+    var tags = entry.tagsToStringCSV()
+    if(etags != null) etags.value = tags;
     else console.error('update.ts: const etags = null')
 }

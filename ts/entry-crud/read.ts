@@ -49,6 +49,7 @@ function refresh() {
  * that display file contents when clicked,
  * and have one button highlighted as active.
  * @param element   element to be made clickable
+ * @param readFunction function for reading Entries
  * @param highlightActive   function for highlighting the element
  * i.e. `highlightActiveEntry` or `highlightActiveTag`
  */
@@ -95,9 +96,13 @@ window.tagCRUD.readTagEntriesR(function (tagEntriesHTML:string) {
  * @param entry Entry to be displayed
  */
 function displayEntry(entry:Entry) {
+    console.log('*** displayEntry called ***');
     (document.querySelector('#e-title') as HTMLInputElement).innerHTML = entry.title;
     (document.querySelector('#e-body-text') as HTMLInputElement).innerHTML = entry.body;
-    (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = entry.tagsToStringCSV();
+
+    var tagsCSV:string = entry.tagsToStringCSV();
+    console.log('tagsCSV:',tagsCSV);
+    (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = (entry.tagsToStringCSV() as string);
 }
 
 //  SECTION - Loading Functions - for Tag & Entry

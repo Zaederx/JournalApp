@@ -29,7 +29,8 @@ function submit (event:Event) {
     // var neTitle:HTMLElement|null = document.querySelector('#new-entry-title');
     var etitle:string|null = (document.querySelector('#new-entry-title') as HTMLInputElement).value;
     var ebody:string|null = (document.querySelector('#new-entry-body') as HTMLInputElement).value;
-    var etags:string|null = (document.querySelector('#new-entry-tags') as HTMLInputElement).value;
+    // var etags:string|null = (document.querySelector('#new-entry-tags') as HTMLInputElement).value;
+    var etags:string|null = tags //from add-tag-searchbar.ts
     var message:string = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
     console.log('message:',message);
     window.logAPI.message(message);
@@ -48,6 +49,8 @@ function submit (event:Event) {
     refresh();//from read.js
     
 }
+
+
 
 /**
  * Recieves and displays success of failure messages.

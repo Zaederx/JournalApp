@@ -25,10 +25,14 @@ const newTagDiv = document.querySelector('#new-entry-tags') as HTMLDivElement
   */
  function tagRowToHTML(row:HTMLTableRowElement) {
      var tagName = row.cells[0].innerHTML
-     var html = '<div>'+tagName+'</div>'
+     var html = '<span>'+tagName+'</span>'
      return html
  }
 
+ /**
+  * The tags needed by create.ts - 'submit' function
+  */
+ var tags = ''
  /**
   * 
   */
@@ -36,16 +40,26 @@ const newTagDiv = document.querySelector('#new-entry-tags') as HTMLDivElement
     console.log('*** addAllHighlightedTags function called ***')
     var rows = tagDropTableBody?.querySelectorAll('tr');
     var htmlTags:string = ''
+    var count = 0
     rows.forEach( row => {
         console.log('row,style.backgroundColor',row.style.backgroundColor)
-        if (row.style.backgroundColor == clicked){
+        if (row.style.backgroundColor == clicked) {
+            
             console.log('row.cell[0]:',row.cells[0])
             htmlTags += tagRowToHTML(row)
+            if (count == 0) {
+                tags = row.cells[0].innerHTML
+            }
+            else {
+                tags = ','+row.cells[0].innerHTML
+            }
+            count++
         }
     })
     console.log('htmlTags:',htmlTags)
     newTagDiv.innerHTML =  htmlTags
  }
+
 
 
  

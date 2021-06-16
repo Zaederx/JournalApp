@@ -10,16 +10,18 @@ class Entry {
         this.title = title ? title : 'default';
         this.body = body ? body : 'default';
         this.tags = tags ? tags : [];
+        tags?.push('all')
     }
 
     tagsToStringCSV():string {
-       return this.arrToStringCSV(this.tags!)//TODO add saftey measure
+        var csv = this.arrToStringCSV()
+        return csv
     }
     stringToArr(tagsString:string):string[] {
         var arr:string[] = tagsString.split(',')
         return arr
     }
-    arrToStringCSV(tags:string[]) {
+    arrToStringCSV(tags:string[]=this.tags):string {
         var entryTags:string = ''
         var count = 0
         tags.forEach((e)=> {
