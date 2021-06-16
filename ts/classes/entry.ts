@@ -9,19 +9,18 @@ class Entry {
     constructor (title?:string, body?:string, tags?:string[]) {
         this.title = title ? title : 'default';
         this.body = body ? body : 'default';
-        this.tags = tags ? tags : [];
-        tags?.push('all')
+        this.tags = tags ? tags : ['all'];
     }
 
     tagsToStringCSV():string {
-        var csv = this.arrToStringCSV()
+        var csv = this ? this.arrToStringCSV()  : 'all'
         return csv
     }
     stringToArr(tagsString:string):string[] {
         var arr:string[] = tagsString.split(',')
         return arr
     }
-    arrToStringCSV(tags:string[]=this.tags):string {
+    arrToStringCSV(tags:string[]=(this.tags)):string {
         var entryTags:string = ''
         var count = 0
         tags.forEach((e)=> {

@@ -76,10 +76,13 @@ the second returns the acutal element, the first does not. */
  */
 window.CRUD.readEntryResponse(function (fileContent:string) {
     console.log('Entry recieved. Displaying entry...');
-    var entry = JSON.parse(fileContent);
-    setECurrent(entry);//sets selectedEntry variable var.js
-    displayEntry(entry);
-    console.log('Entry "'+entry.title+'" displayed.');
+    var entryParsedJson:Entry = JSON.parse(fileContent) as Entry;//note parsed JSON has now class method functionality - just object data
+    console.log('*** entry:',entryParsedJson,'***')
+    console.log('Entry "'+entryParsedJson.title+'" displayed.');
+    console.log('Entry Tags"'+entryParsedJson.tags+'" displayed.');
+    setECurrent(entryParsedJson);//sets selectedEntry variable var.js
+    displayEntry(entryParsedJson);
+    // console.log('Entry "'+entry.title+'" displayed.');
 });
 
 /**
@@ -91,18 +94,20 @@ window.tagCRUD.readTagEntriesR(function (tagEntriesHTML:string) {
     loadEntries(tagEntriesHTML);
 });
 
+e = new Entry()//to have access to class methods
 /**
  * Displays an entry on the screen.
- * @param entry Entry to be displayed
+ * @param entryParsedJson Entry to be displayed
  */
-function displayEntry(entry:Entry) {
+function displayEntry(entryParsedJson:Entry) {
     console.log('*** displayEntry called ***');
-    (document.querySelector('#e-title') as HTMLInputElement).innerHTML = entry.title;
-    (document.querySelector('#e-body-text') as HTMLInputElement).innerHTML = entry.body;
+    
+    (document.querySelector('#e-title') as HTMLInputElement).innerHTML = entryParsedJson.title;
+    (document.querySelector('#e-body-text') as HTMLInputElement).innerHTML = entryParsedJson.body;
 
-    var tagsCSV:string = entry.tagsToStringCSV();
+    var tagsCSV:string = e.arrToStringCSV(entryParsedJson.tags);
     console.log('tagsCSV:',tagsCSV);
-    (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = (entry.tagsToStringCSV() as string);
+    (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = tagsCSV;
 }
 
 //  SECTION - Loading Functions - for Tag & Entry
