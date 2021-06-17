@@ -1,6 +1,9 @@
 # JournalApp
  Jounalling App
-
+ 
+#Instructions
+Download the folder. CD inside the folder in terminal and run the command npm start. (You will need node and npm to already be already installed)
+#Images
 [Trello Page](https://trello.com/b/CXi4WL52)
 
 <img width="923" alt="image" src="https://user-images.githubusercontent.com/38586415/122446822-ff4bc100-cf9a-11eb-8ad9-3872c5860922.png">
