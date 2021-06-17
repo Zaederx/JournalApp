@@ -114,12 +114,15 @@ function tagsToHtml(tags:string[]):string {
  * Loops thorugh each `<tr>` and checks if any `td` cell
  * matches the input. If a match if found in any cell, display that entire row,
  * otherwise hide the entire row that the cell belongs to.
+ * @param tagTableBody - table to be filtered
+ * @param input - the search bar the take the user input
+ * @param displayViewFunc - the function that returns the view (need to refresh view after filtering to work)
  * @return res string of html rows that match
  */
-function filterTable(tagTableBody:HTMLTableElement=tagTableBody1) {
+function filterTable(tagTableBody:HTMLTableElement=tagTableBody1, input:HTMLInputElement=tag_input) {
     //Ensure search value is not undefined, then displayTagView() if an empty string
-    var searchValue:string =  tag_input?.value.toLowerCase() == undefined ? '' : tag_input.value.toLocaleLowerCase();
-    searchValue == ''? displayTagView() : '';
+    var searchValue:string =  input?.value.toLowerCase() == undefined ? '' : input.value.toLocaleLowerCase();
+    // searchValue == ''? displayViewFunc() : '';
 
     //Get all rows
     var rows = tagTableBody?.querySelectorAll('tr');

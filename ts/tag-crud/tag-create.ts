@@ -1,6 +1,6 @@
 /* Constants  */
 const btn_submit_tag:HTMLButtonElement|null = document.querySelector('#btn-submit-tag');
-const tag_input:HTMLInputElement|null = document.querySelector('#tag-input');
+const tag_input:HTMLInputElement = document.querySelector('#tag-input') as HTMLInputElement;
 var newTaglist:string[] = [];
 /* Null Checks */
 if(btn_submit_tag == null) console.error('Problem with: Submit New Tag Button')

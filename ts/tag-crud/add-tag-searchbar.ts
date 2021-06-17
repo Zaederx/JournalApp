@@ -6,14 +6,14 @@ const tableId = '#add-tag-table-body'
 const inputId = '#add-tag-input'
 const btnInput = '#btn-add-tag'
 const tagDropTableBody:HTMLTableElement = document.querySelector(tableId) as HTMLTableElement;
-const add_tag_input:HTMLElement|null = document.querySelector(inputId)
+const add_tag_input:HTMLInputElement|null = document.querySelector(inputId)
 const add_tag:HTMLButtonElement = document.querySelector(btnInput) as HTMLButtonElement
 const newTagDiv = document.querySelector('#new-entry-tags') as HTMLDivElement
 
 
  tagDropTableBody ? console.log(tableId,'present') : console.log(tableId,'null')
 
- add_tag_input ? add_tag_input.onkeyup = () => filterTable(tagDropTableBody) : console.log(inputId,'null');
+ add_tag_input ? add_tag_input.onkeyup = () => filterTable(tagDropTableBody,add_tag_input) : console.log(inputId,'null');
  //TODO Add a succesful message/alert box adding a new tag
  add_tag ? add_tag.onclick = addAllHighlightedTags : console.log('button add_tag:',btnInput,'is null')
  newTagDiv ? console.log('newTagDiv present') : console.log('newTagDiv null')
