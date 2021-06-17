@@ -3,7 +3,8 @@
 node_modules
 
 # JSON entry files
-tagDirs/all/
+tagDirs/all
+tagDirs/
 
 #New JS files - converting project to TS
 js/
