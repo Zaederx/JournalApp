@@ -31,12 +31,13 @@
     <script src="../js/entry-crud/delete.js" defer></script>
     
     <!-- Tag C.R.U.D Scripts-->
+    <script src="../js/tag-crud/add-tag-searchbar.js" defer></script>
     <script src="../js/tag-crud/tag-create.js" defer></script>
     <script src="../js/tag-crud/tag-read.js" defer></script>
     <script src="../js/tag-crud/tag-update.js" defer></script>
     <script src="../js/tag-crud/tag-delete.js" defer></script>
-    <script src="../js/tag-crud/tag-select.js"defer></script>
-    <script src="../js/tag-crud/add-tag-searchbar.js"defer></script>
+    <script src="../js/tag-crud/tag-select.js" defer></script>
+    
 
     <title>Journal App</title>
 </head>
@@ -143,7 +144,11 @@
         <label for="tag-input">Search</label>
         <input type="text" name="tag-input" id="tag-input"> <button id="btn-submit-tag">Submit New Tag</button>
         
-        
+        <div id="pop-up-input-div" class="pop-up-input-div" hidden>
+            <label for="pop-up-input">Submit</label>
+            <input id="pop-up-input" type="text">
+            <button id="pop-up-submit">Submit</button>
+        </div>
         <!-- Table -->
         <div>
             <table id="tag-table">

@@ -11,7 +11,7 @@ import * as  eDelete from './helpers/e-crud/e-delete';
 // Tag C.R.U.D
 import * as tCreate from './helpers/t-crud/t-create';
 import * as tRead from './helpers/t-crud/t-read';
-// import * as tUpdate from './helpers/t-crud/t-update';
+import * as tUpdate from './helpers/t-crud/t-update';
 import * as tDelete from './helpers/t-crud/t-delete';
 
 let window:BrowserWindow;
@@ -129,6 +129,11 @@ ipcMain.handle('t-read-all', async (event:Electron.IpcMainInvokeEvent) => {
 })
 
 ipcMain.on('t-read', (event:Electron.IpcMainEvent, tagName:string) => tRead.readTagEntries(event,tagName));
+
+ipcMain.handle('t-update', async (event:Electron.IpcMainInvokeEvent, dirName, newDirName) => {
+  var message = await tUpdate.updateTag(dirName,newDirName)
+  return message
+})
 
 ipcMain.handle('t-delete', async (event:Electron.IpcMainInvokeEvent,tagname:string) => {
   var message:string = tDelete.deleteTag(tagname);

@@ -76,6 +76,9 @@ function makeTTRowClickable(row:HTMLTableRowElement) {
         if (row.style.backgroundColor == clicked) {
             selectedDropdownTag = row.cells[0].textContent as string
          }
+         //from tag-update.ts
+         currentTagName = row.cells[0].textContent as string
+         console.log('row clicked')
     });
 }
 

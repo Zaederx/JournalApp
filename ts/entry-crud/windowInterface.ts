@@ -24,7 +24,7 @@ interface Window {
         readAllTags: (func:Function) => string[],
         readTagEntries: (tagname:string) => void,
         readTagEntriesR: (func:Function) => void,
-        update: (tagname:string) => void,
+        update: (tagName:string, newtagName:string) => string,
         updateR: (func:Function) => void,
         delete: (tagname:string) => void,
         deleteR: (func:Function) => void
