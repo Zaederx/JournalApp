@@ -3,7 +3,14 @@
 
 [Trello Page](https://trello.com/b/CXi4WL52)
 
-<img width="927" alt="image" src="https://user-images.githubusercontent.com/38586415/105251411-57f56a00-5b73-11eb-9cd9-cfa911de121f.png">
+<img width="923" alt="image" src="https://user-images.githubusercontent.com/38586415/122446822-ff4bc100-cf9a-11eb-8ad9-3872c5860922.png">
+
+<img width="924" alt="image" src="https://user-images.githubusercontent.com/38586415/122446228-54d39e00-cf9a-11eb-9608-b49878dbffad.png">
+
+<img width="925" alt="image" src="https://user-images.githubusercontent.com/38586415/122446431-906e6800-cf9a-11eb-8ba6-6115cfe55a98.png">
+
+<img width="925" alt="image" src="https://user-images.githubusercontent.com/38586415/122446495-a3813800-cf9a-11eb-9322-0130024b9192.png">
+
 
 Images Attributed to:
 
