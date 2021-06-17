@@ -1,11 +1,12 @@
 import * as fs from 'fs';
+import * as eCreate from '../e-crud/e-create'
 const directory = require('../directory');
 
 
 
-export function updateEntry(event:Electron.IpcMainEvent, entry:string, filename:string) {
+export function updateEntry(event:Electron.IpcMainEvent, entryJson:string, filename:string) {
     var filepath:string = directory.all + filename;
-    fs.writeFile(filepath, entry, function(err) {
+    fs.writeFile(filepath, entryJson, function(err) {
         if (err) {
             var message = 'updateEntry(): Error in updating entry file: '+err;
             console.log(message);
@@ -17,4 +18,7 @@ export function updateEntry(event:Electron.IpcMainEvent, entry:string, filename:
             event.reply('response-e-update', message);
         }
     })
+
+    eCreate.symlinkEntryFile(entryJson,filename)
 }
+

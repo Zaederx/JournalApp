@@ -21,5 +21,22 @@ export function createEvent(event:Electron.IpcMainEvent, entryJson:string) {
       console.log(message);
       event.reply('response-e-create', message);
     }); 
+
+    symlinkEntryFile(entryJson,fileName)
+  }
+
+  export async function symlinkEntryFile(entryJson:string,filename:string) {
+    console.log('*** symlinkEntryFile called ***')
+    var entry:Entry = JSON.parse(entryJson)
+    var targetFile = 'tagDirs/all/'+filename
+    
+    entry.tags.forEach(async (tag)=> {
+      if (tag != '' && tag != 'all'){
+        var symlinkPath = 'tagDirs/'+tag+'/'+filename
+        console.log('symlinkPath',symlinkPath)
+        var error = await fs.promises.symlink(targetFile,symlinkPath)
+        console.log(error)
+      }
+    })
   }
 
