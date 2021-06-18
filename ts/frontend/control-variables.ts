@@ -11,3 +11,6 @@ const addEntryViewId = '#btn-add-entries'
 const eTitleId = '#e-title'
 // Entry body
 const eBodyId = '#e-body'
+
+//Entry TagId
+const eTagsId = '#right-nav'

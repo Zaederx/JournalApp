@@ -105,10 +105,11 @@ function displayEntry(entryParsedJson:Entry) {
     
     (document.querySelector(eTitleId) as HTMLInputElement).innerHTML = entryParsedJson.title;
     (document.querySelector(eBodyId) as HTMLInputElement).innerHTML = entryParsedJson.body;
-
-    var tagsCSV:string = e.arrToStringCSV(entryParsedJson.tags);
-    console.log('tagsCSV:',tagsCSV);
-    (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = tagsCSV;
+    var eTags = ''
+   entryParsedJson.tags.forEach( (tag) => {
+       eTags += '<div>'+tag+'</div>\n'
+   });
+   (document.querySelector(eTagsId) as HTMLDivElement).innerHTML = eTags
 
     //close sidePanel
     toggleSidePanel()
