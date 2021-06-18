@@ -19,7 +19,7 @@ const eTagsId = '#right-nav'
 const entryViewId = '#main'
 
 //Tag View ID
-// const tagViewId
+const tagViewId = '#new-tag-view'
 
 //New Entry View ID
 const newEntryViewId = '#new-entry-view'

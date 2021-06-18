@@ -131,3 +131,11 @@ $side-panel: rgb(113, 120, 113);
     grid-template-columns: 10px 10px auto auto auto 20px 10px auto 10px;
     grid-template-rows: auto auto 50px auto auto auto auto;
 }
+
+.new-tag-view {
+    background-color: $main;
+    grid-column: 2 / span 6;
+    grid-row: 1 / span 6;
+    grid-template-columns: 10px 10px auto auto auto 20px 10px auto 10px;
+    grid-template-rows: auto auto 50px auto auto auto auto;
+}
