@@ -1,3 +1,4 @@
+
 //Read tag directories on page/document load
 $(document).ready(function() { 
     getTopics();
@@ -117,9 +118,9 @@ function displayEntry(entryParsedJson:Entry) {
  * to be loaded into #files side panel
  */
 function loadEntries(entriesHTML:string) {
-    console.log('loadEntries called');
+    console.log('*** loadEntries called ***');
     //fills #files div with many -> <div>{filename}</div>
-    var entries:HTMLElement|null = document.querySelector('#files');
+    var entries:HTMLElement|null = document.querySelector(entryPanelId);
     if (entries != null) entries.innerHTML = entriesHTML;
     else console.error('read.ts: var files = null');
     entries?.childNodes.forEach( entry => makeClickable(entry as HTMLDivElement, window.CRUD.readEntry, highlightActiveEntry));
@@ -131,7 +132,8 @@ function loadEntries(entriesHTML:string) {
  * to be loaded into #topics side panel
  */
 function loadTags(tagsHTML:string) {
-    var tags:HTMLElement|null = document.querySelector('#topics');
+    console.log('*** loadTags called ***')
+    var tags:HTMLElement|null = document.querySelector(tagPanelId);
     if (tags !=null) tags.innerHTML = tagsHTML;
     else console.error('read.ts: var topics = null')
     tags?.childNodes.forEach(tag => makeClickable(tag as HTMLDivElement, window.tagCRUD.readTagEntries,highlightActiveTag));

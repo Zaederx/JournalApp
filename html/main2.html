@@ -10,7 +10,15 @@
     
 
     <!-- JS -->
+    <!-- New Scripts -->
     <script src="../js/frontend/nav-bar.js" defer></script>
+    <script src="../js/frontend/control-variables.js" defer></script>
+    
+    <!-- External -->
+    <script src="../external/jQuery/jquery-3.5.1.js" defer></script>
+    <!-- Old Scripts -->
+    <script src="../js/entry-crud/read.js" defer></script>
+    
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,10 +60,10 @@
                 
             </div>
         </div>
-        <div id="side-panel" class="side-panel">
+        <div id="side-panel" class="side-panel" hidden>
             <div id="tags" class="tags">
                 <!-- place holders -->
-                <div>tag1</div>
+                <div class="selected-tag">tag1</div>
                 <div>tag2</div>
                 <div>tag3</div>
             </div>
