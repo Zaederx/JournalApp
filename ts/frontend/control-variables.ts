@@ -5,7 +5,7 @@ const tagPanelId = '#tags' // used in read.ts
 // Entries Panel
 const entryPanelId = '#entries'
 //button id for add entry view
-const addEntryViewId = '#btn-add-entries'
+const addEntryViewId = '#btn-add-entry'
 
 // Entry title
 const eTitleId = '#e-title'
@@ -14,3 +14,12 @@ const eBodyId = '#e-body'
 
 //Entry TagId
 const eTagsId = '#right-nav'
+
+//Entry View ID
+const entryViewId = '#main'
+
+//Tag View ID
+// const tagViewId
+
+//New Entry View ID
+const newEntryViewId = '#new-entry-view'

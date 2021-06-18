@@ -1,9 +1,9 @@
 /** Form for submitting entries and entry updates */
 const form:HTMLFormElement|null = document.querySelector('#entry-form');
 /** #entry-view */
-const eView:HTMLDivElement|null = document.querySelector('#entry-view');
+const eView:HTMLDivElement|null = document.querySelector(entryViewId);
 /** #new-entry-view */
-const neView:HTMLDivElement|null = document.querySelector('#new-entry-view');
+const neView:HTMLDivElement|null = document.querySelector(newEntryViewId);
 /** #new-tag-view */
 const ntView:HTMLDivElement|null = document.querySelector('#new-tag-view');
 
@@ -16,6 +16,7 @@ Note for display functions - //attribute hidden does not take a boolean argument
  * Also hides other views at the smae time.
  */
 function displayEView() {
+    console.log('*** displayEView ***')
     //display #entry-view
     if (eView != null) eView.removeAttribute('hidden');
     else console.error('view.ts: var eView = null');
@@ -40,6 +41,7 @@ function displayNEView() {
     //display #new-entry-view
     if (neView != null) neView.removeAttribute('hidden');
     else console.error('view.ts: const neView = null');
+    neView ? neView.style.display = 'grid' : console.log('neView error')
     //hide #entry-view
     if (eView != null) eView.setAttribute('hidden','');
     else console.error('view.ts: const eView = null');
@@ -61,6 +63,7 @@ function displayTagView() {
     //hide #new-entry-view
     if (neView != null) neView.setAttribute('hidden','');
     else console.error('view.ts: const neView = null');
+    neView ? neView.style.display = '' : console.log('neView error')
     //hide #entry-view
     if (eView != null) eView.setAttribute('hidden','');
     else console.error('view.ts: const eView = null');

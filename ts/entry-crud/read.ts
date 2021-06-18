@@ -102,14 +102,14 @@ e = new Entry()//to have access to class methods
  */
 function displayEntry(entryParsedJson:Entry) {
     console.log('*** displayEntry called ***');
-    
+
     (document.querySelector(eTitleId) as HTMLInputElement).innerHTML = entryParsedJson.title;
     (document.querySelector(eBodyId) as HTMLInputElement).innerHTML = entryParsedJson.body;
     var eTags = ''
-   entryParsedJson.tags.forEach( (tag) => {
-       eTags += '<div>'+tag+'</div>\n'
-   });
-   (document.querySelector(eTagsId) as HTMLDivElement).innerHTML = eTags
+    entryParsedJson.tags.forEach( (tag) => {
+        eTags += '<div>'+tag+'</div>\n'
+    });
+    (document.querySelector(eTagsId) as HTMLDivElement).innerHTML = eTags
 
     //close sidePanel
     toggleSidePanel()
