@@ -2,10 +2,15 @@ $main : rgb(243, 236, 211);
 $body : rgb(226, 215, 173);
 $panel-tag : rgb(243, 236, 211);
 $selected : rgb(129, 155, 204);
+$side-panel: rgb(113, 120, 113);
 
 //for divs enclosing nav-bar buttons
 .btn-div {
     padding-left: 20px;
+}
+
+.btn-div-highlighted {
+    background-color: $selected;
 }
 
 .btn {
@@ -32,10 +37,14 @@ $selected : rgb(129, 155, 204);
 
 .side-panel {
     background-color: rgb(113, 120, 113);
+    grid-column: 2 / span 3;
+    grid-row: 1 / span 6;
+    display: grid;
+    grid-template-columns: auto auto;
+    
 }
 
 .main {
-    
     background-color: $main;
     grid-column: 2 / span 6;
     grid-row: 1 / span 6;
@@ -76,12 +85,32 @@ $selected : rgb(129, 155, 204);
 
 //for left side panel tags (unselected)
 .tags {
-    background-color: $panel-tag
+    background-color: $side-panel;
+    margin-bottom: 10px;
+    
 }
+
+.tags > div {
+    background-color: $panel-tag;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding: 10px;
+}
+
 .selected-tag {
     background-color: $selected;
 }
 
 .entries {
     background-color: $selected;
+}
+
+.entries > div {
+    background-color: $panel-tag;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 20px;
 }
