@@ -37,7 +37,7 @@ function createWindow () {
     }
   })
 
-  window.loadFile('html/main.html');
+  window.loadFile('html/main2.html');
   if (process.env.NODE_ENV === 'dev-tools') {
     window.webContents.openDevTools();
   }

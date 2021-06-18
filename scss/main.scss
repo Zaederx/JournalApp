@@ -1,0 +1,87 @@
+$main : rgb(243, 236, 211);
+$body : rgb(226, 215, 173);
+$panel-tag : rgb(243, 236, 211);
+$selected : rgb(129, 155, 204);
+
+//for divs enclosing nav-bar buttons
+.btn-div {
+    padding-left: 20px;
+}
+
+.btn {
+    width: 30px;
+    height: 50px;
+    padding: 10px;
+    margin: auto;
+}
+
+.grid-container {
+    display: grid;
+    // 7 across
+    grid-template-columns: 100px auto auto auto auto auto auto;
+    //6 down
+    grid-template-rows: 94px 94px 94px 94px 94px 94px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.nav-bar {
+    background-color: rgb(43, 50, 62);
+    grid-row: 1 / span 6;
+}
+
+.side-panel {
+    background-color: rgb(113, 120, 113);
+}
+
+.main {
+    
+    background-color: $main;
+    grid-column: 2 / span 6;
+    grid-row: 1 / span 6;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto 55px auto auto auto auto;
+}
+
+// .centre {
+//    display: grid;
+//    grid-template-columns: 100 100 100;
+//    grid-template-rows: 60 60 60 60;
+// }
+
+.e-title {
+    background-color: $body;
+    grid-column: 2 / span 3;
+    grid-row: 2 ;
+}
+
+.e-body {
+    background-color: $body;
+    grid-column: 2 / span 3;
+    grid-row: 4 / span 3
+}
+
+.right-nav {
+    background-color: $body;
+    grid-column: 6 / span 1;
+    grid-row: 2 / span 5;
+}
+
+//for right nav tags
+.right-nav > div {
+    background-color: rgb(198, 189, 157);
+    margin-bottom: 10px;
+}
+
+//for left side panel tags (unselected)
+.tags {
+    background-color: $panel-tag
+}
+.selected-tag {
+    background-color: $selected;
+}
+
+.entries {
+    background-color: $selected;
+}

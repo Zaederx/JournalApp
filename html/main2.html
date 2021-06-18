@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal App</title>
+</head>
+<body>
+    <div class="grid-container">
+        <div id="nav-bar" class="nav-bar">
+            
+            <div id="btn-tags" class="btn-div">
+                <img src="../img/icons/folder.svg" alt="folder button" class="btn">
+            </div>
+            <div id="btn-entries" class="btn-div">
+                <img src="../img/icons/document.svg" alt="entry button" class="btn">
+            </div>
+            <div id="btn-add-entry" class="btn-div">
+                <img src="../img/icons/add-file.svg" alt="add entry button" class="btn">
+            </div>
+            <div id="btn-settings" class="btn-div">
+                <img src="../img/icons/settings-3.svg" alt="settings button" class="btn">
+            </div>
+        </div>
+        <div id="side-panel" class="side-panel" hidden>
+            <div id="tags" class="tags">
+                <!-- place holders -->
+                <div>tag1</div>
+                <div>tag2</div>
+                <div>tag3</div>
+            </div>
+            <div id="entries" class="entries">
+                <!-- placeholders -->
+                <div>entry1</div>
+                <div>entry2</div>
+                <div>entry3</div>
+            </div>
+        </div>
+        <div id="main" class="main">
+            <!-- <div id="centre" -->
+                <div id="e-title" class="e-title">
+                    Title
+                </div>
+                <div id="e-body" class="e-body">
+                    Body
+                </div>
+            <!-- </div> -->
+            <div id="right-nav" class="right-nav">
+                <!-- ajax fill with tags -->
+                <!-- <div>tags</div> -->
+                <div>tag1</div>
+                <div>tag2</div>
+                <div>tag3</div>
+                
+            </div>
+        </div>
+        
+    </div>
+    
+</body>
+</html>
