@@ -103,12 +103,17 @@ e = new Entry()//to have access to class methods
 function displayEntry(entryParsedJson:Entry) {
     console.log('*** displayEntry called ***');
     
-    (document.querySelector('#e-title') as HTMLInputElement).innerHTML = entryParsedJson.title;
-    (document.querySelector('#e-body-text') as HTMLInputElement).innerHTML = entryParsedJson.body;
+    (document.querySelector(eTitleId) as HTMLInputElement).innerHTML = entryParsedJson.title;
+    (document.querySelector(eBodyId) as HTMLInputElement).innerHTML = entryParsedJson.body;
 
     var tagsCSV:string = e.arrToStringCSV(entryParsedJson.tags);
     console.log('tagsCSV:',tagsCSV);
     (document.querySelector('#e-tags') as HTMLInputElement).innerHTML = tagsCSV;
+
+    //close sidePanel
+    toggleSidePanel()
+    
+
 }
 
 //  SECTION - Loading Functions - for Tag & Entry

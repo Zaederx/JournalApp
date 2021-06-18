@@ -12,6 +12,9 @@ btn_settings ? btn_settings.onclick = () => {} : console.log('btn_settings is nu
 
 
 var visible = false
+/**
+ * Toggles side panel off and on
+ */
 function toggleSidePanel() {
     console.log('toggleSidePanel called')
     if (visible == false) {
@@ -28,7 +31,7 @@ function toggleSidePanel() {
 var sidePanel = document.querySelector('#side-panel') as HTMLDivElement
 function displaySidePanel() {
     console.log('displaySidePanel called')
-    sidePanel.style.display = 'grid'
+    sidePanel.style.display = ''
 }
 
 function hideSidePanel() {

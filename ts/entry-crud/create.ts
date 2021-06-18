@@ -3,7 +3,7 @@
 /**
  * Displays entry view - with loaded entry
  */
-const btn_addEntry:HTMLElement|null = document.querySelector('#e-view');
+const btn_addEntry:HTMLElement|null = document.querySelector(addEntryViewId);
 /**
  * Used to display messages.
  */

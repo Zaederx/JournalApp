@@ -49,8 +49,8 @@ $side-panel: rgb(113, 120, 113);
     grid-column: 2 / span 6;
     grid-row: 1 / span 6;
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto auto;
-    grid-template-rows: auto auto 55px auto auto auto auto;
+    grid-template-columns: 10px 10px auto auto auto 20px 10px auto 10px;
+    grid-template-rows: auto auto 50px auto auto auto auto;
 }
 
 // .centre {
@@ -61,19 +61,21 @@ $side-panel: rgb(113, 120, 113);
 
 .e-title {
     background-color: $body;
-    grid-column: 2 / span 3;
+    grid-column: 3 / span 4;
     grid-row: 2 ;
+    overflow-wrap: break-word;
+    overflow-y: scroll;
 }
 
 .e-body {
     background-color: $body;
-    grid-column: 2 / span 3;
+    grid-column: 3 / span 4;
     grid-row: 4 / span 3
 }
 
 .right-nav {
     background-color: $body;
-    grid-column: 6 / span 1;
+    grid-column: 8 / span 1;
     grid-row: 2 / span 5;
 }
 
