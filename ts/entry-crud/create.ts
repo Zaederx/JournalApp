@@ -9,7 +9,7 @@ const btn_addEntry:HTMLElement|null = document.querySelector(addEntryViewId);
  */
 const messageDiv:HTMLElement|null = document.querySelector('#message-div');
 /** Used to save new entries */
-const btn_submit:HTMLElement|null = document.querySelector('#btn-submit');
+const btn_submit:HTMLElement|null = document.querySelector(saveNewEntryId);
 
 /********** Open New Entry View ********** */ 
 if (btn_addEntry != null)
@@ -28,7 +28,7 @@ function submit (event:Event) {
     window.logAPI.message('form submit button clicked\n');
     // var neTitle:HTMLElement|null = document.querySelector('#new-entry-title');
     var etitle:string|null = (document.querySelector('#new-entry-title') as HTMLInputElement).value;
-    var ebody:string|null = (document.querySelector('#new-entry-body') as HTMLInputElement).value;
+    var ebody:string = (document.querySelector('#new-entry-body') as HTMLDivElement).textContent as string;
     // var etags:string|null = (document.querySelector('#new-entry-tags') as HTMLInputElement).value;
     var etags:string|null = tags //from add-tag-searchbar.ts
     var message:string = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;

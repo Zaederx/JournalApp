@@ -1,5 +1,5 @@
 /** Button used to open the update entry view (by displaying the #new-entry-view div) */
-const btn_update:HTMLElement|null = document.querySelector('#e-update');//btn to open update view
+const btn_update:HTMLElement|null = document.querySelector(updateOldEntryId);//btn to open update view
 /** Button used to submit update changes. */
 const btn_submit_update:HTMLElement|null = document.querySelector('#btn-submit-update');
 const etitle:HTMLInputElement|null = document.querySelector('#new-entry-title');

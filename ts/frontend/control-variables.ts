@@ -23,3 +23,9 @@ const tagViewId = '#new-tag-view'
 
 //New Entry View ID
 const newEntryViewId = '#new-entry-view'
+
+//Create Entry - Save new Entry Button Id
+const saveNewEntryId = '#save-new-entry'
+
+//Update Entry
+const updateOldEntryId = '#update-old-entry'

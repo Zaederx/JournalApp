@@ -3,10 +3,13 @@ $body : rgb(226, 215, 173);
 $panel-tag : rgb(243, 236, 211);
 $selected : rgb(129, 155, 204);
 $side-panel: rgb(113, 120, 113);
-
+.active.tag{
+    background-color: $selected;
+}
 //for divs enclosing nav-bar buttons
 .btn-div {
     padding-left: 20px;
+    cursor: pointer;
 }
 
 .btn-div-highlighted {
@@ -18,6 +21,22 @@ $side-panel: rgb(113, 120, 113);
     height: 50px;
     padding: 10px;
     margin: auto;
+    // background-color: $side-panel;
+}
+.btn-manage {
+    width: 50px;
+    height: 50px;
+    padding: 20px 10px;
+    margin: auto;
+    background-color: $body;
+}
+
+.manage-tags-btn {
+    background-color: $side-panel;
+}
+
+.manage-tags-btn > i {
+    
 }
 
 .grid-container {
