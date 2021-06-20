@@ -1,9 +1,4 @@
-//TODO - Later will have to reorganise - could be considered mainly reading code here
-// It is intertwined obviously, but should still try to have more clear distinction
-/**
- * Displays entry view - with loaded entry
- */
-const btn_addEntry:HTMLElement|null = document.querySelector(addEntryViewId);
+
 /**
  * Used to display messages.
  */
@@ -11,10 +6,6 @@ const messageDiv:HTMLElement|null = document.querySelector('#message-div');
 /** Used to save new entries */
 const btn_submit:HTMLElement|null = document.querySelector(saveNewEntryId);
 
-/********** Open New Entry View ********** */ 
-
-btn_addEntry ?    btn_addEntry.onclick = (event) => {displayNEView(); hideSidePanel()}:
-console.error('create.ts: var btn_addEntry = null');
 
 /********** Submit New Entry ********** */ 
 if(btn_submit != null)

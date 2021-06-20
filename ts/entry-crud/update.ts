@@ -57,7 +57,7 @@ function getUpdateForm(event:Event) {
     if(etitle != null) etitle.value =  entry.title;
     else console.error('update.ts: const etitle = null')
 
-    if(ebody != null) ebody.value = entry.body;
+    if(ebody != null) ebody.textContent = entry.body;
     else console.error('update.ts: const ebody = null')
 
     var tags = csvToSpan(entry.tags)
