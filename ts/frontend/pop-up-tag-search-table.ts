@@ -2,6 +2,7 @@
 const table_input = document.querySelector('#tag-input') as HTMLDivElement
 
 table_input ? table_input.onclick = () => clearSearchbar() : console.log('table_input is null')
+table_input.onkeyup = () => filterTable()
 
 function clearSearchbar() {
     table_input.innerText = ''

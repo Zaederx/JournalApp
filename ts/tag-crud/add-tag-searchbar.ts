@@ -3,7 +3,7 @@
  * READs tag data and presents in the Tag Creation View.
  */
 const tableId = '#add-tag-table-body'
-const inputId = '#add-tag-input'
+const inputId = '#tag-input'
 const btnInput = '#btn-add-tag'
 const tagDropTableBody:HTMLTableElement = document.querySelector(tableId) as HTMLTableElement;
 const add_tag_input:HTMLInputElement|null = document.querySelector(inputId)

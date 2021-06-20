@@ -31,3 +31,6 @@ const newTagViewId = '#new-tag-view'
 
 //New Entry View Div-Button ID
 const newEntryViewId = '#new-entry-view'
+
+//Delete Entry Button Id
+const deleteEntry = '#delete-entry'

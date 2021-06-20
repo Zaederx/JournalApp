@@ -1,4 +1,4 @@
-const btn_delete:HTMLElement|null = document.querySelector('#e-delete');
+const btn_delete:HTMLElement|null = document.querySelector(deleteEntry);
 
 if(btn_delete != null)
 btn_delete.onclick = function () {
