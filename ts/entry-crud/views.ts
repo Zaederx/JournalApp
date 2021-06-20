@@ -5,7 +5,7 @@ const eView:HTMLDivElement|null = document.querySelector(entryViewId);
 /** #new-entry-view */
 const neView:HTMLDivElement|null = document.querySelector(newEntryViewId);
 /** #new-tag-view */
-const ntView:HTMLDivElement|null = document.querySelector('#new-tag-view');
+const ntView:HTMLDivElement|null = document.querySelector(newTagViewId);
 
 /* Entry and NewEntry Views 
 Note for display functions - //attribute hidden does not take a boolean argument, but is itself either present or not present. Thats why : View.setAttribute('hidden',''); sets the view as 

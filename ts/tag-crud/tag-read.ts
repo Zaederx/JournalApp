@@ -143,21 +143,3 @@ function filterTable(tagTableBody:HTMLTableElement=tagTableBody1, input:HTMLInpu
         matchFound == true ?  row.style.display = '' : row.style.display = 'none';
     });
 }
-
-//TODO - filter by individual topic - cell[i] - where i is the coloumn number
-
-//TODO - Be able to select tag - from sidebar 
-
-//TODO - Be able to select tag - from TagTable
-
-//TODO Add tag to entry
-// const btn_addTag = document.querySelector('#btn-add-tag') as HTMLButtonElement
-// var highlightedRow:HTMLTableRowElement
-// btn_addTag ? btn_addTag.onclick = () => addTagToEntry() : null
-
-// function addTagToEntry() {
-//     var text = highlightedRow.cells[0].textContent
-//     var tagText = '\n<span>'+text+'</span>\n'
-//     var tagPins = document.querySelector('#tags-pins') as HTMLElement
-//     tagPins.innerHTML += tagText
-// }

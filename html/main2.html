@@ -13,6 +13,7 @@
     <!-- New Scripts -->
     <script src="../js/frontend/nav-bar.js" defer></script>
     <script src="../js/frontend/control-variables.js" defer></script>
+    <script src="../js/frontend/pop-up-tag-search-table.js" defer></script>
     
     <!-- External -->
     <script src="../external/jQuery/jquery-3.5.1.js" defer></script>
@@ -62,13 +63,14 @@
         </div>
         
         <div id="main" class="main">
+            
             <!-- <div id="centre" -->
-                <div id="e-title" class="e-title">
-                    Title
-                </div>
-                <div id="e-body" class="e-body">
-                    Body
-                </div>
+            <div id="e-title" class="e-title">
+                Title
+            </div>
+            <div id="e-body" class="e-body">
+                Body
+            </div>
             <!-- </div> -->
             <div id="right-nav" class="right-nav">
                 <!-- ajax fill with tags -->
@@ -77,13 +79,16 @@
                 <div>tag2</div>
                 <div>tag3</div>
             </div>
+                <div id="edit-entry" class="btn-div btn-manage b1" >Edit Entry</div>
+                <div id="delete-entry" class="btn-div btn-manage b2">Delete New Entry</div>
         </div>
+        
 
         <div id="new-entry-view" class="new-entry-view" hidden>
             <h4>New Journal Entry</h4>
             <div id="message-div"></div>
-            <input id="new-entry-title" class="e-title"></input>
-            <div contenteditable="true" id="new-entry-body" class="e-body"></div>
+            <input id="edit-e-title" class="e-title"></input>
+            <div contenteditable="true" id="edit-e-body" class="e-body"></div>
             <div id="new-entry-right-nav" class="right-nav">
                 <!-- ajax fill with tags -->
                 <!-- <div>tags</div> -->
@@ -92,41 +97,34 @@
             </div>
             <div id="save-new-entry" class="btn-div btn-manage">Save New Entry</div>
             <div id="update-old-entry" class="btn-div btn-manage">Update Old Entry</div>
+            <div id="manage-entry-tags" class="btn-div btn-manage">Manage Entry Tags</div>
         </div>
-
-        <div id="new-tag-view" class="new-tag-view" hidden>
-            <h4>Manage Tags</h4>
-            <div class="btn-div manage-tags-btn">
-                <i id="t-delete" class="fas fa-trash-alt fa-lg crud-btn"></i>
             
-                <i id="t-update" class="fas fa-pen-square fa-lg crud-btn"></i>
-            </div>
+          
 
-            <!-- Search input -->
-            <label for="tag-input">Search</label>
-            <input type="text" name="tag-input" id="tag-input"> <button id="btn-submit-tag">Submit New Tag</button>
-            
-            <div id="pop-up-input-div" class="pop-up-input-div" hidden>
-                <label for="pop-up-input">Submit</label>
-                <input id="pop-up-input" type="text">
-                <button id="pop-up-submit">Submit</button>
+        <!-- Pop Up Search Table -->
+        <div id="pop-up-tag-search-table" class="pop-up-tag-search-table" hidden>
+            <!-- Search Input -->
+            <div contenteditable="true" id="tag-input" class="tag-input">Search
+                
             </div>
-            <!-- Table -->
-            <div>
-                <table id="tag-table">
-                    <thead class="table-head">
+            <div contenteditable="false" id="plus-btn" class="plus-btn">Add Tag</div>
+
+            <!-- Table Input -->
+            <table id="tag-table">
+                <thead class="table-head" class="table-head">
                             <th>Current Tags</th>
                             <th>Entry Count</th>
                             <th>Creation Date</th>
-                    </thead>
-                    <tbody id="tag-table-body" class="table-body">
-                        <!-- return <tr><td>tagName</td></tr> -->
-                    </tbody>
-                </table>
-            </div>
+                </thead>
+                <tbody id="tag-table-body" class="table-body">
+                    <!-- return <tr><td>tagName</td></tr> -->
+                </tbody>
+            </table>
+
         </div>
 
-        
+        <!-- Side Panel -->
         <div id="side-panel" class="side-panel" hidden>
             <div id="tags" class="tags">
                 <!-- place holders -->
@@ -142,6 +140,6 @@
             </div>
         </div>
     </div>
-    
+</div>
 </body>
 </html>

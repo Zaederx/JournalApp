@@ -5,7 +5,7 @@ const btn_settings = document.querySelector('#btn-settings') as HTMLDivElement
 
 
 btn_tags ? btn_tags.onclick = () => clickTagsBtn() : console.log('btn_tags is null')
-btn_entries ? btn_entries.onclick = () => {} : console.log('btn_entries is null')
+// btn_entries ? btn_entries.onclick = () => {displayNEView(); hideSidePanel() /*see create.ts for functions*/} : console.log('btn_entries is null')
 btn_add_entry ? btn_add_entry.onclick = () => {} : console.log('btn_add_entry is null')
 btn_settings ? btn_settings.onclick = () => {} : console.log('btn_settings is null')
 

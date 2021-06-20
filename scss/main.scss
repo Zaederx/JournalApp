@@ -33,10 +33,12 @@ $side-panel: rgb(113, 120, 113);
 
 .manage-tags-btn {
     background-color: $side-panel;
+    grid-column: 5;
+    grid-row: 1;
 }
 
-.manage-tags-btn > i {
-    
+.manage-tags-btn > div {
+    display: inline;
 }
 
 .grid-container {
@@ -107,13 +109,14 @@ $side-panel: rgb(113, 120, 113);
     margin-left: 10px;
     margin-right: 10px;
     padding: 20px;
+    overflow-y: scroll;
 }
 
 //for left side panel tags (unselected)
 .tags {
     background-color: $side-panel;
     margin-bottom: 10px;
-    
+    overflow-y: scroll;
 }
 
 .tags > div {
@@ -130,6 +133,7 @@ $side-panel: rgb(113, 120, 113);
 
 .entries {
     background-color: $selected;
+    overflow-y: scroll;
 }
 
 .entries > div {
@@ -157,4 +161,44 @@ $side-panel: rgb(113, 120, 113);
     grid-row: 1 / span 6;
     grid-template-columns: 10px 10px auto auto auto 20px 10px auto 10px;
     grid-template-rows: auto auto 50px auto auto auto auto;
+}
+
+
+.pop-up-tag-search-table {
+    background-color: rgb(89, 108, 119);
+    grid-column: 3 / span 3;
+    grid-row: 3 / span 4;
+    margin-right: 50px;
+    text-align: left;
+}
+
+.tag-input{
+    padding: 10px;
+    text-align: center;
+}
+
+.plus-btn {
+    background-color: white;
+    grid-column: 5;
+    grid-row: 1;
+    margin-left: auto;
+    text-align: center;
+    cursor: pointer;
+}
+
+.table-head > th{
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    float: none;
+}
+
+.b1 {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.b2 {
+    grid-column: 4;
+    grid-row: 1;
 }

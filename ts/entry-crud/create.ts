@@ -12,9 +12,9 @@ const messageDiv:HTMLElement|null = document.querySelector('#message-div');
 const btn_submit:HTMLElement|null = document.querySelector(saveNewEntryId);
 
 /********** Open New Entry View ********** */ 
-if (btn_addEntry != null)
-    btn_addEntry.onclick = (event) => displayNEView();
-else console.error('create.ts: var btn_addEntry = null');
+
+btn_addEntry ?    btn_addEntry.onclick = (event) => {displayNEView(); hideSidePanel()}:
+console.error('create.ts: var btn_addEntry = null');
 
 /********** Submit New Entry ********** */ 
 if(btn_submit != null)

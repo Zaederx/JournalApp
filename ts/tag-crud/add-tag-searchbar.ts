@@ -31,6 +31,7 @@ const newTagDiv = document.querySelector('#new-entry-tags') as HTMLDivElement
 
  /**
   * The tags needed by create.ts - 'submit' function
+  * and by update.ts functions
   */
  var tags = ''
  /**

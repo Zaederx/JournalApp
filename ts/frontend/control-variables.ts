@@ -1,4 +1,4 @@
-// Variables that contain the id's the control where data like clickable tagnames etc is loaded to onscreen
+// Variables that contain the id's of button divs that control where data like clickable tagnames etc is loaded to onscreen
 
 // Tags panel id
 const tagPanelId = '#tags' // used in read.ts
@@ -18,14 +18,16 @@ const eTagsId = '#right-nav'
 //Entry View ID
 const entryViewId = '#main'
 
-//Tag View ID
-const tagViewId = '#new-tag-view'
-
-//New Entry View ID
-const newEntryViewId = '#new-entry-view'
-
 //Create Entry - Save new Entry Button Id
 const saveNewEntryId = '#save-new-entry'
 
 //Update Entry
-const updateOldEntryId = '#update-old-entry'
+const updateOldEntryId = '#edit-entry'
+
+const submitUpDateId = '#update-old-entry'
+
+//Tag View Div-Button ID
+const newTagViewId = '#new-tag-view'
+
+//New Entry View Div-Button ID
+const newEntryViewId = '#new-entry-view'

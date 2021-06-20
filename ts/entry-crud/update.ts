@@ -1,22 +1,21 @@
 /** Button used to open the update entry view (by displaying the #new-entry-view div) */
 const btn_update:HTMLElement|null = document.querySelector(updateOldEntryId);//btn to open update view
 /** Button used to submit update changes. */
-const btn_submit_update:HTMLElement|null = document.querySelector('#btn-submit-update');
-const etitle:HTMLInputElement|null = document.querySelector('#new-entry-title');
-const ebody:HTMLInputElement|null = document.querySelector('#new-entry-body');
-const etags:HTMLElement|null = document.querySelector('#new-entry-tags');
+const btn_submit_update:HTMLElement|null = document.querySelector(submitUpDateId);
+const etitle:HTMLInputElement|null = document.querySelector('#edit-e-title');
+const ebody:HTMLInputElement|null = document.querySelector('#edit-e-body');
+// const etags:HTMLElement|null = document.querySelector('#new-entry-tags');
+const etags = document.querySelector('#new-entry-right-nav')
 
 
-if(btn_submit_update != null)
-    btn_submit_update.onclick = (event) => {updateFile(event)};
-else console.error('update.ts: var btn_submit_update = null');
+btn_submit_update ?  btn_submit_update.onclick = (event) => {updateFile(event)} : console.error('update.ts: var btn_submit_update = null');
 
 var e = new Entry()//FOR ACCESS TO CONVERSION METHODS/FUNCTIONS
 function updateFile(event:Event) {
     window.logAPI.message('form submit button clicked\n');
 
-    var etitle = (document.querySelector('#new-entry-title') as HTMLInputElement).value;
-    var ebody = (document.querySelector('#new-entry-body') as HTMLInputElement).value;
+    var etitle = (document.querySelector('#edit-e-title') as HTMLInputElement).value;
+    var ebody = (document.querySelector('#edit-e-body') as HTMLDivElement).textContent as string;
     var etags = tags
     var message = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
     console.log('message:',message);
@@ -39,8 +38,9 @@ function updateFile(event:Event) {
 
     refresh();//from read.js
 }
-if (btn_update != null)
-btn_update.onclick = (event) => getUpdateForm(event);
+
+
+btn_update ? btn_update.onclick = (event) => getUpdateForm(event) : console.log('btn_update is null');
 
 /** Displays the update form.
  * Also fills that form with information of the 
@@ -69,7 +69,7 @@ function getUpdateForm(event:Event) {
 function csvToSpan(tags:string[]) {
     var html = ''
     tags.forEach((tag)=>{
-        html += '<span>'+tag+'</span>'
+        html += '<span>'+tag+'</span>\n'
     })
     return html
 }
