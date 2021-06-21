@@ -18,6 +18,7 @@ function toggleSidePanel() {
     console.log('toggleSidePanel called')
     if (visible == false) {
         displaySidePanel()
+        refresh()
     }
     else {
         hideSidePanel()

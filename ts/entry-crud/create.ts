@@ -18,8 +18,8 @@ var e = new Entry()//for access to conversion methods
 function submit (event:Event) {
     window.logAPI.message('form submit button clicked\n');
     // var neTitle:HTMLElement|null = document.querySelector('#new-entry-title');
-    var etitle:string|null = (document.querySelector('#new-entry-title') as HTMLInputElement).value;
-    var ebody:string = (document.querySelector('#new-entry-body') as HTMLDivElement).textContent as string;
+    var etitle:string|null = (document.querySelector('#edit-e-title') as HTMLInputElement).value;
+    var ebody:string = (document.querySelector('#edit-e-body') as HTMLDivElement).textContent as string;
     // var etags:string|null = (document.querySelector('#new-entry-tags') as HTMLInputElement).value;
     var etags:string|null = tags //from add-tag-searchbar.ts
     var message:string = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
