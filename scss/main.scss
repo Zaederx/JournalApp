@@ -152,6 +152,18 @@ body {
     grid-row: 4 / span 5;
 }
 
+//for right nav tags
+.edit-right-nav > div {
+    background-color: rgb(198, 189, 157);
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 20px;
+    overflow-y: scroll;
+}
+
 //for left side panel tags (unselected)
 .tags {
     background-color: $side-panel;
