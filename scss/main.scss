@@ -63,9 +63,8 @@ body {
     background-color: rgb(113, 120, 113);
     grid-column: 2 / span 3;
     grid-row: 1 / span 6;
-    display: grid;
+    // display: grid;
     grid-template-columns: auto auto;
-    
 }
 
 .main {

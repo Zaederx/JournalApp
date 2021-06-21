@@ -112,7 +112,7 @@ function displayEntry(entryParsedJson:Entry) {
     (document.querySelector(eTagsId) as HTMLDivElement).innerHTML = eTags
 
     //close sidePanel
-    toggleSidePanel()
+    hideSidePanel()
     
 
 }

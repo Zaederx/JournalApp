@@ -5,7 +5,7 @@ const btn_submit_update:HTMLElement|null = document.querySelector(submitUpDateId
 const etitle:HTMLInputElement|null = document.querySelector('#edit-e-title');
 const ebody:HTMLInputElement|null = document.querySelector('#edit-e-body');
 // const etags:HTMLElement|null = document.querySelector('#new-entry-tags');
-const etags = document.querySelector('#new-entry-right-nav')
+
 
 
 btn_submit_update ?  btn_submit_update.onclick = (event) => {updateFile(event)} : console.error('update.ts: var btn_submit_update = null');
@@ -16,13 +16,13 @@ function updateFile(event:Event) {
 
     var etitle = (document.querySelector('#edit-e-title') as HTMLInputElement).value;
     var ebody = (document.querySelector('#edit-e-body') as HTMLDivElement).textContent as string;
-    var etags = tags
-    var message = 'title:' + etitle + ' body:' + ebody + ' tags:' + etags;
+    var e_tags = tags
+    var message = 'title:' + etitle + ' body:' + ebody + ' tags:' + e_tags;
     console.log('message:',message);
     window.logAPI.message(message);
 
 
-    var entry = new Entry(etitle, ebody, e.stringToArr(etags));
+    var entry = new Entry(etitle, ebody, e.stringToArr(e_tags));
     var entryJSON = JSON.stringify(entry);
     window.logAPI.message(entryJSON);
 
@@ -39,7 +39,7 @@ function updateFile(event:Event) {
     refresh();//from read.js
 }
 
-
+const etags = document.querySelector('#new-entry-right-nav')
 btn_update ? btn_update.onclick = (event) => getUpdateForm(event) : console.log('btn_update is null');
 
 /** Displays the update form.
@@ -69,7 +69,7 @@ function getUpdateForm(event:Event) {
 function csvToSpan(tags:string[]) {
     var html = ''
     tags.forEach((tag)=>{
-        html += '<span>'+tag+'</span>\n'
+        html += '<div>'+tag+'</div>\n'
     })
     return html
 }

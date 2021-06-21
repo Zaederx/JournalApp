@@ -2,20 +2,19 @@
  * The plus/add button in the main.html tag panel,
  * READs tag data and presents in the Tag Creation View.
  */
-const tableId = '#add-tag-table-body'
+const tableId = '#tag-table-body'
 const inputId = '#tag-input'
 const btnInput = '#btn-add-tag'
 const tagDropTableBody:HTMLTableElement = document.querySelector(tableId) as HTMLTableElement;
 const add_tag_input:HTMLInputElement|null = document.querySelector(inputId)
 const add_tag:HTMLButtonElement = document.querySelector(btnInput) as HTMLButtonElement
-const newTagDiv = document.querySelector('#new-entry-tags') as HTMLDivElement
+const newTagDiv = document.querySelector('#new-entry-right-nav') as HTMLDivElement
 
 
  tagDropTableBody ? console.log(tableId,'present') : console.log(tableId,'null')
 
  add_tag_input ? add_tag_input.onkeyup = () => filterTable(tagDropTableBody,add_tag_input) : console.log(inputId,'null');
- //TODO Add a succesful message/alert box adding a new tag
- add_tag ? add_tag.onclick = addAllHighlightedTags : console.log('button add_tag:',btnInput,'is null')
+ 
  newTagDiv ? console.log('newTagDiv present') : console.log('newTagDiv null')
  
  /**
@@ -25,13 +24,16 @@ const newTagDiv = document.querySelector('#new-entry-tags') as HTMLDivElement
   */
  function tagRowToHTML(row:HTMLTableRowElement) {
      var tagName = row.cells[0].innerHTML
-     var html = '<span>'+tagName+'</span>'
+     var html = '<div>'+tagName+'</div>'
      return html
  }
 
  /**
   * The tags needed by create.ts - 'submit' function
   * and by update.ts functions
+  * Tags is assigned it's value by the 'addAllHighlightedTags; function.
+  * This function adds all highlighted/selected tags to the tags variable (for use on 
+  * the backend) and to the htmlTags variable (for display on the frontend)
   */
  var tags = ''
  /**

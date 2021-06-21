@@ -43,6 +43,10 @@ const btn_plusTag = document.querySelector('#plus-btn') as HTMLDivElement
 btn_plusTag ? btn_plusTag.onclick = () => addTagToEntry() : console.log('btn_plusTag is null')
 
 function addTagToEntry() {
+    addAllHighlightedTags()
+}
+
+function submitChanges() {
     //@ts-ignore
     updateFile()//from update.ts
 }
