@@ -7,6 +7,21 @@ $side-panel: rgb(113, 120, 113);
 body {
     overflow-y: hidden;
 }
+th, tr{
+    border-collapse: collapse;
+    padding: 10px 8px;
+    width: 60%;
+    cursor: pointer;
+}
+
+tr:nth-child(even) {
+    background-color: white;
+}
+.manage-tag-table tr:nth-child(even) {
+    background-color: $body;
+}
+
+
 .active.tag{
     background-color: $selected;
 }
@@ -230,7 +245,7 @@ body {
     padding: 10px;
     text-align: center;
     display: block;
-    width: 92%;
+    width: 93%;
 }
 
 .plus-btn {

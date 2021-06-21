@@ -52,8 +52,8 @@
             <div id="btn-tags" class="btn-div">
                 <img src="../img/icons/folder.svg" alt="folder button" class="btn">
             </div>
-            <div id="btn-entries" class="btn-div">
-                <img src="../img/icons/document.svg" alt="entry button" class="btn">
+            <div id="btn-edit-tags" class="btn-div">
+                <img src="../img/icons/iconmonstr-folder-4.svg" alt="entry button" class="btn">
             </div>
             <div id="btn-add-entry" class="btn-div">
                 <img src="../img/icons/add-file.svg" alt="add entry button" class="btn">
@@ -123,6 +123,32 @@
                 </tbody>
             </table>
 
+        </div>
+
+
+
+        <!-- Manage Tags view -->
+        <div id="manage-tags-view" class="edit-main" hidden>
+            <h4 id="heading" class="heading">Manage Tag View</h4>
+            <div id="message-div" class="message-div"></div>
+
+            <!-- Search Table -->
+            <div>
+                <input id="tag-input" class="tag-input">
+            <div contenteditable="false" id="manage-plus-btn" class="plus-btn">Add Tag</div>
+
+            <!-- Table Input -->
+            <table id="manage-tag-table" class="manage-tag-table">
+                <thead class="table-head" class="table-head">
+                            <th>Current Tags</th>
+                            <th>Entry Count</th>
+                            <th>Creation Date</th>
+                </thead>
+                <tbody id="manage-tag-table-body" class="table-body">
+                    <!-- return <tr><td>tagName</td></tr> -->
+                </tbody>
+            </table>
+            </div>
         </div>
 
         <!-- Side Panel -->

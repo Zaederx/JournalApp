@@ -18,23 +18,25 @@ const popUpTable = document.querySelector('#pop-up-tag-search-table') as HTMLDiv
 
 function displayPopUpTable() {
     popUpTable.style.display = 'block'
+    popTableVisible = true
     //@ts-ignore - says there is no function - there is in another file - it works
     loadTagTable()  //from tag-read.ts
 }
 
 function hidePopUpTable() {
     popUpTable.style.display = 'none'
+    popTableVisible = false
 }
 
 var popTableVisible = false
 function togglePopUpTable() {
     if (popTableVisible) {
         hidePopUpTable()
-        popTableVisible = false
+        
     }
     else {
         displayPopUpTable()
-        popTableVisible = true
+        
     }
     console.log('popUpTableVisible:',popTableVisible)
 }
@@ -44,6 +46,7 @@ btn_plusTag ? btn_plusTag.onclick = () => addTagToEntry() : console.log('btn_plu
 
 function addTagToEntry() {
     addAllHighlightedTags()
+    hidePopUpTable()
 }
 
 function submitChanges() {
