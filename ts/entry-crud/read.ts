@@ -64,6 +64,12 @@ function makeClickable(element:HTMLDivElement, readFunction:Function,highlightAc
         readFunction(filename);       
         highlightActive(element);
     };
+    element.onmouseover = () => {
+        element.style.backgroundColor = 'rgb(140, 161, 216)'
+    }
+    element.onmouseout = () => {
+        element.style.backgroundColor = ''
+    }
 }
 
 

@@ -34,3 +34,5 @@ const newEntryViewId = '#new-entry-view'
 
 //Delete Entry Button Id
 const deleteEntry = '#delete-entry'
+
+const btnHighlightRGB = 'rgb(140, 161, 216)'
