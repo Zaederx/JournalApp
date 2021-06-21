@@ -74,7 +74,7 @@ body {
     grid-row: 1 / span 6;
     display: grid;
     grid-template-columns: 10px 10px 90px 90px 90px 90px 90px 90px 20px 10px auto 10px;
-    grid-template-rows: auto auto 50px auto auto auto auto;
+    grid-template-rows: 50px auto auto 50px auto auto auto auto;
 }
 
 // .centre {
@@ -86,7 +86,7 @@ body {
 .e-title {
     background-color: $body;
     grid-column: 3 / span 7;
-    grid-row: 2 ;
+    grid-row: 3 ;
     overflow-wrap: break-word;
     overflow-y: scroll;
 }
@@ -94,7 +94,7 @@ body {
 .e-body {
     background-color: $body;
     grid-column: 3 / span 7;
-    grid-row: 4 / span 3;
+    grid-row: 5 / span 3;
     overflow-y: scroll;
     overflow-x: scroll;
     max-width: 600px;
@@ -103,7 +103,7 @@ body {
 .right-nav {
     background-color: $body;
     grid-column: 11 / span 1;
-    grid-row: 2 / span 5;
+    grid-row: 3 / span 5;
 }
 
 //for right nav tags
@@ -116,6 +116,40 @@ body {
     margin-right: 10px;
     padding: 20px;
     overflow-y: scroll;
+}
+
+.edit-main {
+    background-color: $main;
+    grid-column: 2 / span 6;
+    grid-row: 1 / span 6;
+    display: none;
+    //12 coloumns
+    grid-template-columns: 10px 10px 90px 90px 90px 90px 90px 90px 20px 90px;
+    //8rows
+    grid-template-rows: 50px auto auto 50px auto auto auto auto;
+}
+
+.edit-e-title {
+    background-color: $body;
+    grid-column: 3 / span 8;
+    grid-row: 4 ;
+    overflow-y: scroll;
+    max-width: 600px;
+}
+
+.edit-e-body {
+    background-color: $body;
+    grid-column: 3 / span 8;
+    grid-row: 6 / span 3;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    max-width: 600px;
+}
+
+.edit-right-nav {
+    background-color: $body;
+    grid-column: 10 / span 1;
+    grid-row: 4 / span 5;
 }
 
 //for left side panel tags (unselected)
@@ -155,21 +189,21 @@ body {
 
 
 // SECTION Views
-.new-entry-view{
+.new-entry-view {
     background-color: $main;
     grid-column: 2 / span 6;
     grid-row: 1 / span 6;
     grid-template-columns: 10px 10px auto auto auto 20px 10px auto 10px;
-    grid-template-rows: auto auto 50px auto auto auto auto;
+    grid-template-rows: 50px auto auto auto 50px auto auto auto auto;
 }
 
-.new-tag-view {
-    background-color: $main;
-    grid-column: 2 / span 6;
-    grid-row: 1 / span 6;
-    grid-template-columns: 10px 10px auto auto auto 20px 10px auto 10px;
-    grid-template-rows: auto auto 50px auto auto auto auto;
-}
+// .new-tag-view {
+//     background-color: $main;
+//     grid-column: 2 / span 6;
+//     grid-row: 1 / span 6;
+//     grid-template-columns: 10px 10px auto auto auto 20px 10px auto 10px;
+//     grid-template-rows: 50px auto auto 50px auto auto auto auto;
+// }
 
 
 .pop-up-tag-search-table {
@@ -205,12 +239,25 @@ body {
 
 .b1 {
     grid-column: 3;
-    grid-row: 1;
-    
+    grid-row: 2;
 }
 
 .b2 {
     grid-column: 4;
-    grid-row: 1;
+    grid-row: 2;
+}
 
+.b3 {
+    grid-column: 5;
+    grid-row: 2;
+}
+
+.heading {
+    grid-column: 3 / span 2;
+    grid-row: 1
+}
+
+.message-div {
+    grid-column: 3 / span 2;
+    grid-row: 2
 }

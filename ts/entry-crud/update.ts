@@ -2,8 +2,8 @@
 const btn_update:HTMLElement|null = document.querySelector(updateOldEntryId);//btn to open update view
 /** Button used to submit update changes. */
 const btn_submit_update:HTMLElement|null = document.querySelector(submitUpDateId);
-const etitle:HTMLInputElement|null = document.querySelector('#edit-e-title');
-const ebody:HTMLInputElement|null = document.querySelector('#edit-e-body');
+const etitle:HTMLDivElement|null = document.querySelector('#edit-e-title');
+const ebody:HTMLDivElement|null = document.querySelector('#edit-e-body');
 // const etags:HTMLElement|null = document.querySelector('#new-entry-tags');
 
 
@@ -14,7 +14,7 @@ var e = new Entry()//FOR ACCESS TO CONVERSION METHODS/FUNCTIONS
 function updateFile(event:Event) {
     window.logAPI.message('form submit button clicked\n');
 
-    var etitle = (document.querySelector('#edit-e-title') as HTMLInputElement).value;
+    var etitle = (document.querySelector('#edit-e-title') as HTMLInputElement).innerText as string;
     var ebody = (document.querySelector('#edit-e-body') as HTMLDivElement).textContent as string;
     var e_tags = tags
     var message = 'title:' + etitle + ' body:' + ebody + ' tags:' + e_tags;
@@ -54,7 +54,7 @@ function getUpdateForm(event:Event) {
     var entry:Entry = getECurrent();//from vars.js
     
     //insert into fields
-    if(etitle != null) etitle.value =  entry.title;
+    if(etitle != null) etitle.textContent =  entry.title;
     else console.error('update.ts: const etitle = null')
 
     if(ebody != null) ebody.textContent = entry.body;
