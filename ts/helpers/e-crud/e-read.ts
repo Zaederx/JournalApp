@@ -124,7 +124,7 @@ export function readSingleFile(event:Electron.IpcMainEvent, filename:string) {
 }
 
 /**
- * Finds birthtime of an entry.
+ * Finds birthtime of an entry (as a number).
  * Once the birthtime is known, it creates an {@link EntryDate}
  * and adds it to the given array.
  * @param file name of the subdirectory - i.e. tagDirectory 

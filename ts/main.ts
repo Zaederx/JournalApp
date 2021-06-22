@@ -14,6 +14,7 @@ import * as tRead from './helpers/t-crud/t-read';
 import * as tUpdate from './helpers/t-crud/t-update';
 import * as tDelete from './helpers/t-crud/t-delete';
 
+import {Tag} from '../js/classes/tag'
 let window:BrowserWindow;
 
 var filename = 'default';
@@ -141,4 +142,8 @@ ipcMain.handle('t-delete', async (event:Electron.IpcMainInvokeEvent,tagname:stri
   return message;
 });
 
+ipcMain.handle('t-TagInfo', async (event:Electron.IpcMainInvokeEvent) => {
+  var tags:string[] = await tRead.getTags_EntryCount_CreationDate()
+  return tags
+})
 
