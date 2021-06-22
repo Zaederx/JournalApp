@@ -17,14 +17,15 @@ th, tr{
 tr:nth-child(even) {
     background-color: white;
 }
+
 .manage-tag-table tr:nth-child(even) {
     background-color: $body;
 }
 
-
 .active.tag{
     background-color: $selected;
 }
+
 //for divs enclosing nav-bar buttons
 .btn-div {
     padding-left: 20px;

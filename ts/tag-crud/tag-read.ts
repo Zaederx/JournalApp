@@ -123,6 +123,7 @@ function tagsToHtml(tags:string[]):string {
  * @return res string of html rows that match
  */
 function filterTable(tagTableBody:HTMLTableElement=tagTableBody1, input:HTMLInputElement=tag_input) {
+    console.log('*** filterTable called ***')
     //Ensure search value is not undefined, then displayTagView() if an empty string
     var searchValue:string =  input?.value.toLowerCase() == undefined ? '' : input.value.toLocaleLowerCase();
     // searchValue == ''? displayViewFunc() : '';
