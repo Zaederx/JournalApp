@@ -72,14 +72,14 @@ function btnHighlighting(btn:HTMLDivElement) {
 var table = document.querySelector('#manage-tags')
 
 function clickPlusFolderBtn() {
-    //display manage tags view
+    //toggle manage tags view
     toggleManageTagView()
-
-    //present a table to be filled
-    
 
     // load tags into popUpTable
     loadTagTable()
+
+    //hide side panel
+    hideSidePanel()
 }
 
 var manageTagViewVisible = false
