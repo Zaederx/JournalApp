@@ -27,7 +27,7 @@ const updateOldEntryId = '#edit-entry'
 const submitUpDateId = '#update-old-entry'
 
 //Tag View Div-Button ID
-const newTagViewId = '#new-tag-view'
+const newTagViewId = '#manage-tags-view'
 
 //New Entry View Div-Button ID
 const newEntryViewId = '#new-entry-view'

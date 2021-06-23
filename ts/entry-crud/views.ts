@@ -52,7 +52,7 @@ function displayNEView() {
     //hide #new-tag-view
     if (ntView != null) ntView.setAttribute('hidden','');
     else console.error('view.ts: const ntView = null');
-    ntView ? ntView.style.display = '' : console.log('neView error')
+    ntView ? ntView.style.display = '' : console.log('ntView error')
     //reset form
     if (form != null) form.reset();
     else console.error('view.ts: const form = null');
@@ -64,11 +64,13 @@ function displayTagView() {
     //display #new-tag-view
     if (ntView != null) ntView.removeAttribute('hidden');
     else console.error('view.ts: const ntView = null');
-    ntView ? ntView.style.display = 'grid' : console.log('neView error')
+    ntView ? ntView.style.display = 'block' : console.log('ntView error')
+
     //hide #new-entry-view
     if (neView != null) neView.setAttribute('hidden','');
     else console.error('view.ts: const neView = null');
     neView ? neView.style.display = '' : console.log('neView error')
+    
     //hide #entry-view
     if (eView != null) eView.setAttribute('hidden','');
     else console.error('view.ts: const eView = null');

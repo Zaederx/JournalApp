@@ -1,6 +1,7 @@
 /* Constants  */
-const btn_submit_tag:HTMLButtonElement|null = document.querySelector('#btn-submit-tag');
-const tag_input:HTMLInputElement = document.querySelector('#tag-input') as HTMLInputElement;
+
+const tag_input:HTMLInputElement = document.querySelector('#manage-tag-input') as HTMLInputElement;
+const btn_submit_tag:HTMLButtonElement|null = document.querySelector('#manage-plus-btn');
 var newTaglist:string[] = [];
 /* Null Checks */
 if(btn_submit_tag == null) console.error('Problem with: Submit New Tag Button')
@@ -34,7 +35,10 @@ function addTag(tagname:string) {
 
         window.tagCRUD.createPromise(newTaglist,(successful:boolean) => {
             
-            if(successful) {displayTagView(); console.log('Tag created successfully.');}
+            if(successful) {
+                // displayTagView(); console.log('Tag created successfully.');
+                displayManageTagView()
+            }
             else console.error('Failed to create tag:'+tagname);
         });
 
