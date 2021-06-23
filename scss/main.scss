@@ -82,6 +82,7 @@ tr:nth-child(even) {
     grid-row: 1 / span 6;
     // display: grid;
     grid-template-columns: auto auto;
+    z-index: 2;
 }
 
 .main {
@@ -143,6 +144,7 @@ tr:nth-child(even) {
     grid-template-columns: 10px 10px 90px 90px 90px 90px 90px 90px 20px 90px;
     //8rows
     grid-template-rows: 50px auto auto 50px auto auto auto auto;
+    z-index: 2;
 }
 
 .edit-e-title {
@@ -240,6 +242,7 @@ tr:nth-child(even) {
     grid-row: 3 / span 4;
     margin-right: 50px;
     text-align: left;
+    z-index: 2;
 }
 
 .tag-input {
