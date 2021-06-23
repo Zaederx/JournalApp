@@ -1,3 +1,4 @@
+
 /** Button used to open the update entry view (by displaying the #new-entry-view div) */
 const btn_update:HTMLElement|null = document.querySelector(updateOldEntryId);//btn to open update view
 /** Button used to submit update changes. */
@@ -26,6 +27,7 @@ function updateFile(event:Event) {
     var entryJSON = JSON.stringify(entry);
     window.logAPI.message(entryJSON);
 
+    //@ts-ignore
     var filename = getEntryFilename();//from vars.js
     
     //need to call method that creates entry file in file system
@@ -51,6 +53,8 @@ function getUpdateForm(event:Event) {
     //display 'new-entry-view'
     displayNEView();
     //read entry
+
+    //@ts-ignore
     var entry:Entry = getECurrent();//from vars.js
     
     //insert into fields

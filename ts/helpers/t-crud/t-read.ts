@@ -28,7 +28,7 @@ export function readTagDir():string[] {
  * @param and optional addition to the path
  * 
  * ```
- * readDir('./hello', 'there') -> path looks like './hello/there'
+ * readDir('./hello/', 'there') -> path looks like './hello/there'
  * ```
  */
 function readDir(dir:string, and?:string):string[] {
@@ -41,7 +41,7 @@ function readDir(dir:string, and?:string):string[] {
         });
     }
     catch (err){
-        console.error('Entry folder could not be read');
+        console.error('Entry folder',dir+(and?and+'/':''),' could not be read');
     }
     return directory;
 }
@@ -76,18 +76,38 @@ export function readTagEntries(event:Electron.IpcMainEvent,tagName:string) {
  * Get an array of tags -> tagname, entry count and 
  * creation date of the tag directory
  */
-export async function getTags_EntryCount_CreationDate():Promise<string[]> {
-    var tagsHTML:string[] = []
-    var tagsStr:string[] = readTagDir()
+export async function getTags_EntryCount_CreationDate():Promise<string> {
+    console.log('*** getTags_EntryCount_CreationDate called ***')
+    var tagsHTMLArr:string[] = []
+    var tagsStrArr:string[] = readAllTags()
+    console.log('tagsStrArr:',tagsStrArr)
     //for each - get entry count and creation date
-    tagsStr.forEach( async (tName) => {
+     for(var tName of tagsStrArr) {
+         console.log('tName:',tName)
         var count = getTag_EntryCount(tName)
-        var date = await getTag_CreationDate(tName)
+        var date = await getTag_CreationDate(tName);
         var tag = new Tag(tName,count,date)
-        tagsHTML.push(tag.toHTML())
+        console.log('tag.toHTML:',tag.toHTML())
+        tagsHTMLArr.push(tag.toHTML())
+     }
+    
+    var tagsHTML = ''
+    tagsHTMLArr.forEach( (t) => {
+        console.log('t:',t)
+        tagsHTML += t
     })
+    console.log('tagsHTML',tagsHTML)
     return tagsHTML
 }
+
+// async function tagStrArr_toTagsHTMLArr(tName:string) {
+//     var count = getTag_EntryCount(tName)
+//     var date = await getTag_CreationDate(tName)
+//     var tag = new Tag(tName,count,date)
+//     console.log('tag.toHTML:',tag.toHTML())
+//     tagsHTMLArr.push(tag.toHTML())
+//     return tagsHTMLArr
+// }
 
 /**
  * Get a tally(count) of a tag directories entries.
@@ -95,7 +115,7 @@ export async function getTags_EntryCount_CreationDate():Promise<string[]> {
  * @returns 
  */
 function getTag_EntryCount(tag:string):number {
-    var entries = readDir('./tagDirs', tag)
+    var entries = readDir('./tagDirs/', tag)
     return entries.length
 }
 /**

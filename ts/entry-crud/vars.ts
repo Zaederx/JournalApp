@@ -1,4 +1,7 @@
 /*Current Tag and Entry information*/
+
+
+
 /** Variable for information of the currently selected entry*/
 var selectedEntry = new Entry('default','default',[]);
 /** Variable for information of the currently selected tag*/
@@ -8,7 +11,7 @@ var selectedEntryFilename = '';//TODO souldn't this just be in the Entry class ?
 
 //TODO Work on Entry and Tag Cache - to increase efficiency
 var EntryCache:Entry[];
-var TagCache:Tag[];
+// var TagCache:Tag[];
 /**
  * Returns the currently selected entry.
  * This will be the entry selected by a user 

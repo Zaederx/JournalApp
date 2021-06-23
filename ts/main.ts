@@ -142,8 +142,9 @@ ipcMain.handle('t-delete', async (event:Electron.IpcMainInvokeEvent,tagname:stri
   return message;
 });
 
-ipcMain.handle('t-TagInfo', async (event:Electron.IpcMainInvokeEvent) => {
-  var tags:string[] = await tRead.getTags_EntryCount_CreationDate()
-  return tags
+ipcMain.handle('t-TagInfo', async (event:Electron.IpcMainInvokeEvent):Promise<string> => {
+  console.log('*** ipcMain t-TagInfo called ***')
+  var tagsHTML:string = await tRead.getTags_EntryCount_CreationDate()
+  return tagsHTML
 })
 

@@ -12,7 +12,6 @@ const newTagDiv = document.querySelector('#new-entry-right-nav') as HTMLDivEleme
 
 
  tagDropTableBody ? console.log(tableId,'present') : console.log(tableId,'null')
-
  add_tag_input ? add_tag_input.onkeyup = () => filterTable(tagDropTableBody,add_tag_input) : console.log(inputId,'null');
 //  add_tag_input ? add_tag_input.onclick = () => hidePopUpTable() : console.log('add_tag_input is null')
  

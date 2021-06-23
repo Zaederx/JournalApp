@@ -1,3 +1,5 @@
+
+
 /**
  * The plus/add button in the main.html tag panel,
  * READs tag data and presents in the Tag Creation View.
@@ -14,29 +16,22 @@ btn_addTag ? btn_addTag.onclick =  displayTagView : console.log('btn_addTag is n
 /**
  * Fills tag table with all tags.
  */
-function loadTagTable(tagTableBody:HTMLTableElement=tagTableBody1) {
+async function loadTagTable(tagTableBody:HTMLTableElement=tagTableBody1) {
+    console.log('*** loadTagTable called ***')
+    var tagsHTML:string = '' 
+    tagsHTML =  await window.tagCRUD.getTagInfo()
     
-    //ipcMessage - requests tag to be read
-    window.CRUD.readTags(); 
-    //wait for for ipc response -> load tag table
-    window.tagCRUD.readAllTags((tags:string[]) => {
-        // if(tagTableBody != null)
-        // var promise = new Promise<HTMLTableElement|null>((resolve) => {
-        //     tagTableBody!.innerHTML =  tagsToHtml(tags);
-        //     resolve(tagTableBody);
-        // });
-        var promise = new Promise<HTMLTableElement|null>((resolve, reject) => {
-            tagTableBody? tagTableBody.innerHTML =  tagsToHtml(tags) : reject();
-            resolve(tagTableBody);
-        });
-
-        promise.then((tagTableBody) => {
-            var rows = tagTableBody?.querySelectorAll('tr');
-            rows?.forEach( row => {
-                makeTTRowClickable(row as HTMLTableRowElement);
-            }); 
-        });
+    
+    
+    console.log('tags html:', tagsHTML)
+    
+    tagTableBody.innerHTML = tagsHTML
+    var rows = tagTableBody?.querySelectorAll('tr');
+    
+    rows?.forEach( row => {
+        makeTTRowClickable(row as HTMLTableRowElement);
     });
+    
 }
 
 
