@@ -1,11 +1,3 @@
-/* This file manages the delete functionality avaialbe from the 
-* "Add New Tags" view. Selecting a tag from the clickable table should allow you to then selected delete once it is selected.
-*/
-
-
-var btn_tDelete = document.querySelector('#t-delete') as HTMLButtonElement
-
-btn_tDelete ? btn_tDelete.onclick = () => deleteSelectedTag() : console.log('#t-delete is null')
 
 /** get its value from tag-dropdown-searchbar.ts - makeAddTTRowClickable line 73 - when user clicks on a tag's table row*/
 var selectedDropdownTag:string = '';
@@ -21,6 +13,7 @@ async function deleteSelectedTag() {
     console.log(message)
     refresh()
     loadTagTable()
+    displayManageTagView()
 }
 
 //TODO reload that table

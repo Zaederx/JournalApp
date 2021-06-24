@@ -126,6 +126,10 @@ contextBridge.exposeInMainWorld('tagCRUD', {
     getTagInfo: async () => {
         var tagsHTML = await ipcRenderer.invoke('t-TagInfo')
         return tagsHTML
+    },
+    deleteTags: async (tags:string[]) => {
+        var message = await ipcRenderer.invoke('t-DeleteTags',tags)
+        return message
     }
 })
 

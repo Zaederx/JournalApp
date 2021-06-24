@@ -28,6 +28,7 @@ interface Window {
         updateR: (func:Function) => void,
         delete: (tagname:string) => void,
         deleteR: (func:Function) => void,
-        getTagInfo: () => Promise<string>
+        getTagInfo: () => Promise<string>,
+        deleteTags: (tags:string[]) => Promise<string[]>
     }
 }

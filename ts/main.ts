@@ -148,3 +148,8 @@ ipcMain.handle('t-TagInfo', async (event:Electron.IpcMainInvokeEvent):Promise<st
   return tagsHTML
 })
 
+ipcMain.handle('t-DeleteTags', async (event:Electron.IpcMainInvokeEvent, tags:string[]) => {
+  var message:string = await tDelete.deleteTags(tags)
+  return message
+})
+

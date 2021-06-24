@@ -16,3 +16,19 @@ export function deleteTag(tagname:string):string {
     });
     return failure;
 }
+export function deleteTags(tags: string[]): string | PromiseLike<string> {
+    var message = ''
+    try {
+        tags.forEach(tag => {
+            deleteTag(tag)
+        })
+        message = 'Successfully deleted tags'
+    }
+    catch (error) {
+        console.log(error)
+        message = 'Problem deleting tags'
+    }
+    
+    return message
+}
+
