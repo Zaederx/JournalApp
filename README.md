@@ -1,7 +1,10 @@
-# JournalApp
+# JournalApp - Redesign
  Jounalling App
 
 [Trello Page](https://trello.com/b/CXi4WL52)
+
+<img width="927" alt="image" src="https://user-images.githubusercontent.com/38586415/123151514-71b91700-d45b-11eb-9bc7-6f81ef35a10e.png">
+
 
 <img width="927" alt="image" src="https://user-images.githubusercontent.com/38586415/105251411-57f56a00-5b73-11eb-9cd9-cfa911de121f.png">
 
