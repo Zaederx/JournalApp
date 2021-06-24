@@ -13,6 +13,11 @@ th, tr{
     width: 60%;
     cursor: pointer;
 }
+tbody {
+    height: 200px;
+    overflow: auto;
+}
+
 
 tr:nth-child(even) {
     background-color: white;
@@ -20,6 +25,10 @@ tr:nth-child(even) {
 
 .manage-tag-table tr:nth-child(even) {
     background-color: $body;
+}
+
+.manage-tag-table-body {
+    overflow-y: scroll;
 }
 
 .active.tag{
@@ -243,6 +252,7 @@ tr:nth-child(even) {
     margin-right: 50px;
     text-align: left;
     z-index: 2;
+    overflow-y: scroll;
 }
 
 .tag-input {
@@ -260,6 +270,21 @@ tr:nth-child(even) {
     text-align: center;
     cursor: pointer;
 }
+
+table#manage-tag-table {
+    display: block;
+    height: 420px;
+    overflow-y: scroll;
+}
+
+table#manage-tag-table > tr{
+    height: 40px;
+}
+table#manage-tag-table > tbody{
+    height: 300;
+    overflow-y: scroll;
+}
+
 
 .table-head > th {
     text-align: center;
