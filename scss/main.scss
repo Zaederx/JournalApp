@@ -317,3 +317,20 @@ table#manage-tag-table > tbody{
     grid-column: 3 / span 2;
     grid-row: 2
 }
+
+//delete tag button
+#manage-delete-btn {
+    background-color: tomato;
+}
+
+#manage-delete-btn:hover {
+    background-color: $selected;
+}
+
+//add tag button
+#manage-plus-btn {
+    background-color: rgb(243, 242, 164);
+}
+#manage-plus-btn:hover {
+    background-color: $selected;
+}

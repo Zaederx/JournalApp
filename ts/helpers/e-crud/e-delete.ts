@@ -7,20 +7,23 @@ import * as directory from '../directory';
  * @param filename 
  */
 export async function deleteEntry(event:Electron.IpcMainEvent, filename:string) {
-    var entry = await retrieveEntry(filename)
-    deleteSymlinks(entry,filename)
-    var path:fs.PathLike = directory.all + filename;
-    console.log('e-delete.js:file path:'+path);
-    var callback:fs.NoParamCallback = function (error:NodeJS.ErrnoException|null) {
-        if (error) {
-            console.log('Error deleting file:'+error);
-            var channel:string = 'response-e-delete';
-            var message:string = 'Error deleting file:'+filename;
-            event.reply(channel, message);
-            // throw error;
-        }
-    };
-    fs.unlink(path, callback);
+    var channel:string = 'response-e-delete';
+    var message = ''
+    try {
+        var entry = await retrieveEntry(filename)
+        deleteSymlinks(entry,filename)
+        message = 'Succesfully deleted entry'
+    }
+    catch (error) {
+        console.log('Error deleting file:'+error);
+        
+        message = 'Error deleting file:'+filename;
+        event.reply(channel, message);//error response
+        console.log('e-delete.js:file - filename:',filename);
+    }
+    //success response
+    event.reply(channel,message)
+
 }
 
 /**
