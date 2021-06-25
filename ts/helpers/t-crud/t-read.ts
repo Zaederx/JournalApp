@@ -3,6 +3,10 @@ import * as dir from '../directory';
 import * as eSort from '../algorithms/entrysort'
 import {readDirFiles} from '../e-crud/e-read';
 import {Tag} from '../../classes/tag'
+import * as tSort from '../algorithms/tagsort'
+import { TagDate } from '../../classes/tagdate';
+import * as process from 'child_process';
+import { EntryDate } from '../../classes/entrydate';
 /**
  * Returns array of `tagDir` contents (not recursively).
  * i.e. only at that immediate folder level - not each of the folders descendants
@@ -16,11 +20,45 @@ import {Tag} from '../../classes/tag'
  * @return directoryContexts    array of tag directory names
  */
 export function readTagDir():string[] {
-    //IMPORTANT sort Directories that are to be returned
-    // var arr = readDir(dir.tagDirectory)
-    // eSort.sort(arr,0,arr.length-1)
-    return readDir(dir.tagDirectory);
+
+    return readDir(dir.tagDirectory)
 }
+
+/**
+ * Finds birthtime of an entry (as a number).
+ * Once the birthtime is known, it creates an {@link EntryDate}
+ * and adds it to the given array.
+ * @param file name of the subdirectory - i.e. tagDirectory 
+ * @param arr an array of EntryDate
+ * @see EntryDate
+ */
+ function fetchBtime(prefix:string,file:string, arr:EntryDate[]) {
+    /*
+     * From ZSH manual under 'stat' - see zsh terminal command 'man stat':
+     * 
+     *  -f format
+                 Display information using the specified format.  See the FORMATS
+                 section for a description of valid formats.
+    
+     * -L      Use stat(2) instead of lstat(2).  The information reported by
+                 stat will refer to the target of file, if file is a symbolic
+                 link, and not to file itself.
+     */
+    //Addtionally - %B inserts File BirthTime (Creation Date)
+      var stat_birth = process.spawnSync('stat',['-f','%B', '-L', prefix+file]);
+      console.log('output',stat_birth.output);
+      var bString:string = stat_birth.stdout;
+      var btime:number = Number(stat_birth.stdout);
+      var eDate:TagDate = new TagDate(file, btime);
+      arr.push(eDate);
+      console.log('bString',bString);
+      console.log('btime',btime);
+      var err:string = stat_birth.stderr;
+      err != '' ? console.error('File Birthtime error:',err) : null;
+  
+      var code:number|null = stat_birth.status;
+      console.log('child process: "stat_birth" exited with code',code);
+  }
 
 /**
  * 

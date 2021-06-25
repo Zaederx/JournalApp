@@ -12,18 +12,16 @@ export async function deleteEntry(event:Electron.IpcMainEvent, filename:string) 
     try {
         var entry = await retrieveEntry(filename)
         deleteSymlinks(entry,filename)
-        message = 'Succesfully deleted entry'
+        message = 'Successfully deleted entry'
     }
     catch (error) {
         console.log('Error deleting file:'+error);
-        
         message = 'Error deleting file:'+filename;
         event.reply(channel, message);//error response
         console.log('e-delete.js:file - filename:',filename);
     }
     //success response
     event.reply(channel,message)
-
 }
 
 /**

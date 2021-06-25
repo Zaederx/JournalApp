@@ -72,7 +72,7 @@ ipcMain.on('new_content', function(e,htmlFilename:string) {
 //SECTION C.R.U.D. METHODS ****************** */
 // Create Entry
 ipcMain.on('e-create', (event:Electron.IpcMainEvent, entry:string) => {
-  eCreate.createEvent(event,entry);
+  eCreate.createEntry(event,entry);
   //TODO Try to implement an better ansynchronous testing
   // window.webContents.send('test-create-entry', 'done');
 });

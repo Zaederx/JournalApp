@@ -12,7 +12,7 @@ manage_tag_table_input ? manage_tag_table_input.onkeyup = () => filterTable(mana
     console.log('*** addAllHighlightedTags function called ***')
     var rows = manage_tag_view_table_body?.querySelectorAll('tr');
 
-    var tags:string[] = []
+    var tags:string[] = ['all']
     var count = 0
 
     //for each row...

@@ -5,7 +5,7 @@ import * as eDate from '../dateStr';
  * @param event IpcMainEvent
  * @param entryJson json String of entry details
  */
-export function createEvent(event:Electron.IpcMainEvent, entryJson:string) {
+export function createEntry(event:Electron.IpcMainEvent, entryJson:string) {
     console.log('ipcmain: Creating new Entry -' + entryJson);
     var directory:string = "tagDirs/all/";
     var fileName:string = eDate.dateStr() + ".json";
