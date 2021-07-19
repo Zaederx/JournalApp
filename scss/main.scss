@@ -1,336 +1,69 @@
+
+$brilliant-blue: #135e7c;
+// $minty-green:#3c9e85;
+// $lemony-yellow: #fff56b;
+// $nav-width: 20%;
+// $light-grey: #c9c3c3;
+// $royalRed: #812323;
+// $bg: rgb(230, 230, 230);
+
+//@at-root
 $main : rgb(243, 236, 211);
 $body : rgb(226, 215, 173);
 $panel-tag : rgb(243, 236, 211);
 $selected : rgb(129, 155, 204);
 $hover : rgb(140, 161, 216);
 $side-panel: rgb(113, 120, 113);
-body {
-    overflow-y: hidden;
-}
-th, tr{
-    border-collapse: collapse;
-    padding: 10px 8px;
-    width: 60%;
-    cursor: pointer;
-}
-tbody {
-    height: 200px;
-    overflow: auto;
-}
-
-
-tr:nth-child(even) {
-    background-color: white;
-}
-
-.manage-tag-table tr:nth-child(even) {
-    background-color: $body;
-}
-
-.manage-tag-table-body {
-    overflow-y: scroll;
-}
-
-.active.tag{
-    background-color: $selected;
-}
-
-//for divs enclosing nav-bar buttons
-.btn-div {
-    padding-left: 20px;
-    cursor: pointer;
-}
-
-.btn-div-highlighted {
-    background-color: $selected;
-}
-
-.btn {
-    width: 30px;
-    height: 50px;
-    padding: 10px;
-    margin: auto;
-    // background-color: $side-panel;
-}
-.btn-manage {
-    width: 50px;
-    height: 50px;
-    padding: 20px 10px;
-    margin: auto;
-    background-color: $body;
-}
-
-.manage-tags-btn {
-    background-color: $side-panel;
-    grid-column: 5;
-    grid-row: 1;
-}
-
-.manage-tags-btn > div {
-    display: inline;
-}
 
 .grid-container {
     display: grid;
-    // 7 across
-    grid-template-columns: 100px auto auto auto auto auto auto;
-    //6 down
-    grid-template-rows: 94px 94px 94px 94px 94px 94px;
-    padding: 0px;
-    margin: 0px;
+    grid-template-columns: 100px 800px;
+    height: 560px;
 }
 
-.nav-bar {
-    background-color: rgb(43, 50, 62);
-    grid-row: 1 / span 6;
+.grid-container .nav {
+    grid-column: 1;
+    background-color: $brilliant-blue;
 }
 
-.side-panel {
-    background-color: rgb(113, 120, 113);
-    grid-column: 2 / span 3;
-    grid-row: 1 / span 6;
-    // display: grid;
-    grid-template-columns: auto auto;
-    z-index: 2;
-}
-
-.main {
-    background-color: $main;
-    grid-column: 2 / span 6;
-    grid-row: 1 / span 6;
+.grid-container .main-container {
+    grid-column: 2;
     display: grid;
-    grid-template-columns: 10px 10px 90px 90px 90px 90px 90px 90px 20px 10px auto 10px;
-    grid-template-rows: 50px auto auto 50px auto auto auto auto;
-}
-
-// .centre {
-//    display: grid;
-//    grid-template-columns: 100 100 100;
-//    grid-template-rows: 60 60 60 60;
-// }
-
-.e-title {
-    background-color: $body;
-    grid-column: 3 / span 7;
-    grid-row: 3 ;
-    overflow-wrap: break-word;
-    overflow-y: scroll;
-}
-
-.e-body {
-    background-color: $body;
-    grid-column: 3 / span 7;
-    grid-row: 5 / span 3;
-    overflow-y: scroll;
-    overflow-x: scroll;
-    max-width: 600px;
-}
-
-.right-nav {
-    background-color: $body;
-    grid-column: 11 / span 1;
-    grid-row: 3 / span 5;
-}
-
-//for right nav tags
-.right-nav > div {
-    background-color: rgb(198, 189, 157);
-    margin-bottom: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 20px;
-    overflow-y: scroll;
-}
-
-.edit-main {
+    grid-template-columns: 50px auto 50px 100px 20px;//5 columns
+    grid-template-rows: 50px 50px 20px 50px 20px auto 20px;// rows
     background-color: $main;
-    grid-column: 2 / span 6;
-    grid-row: 1 / span 6;
-    display: none;
-    //12 coloumns
-    grid-template-columns: 10px 10px 90px 90px 90px 90px 90px 90px 20px 90px;
-    //8rows
-    grid-template-rows: 50px auto auto 50px auto auto auto auto;
-    z-index: 2;
 }
 
-.edit-e-title {
-    background-color: $body;
-    grid-column: 3 / span 8;
-    grid-row: 4 ;
-    overflow-y: scroll;
-    max-width: 600px;
-}
-
-.edit-e-body {
-    background-color: $body;
-    grid-column: 3 / span 8;
-    grid-row: 6 / span 3;
-    overflow-y: scroll;
-    overflow-x: scroll;
-    max-width: 600px;
-}
-
-.edit-right-nav {
-    background-color: $body;
-    grid-column: 10 / span 1;
-    grid-row: 4 / span 5;
-}
-
-//for right nav tags
-.edit-right-nav > div {
-    background-color: rgb(198, 189, 157);
-    margin-bottom: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 20px;
-    overflow-y: scroll;
-}
-
-//for left side panel tags (unselected)
-.tags {
-    background-color: $side-panel;
-    margin-bottom: 10px;
-    overflow-y: scroll;
-}
-
-.tags > div {
-    background-color: $panel-tag;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.selected-tag {
-    background-color: $selected;
-}
-
-.entries {
-    background-color: $selected;
-    overflow-y: scroll;
-}
-
-.entries > div {
-    background-color: $panel-tag;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 20px;
-    cursor: pointer;
-}
-
-
-// SECTION Views
-.new-entry-view {
-    background-color: $main;
-    grid-column: 2 / span 6;
-    grid-row: 1 / span 6;
-    grid-template-columns: 10px 10px auto auto auto 20px 10px auto 10px;
-    grid-template-rows: 50px auto auto auto 50px auto auto auto auto;
-}
-
-// .new-tag-view {
-//     background-color: $main;
-//     grid-column: 2 / span 6;
-//     grid-row: 1 / span 6;
-//     grid-template-columns: 10px 10px auto auto auto 20px 10px auto 10px;
-//     grid-template-rows: 50px auto auto 50px auto auto auto auto;
-// }
-
-
-.pop-up-tag-search-table {
-    background-color: rgb(89, 108, 119);
-    grid-column: 3 / span 3;
-    grid-row: 3 / span 4;
-    margin-right: 50px;
-    text-align: left;
-    z-index: 2;
-    overflow-y: scroll;
-}
-
-.tag-input {
-    padding: 10px;
-    text-align: center;
-    display: block;
-    width: 93%;
-}
-
-.plus-btn {
-    background-color: white;
-    grid-column: 5;
+.main-container .heading {
+    grid-column: 2;
     grid-row: 1;
-    margin-left: auto;
-    text-align: center;
-    cursor: pointer;
 }
 
-table#manage-tag-table {
-    display: block;
-    height: 420px;
-    overflow-y: scroll;
-}
-
-table#manage-tag-table > tr{
-    height: 40px;
-}
-table#manage-tag-table > tbody{
-    height: 300;
-    overflow-y: scroll;
-}
-
-
-.table-head > th {
-    text-align: center;
-    padding: 10px;
-    margin: auto;
-    float: none;
-}
-
-.b1 {
-    grid-column: 3;
+.main-container .buttons {
+    grid-column: 2;
     grid-row: 2;
+    background-color: $body;
 }
 
-.b2 {
+.main-container .buttons > div {
+    display: inline;
+    background-color: $body;
+}
+
+.main-container .entry-title {
+    grid-column: 2;
+    grid-row: 4;
+    background-color: $body;
+}
+
+.main-container .entry-body {
+    grid-column: 2;
+    grid-row: 6;
+    background-color: $body;
+}
+
+.main-container .entry-tags {
     grid-column: 4;
-    grid-row: 2;
-}
-
-.b3 {
-    grid-column: 5;
-    grid-row: 2;
-}
-
-.heading {
-    grid-column: 3 / span 2;
-    grid-row: 1
-}
-
-.message-div {
-    grid-column: 3 / span 2;
-    grid-row: 2
-}
-
-//delete tag button
-#manage-delete-btn {
-    background-color: tomato;
-}
-
-#manage-delete-btn:hover {
-    background-color: $selected;
-}
-
-//add tag button
-#manage-plus-btn {
-    background-color: rgb(243, 242, 164);
-}
-#manage-plus-btn:hover {
-    background-color: $selected;
+    grid-row: 4 / span 3;
+    background-color: $body;
 }
