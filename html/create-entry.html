@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="../js/views/create-entry.js"></script>
     <link rel="stylesheet" href="../css/main.css">
     <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
@@ -32,13 +33,12 @@
             <h4 id="heading" class="heading">Journal Entry</h4>
             <!-- <div id="centre" -->
             <div class="buttons">
-                <div id="edit-entry">Edit Entry</div>
-                <div id="delete-entry">Delete Entry</div>
+                <div id="create-entry">Create Entry</div> 
             </div>
-            <div id="entry-title" class="entry-title">
+            <div contenteditable="true" id="entry-title" class="entry-title">
                 Title
             </div>
-            <div id="entry-body" class="entry-body">
+            <div contenteditable="true" id="entry-body" class="entry-body">
                 Body
             </div>
 

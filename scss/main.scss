@@ -1,5 +1,5 @@
 
-$brilliant-blue: #135e7c;
+$brilliant-blue: #29313F;
 // $minty-green:#3c9e85;
 // $lemony-yellow: #fff56b;
 // $nav-width: 20%;
@@ -15,6 +15,7 @@ $selected : rgb(129, 155, 204);
 $hover : rgb(140, 161, 216);
 $side-panel: rgb(113, 120, 113);
 
+
 .grid-container {
     display: grid;
     grid-template-columns: 100px 800px;
@@ -24,6 +25,16 @@ $side-panel: rgb(113, 120, 113);
 .grid-container .nav {
     grid-column: 1;
     background-color: $brilliant-blue;
+}
+
+.nav-btn {
+    margin: auto;
+}
+
+.nav-btn > img {
+    height: 50px;
+    margin-left: 20px;
+    margin-bottom: 30px;
 }
 
 .grid-container .main-container {
@@ -42,12 +53,19 @@ $side-panel: rgb(113, 120, 113);
 .main-container .buttons {
     grid-column: 2;
     grid-row: 2;
-    background-color: $body;
+    padding-top: 20px;
+    // background-color: $body;
 }
 
 .main-container .buttons > div {
     display: inline;
     background-color: $body;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.main-container .buttons > div:hover {
+   background-color: $hover;
 }
 
 .main-container .entry-title {
