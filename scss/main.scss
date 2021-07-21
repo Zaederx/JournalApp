@@ -85,3 +85,8 @@ $side-panel: rgb(113, 120, 113);
     grid-row: 4 / span 3;
     background-color: $body;
 }
+
+.editable:empty:before {
+    content: attr(data-placeholder);
+    color: rgb(109, 109, 109);
+}

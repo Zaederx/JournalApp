@@ -1,5 +1,5 @@
 import {app, BrowserWindow, ipcMain, ipcRenderer } from 'electron';
-import path = require('path');
+import path from 'path'
 import * as dir from './directory'
 import * as eCreate from './entry/crud/backend/e-create'
 import * as eRead from './entry/crud/backend/e-read'
@@ -25,7 +25,7 @@ function createWindow () {
   var integration = false;
   if (process.env.NODE_ENV === 'test-main') {
      integration = true;
-}
+  }
 
   window = new BrowserWindow({
     width: 921,
@@ -33,10 +33,9 @@ function createWindow () {
     minWidth: 921,
     minHeight: 478,
     webPreferences: {
-        worldSafeExecuteJavaScript: true ,
-        contextIsolation: true,//otherwise "WorldSafe".. message still appears
-        nodeIntegration: integration, //whether you can access node methods - e.g. requires, anywhere in the app's js
-        preload: path.join(__dirname, "preload.js")
+        // worldSafeExecuteJavaScript: true ,
+        contextIsolation: false,//otherwise "WorldSafe".. message still appears
+        nodeIntegration: true, //whether you can access node methods - e.g. requires, anywhere in the app's js
     }
   })
 

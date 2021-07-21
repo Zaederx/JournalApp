@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="../js/views/create-entry.js"></script>
+    <script type="module" src="../js/views/create-entry.js" defer></script>
+    <script src="../js/classes/entry.js" defer></script>
+    <script>var exports = {"__esModule": true};</script>
     <link rel="stylesheet" href="../css/main.css">
     <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
@@ -35,12 +37,8 @@
             <div class="buttons">
                 <div id="create-entry">Create Entry</div> 
             </div>
-            <div contenteditable="true" id="entry-title" class="entry-title">
-                Title
-            </div>
-            <div contenteditable="true" id="entry-body" class="entry-body">
-                Body
-            </div>
+            <div contenteditable="true" id="entry-title" class="editable entry-title" data-placeholder="Title"></div>
+            <div contenteditable="true" id="entry-body" class="editable entry-body" data-placeholder="Entry Text Body"></div>
 
             <div class="entry-tags">
                 tags

@@ -4,7 +4,8 @@
   "description": "",
   "main": "js/main.js",
   "scripts": {
-    "start": "export NODE_ENV=''; sass ./scss:./css && tsc && electron .;",
+    "sass" : "sass ./scss:./css",
+    "start": "export NODE_ENV=''; npm run sass && tsc && electron .;",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Zachary Ishmael",

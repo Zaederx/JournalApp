@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import * as eDate from './dateStr';
 import * as dir from '../../../directory'
+import {app} from 'electron'
+import paths from 'path'
 
 /**
  * Writes a entry's json to the file system.
@@ -9,15 +11,26 @@ import * as dir from '../../../directory'
  */
 export async function createEntry(entryJson:string) {
   console.log('ipcmain: Creating new Entry -' + entryJson);
+  //create filename
   var fileName:string = eDate.dateStr() + ".json";
-  var path = dir.allEntries+fileName
+
+  //if directory doesn't exist - create directory
+  var directory = paths.join(app.getPath('userData'), dir.allEntries)
+  if (!fs.existsSync(directory)) {
+    fs.promises.mkdir(directory)
+  }
+
+  //store entry_json in directory
+  var filepath = paths.join(directory, dir.allEntries+fileName)
+  console.warn('createEntry path:', filepath)
   var message
   try {
-    await fs.promises.writeFile(path,entryJson, 'utf-8')
+    await fs.promises.writeFile(filepath,entryJson, 'utf-8')
     message ='File saved successfully'
   } catch (err) {
     message = 'An error occured in saving the new entry:'+err
   }
+  //create symlinks at related tag directories
   symlinkEntryFile(entryJson,fileName)
 
   return message
@@ -26,13 +39,13 @@ export async function createEntry(entryJson:string) {
 export async function symlinkEntryFile(entryJson:string,filename:string) {
   console.log('*** symlinkEntryFile called ***')
   var entry:Entry = JSON.parse(entryJson)
-  var targetFile = dir.allEntries+filename
+  var targetFilepath = paths.join(app.getPath('userData'),dir.allEntries+filename)
   
-  entry.tags.forEach(async (tag)=> {
+  entry.tags.forEach(async (tag: string)=> {
     if (tag != '' && tag != 'all'){
-      var symlinkPath = dir.tagDirectory+tag+'/'+filename
+      var symlinkPath = paths.join(app.getPath('userData'),dir.tagDirectory+tag, filename)
       console.log('symlinkPath',symlinkPath)
-      var error = await fs.promises.symlink(targetFile,symlinkPath)
+      var error = await fs.promises.symlink(targetFilepath,symlinkPath)
       console.log(error)
     }
   })
