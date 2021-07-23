@@ -1,15 +1,15 @@
 import {app, BrowserWindow, ipcMain, ipcRenderer } from 'electron';
 import path from 'path'
 import * as dir from './directory'
-import * as eCreate from './entry/crud/backend/e-create'
-import * as eRead from './entry/crud/backend/e-read'
-import * as eUpdate from './entry/crud/backend/e-update'
-import * as eDelete from './entry/crud/backend/e-delete'
+import * as eCreate from './entry/crud/e-create'
+import * as eRead from './entry/crud/e-read'
+import * as eUpdate from './entry/crud/e-update'
+import * as eDelete from './entry/crud/e-delete'
 
-import * as tCreate from './tag/crud/backend/t-create'
-import * as tRead from './tag/crud/backend/t-read'
-import * as tUpdate from './tag/crud/backend/t-update'
-import * as tDelete from './tag/crud/backend/t-delete'
+import * as tCreate from './tag/crud/t-create'
+import * as tRead from './tag/crud/t-read'
+import * as tUpdate from './tag/crud/t-update'
+import * as tDelete from './tag/crud/t-delete'
 
 
 // Entry C.R.U.D

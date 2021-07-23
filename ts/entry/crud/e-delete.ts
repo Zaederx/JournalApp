@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as dir from '../../../directory';
+import * as dir from '../../directory';
 import paths from 'path'
 
 /**

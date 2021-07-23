@@ -1,12 +1,11 @@
 import * as fs from 'fs';
-import * as dir from '../../../directory';
-import * as eSort from '../../../algorithms/entrysort'
-import {readDirFiles} from '../../../entry/crud/backend/e-read'
-import {Tag} from '../../../classes/tag'
-import * as tSort from '../../../algorithms/tagsort'
-import { TagDate } from '../../../classes/tagdate';
+import * as dir from '../../directory';
+import * as eSort from '../../algorithms/entrysort'
+import {readDirFiles} from '../../entry/crud/e-read'
+import {Tag} from '../../classes/tag'
+import * as tSort from '../../algorithms/tagsort'
+import { TagDate } from '../../classes/tagdate';
 import * as process from 'child_process';
-import { EntryDate } from '../../../classes/EntryDate';
 
 
 

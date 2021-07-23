@@ -1,7 +1,6 @@
 import * as fs from 'fs';
-import * as entrySort from '../../../algorithms/entrysort';
+import * as entrySort from '../../algorithms/entrysort';
 import * as process from 'child_process';
-import {EntryDate} from '../../../classes/EntryDate';
 // import * as dirs from '../directory';
 
 
