@@ -50,14 +50,18 @@ function clickBtnSettings() {
 
 }
 
-var tags = document.querySelector('#tagss') as HTMLDivElement
+var tags = document.querySelector('#tags') as HTMLDivElement
 var entries = document.querySelector('#entries') as HTMLDivElement
 async function loadTags() {
+    console.log('loadTags called')
     var html = await ipcRenderer.invoke('list-all-tags-html')
     tags.innerHTML = html
+    console.log('html:',html)
 }
 
 async function loadEntries() {
+    console.log('loadEntries called')
     var html = await ipcRenderer.invoke('list-all-entries-html')
     entries.innerHTML = html
+    console.log('html:',html)
 }

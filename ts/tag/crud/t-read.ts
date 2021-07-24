@@ -8,6 +8,7 @@ import { TagDate } from '../../classes/tagdate';
 import * as process from 'child_process';
 import paths from 'path'
 import { app } from 'electron'
+import { EntryDate } from '../../classes/EntryDate';
 
 
 /**
@@ -21,20 +22,21 @@ import { app } from 'electron'
  * @see:{@link https://github.com/electron/electron/issues/19074}
  */
  export async function readAllDirectoryNames() {
-    var directory:string[] = [];
+    console.log('readAllDirectoryNames')
+    var tagDirectories:string[] = [];
     
     try {
        var path = dirs.tagDirectory
-        directory = await fs.promises.readdir(path, {
+        tagDirectories = await fs.promises.readdir(path, {
           withFileTypes: false,
           encoding: 'utf-8'
         });
-        
-        return directory
+        console.log('tagDirectories:',tagDirectories)
+        return tagDirectories
     } catch (err) {
         console.error('Entry folder could not be read');
     }
-    return directory;//empty condition
+    return tagDirectories;//empty condition
   }
 
   /**
@@ -42,8 +44,8 @@ import { app } from 'electron'
    * @param directoryFolders directory folder names
    */
   export function directoryFoldersToHTML(directoryFolders:string[]) {
-    var counter:number = 0;
-    var dirHTML:string;
+    var counter:number = 0
+    var dirHTML:string = ''
     directoryFolders.forEach( subdirectoryName => {
     if(subdirectoryName.charAt(0) == '.') {/*DO NOT ADD*/}//so it doesn't add .DS_Store files etc
       else if (counter == 0) {
@@ -53,8 +55,10 @@ import { app } from 'electron'
       else {
           dirHTML += '<div>'+subdirectoryName+'</div>\n';
       }
-      return dirHTML;
+
+
       });
+      return dirHTML
   }
 /**
  * Returns array of `tagDir` contents (not recursively).

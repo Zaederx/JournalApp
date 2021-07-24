@@ -7,6 +7,6 @@ import {app} from 'electron'
 export const allEntries = paths.join(app.getPath('userData'),'tagDirs','all')
 
 /**
- * Directory containing all tag folders
+ * Directory containing all tag folders - 'tagDirs'
  */
 export const tagDirectory = paths.join(app.getPath('userData'),'tagDirs')

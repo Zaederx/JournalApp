@@ -1,3 +1,5 @@
+import { EntryDate } from "../classes/EntryDate";
+
 /**
  * 
  * @param arr 

@@ -133,3 +133,8 @@ $side-panel: rgb(113, 120, 113);
     content: attr(data-placeholder);
     color: rgb(109, 109, 109);
 }
+
+
+.main-container .side-panel .active.tag {
+    background-color: $selected;
+}

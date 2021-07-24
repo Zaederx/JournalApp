@@ -123,9 +123,11 @@ ipcMain.handle('delete-entry', async (event, entry_filename) => {
 
 ipcMain.handle('list-all-tags-html', async () => {
   //Read all tag directory folder names
-  var tagDirectoryNames = await tRead.readAllDirectoryNames();
+  var tagDirectoryNames = await tRead.readAllTags();
+  console.log('tagDirectoryNames:',tagDirectoryNames)
   //Put tags folder names into 'div' tags
   var tagsHTML = tRead.directoryFoldersToHTML(tagDirectoryNames);
+  console.log('tagsHTML',tagsHTML)
   return tagsHTML
 })
 

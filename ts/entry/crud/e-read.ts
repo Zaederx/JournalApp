@@ -3,6 +3,8 @@ import * as entrySort from '../../algorithms/entrysort';
 import * as process from 'child_process';
 import paths from 'path'
 import * as dirs from '../../directory';
+import { EntryDate } from '../../classes/EntryDate';
+
 
 
 
@@ -106,15 +108,24 @@ function fetchBtime(directory:string,filename:string, arr:EntryDate[]) {
   //Addtionally - %B inserts File BirthTime (Creation Date)
     var stat_birth = process.spawnSync('stat',['-f','%B', '-L', directory+filename]);
     console.log('output',stat_birth.output);
+
+    //get file birthtime as str -> number
     var bString:string = stat_birth.stdout;
     var btime:number = Number(stat_birth.stdout);
+    //create EntryDate - name and btime
     var eDate:EntryDate = new EntryDate(filename, btime);
+    //add to list of EntryDates
     arr.push(eDate);
+
+    //console logging birthtime
     console.log('bString',bString);
     console.log('btime',btime);
+
+    //console logging errors
     var err:string = stat_birth.stderr;
     err != '' ? console.error('File Birthtime error:',err) : null;
 
+    //console logging status
     var code:number|null = stat_birth.status;
     console.log('child process: "stat_birth" exited with code',code);
 }
