@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import paths from 'path'
 import * as dir from '../../directory'
 
 /**
@@ -8,7 +9,8 @@ import * as dir from '../../directory'
 export function deleteTag(tagname:string):string {
     var success:string = 'Tag '+ tagname+' deleted'; 
     var failure:string = 'Error: Tag '+ tagname +' not deleted';
-    fs.rmdir(dir.tagDirectory+tagname,{
+    var path = paths.join(dir.tagDirectory,tagname)
+    fs.rmdir(path,{
         recursive: true
     }, () => {
         console.log(success);

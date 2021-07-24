@@ -1,3 +1,5 @@
+import { ipcRenderer } from "electron"
+
 var btn_tags = document.querySelector('#btn-tags') as HTMLDivElement
 var btn_edit_tags = document.querySelector('btn-edit-tags') as HTMLDivElement
 var btn_add_entry = document.querySelector('#btn_add_entry') as HTMLDivElement
@@ -31,6 +33,8 @@ function toggleSidePanel() {
     else {
         displaySidePanel()
         hidden = false
+        loadTags()
+        loadEntries()
     }
 }
 
@@ -46,3 +50,14 @@ function clickBtnSettings() {
 
 }
 
+var tags = document.querySelector('#tagss') as HTMLDivElement
+var entries = document.querySelector('#entries') as HTMLDivElement
+async function loadTags() {
+    var html = await ipcRenderer.invoke('list-all-tags-html')
+    tags.innerHTML = html
+}
+
+async function loadEntries() {
+    var html = await ipcRenderer.invoke('list-all-entries-html')
+    entries.innerHTML = html
+}

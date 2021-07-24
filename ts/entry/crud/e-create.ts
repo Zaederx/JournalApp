@@ -15,13 +15,13 @@ export async function createEntry(entryJson:string) {
   var fileName:string = eDate.dateStr() + ".json";
 
   //if directory doesn't exist - create directory
-  var directory = paths.join(app.getPath('userData'), dir.allEntries)
-  if (!fs.existsSync(directory)) {
-    fs.promises.mkdir(directory)
+  
+  if (!fs.existsSync(dir.allEntries)) {
+    fs.promises.mkdir(dir.tagDirectory)
   }
 
   //store entry_json in directory
-  var filepath = paths.join(directory, dir.allEntries+fileName)
+  var filepath = paths.join(dir.allEntries,fileName)
   console.warn('createEntry path:', filepath)
   var message
   try {
@@ -39,11 +39,11 @@ export async function createEntry(entryJson:string) {
 export async function symlinkEntryFile(entryJson:string,filename:string) {
   console.log('*** symlinkEntryFile called ***')
   var entry:Entry = JSON.parse(entryJson)
-  var targetFilepath = paths.join(app.getPath('userData'),dir.allEntries+filename)
+  var targetFilepath = paths.join(dir.allEntries,filename)
   
   entry.tags.forEach(async (tag: string)=> {
     if (tag != '' && tag != 'all'){
-      var symlinkPath = paths.join(app.getPath('userData'),dir.tagDirectory+tag, filename)
+      var symlinkPath = paths.join(dir.tagDirectory,tag, filename)
       console.log('symlinkPath',symlinkPath)
       var error = await fs.promises.symlink(targetFilepath,symlinkPath)
       console.log(error)

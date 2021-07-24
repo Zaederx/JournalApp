@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as entrySort from '../../algorithms/entrysort';
 import * as process from 'child_process';
-// import * as dirs from '../directory';
+import paths from 'path'
+import * as dirs from '../../directory';
 
 
 
@@ -25,7 +26,6 @@ import * as process from 'child_process';
 export async function readDirFiles(dir:string) {
   console.log('ipcMain: Reading new Entry - ' + dir);
   
-  var prefix:string = dir;
   var files:string[] = await fs.promises.readdir(dir,'utf-8')
 
   return files
@@ -68,7 +68,7 @@ export async function readSingleFile(filename:string) {
   console.log('ipcMain: Reading file - '+filename);
 
   var entry
-  var entry_filepath = 'tagDirs/all/'+filename;
+  var entry_filepath = paths.join(dirs.allEntries,filename);
   var message
   try {
     entry = await fs.promises.readFile(entry_filepath,'utf-8')

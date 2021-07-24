@@ -1,5 +1,6 @@
 import {app, BrowserWindow, ipcMain, ipcRenderer } from 'electron';
 import path from 'path'
+import fs from 'fs'
 import * as dir from './directory'
 import * as eCreate from './entry/crud/e-create'
 import * as eRead from './entry/crud/e-read'
@@ -44,6 +45,18 @@ function createWindow () {
   if (process.env.NODE_ENV === 'dev-tools') {
     window.webContents.openDevTools();
   }
+}
+//if directory doesn't exist - create directory
+var directory = path.join(dir.allEntries)
+if (!fs.existsSync(directory)) {
+  try {
+    fs.promises.mkdir(directory)
+    console.log('Successfully created directory')
+  }
+  catch (error) {
+    console.log('Error creating directory:',error)
+  }
+  
 }
 
 app.whenReady().then(createWindow);
@@ -108,20 +121,21 @@ ipcMain.handle('delete-entry', async (event, entry_filename) => {
 })
 
 
-ipcMain.handle('list-all-entries-html', async () => {
-  //Read entry names from 'tagDir/all'
-  var files = await eRead.readDirFiles(dir.allEntries)
-  //Read entry names from 'tagDir/'
-  var filesHtml = eRead.filesToHtml(files,dir.allEntries)
-  return filesHtml
-})
-
 ipcMain.handle('list-all-tags-html', async () => {
   //Read all tag directory folder names
   var tagDirectoryNames = await tRead.readAllDirectoryNames();
   //Put tags folder names into 'div' tags
   var tagsHTML = tRead.directoryFoldersToHTML(tagDirectoryNames);
   return tagsHTML
+})
+
+
+ipcMain.handle('list-all-entries-html', async () => {
+  //Read entry names from 'tagDir/all'
+  var files = await eRead.readDirFiles(dir.allEntries)
+  //Read entry names from 'tagDir/'
+  var filesHtml = eRead.filesToHtml(files,dir.allEntries)
+  return filesHtml
 })
 
 

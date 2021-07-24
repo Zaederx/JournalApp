@@ -1,12 +1,13 @@
 import * as fs from 'fs';
-import * as dir from '../../directory';
+import * as dirs from '../../directory';
 import * as eSort from '../../algorithms/entrysort'
 import {readDirFiles} from '../../entry/crud/e-read'
 import {Tag} from '../../classes/tag'
 import * as tSort from '../../algorithms/tagsort'
 import { TagDate } from '../../classes/tagdate';
 import * as process from 'child_process';
-
+import paths from 'path'
+import { app } from 'electron'
 
 
 /**
@@ -23,8 +24,8 @@ import * as process from 'child_process';
     var directory:string[] = [];
     
     try {
-        //using readdirSync - blocks IO until the read is done - will try sending event reply only once directories are loaded
-        directory = await fs.promises.readdir(dir.tagDirectory, {
+       var path = dirs.tagDirectory
+        directory = await fs.promises.readdir(path, {
           withFileTypes: false,
           encoding: 'utf-8'
         });
@@ -68,7 +69,7 @@ import * as process from 'child_process';
  * @return directoryContexts    array of tag directory names
  */
 export function readTagDir():Promise<string[]> {
-    return readDir(dir.tagDirectory)
+    return readDir(dirs.tagDirectory)
 }
 
 /**
@@ -112,9 +113,6 @@ export function readTagDir():Promise<string[]> {
  * @param dir main directory path i.e. './hello'
  * @param and optional addition to the path
  * 
- * ```
- * readDir('./hello/', 'there') -> path looks like './hello/there'
- * ```
  */
 async function readDir(dir:string):Promise<string[]> {
     var directoryContents:string[] = [];
@@ -153,7 +151,8 @@ export async function readAllTags():Promise<string[]> {
 }
 
 export async function readTagEntries(tagName:string) {
-   var files = await readDirFiles(dir.tagDirectory+tagName);
+    var path = paths.join(dirs.tagDirectory,tagName)
+   var files = await readDirFiles(path);
    var filesHTML = tagFilesToHtml(files)
    return filesHTML
 }
@@ -223,7 +222,8 @@ export async function getTags_EntryCount_CreationDate():Promise<string> {
  * @returns 
  */
 async function getTag_EntryCount(tag:string):Promise<number> {
-    var entries = await readDir(dir.tagDirectory+tag)
+    var path = paths.join(dirs.tagDirectory,tag)
+    var entries = await readDir(path)
     return entries.length
 }
 /**
@@ -232,7 +232,7 @@ async function getTag_EntryCount(tag:string):Promise<number> {
  * @returns 
  */
 async function getTag_CreationDate(tag:string):Promise<string> {
-    var path = dir.tagDirectory+tag
+    var path = paths.join(dirs.tagDirectory,tag)
     var {birthtime} = await fs.promises.stat(path)
     var btimeStr = birthtime.toDateString()
     return btimeStr

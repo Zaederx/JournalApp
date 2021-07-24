@@ -1,6 +1,7 @@
+import paths from 'path'
 import * as fs from 'fs';
 import * as eCreate from './e-create'
-// const directory = require('../directory');//TODO add directory variable - easy to change all at once in future
+import * as dirs from '../../directory';//TODO add directory variable - easy to change all at once in future
 
 
 /**
@@ -10,7 +11,7 @@ import * as eCreate from './e-create'
  * @returns message - success or error message
  */
 export function updateEntry(entry_json:string, entry_filename:string) {
-    var filepath:string = 'tagDirs/all/' + entry_filename;
+    var filepath:string = paths.join(dirs.allEntries, entry_filename);
     var message
     try {
         fs.promises.writeFile(filepath,entry_json,'utf-8')
