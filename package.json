@@ -4,14 +4,16 @@
   "description": "",
   "main": "js/main.js",
   "scripts": {
-    "sass" : "sass ./scss:./css",
+    "sass": "sass ./scss:./css",
     "start": "export NODE_ENV=''; npm run sass && tsc && electron .;",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Zachary Ishmael",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^16.3.3"
+    "@types/node": "^16.3.3",
+    "sass": "^1.36.0",
+    "typescript": "^4.3.5"
   },
   "dependencies": {
     "electron": "^13.1.7"

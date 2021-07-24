@@ -10,7 +10,7 @@ import paths from 'path'
  * @param entryJson json String of entry details
  */
 export async function createEntry(entryJson:string) {
-  console.log('ipcmain: Creating new Entry -' + entryJson);
+  console.log('ipcMain: Creating new Entry -' + entryJson);
   //create filename
   var fileName:string = eDate.dateStr() + ".json";
 

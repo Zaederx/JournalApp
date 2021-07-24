@@ -29,7 +29,7 @@
         </div>
         
         <div id="main" class="main-container">
-            <h4 id="heading" class="heading">Journal Entry</h4>
+            <h4 id="heading" class="heading">View Entry</h4>
             <!-- <div id="centre" -->
             <div class="buttons">
                 <div id="edit-entry">Edit Entry</div>
@@ -46,16 +46,15 @@
                 tags
             </div>
 
-            <div class="side-panel">
+            <div id="side-panel" class="side-panel" hidden>
                 <div id="tags" class="tags">
-                    <div class="selected">tag</div>
-                    <div>tag</div>
+                    <div class="selected">all</div>
                 </div>
                 <div id="entries" class="entries">
-                    <div >entry</div>
-                    <div>entry</div>
+                    <div>Loading Entries</div>
                 </div>
             </div>
+            <div id="loader"></div>
         </div>    
 </body>
 </html>

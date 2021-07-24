@@ -1,12 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="../js/view/nav.js"defer></script>
+    <script type="module" src="../js/views/create-entry.js" defer></script>
+    <script src="../js/classes/entry.js" defer></script>
+    <script>var exports = {"__esModule": true};</script>
+    <link rel="stylesheet" href="../css/main.css">
+    <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Journal App</title>
 </head>
 <body>
-    
+    <div class="grid-container">
+        <div id="nav" class="nav">
+            
+            <div id="btn-tags" class="nav-btn">
+                <img src="../img/icons/folder.svg" alt="folder button" class="btn">
+            </div>
+            <div id="btn-edit-tags" class="nav-btn">
+                <img src="../img/icons/iconmonstr-folder-4.svg" alt="entry button" class="btn">
+            </div>
+            <div id="btn-add-entry" class="nav-btn">
+                <img src="../img/icons/add-file.svg" alt="add entry button" class="btn">
+            </div>
+            <div id="btn-settings" class="nav-btn">
+                <img src="../img/icons/settings-3.svg" alt="settings button" class="btn">
+            </div>
+        </div>
+        
+        <div id="main" class="main-container">
+            <h4 id="heading" class="heading">Edit Tags</h4>
+            <!-- <div id="centre" -->
+            <div class="buttons">
+                <div id="create-entry">Create Entry</div> 
+            </div>
+            <div contenteditable="true" id="entry-title" class="editable entry-title" data-placeholder="Title"></div>
+            <div contenteditable="true" id="entry-body" class="editable entry-body" data-placeholder="Entry Text Body"></div>
+
+            <div class="entry-tags">
+                tags
+            </div>
+            <div id="side-panel" class="side-panel" hidden>
+                
+                <div id="tags" class="tags">
+                    <div class="selected">all</div>
+                </div>
+                <div id="entries" class="entries">
+                    <div>Loading Entries</div>
+                </div>
+                
+            </div>
+            <div id="loader"></div>
+        </div> 
+        
+        
 </body>
 </html>

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="../js/view/nav.js"defer></script>
+    <script type="module" src="../js/views/create-entry.js" defer></script>
+    <script src="../js/classes/entry.js" defer></script>
+    <script>var exports = {"__esModule": true};</script>
     <link rel="stylesheet" href="../css/main.css">
     <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
@@ -29,34 +33,28 @@
         </div>
         
         <div id="main" class="main-container">
-            <h4 id="heading" class="heading">Edit Entry</h4>
+            <h4 id="heading" class="heading">Settings</h4>
             <!-- <div id="centre" -->
             <div class="buttons">
-                <div>Edit Entry</div>
-                <div>Delete Entry</div>
+                <div id="create-entry">Create Entry</div> 
             </div>
-            <div contenteditable="true" id="entry-title" class="entry-title">
-                Title
-            </div>
-            <div contenteditable="true" id="entry-body" class="entry-body">
-                Body
-            </div>
+            <div contenteditable="true" id="entry-title" class="editable entry-title" data-placeholder="Title"></div>
+            <div contenteditable="true" id="entry-body" class="editable entry-body" data-placeholder="Entry Text Body"></div>
 
             <div class="entry-tags">
                 tags
             </div>
-
             <div id="side-panel" class="side-panel" hidden>
-                
                 <div id="tags" class="tags">
                     <div class="selected">all</div>
                 </div>
                 <div id="entries" class="entries">
                     <div>Loading Entries</div>
                 </div>
-                
             </div>
             <div id="loader"></div>
-        </div>    
+        </div> 
+        
+        
 </body>
 </html>

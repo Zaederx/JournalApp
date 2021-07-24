@@ -11,6 +11,7 @@ import * as tCreate from './tag/crud/t-create'
 import * as tRead from './tag/crud/t-read'
 import * as tUpdate from './tag/crud/t-update'
 import * as tDelete from './tag/crud/t-delete'
+import { mergeSort } from './algorithms/mergesort';
 
 
 // Entry C.R.U.D
@@ -98,6 +99,10 @@ ipcMain.handle('edit-tags', () => {
   window.loadFile('html/edit-tags.html')
 })
 
+ipcMain.handle('settings-view',() => {
+  window.loadFile('html/settings.html')
+})
+
 
 // entry C.R.U.D.
 ipcMain.handle('create-entry', async (event,entry_json) => {
@@ -121,23 +126,23 @@ ipcMain.handle('delete-entry', async (event, entry_filename) => {
 })
 
 
-ipcMain.handle('list-all-tags-html', async () => {
+ipcMain.on('list-all-tags-html', async (event) => {
   //Read all tag directory folder names
   var tagDirectoryNames = await tRead.readAllTags();
   console.log('tagDirectoryNames:',tagDirectoryNames)
   //Put tags folder names into 'div' tags
   var tagsHTML = tRead.directoryFoldersToHTML(tagDirectoryNames);
   console.log('tagsHTML',tagsHTML)
-  return tagsHTML
+  event.reply('recieve-list-all-tags-html', tagsHTML)
 })
 
 
-ipcMain.handle('list-all-entries-html', async () => {
+ipcMain.on('list-all-entries-html', async (event) => {
   //Read entry names from 'tagDir/all'
   var files = await eRead.readDirFiles(dir.allEntries)
   //Read entry names from 'tagDir/'
   var filesHtml = eRead.filesToHtml(files,dir.allEntries)
-  return filesHtml
+  event.reply('recieve-list-all-entries-html',filesHtml)
 })
 
 
@@ -150,3 +155,8 @@ ipcMain.handle('get-last-entry', async () => {
   var lastEntry = filesHtml[0]
   return lastEntry
 })
+
+
+var arr:number[] = [5,4,3,2,1]
+
+console.log('mergeSort',mergeSort(arr))

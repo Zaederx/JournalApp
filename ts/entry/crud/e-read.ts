@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as entrySort from '../../algorithms/entrysort';
+import * as entryMergeSort from '../../algorithms/entryMergeSort'
 import * as process from 'child_process';
 import paths from 'path'
 import * as dirs from '../../directory';
@@ -45,7 +45,7 @@ export function filesToHtml(files:string[],directory:string) {
   files.forEach( file => fetchBtime(directory,file,arr));
   var start:number = 0;
   var end:number = arr.length-1;
-  var newArr:EntryDate[] = entrySort.sort(arr,start,end);
+  var newArr:EntryDate[] = entryMergeSort.mergeSort(arr)
 
   var i:number = 0;
   newArr.forEach(entryDate => {

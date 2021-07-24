@@ -50,6 +50,12 @@ $side-panel: rgb(113, 120, 113);
     grid-row: 1;
 }
 
+.main-container .messageDiv {
+    grid-column: 2 / span 2;
+    grid-row: 1;
+    color: $selected;
+}
+
 .main-container .buttons {
     grid-column: 2 / span 2;
     grid-row: 2;
@@ -90,7 +96,7 @@ $side-panel: rgb(113, 120, 113);
     grid-column: 1 / span 2;
     grid-row: 1 / span 7;
     background-color: $side-panel-green;
-    display: grid;
+    display: none;
     grid-template-columns: 130px auto;
     z-index: 1;
 }
@@ -138,3 +144,29 @@ $side-panel: rgb(113, 120, 113);
 .main-container .side-panel .active.tag {
     background-color: $selected;
 }
+
+//loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
+.loader {
+    grid-column: 2 / span 2;
+    grid-row: 3;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    border-bottom: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+    z-index: 3;
+  }
+  
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
