@@ -125,8 +125,8 @@ function fetchBtime(directory:string,filename:string, arr:EntryDate[]) {
     arr.push(eDate);
 
     //console logging birthtime
-    console.log('bString',bString);
-    console.log('btime',btime);
+    // console.log('bString',bString);
+    // console.log('btime',btime);
 
     //console logging errors
     var err:string = stat_birth.stderr;

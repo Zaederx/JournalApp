@@ -31,12 +31,15 @@ function deleteSymlinks(entry:Entry,filename:string) {
     //delete each related symlink
     entry.tags.forEach(
         (tag) => {
-            try {
-                var path =  paths.join(dir.tagDirectory+tag,filename)
-                fs.promises.unlink(path)
-            }
-            catch (error) {
-                console.log(error)
+            if (tag != '') {
+                console.log('tagname:',tag)
+                try {
+                    var path =  paths.join(dir.tagDirectory,tag,filename)
+                    fs.promises.unlink(path)
+                }
+                catch (error) {
+                    console.log(error)
+                }
             }
         })
 }
@@ -45,7 +48,7 @@ function deleteSymlinks(entry:Entry,filename:string) {
  */
 async function retrieveEntry(entryName:string):Promise<Entry> {
     console.log('*** retrieveEntry called ***')
-    var path = paths.join(dir.tagDirectory+entryName)
+    var path = paths.join(dir.allEntries,entryName)
     //note utf-8 means -> string. if not specified return Promise<Buffer>
     var entryJson = await fs.promises.readFile(path,'utf-8') 
 

@@ -126,6 +126,12 @@ ipcMain.handle('delete-entry', async (event, entry_filename) => {
   return message
 })
 
+ipcMain.handle('delete-current-entry', async (event) => {
+  var message = eDelete.deleteEntry(this_selectedEntryName)
+  this_selectedEntryName = ''
+  return message
+})
+
 
 ipcMain.on('list-all-tags-html', async (event) => {
   //Read all tag directory folder names

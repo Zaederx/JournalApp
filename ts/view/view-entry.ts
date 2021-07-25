@@ -1,10 +1,12 @@
 import { ipcRenderer } from "electron"
+import { deleteTag } from "../tag/crud/t-delete"
 
-
+var messageDiv = document.querySelector('#message') as HTMLDivElement
 var title = document.querySelector('#entry-title') as HTMLDivElement
 var body = document.querySelector('#entry-body') as HTMLDivElement
 var tags = document.querySelector('#entry-tags') as HTMLDivElement
 var btn_edit_entry = document.querySelector('#edit-entry') as HTMLDivElement
+var btn_delete_entry = document.querySelector('#delete-entry') as HTMLDivElement
 
 async function displayLastEntry() {
     var entryJson:string = await ipcRenderer.invoke('get-last-entry')
@@ -13,9 +15,9 @@ async function displayLastEntry() {
     body.innerHTML = entry.body
 }
 
-
 window.onload = () => displaySelectedEntry()
 var e = new Entry()
+
 async function displaySelectedEntry() {
     console.log('displaySelectedEntry called')
     var entryJson:string = await ipcRenderer.invoke('get-current-entry')
@@ -34,6 +36,12 @@ function editEntryView() {
     ipcRenderer.invoke('edit-entry-view')
 }
 
+btn_delete_entry ? btn_delete_entry.onclick = () => deleteCurrentEntry() : console.log('btn_delete_entry is null')
+
+async function deleteCurrentEntry() {
+    var message = await ipcRenderer.invoke('delete-current-entry')
+    messageDiv.innerText = message
+}
 // //collect all tags added
 // var eTags:any[] = []
 // tags.childNodes.forEach((tag) => { eTags.push((tag as HTMLDivElement).innerHTML)})
