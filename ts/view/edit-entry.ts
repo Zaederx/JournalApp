@@ -67,7 +67,7 @@ async function saveNewEntry() {
 
 //******** Handling The Tag Pop ********** */
 var tags_popup = document.querySelector('#edit-tags-popup') as HTMLDivElement
-tags_popup ? tags_popup.onclick = () => editEntryTags() : console.log('tags_popup is null')
+// tags_popup ? tags_popup.onclick = () => editEntryTags() : console.log('tags_popup is null')
 
 function editEntryTags() {
     console.warn('editEntryTag called')
@@ -100,11 +100,11 @@ function hideTagPopup() {
 
 
 // Handling Popup table filtering
- var btn_addTag = document.querySelector('#t-view') as HTMLDivElement
+//  var btn_addTag = document.querySelector('#t-view') as HTMLDivElement
  var tagTableBody1 = document.querySelector('#tag-table-body') as HTMLTableElement
- var tag_searchbar = document.querySelector('#tag_searchbar')  as HTMLDivElement
+ var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
 
- tag_searchbar ? tag_searchbar.onkeyup = ()=> filterTable() : console.log('tag_input is null');
+//  tag_searchbar ? tag_searchbar.onkeyup = ()=> filterTable() : console.log('tag_input is null');
  //TODO Add a successful message/alert box adding a new tag
  
 
