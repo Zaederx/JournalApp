@@ -35,4 +35,11 @@ class Entry {
         })
         return entryTags
     }
+    tagsToHTML(tags:string[]) {
+        var tagsHtml = ''
+        tags.forEach((tag) => {
+            tagsHtml += '<div>'+tag+'</div>\n'
+        })
+        return tagsHtml
+    }
 }

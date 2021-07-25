@@ -13,6 +13,7 @@ import * as tUpdate from './tag/crud/t-update'
 import * as tDelete from './tag/crud/t-delete'
 import { mergeSort } from './algorithms/mergesort';
 
+var this_selectedEntryName = ''
 
 // Entry C.R.U.D
 
@@ -137,12 +138,13 @@ ipcMain.on('list-all-tags-html', async (event) => {
 })
 
 
-ipcMain.on('list-all-entries-html', async (event) => {
+ipcMain.handle('list-all-entries-html', async (event) => {
   //Read entry names from 'tagDir/all'
   var files = await eRead.readDirFiles(dir.allEntries)
   //Read entry names from 'tagDir/'
   var filesHtml = eRead.filesToHtml(files,dir.allEntries)
-  event.reply('recieve-list-all-entries-html',filesHtml)
+  return filesHtml
+  // event.reply('recieve-list-all-entries-html',filesHtml)
 })
 
 
@@ -157,6 +159,16 @@ ipcMain.handle('get-last-entry', async () => {
 })
 
 
+
+ipcMain.handle('set-current-entry', (event, selectedEntryName) => {
+ this_selectedEntryName = selectedEntryName
+})
+
+ipcMain.handle('get-current-entry', async (event) => {
+  var entry = await eRead.readSingleFile(this_selectedEntryName)
+  console.log('current-entry:',entry)
+  return entry
+})
 var arr:number[] = [5,4,3,2,1]
 
 console.log('mergeSort',mergeSort(arr))

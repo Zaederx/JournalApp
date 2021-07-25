@@ -61,29 +61,71 @@ var tags = document.querySelector('#tags') as HTMLDivElement
 var entries = document.querySelector('#entries') as HTMLDivElement
 function loadTags() {
     console.log('loadTags called')
-    loading.className = 'loader'
+    // activateLoader() - done by loadEntries()
     ipcRenderer.send('list-all-tags-html')
 }
 
 ipcRenderer.on('recieve-list-all-tags-html', (event, html) => {
     tags.innerHTML = html
     console.log('html:',html)
+    // deactivateLoader() - done by loadEntires() reciever
 })
 
-function loadEntries() {
+async function loadEntries() {
     console.log('loadEntries called')
-    loading.className = 'loader'
-    ipcRenderer.send('list-all-entries-html')
-    
+    activateLoader()
+    var html = await ipcRenderer.invoke('list-all-entries-html')
+    entries.innerHTML = html
+    console.log('html:',html)
+    makeAllEntriesClickable()
+    deactivateLoader()
 }
 
 
 ipcRenderer.on('recieve-list-all-entries-html', (event,html) => {
     entries.innerHTML = html
     console.log('html:',html)
-    loading.className = ''
+    deactivateLoader()
 })
 
+function activateLoader() {
+    loading.className = 'loader'
+}
 
-window.onload = async() => {
+function deactivateLoader() {
+    loading.className = ''
+}
+//use this to then fetch file
+var selectedTagName = ''
+//Making tags clickable
+function makeTagDivClickable(tagDiv:HTMLDivElement) {
+    tagDiv.onclick = async() => {
+        selectedTagName = tagDiv.innerText
+        //TODO - ADD LOADER ICON HERE
+        var entriesHTML = await ipcRenderer.invoke('get-tag-entries-html')
+        entries.innerHTML = entriesHTML
+        //TODO - THEN REMOVE LOADER HERE
+    }
+}
+
+
+//make entries clickable / open entry view with this entry
+function makeEntryDivClickable(entryDiv:HTMLDivElement) {
+    entryDiv.onclick = () => {
+        var selectedEntryName = entryDiv.innerText
+        activateLoader()
+        //set current entry to be read as selected
+        var entry = ipcRenderer.invoke('set-current-entry', selectedEntryName)
+        deactivateLoader()
+        //open the entry view
+        ipcRenderer.invoke('entry-view')
+    }
+}
+
+//make all entries clickable
+function makeAllEntriesClickable() {
+    //get all entry divs
+    var entries = document.querySelector('#entries') as HTMLDivElement
+    console.warn('entries:',entries)
+    entries.childNodes.forEach((entry)=> makeEntryDivClickable(entry as HTMLDivElement))
 }

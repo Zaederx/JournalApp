@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>var exports = {"__esModule": true};</script>
+    <script src="../js/classes/entry.js"></script>
     <script src="../js/view/nav.js"defer></script>
+    <script src="../js/view/view-entry.js" defer></script>
+    
     <link rel="stylesheet" href="../css/main.css">
+    
     <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
@@ -42,7 +47,7 @@
                 Body
             </div>
 
-            <div class="entry-tags">
+            <div id="entry-tags" class="entry-tags">
                 tags
             </div>
 
@@ -51,7 +56,7 @@
                     <div class="selected">all</div>
                 </div>
                 <div id="entries" class="entries">
-                    <div>Loading Entries</div>
+                    <div>Loading Entries...</div>
                 </div>
             </div>
             <div id="loader"></div>

@@ -91,6 +91,13 @@ $side-panel: rgb(113, 120, 113);
     grid-row: 4 / span 3;
     background-color: $body;
 }
+.main-container .entry-tags > div {
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    margin: 10px;
+    background-color: $panel-tag;
+}
 
 .main-container .side-panel {
     grid-column: 1 / span 2;
@@ -144,6 +151,7 @@ $side-panel: rgb(113, 120, 113);
 .main-container .side-panel .active.tag {
     background-color: $selected;
 }
+
 
 //loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
 .loader {
