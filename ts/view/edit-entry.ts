@@ -48,8 +48,9 @@ async function updateEntry() {
 
 function tagsToArr(tags:HTMLDivElement) {
     var arr:string[] = []
-    //get tag name from tags div
-    tags.childNodes.forEach( tag => {
+    //get tag names from tags div
+    tags.querySelectorAll('div').forEach( tag => { 
+        //add tag names to arr
         arr.push((tag as HTMLDivElement).innerText)
     })
     //return arr for tag names

@@ -47,16 +47,14 @@ import { EntryDate } from '../../classes/EntryDate';
     var counter:number = 0
     var dirHTML:string = ''
     directoryFolders.forEach( subdirectoryName => {
-    if(subdirectoryName.charAt(0) == '.') {/*DO NOT ADD*/}//so it doesn't add .DS_Store files etc
-      else if (counter == 0) {
-          dirHTML += '<div class="active tag">'+subdirectoryName+'</div>\n';//must be active tag!
-          counter++;
-      }
-      else {
-          dirHTML += '<div>'+subdirectoryName+'</div>\n';
-      }
-
-
+        if(subdirectoryName.charAt(0) == '.') {/*DO NOT ADD*/}//so it doesn't add .DS_Store files etc
+        else if (counter == 0) {
+            dirHTML += '<div class="active tag">'+subdirectoryName+'</div>\n';//must be active tag!
+            counter++;
+        }
+        else {
+            dirHTML += '<div>'+subdirectoryName+'</div>\n';
+        }
       });
       return dirHTML
   }
@@ -175,7 +173,7 @@ export async function readTagEntries(tagName:string) {
     var i = 0;
     files.forEach( (filename) => {
         if (i == 0) {
-            filesHTML += '<div class="active tag">'+filename+'</div>\n';//class must be active entry!
+            filesHTML += '<div class="active tag">'+filename+'</div>\n';//class must be active tag!
             i++;
           } 
           else {
