@@ -36,13 +36,14 @@
             <h4 id="heading" class="heading">Edit Entry</h4>
             <!-- <div id="centre" -->
             <div class="buttons">
-                <div>Update Entry</div>
-                <div>Save New Entry</div>
+                <div id="update-entry">Update Entry</div>
+                <div id="save-new-entry">Save New Entry</div>
+                <div id="edit-entry-tags">Edit Tags</div>
             </div>
             <div contenteditable="true" id="entry-title" data-placeholder="Title" class="entry-title editable"></div>
             <div contenteditable="true" id="entry-body" data-placeholder="Entry Text Body" class="entry-body editable"></div>
 
-            <div class="entry-tags">
+            <div id="entry-tags" class="entry-tags">
                 tags
             </div>
 
@@ -55,6 +56,20 @@
                 </div>
             </div>
             <div id="loader"></div>
+
+            <div id="edit-tags-popup" class="edit-tags-popup">
+                <div id="searchbar"></div>
+                <table>
+                    <thead>
+                        <th>Tag Name</th>
+                        <th>Number of Entries</th>
+                        <th>Creation Date</th>
+                    </thead>
+                    <tbody id="tag-table-body">
+
+                    </tbody>
+                </table>
+            </div>
         </div>    
 </body>
 </html>

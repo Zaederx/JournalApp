@@ -138,6 +138,16 @@ ipcMain.on('list-all-tags-html', async (event) => {
 })
 
 
+ipcMain.on('list-all-tags-html-tr', async (event) => {
+  //Read all tag directory folder names
+  var tagDirectoryNames = await tRead.readAllTags();
+  console.log('tagDirectoryNames:',tagDirectoryNames)
+  //Put tags folder names into 'div' tags
+  var tagsHTML = tRead.directoryFoldersToHTML(tagDirectoryNames);
+  console.log('tagsHTML',tagsHTML)
+  event.reply('recieve-list-all-tags-html', tagsHTML)
+})
+
 ipcMain.handle('list-all-entries-html', async (event) => {
   //Read entry names from 'tagDir/all'
   var files = await eRead.readDirFiles(dir.allEntries)
@@ -164,10 +174,19 @@ ipcMain.handle('set-current-entry', (event, selectedEntryName) => {
  this_selectedEntryName = selectedEntryName
 })
 
+ipcMain.handle('get-current-entry-name', (event) => {
+  return this_selectedEntryName
+ })
+
 ipcMain.handle('get-current-entry', async (event) => {
   var entry = await eRead.readSingleFile(this_selectedEntryName)
   console.log('current-entry:',entry)
   return entry
+})
+
+ipcMain.handle('get-tags-table-rows', async (event) => {
+  var tagsHTML = await tRead.getTags_EntryCount_CreationDate()
+  return tagsHTML
 })
 var arr:number[] = [5,4,3,2,1]
 

@@ -178,3 +178,16 @@ $side-panel: rgb(113, 120, 113);
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+
+  .edit-tags-popup {
+      display: none;
+      grid-column: 2 / span 2;
+      grid-row: 5;
+      background-color: $side-panel;
+      z-index: 3;
+  }
+
+  .edit-tags-popup > * {
+    background-color: $side-panel;
+}
