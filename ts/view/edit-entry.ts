@@ -37,10 +37,11 @@ async function updateEntry() {
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
     var entry = new Entry(title.innerText,body.innerText, tagsArr)
+    var entry_json = JSON.stringify(entry);
     //get current entry name
     var entryName = await ipcRenderer.invoke('get-current-entry-name')
     //send to main for be updated
-    var message = await ipcRenderer.invoke('update-entry', entry, entryName)
+    var message = await ipcRenderer.invoke('update-entry', entry_json, entryName)
     console.log(message)
 }
 
@@ -214,6 +215,6 @@ async function fillTagTable(tableBody:HTMLTableElement=tagTableBody1) {
         });
         /*if matchFound in any cell of a row, add the whole row to results
         @ts-ignore - tsc thinks it will always evaluate to false...It doesn't...*/
-        // matchFound == true ?  row.style.display = '' : row.style.display = 'none';
+        matchFound == true ?  row.style.display = '' : row.style.display = 'none';
     });
  }
