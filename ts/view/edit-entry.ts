@@ -37,6 +37,7 @@ async function updateEntry() {
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
     var entry = new Entry(title.innerText,body.innerText, tagsArr)
+    //turn entry to json format - ready for saving to file
     var entry_json = JSON.stringify(entry);
     //get current entry name
     var entryName = await ipcRenderer.invoke('get-current-entry-name')
