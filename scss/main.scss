@@ -191,7 +191,6 @@ $side-panel: rgb(113, 120, 113);
     width: 100%;
 }
 
-
 .edit-tags-popup {
     display: none;
     grid-column: 2 / span 2;
@@ -250,4 +249,8 @@ $side-panel: rgb(113, 120, 113);
 //table cells
 .table-row > td {
     text-align: center;
+}
+
+.tag-searchbar {
+    background-color: white;
 }

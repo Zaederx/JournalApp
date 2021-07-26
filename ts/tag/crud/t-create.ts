@@ -8,7 +8,7 @@ import paths from 'path'
  * 
  * @param tagName name of a tag to be created
  */
-async function createTag(tagName:string):Promise<string> {
+export async function createTag(tagName:string):Promise<string> {
     console.log('ipcMain: Creating new Tag -'+tagName);
     var tagpath:string = paths.join(dir.tagDirectory,tagName);
     var success:boolean;
@@ -41,7 +41,7 @@ function failure(event:Electron.IpcMainEvent, tagName:string) {
  * @param event Electron.IpcMainEvent
  * @param tagNames all the tag names to be created
  */
-export async function createTags(event:Electron.IpcMainEvent, tagNames:string[]):Promise<string> {
+export async function createTags(tagNames:string[]):Promise<string> {
     var message = '';
     if (tagNames != null) {
         try {

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>var exports = {"__esModule": true};</script>
     <script src="../js/view/nav.js"defer></script>
     <script src="../js/classes/entry.js" defer></script>
-    <script type="module" src="../js/views/create-entry.js" defer></script>
-    <script src="../js/view/edit-tags.js"></script>
-    <script>var exports = {"__esModule": true};</script>
+    <script src="../js/view/edit-entry.js" defer></script>
+    <script src="../js/view/edit-tags.js" defer></script>
+    
     <link rel="stylesheet" href="../css/main.css">
     <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
@@ -37,13 +38,11 @@
             <h4 id="heading" class="heading">Edit Tags</h4>
             <!-- <div id="centre" -->
             <div class="buttons">
-                <div id="create-entry">Create Entry</div> 
-            </div>
-            <div id="edit-tags" class="edit-tags">
-                <div id="close-btn" class="close-btn">X</div>
                 <div id="add-selected-tags" class="button">Add Selected Tags</div>
                 <div id="remove-selected-tags" class="button">Remove Selected Tags</div>
-                <div id="tag-searchbar"></div>
+            </div>
+            <div id="edit-tags" class="edit-tags">
+                <div id="tag-searchbar" class="tag-searchbar editable" data-placeholder="SEARCHBAR" contenteditable="true"></div>
                 <table>
                     <thead>
                         <th>Tag Name</th>

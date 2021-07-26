@@ -11,14 +11,12 @@ import * as tCreate from './tag/crud/t-create'
 import * as tRead from './tag/crud/t-read'
 import * as tUpdate from './tag/crud/t-update'
 import * as tDelete from './tag/crud/t-delete'
-import { mergeSort } from './algorithms/mergesort';
+import { mergeSort } from './algorithms/mergesort'
 
 var this_selectedEntryName = ''
 
-// Entry C.R.U.D
 
-
-// Tag C.R.U.D
+//TODO - option to store file in iCloud
 
 let window:BrowserWindow;
 
@@ -58,7 +56,7 @@ if (!fs.existsSync(directory)) {
   catch (error) {
     console.log('Error creating directory:',error)
   }
-  
+  console.log(app.getPath('home'))
 }
 
 app.whenReady().then(createWindow);
@@ -103,7 +101,6 @@ ipcMain.handle('edit-tags', () => {
 ipcMain.handle('settings-view',() => {
   window.loadFile('html/settings.html')
 })
-
 
 // entry C.R.U.D.
 ipcMain.handle('create-entry', async (event,entry_json) => {
@@ -199,6 +196,20 @@ ipcMain.handle('get-tags-table-rows', async (event) => {
   var tagsHTML = await tRead.getTags_EntryCount_CreationDate()
   return tagsHTML
 })
-var arr:number[] = [5,4,3,2,1]
 
-console.log('mergeSort',mergeSort(arr))
+
+//Tag CRUD
+ipcMain.handle('create-tags', async (event, tags) => {
+  var tagsHTML = await tCreate.createTags(tags)
+  return tagsHTML
+})
+
+ipcMain.handle('create-tag', async (event, tags) => {
+  var tagsHTML = await tCreate.createTag(tags)
+  return tagsHTML
+})
+
+ipcMain.handle('delete-tags', async (event, tags:string[]) => {
+  var tagsHTML = await tDelete.deleteTags(tags)
+  return tagsHTML
+})
