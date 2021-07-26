@@ -177,6 +177,20 @@ $side-panel: rgb(113, 120, 113);
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+.edit-tags {
+    grid-column: 2 /span 2;
+    grid-row: 6;
+    text-align: center;
+    background-color: $body;
+}
+.edit-tags > th{
+    margin: auto;
+}
+
+.edit-tags > table{
+    width: 100%;
+}
+
 
 .edit-tags-popup {
     display: none;
@@ -213,6 +227,7 @@ $side-panel: rgb(113, 120, 113);
     -webkit-filter: blur(1px);
 }
 
+//popup table close btn
 .close-btn {
     font-size: larger;
     text-align: center;

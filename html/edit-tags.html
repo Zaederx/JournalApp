@@ -39,11 +39,21 @@
             <div class="buttons">
                 <div id="create-entry">Create Entry</div> 
             </div>
-            <div contenteditable="true" id="entry-title" class="editable entry-title" data-placeholder="Title"></div>
-            <div contenteditable="true" id="entry-body" class="editable entry-body" data-placeholder="Entry Text Body"></div>
+            <div id="edit-tags" class="edit-tags">
+                <div id="close-btn" class="close-btn">X</div>
+                <div id="add-selected-tags" class="button">Add Selected Tags</div>
+                <div id="remove-selected-tags" class="button">Remove Selected Tags</div>
+                <div id="tag-searchbar"></div>
+                <table>
+                    <thead>
+                        <th>Tag Name</th>
+                        <th>Number of Entries</th>
+                        <th>Creation Date</th>
+                    </thead>
+                    <tbody id="tag-table-body">
 
-            <div class="entry-tags">
-                tags
+                    </tbody>
+                </table>
             </div>
             <div id="side-panel" class="side-panel" hidden>
                 
