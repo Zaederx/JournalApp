@@ -26,6 +26,7 @@ import { EntryDate } from '../../classes/EntryDate';
  * .
  */
 export async function readDirFiles(dir:string) {
+  
   console.log('ipcMain: Reading new Entry - ' + dir);
   
   var dirFiles:string[] = await fs.promises.readdir(dir,'utf-8')
@@ -40,22 +41,35 @@ export async function readDirFiles(dir:string) {
   return files
 }
 
-/**
- * Takes files arr and returns them as HTML
- * @param files - filenames
- * @param directory - diretory of the files - the tag 'all' directory in our case
- * @returns 
- */
-export function filesToHtml(files:string[],directory:string) {
-  var filesHTML = '';
+export async function readDirFilesEntryDate(dir:string) {
+  console.log('ipcMain: Reading new Entry - ' + dir);
+  
+  var dirFiles:string[] = await fs.promises.readdir(dir,'utf-8')
+  var files:string[] = [];//files without .DS_Store 
+  //remove .DS_Store and other '.' files
+  dirFiles.forEach((filename)=> {
+    if (filename.charAt(0) != '.') {
+      files.push(filename)
+    }
+  })
+
   var arr:EntryDate[] = [];
-  files.forEach( file => fetchBtime(directory,file,arr));
-  var start:number = 0;
-  var end:number = arr.length-1;
+  files.forEach( file => fetchBtime(dir,file,arr));
   var newArr:EntryDate[] = entryMergeSort.mergeSort(arr)
 
+  return newArr
+}
+
+/**
+ * Takes sorted array of EntryDates and ouputs entry html divs
+ * for the navigation panel
+ * @param arr 
+ * @returns 
+ */
+export function entryDateToHtml(arr:EntryDate[]) {
+  var filesHTML = ''
   var i:number = 0;
-  newArr.forEach(entryDate => {
+  arr.forEach(entryDate => {
     if (i == 0) {
       filesHTML += '<div class="active entry">'+entryDate.name+'</div>\n';//class must be active entry!
       i++;

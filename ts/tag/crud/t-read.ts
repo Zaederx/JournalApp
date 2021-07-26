@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as dirs from '../../directory';
 import * as eSort from '../../algorithms/entrysort'
-import {readDirFiles} from '../../entry/crud/e-read'
+import * as eRead from '../../entry/crud/e-read'
 import {Tag} from '../../classes/tag'
 import * as tSort from '../../algorithms/tagsort'
 import { TagDate } from '../../classes/tagdate';
@@ -157,8 +157,8 @@ export async function readAllTags():Promise<string[]> {
 
 export async function readTagEntries(tagName:string) {
     var path = paths.join(dirs.tagDirectory,tagName)
-   var files = await readDirFiles(path);
-   var filesHTML = tagFilesToHtml(files)
+   var entryDates:EntryDate[] = await eRead.readDirFilesEntryDate(path);
+   var filesHTML = eRead.entryDateToHtml(entryDates)
    return filesHTML
 }
 

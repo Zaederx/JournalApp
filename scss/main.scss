@@ -110,6 +110,10 @@ $side-panel: rgb(113, 120, 113);
     z-index: 1;
 }
 
+.side-panel .tags {
+    overflow-y: scroll;
+}
+
 .side-panel .tags > div{
     margin-top: 10px;
     margin-left: 10px;

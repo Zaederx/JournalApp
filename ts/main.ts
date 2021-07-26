@@ -158,9 +158,9 @@ ipcMain.on('list-all-tags-html-tr', async (event) => {
 
 ipcMain.handle('list-all-entries-html', async (event) => {
   //Read entry names from 'tagDir/all'
-  var files = await eRead.readDirFiles(dir.allEntries)
+  var entryDates = await eRead.readDirFilesEntryDate(dir.allEntries)
   //Read entry names from 'tagDir/'
-  var filesHtml = eRead.filesToHtml(files,dir.allEntries)
+  var filesHtml = eRead.entryDateToHtml(entryDates)
   return filesHtml
   // event.reply('recieve-list-all-entries-html',filesHtml)
 })
@@ -168,9 +168,9 @@ ipcMain.handle('list-all-entries-html', async (event) => {
 
 ipcMain.handle('get-last-entry', async () => {
   //Read Filenames in -> 'tagDir/all'
-  var files = await eRead.readDirFiles(dir.allEntries)
+  var entryDates = await eRead.readDirFilesEntryDate(dir.allEntries)
   //Put filenames into 'div' tags
-  var filesHtml = eRead.filesToHtml(files,dir.allEntries)
+  var filesHtml = eRead.entryDateToHtml(entryDates)
   //return last entry
   var lastEntry = filesHtml[0]
   return lastEntry
@@ -194,6 +194,11 @@ ipcMain.handle('get-current-entry', async (event) => {
 
 ipcMain.handle('get-tags-table-rows', async (event) => {
   var tagsHTML = await tRead.getTags_EntryCount_CreationDate()
+  return tagsHTML
+})
+
+ipcMain.handle('get-tag-entries-html', async (event,tagName) => {
+  var tagsHTML = await tRead.readTagEntries(tagName)
   return tagsHTML
 })
 
