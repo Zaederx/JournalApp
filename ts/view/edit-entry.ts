@@ -1,6 +1,7 @@
 import { ipcRenderer } from "electron"
 
-
+//messageDiv
+var messageDiv = document.querySelector('#message') as HTMLDivElement
 //  Entry
 var title = document.querySelector('#entry-title') as HTMLDivElement
 var body = document.querySelector('#entry-body') as HTMLDivElement
@@ -70,12 +71,52 @@ async function saveNewEntry() {
 
 //******** Handling The Tag Pop ********** */
 var tags_popup = document.querySelector('#edit-tags-popup') as HTMLDivElement
-// tags_popup ? tags_popup.onclick = () => editEntryTags() : console.log('tags_popup is null')
+var add_tags = document.querySelector('#add-selected-tags') as HTMLDivElement
+add_tags ? add_tags.onclick = () => addSelectedTagsToEntry() : console.log('add_tags btn is null')
+var main = document.querySelector('#main-container') as HTMLDivElement
+var close_btn = document.querySelector('#close-btn') as HTMLDivElement
 
+close_btn ? close_btn.onclick = () => toggleEditTagPopup() : console.warn('popup close_btn is null')
 function editEntryTags() {
     console.warn('editEntryTag called')
-    //toggle edit tag popup
     toggleEditTagPopup()
+}
+
+/**
+ * Get Selected Tags
+ * @param tagTableBody tableBody to get rows from
+ * @returns 
+ */
+function getSelectdTags(tagTableBody:HTMLTableElement=tagTableBody1) {
+    var rows = tagTableBody?.querySelectorAll('tr')
+    var tags:string[] = []
+    rows.forEach( row => {
+        var tag = row.cells[0].innerText
+        tags.push(tag)
+    })
+    return tags
+}
+
+
+async function addSelectedTagsToEntry() {
+    //get selected tags
+    var selectedTags:string[] = getSelectdTags()
+    //get current entry
+    var entryJson = await ipcRenderer.invoke('get-current-entry')
+    var entry:Entry = JSON.parse(entryJson)
+    //for each tag - if not already in tags list -> add to list
+    var tagSet = new Set(entry.tags)
+    selectedTags.forEach (tag => {
+        //if has new - dont add, else add newTag to entry.tags
+        tagSet.has(tag) ? null : entry.tags.push(tag)
+    })
+    //persist changes
+    var newEntryJson = JSON.stringify(entry)
+    var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
+    //display message
+    messageDiv.innerText = message
+    //page refresh
+    displayCurrentEntry()
 }
 
 var hidden = true
@@ -83,13 +124,27 @@ function toggleEditTagPopup() {
     if (hidden == true) {
         displayTagPopup()
         fillTagTable()
+        blurBackground()
         hidden = false
     }
     else {
         hideTagPopup()
+        unblurBackground()
         hidden = true
     }
 }
+
+
+
+
+function blurBackground() {
+    main.className = 'main-container-blur'
+}
+
+function unblurBackground() {
+    main.className = 'main-container'
+}
+    
 
 function displayTagPopup() {
     //display edit tag popup
@@ -102,12 +157,14 @@ function hideTagPopup() {
 }
 
 
+
+
 // Handling Popup table filtering
 //  var btn_addTag = document.querySelector('#t-view') as HTMLDivElement
  var tagTableBody1 = document.querySelector('#tag-table-body') as HTMLTableElement
  var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
 
-//  tag_searchbar ? tag_searchbar.onkeyup = ()=> filterTable() : console.log('tag_input is null');
+//  tag_searchbar ? tag_searchbar.onkeyup = () => filterTable() : console.log('tag_input is null');
  //TODO Add a successful message/alert box adding a new tag
  
 
@@ -148,7 +205,7 @@ async function fillTagTable(tableBody:HTMLTableElement=tagTableBody1) {
     //if mouse leaves row - unhighlight it
     row.addEventListener('mouseleave',function(event) {
         console.log('left:'+plain);
-            console.log('\n\n\n\n\n**********row:'+row.style.backgroundColor+'*************\n\n\n\n\n\n\n')
+        console.log('\n\n\n\n\n**********row:'+row.style.backgroundColor+'*************\n\n\n\n\n\n\n')
         if (row.style.backgroundColor == clicked) {console.log('backgroundColor == clicked');row.style.backgroundColor = clicked;}
         else {row.style.backgroundColor = row.style.backgroundColor == highlighted ?  plain: row.style.backgroundColor;}
     });
@@ -220,3 +277,5 @@ async function fillTagTable(tableBody:HTMLTableElement=tagTableBody1) {
         matchFound == true ?  row.style.display = '' : row.style.display = 'none';
     });
  }
+
+ //TODO - ENABLE SEARCHBAR

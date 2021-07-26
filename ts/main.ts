@@ -121,6 +121,11 @@ ipcMain.handle('update-entry', async (event, entry_json, entry_filename) => {
   return message
 })
 
+ipcMain.handle('update-current-entry', async (event, entry_json) => {
+  var message = eUpdate.updateEntry(entry_json, this_selectedEntryName)
+  return message
+})
+
 ipcMain.handle('delete-entry', async (event, entry_filename) => {
   var message = eDelete.deleteEntry(entry_filename)
   return message

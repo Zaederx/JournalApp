@@ -45,53 +45,53 @@ $side-panel: rgb(113, 120, 113);
     background-color: $main;
 }
 
-.main-container .heading {
+.heading {
     grid-column: 2 / span 2;
     grid-row: 1;
 }
 
-.main-container .messageDiv {
+.messageDiv {
     grid-column: 2 / span 2;
     grid-row: 1;
     color: $selected;
 }
-
-.main-container .buttons {
+.buttons {
     grid-column: 2 / span 2;
     grid-row: 2;
     padding-top: 20px;
     // background-color: $body;
 }
 
-.main-container .buttons > div {
+.buttons > div {
     display: inline;
     background-color: $body;
     padding: 10px;
     cursor: pointer;
+    z-index: 3;
 }
 
-.main-container .buttons > div:hover {
+.buttons > div:hover {
    background-color: $hover;
 }
 
-.main-container .entry-title {
+.entry-title {
     grid-column: 2 / span 2;
     grid-row: 4;
     background-color: $body;
 }
 
-.main-container .entry-body {
+.entry-body {
     grid-column: 2 /span 2;
     grid-row: 6;
     background-color: $body;
 }
 
-.main-container .entry-tags {
+.entry-tags {
     grid-column: 5;
     grid-row: 4 / span 3;
     background-color: $body;
 }
-.main-container .entry-tags > div {
+.entry-tags > div {
     text-align: center;
     padding: 10px;
     margin: auto;
@@ -99,7 +99,7 @@ $side-panel: rgb(113, 120, 113);
     background-color: $panel-tag;
 }
 
-.main-container .side-panel {
+.side-panel {
     grid-column: 1 / span 2;
     grid-row: 1 / span 7;
     background-color: $side-panel-green;
@@ -108,7 +108,7 @@ $side-panel: rgb(113, 120, 113);
     z-index: 1;
 }
 
-.main-container .side-panel .tags > div {
+.side-panel .tags > div{
     margin-top: 10px;
     margin-left: 10px;
     margin-bottom: 10px;
@@ -119,10 +119,10 @@ $side-panel: rgb(113, 120, 113);
     z-index: 1;
     cursor: pointer;
 }
-.main-container .side-panel .tags > div.selected {
+.side-panel .tags > div.selected {
     background-color: $selected;
 }
-.main-container .side-panel .entries {
+.side-panel .entries {
     grid-column: 2;
     padding-left: 10px;
     padding-bottom: 10px;
@@ -132,7 +132,7 @@ $side-panel: rgb(113, 120, 113);
     overflow-y: scroll;
 }
 
-.main-container .side-panel .entries > div {
+.side-panel .entries > div {
     padding-top: 20px;
     padding-left: 20px;
     padding-bottom: 20px;
@@ -148,10 +148,9 @@ $side-panel: rgb(113, 120, 113);
 }
 
 
-.main-container .side-panel .active.tag {
+.side-panel .active.tag {
     background-color: $selected;
 }
-
 
 //loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
 .loader {
@@ -166,28 +165,62 @@ $side-panel: rgb(113, 120, 113);
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
     z-index: 3;
-  }
-  
-  /* Safari */
-  @-webkit-keyframes spin {
+}
+/* Safari */
+@-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
     100% { -webkit-transform: rotate(360deg); }
-  }
-  
-  @keyframes spin {
+}
+@keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-  }
+}
 
-
-  .edit-tags-popup {
-      display: none;
-      grid-column: 2 / span 2;
-      grid-row: 5;
-      background-color: $side-panel;
-      z-index: 3;
-  }
-
-  .edit-tags-popup > * {
+.edit-tags-popup {
+    display: none;
+    grid-column: 2 / span 2;
+    grid-row: 5;
     background-color: $side-panel;
+    z-index: 3;
+}
+
+.edit-tags-popup > * {
+    background-color: $side-panel;
+}
+
+.edit-tags-popup .button {
+    text-align: center;
+    background-color: rgb(224, 206, 102);
+}
+
+.edit-tags-popup .button:hover {
+    background-color: $selected;
+}
+
+.grid-container .main-container-blur  {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: 50px 320px auto 50px 100px 20px;//6 columns
+    grid-template-rows: 50px 50px 20px 50px 20px auto 20px;//7 rows
+    background-color: $main;
+}
+//blur everything in .main-container-blur except edit-tags-popup
+.grid-container .main-container-blur > *:not(.edit-tags-popup) {
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+}
+
+
+
+.close-btn {
+    font-size: larger;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    color: white;
+    background-color: rgb(219, 107, 107);
+}
+
+.close-btn:hover{
+    background-color: rgb(226, 57, 57);
 }
