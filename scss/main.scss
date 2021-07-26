@@ -183,7 +183,7 @@ $side-panel: rgb(113, 120, 113);
 }
 .edit-tags {
     grid-column: 2 /span 2;
-    grid-row: 6;
+    grid-row: 5 / span 2;
     text-align: center;
     background-color: $body;
 }
@@ -252,9 +252,11 @@ $side-panel: rgb(113, 120, 113);
 
 //table cells
 .table-row > td {
+    padding: 15px;
     text-align: center;
 }
 
 .tag-searchbar {
+    padding: 15px;
     background-color: white;
 }
