@@ -114,9 +114,11 @@ function makeTagDivClickable(tagDiv:HTMLDivElement) {
         //activate loading spinner
         activateLoader()
         // fetch the tag's associated entries
-        var entriesHTML = await ipcRenderer.invoke('get-tag-entries-html',selectedTagName)
+        var entriesHTML = await ipcRenderer.invoke('get-tag-entries-html', selectedTagName)
         //display tag's associated entries
         panel_entries.innerHTML = entriesHTML
+        //make entries clickable / open the entry view
+        makeAllEntriesClickable()
         //remove loading spinner
         deactivateLoader()
     }

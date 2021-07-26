@@ -45,6 +45,7 @@ async function updateEntry() {
     //send to main for be updated
     var message = await ipcRenderer.invoke('update-entry', entry_json, entryName)
     console.log(message)
+    messageDiv.innerText = message
 }
 
 function tagsToArr(tags:HTMLDivElement) {
