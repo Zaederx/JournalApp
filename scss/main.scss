@@ -231,3 +231,8 @@ $side-panel: rgb(113, 120, 113);
 .table-row {
     cursor: pointer;
 }
+
+//table cells
+.table-row > td {
+    text-align: center;
+}
