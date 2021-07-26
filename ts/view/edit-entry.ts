@@ -194,6 +194,8 @@ async function fillTagTable(tableBody:HTMLTableElement=tagTableBody1) {
  function makeTTRowClickable(row:HTMLTableRowElement) {
     console.log('\n\n\n\n\n**********row:'+row+'*************\n\n\n\n\n\n\n');
     const toRemove = '#f05c35';  //#86f9d6
+    //add css class
+    row.className = 'table-row'
     //if mouse goes over row - highlight it yellow
     row.addEventListener('mouseover', function (event) {
         console.log('mouseover:'+highlighted);

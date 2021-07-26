@@ -25,6 +25,7 @@ $side-panel: rgb(113, 120, 113);
 .nav-btn {
     margin: auto;
     padding-top: 20px;
+    cursor: pointer;
 }
 
 .nav-btn:hover {
@@ -59,6 +60,7 @@ $side-panel: rgb(113, 120, 113);
     grid-column: 2 / span 2;
     grid-row: 2;
     padding-top: 20px;
+    cursor: pointer;
     // background-color: $body;
 }
 
@@ -191,6 +193,7 @@ $side-panel: rgb(113, 120, 113);
 .edit-tags-popup .button {
     text-align: center;
     background-color: rgb(224, 206, 102);
+    cursor: pointer;
 }
 
 .edit-tags-popup .button:hover {
@@ -210,8 +213,6 @@ $side-panel: rgb(113, 120, 113);
     -webkit-filter: blur(1px);
 }
 
-
-
 .close-btn {
     font-size: larger;
     text-align: center;
@@ -219,8 +220,14 @@ $side-panel: rgb(113, 120, 113);
     height: 20px;
     color: white;
     background-color: rgb(219, 107, 107);
+    cursor: pointer;
 }
 
 .close-btn:hover{
     background-color: rgb(226, 57, 57);
+}
+
+
+.table-row {
+    cursor: pointer;
 }
