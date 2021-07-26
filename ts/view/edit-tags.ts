@@ -3,7 +3,7 @@ import { ipcRenderer } from "electron"
 //message Div
 var messageDiv = document.querySelector('#message') as HTMLDivElement
 // Buttons
-var add_tag_btn = document.querySelector('#add-selected-tags') as HTMLDivElement
+var add_tag_btn = document.querySelector('#add-new-tag') as HTMLDivElement
 var remove_tag_btn = document.querySelector('#remove-selected-tags') as HTMLDivElement
 var searchbar = document.querySelector('#tag-searchbar') as HTMLDivElement
 searchbar.oninput = () => filterTable()
@@ -11,14 +11,27 @@ searchbar.oninput = () => filterTable()
 add_tag_btn ? add_tag_btn.onclick = () => createNewTag() : console.warn('add_tag_btn is null')
 remove_tag_btn ? remove_tag_btn.onclick = () => deleteSelectedTags() : console.warn('remove_tag_btn is null')
 
-function createNewTag() {
+
+async function createNewTag() {
+    //get input
     var tag:string = searchbar.innerText
-    var message = ipcRenderer.invoke('create-tag', tag)
+    //send tag to be persisted
+    var message = await ipcRenderer.invoke('create-tag', tag)
+    // display message
+    messageDiv.innerText = message
+    //refresh tag table
+    fillTagTable()
 }
 
-function deleteSelectedTags() {
+async function deleteSelectedTags() {
+    //get selectedTags
     var tags:string[] = getSelectedTags()
-    ipcRenderer.invoke('delete-tags', tags)
+    //send tag to be deleted
+    var message = await ipcRenderer.invoke('delete-tags', tags)
+    //display message
+    messageDiv.innerText = message
+    //refresh tag table
+    fillTagTable()
 }
 
 
@@ -155,8 +168,10 @@ function filterTable(tagTableBody:HTMLTableElement=tagTableBody2, input:HTMLDivE
     var rows = tagTableBody?.querySelectorAll('tr')
     var tags:string[] = []
     rows.forEach( row => {
-        var tag = row.cells[0].innerText
-        tags.push(tag)
+        //add tags if selected/clicked
+        if (row.style.backgroundColor == clicked) {
+            tags.push(row.cells[0].innerHTML)
+        }
     })
     return tags
 }

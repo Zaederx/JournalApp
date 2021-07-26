@@ -28,7 +28,7 @@ export function deleteTags(tags: string[]): string | PromiseLike<string> {
     }
     catch (error) {
         console.log(error)
-        message = 'Problem deleting tags'
+        message = 'Problem deleting tag'
     }
     
     return message

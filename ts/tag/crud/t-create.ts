@@ -15,7 +15,7 @@ export async function createTag(tagName:string):Promise<string> {
     var message:string = '';
     try {
         fs.promises.mkdir(tagpath)
-        message = ''
+        message = 'Successfully created tag:'+tagName
     }
     catch (error) {
         message = 'Error creating tag:'+ error
