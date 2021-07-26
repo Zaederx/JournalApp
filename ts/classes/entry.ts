@@ -4,7 +4,7 @@
 class Entry {
     title:string;
     body:string;
-    tags:string[];
+    tags:string[] = [];
     
     constructor (title?:string, body?:string, tags?:string[]) {
         this.title = title ? title : 'default';

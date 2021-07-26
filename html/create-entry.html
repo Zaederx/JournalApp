@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="../js/algorithms/mergesort.js"defer></script>
+    <script>var exports = {"__esModule": true};</script>
     <script src="../js/view/nav.js" defer></script>
     <script type="module" src="../js/view/create-entry.js" defer></script>
     <script src="../js/classes/entry.js" defer></script>
-    <script>var exports = {"__esModule": true};</script>
     <link rel="stylesheet" href="../css/main.css">
     <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
@@ -36,16 +35,18 @@
         <div id="main" class="main-container">
             <h4 id="heading" class="heading">Create Entry</h4>
             <div id="message" class="messageDiv"></div>
-            <!-- <div id="centre" -->
+
             <div class="buttons">
-                <div id="create-entry">Create Entry</div> 
+                <div id="create-entry">Create Entry</div>
+                <div id="btn-add-tags">Add Tags</div>
             </div>
             <div contenteditable="true" id="entry-title" class="editable entry-title" data-placeholder="Title"></div>
             <div contenteditable="true" id="entry-body" class="editable entry-body" data-placeholder="Entry Text Body"></div>
 
-            <div class="entry-tags">
+            <div id="entry-tags" class="entry-tags">
                 <div>all</div>
             </div>
+            <!-- Sidepanel -->
             <div id="side-panel" class="side-panel" hidden>
                 <div id="tags" class="tags">
                     <div class="selected">all</div>
@@ -55,6 +56,24 @@
                 </div>
             </div>
             <div id="loader"></div>
+
+            <!-- Tags Popup -->
+            <div id="add-tags-popup" class="edit-tags-popup">
+                <div id="close-btn" class="close-btn">X</div>
+                <div id="add-selected-tags" class="button">Add Selected Tags</div>
+                <!-- <div id="remove-selected-tags" class="button">Remove Selected Tags</div> -->
+                <div id="tag-searchbar"></div>
+                <table>
+                    <thead>
+                        <th>Tag Name</th>
+                        <th>Number of Entries</th>
+                        <th>Creation Date</th>
+                    </thead>
+                    <tbody id="tag-table-body">
+
+                    </tbody>
+                </table>
+            </div>
         </div> 
         
         

@@ -44,7 +44,7 @@ async function updateEntry() {
     var entryName = await ipcRenderer.invoke('get-current-entry-name')
     //send to main for be updated
     var message = await ipcRenderer.invoke('update-entry', entry_json, entryName)
-    console.log(message)
+    //displat message
     messageDiv.innerText = message
 }
 
@@ -66,7 +66,8 @@ async function saveNewEntry() {
     var entry = new Entry(title.innerText,body.innerText, tagsArr)
     //send to main for be persisted
     var message = await ipcRenderer.invoke('create-entry', entry)
-    console.log(message)
+    //display message
+    messageDiv.innerText = message
 }
 
 
