@@ -1,4 +1,3 @@
-import { Console } from "console";
 import { ipcRenderer } from "electron";
 var messageDiv = document.querySelector('#message') as HTMLDivElement
 var title = document.querySelector('#entry-title') as HTMLDivElement
@@ -9,10 +8,12 @@ var btn_create_entry = document.querySelector('#create-entry') as HTMLDivElement
 
 btn_create_entry ? btn_create_entry.onclick = () => { return clickCreateEntryBtn(); } : console.log('btn_create_entry is null');
 
+//Temp
+var entryTemp:Entry = new Entry()
 async function clickCreateEntryBtn() {
     //get entry text & put in entry object
-    entryTemp.title = title.innerText
-    entryTemp.body = body.innerText
+    entryTemp.title = title.innerHTML
+    entryTemp.body = body.innerHTML
     //send to backend to be persisted
     var entry_json = JSON.stringify(entryTemp);
     var message:string = await ipcRenderer.invoke('create-entry', entry_json);
@@ -23,8 +24,7 @@ async function clickCreateEntryBtn() {
 
 
 // ********   Handling The Tag Pop   ********** */
-//Temp
-var entryTemp:Entry
+
 //Buttons
 var btn_open_tags_popup = document.querySelector('#btn-add-tags') as HTMLDivElement
 var btn_add_tags = document.querySelector('#add-selected-tags') as HTMLDivElement

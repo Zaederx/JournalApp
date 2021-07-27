@@ -218,3 +218,9 @@ ipcMain.handle('delete-tags', async (event, tags:string[]) => {
   var tagsHTML = await tDelete.deleteTags(tags)
   return tagsHTML
 })
+
+//i.e. delete entry symlink from tag folder
+ipcMain.handle('remove-entry-tags', async (event,tagnames:string[]) => {
+  var message = await tDelete.removeEntrySymlinks(tagnames,this_selectedEntryName)
+  return message
+})

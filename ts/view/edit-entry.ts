@@ -37,7 +37,7 @@ async function updateEntry() {
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
-    var entry = new Entry(title.innerText,body.innerText, tagsArr)
+    var entry = new Entry(title.innerHTML,body.innerHTML, tagsArr)
     //turn entry to json format - ready for saving to file
     var entry_json = JSON.stringify(entry);
     //get current entry name
@@ -63,7 +63,7 @@ async function saveNewEntry() {
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
-    var entry = new Entry(title.innerText,body.innerText, tagsArr)
+    var entry = new Entry(title.innerHTML,body.innerHTML, tagsArr)
     //send to main for be persisted
     var message = await ipcRenderer.invoke('create-entry', entry)
     //display message
@@ -148,8 +148,10 @@ async function removeSelectedTags() {
     var newEntryJson = JSON.stringify(entry)
     console.log('newEntryJson:',newEntryJson)
     var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
+    //remove old entry symlinks from tag folders
+    var message2 = await ipcRenderer.invoke('remove-entry-tags',selectedTags)
     //display message
-    messageDiv.innerText = message
+    messageDiv.innerText = message, message2
     //page refresh
     displayCurrentEntry()
 }

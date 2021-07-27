@@ -34,3 +34,20 @@ export function deleteTags(tags: string[]): string | PromiseLike<string> {
     return message
 }
 
+export async function removeEntrySymlinks(tagnames: string[], entryName: string) {
+    var message = ''
+    tagnames.forEach ( tag => {
+        try {
+            var path =  paths.join(dir.tagDirectory,tag,entryName)
+            fs.promises.unlink(path)
+            message = 'Successfully removed tag from entry'
+        }
+        catch (error) {
+            console.log(error)
+            message = 'Error removing tags from entry'
+        }
+    })
+    
+    return message
+}
+
