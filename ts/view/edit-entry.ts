@@ -138,9 +138,9 @@ async function removeSelectedTags() {
     tempTags.forEach (tag => {
         console.log('iteration:',i)
         console.log('tag:',tag)
-        //if tag is in set of tags to remove - then remove
-        tagToRemove.has(tag) ? entry.tags.splice(i,1) : i++
-        
+        //if tag is in set of tags to remove - then remove 
+        //...(unless tag is 'all' - every entry is part of all)
+        tagToRemove.has(tag) && tag != 'all' ? entry.tags.splice(i,1) : i++
         console.log('tagToRemove:',tagToRemove.has(tag))
     })
     //persist changes
