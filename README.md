@@ -17,7 +17,7 @@ Clone or download the repository then `cd` to that folder in the commandline / t
 ## Compared to Version 1...
 <img width="927" alt="image" src="https://user-images.githubusercontent.com/38586415/105251411-57f56a00-5b73-11eb-9cd9-cfa911de121f.png">
 
-Images Attributed to:
+Images in Version 1 Attributed to:
 
 Settings button icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 
