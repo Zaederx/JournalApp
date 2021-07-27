@@ -44,6 +44,7 @@ $side-panel: rgb(113, 120, 113);
     grid-template-columns: 50px 320px auto 50px 100px 20px;//6 columns
     grid-template-rows: 50px 50px 20px 50px 20px auto 20px;//7 rows
     background-color: $main;
+    overflow-y: clip;
 }
 
 .heading {
@@ -107,6 +108,7 @@ $side-panel: rgb(113, 120, 113);
     background-color: $side-panel-green;
     display: none;
     grid-template-columns: 130px auto;
+    overflow-y: clip;
     z-index: 1;
 }
 
