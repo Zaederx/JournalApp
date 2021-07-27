@@ -19,11 +19,6 @@ import { EntryDate } from '../../classes/EntryDate';
  * ``` event.reply(address, message);```
  * @return html `div` list of entry names
  * 
- * .
- * 
- * .
- * 
- * .
  */
 export async function readDirFiles(dir:string) {
   
@@ -41,6 +36,14 @@ export async function readDirFiles(dir:string) {
   return files
 }
 
+/**
+ * Returns a sorted EntryDate array.
+ * EntryDates contain entry's matched to their creation date
+ * Creation date (btime) is used to sort them into order of last
+ * created to first created entry
+ * @param dir directory
+ * @returns EntryDate[]
+ */
 export async function readDirFilesEntryDate(dir:string) {
   console.log('ipcMain: Reading new Entry - ' + dir);
   

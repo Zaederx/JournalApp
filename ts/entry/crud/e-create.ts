@@ -15,7 +15,6 @@ export async function createEntry(entryJson:string) {
   var fileName:string = eDate.dateStr() + ".json";
 
   //if directory doesn't exist - create directory
-  
   if (!fs.existsSync(dir.allEntries)) {
     fs.promises.mkdir(dir.tagDirectory)
   }

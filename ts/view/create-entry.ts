@@ -123,15 +123,9 @@ async function addSelectedTagsToEntry() {
 
 
 
-
-
-// Handling Popup table filtering
-//  var btn_addTag = document.querySelector('#t-view') as HTMLDivElement
  var tagTableBody3 = document.querySelector('#tag-table-body') as HTMLTableElement
  var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
 
- //TODO Add a successful message/alert box adding a new tag
- 
 
 //fill tag popup table
 async function fillTagTable(tableBody:HTMLTableElement=tagTableBody3) {

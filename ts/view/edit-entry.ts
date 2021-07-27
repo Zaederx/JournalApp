@@ -81,6 +81,7 @@ var close_btn = document.querySelector('#close-btn') as HTMLDivElement
 btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry() : console.log('add_tags btn is null')
 btn_remove_tags ? btn_remove_tags.onclick = () => removeSelectedTags() : console.warn('btn_remove_tags is null')
 close_btn ? close_btn.onclick = () => toggleEditTagPopup() : console.warn('popup close_btn is null')
+
 function editEntryTags() {
     console.warn('editEntryTag called')
     toggleEditTagPopup()
@@ -191,17 +192,12 @@ function hideTagPopup() {
 }
 
 
-
-
 // Handling Popup table filtering
 //  var btn_addTag = document.querySelector('#t-view') as HTMLDivElement
  var tagTableBody1 = document.querySelector('#tag-table-body') as HTMLTableElement
  var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
 
-//  tag_searchbar ? tag_searchbar.onkeyup = () => filterTable() : console.log('tag_input is null');
- //TODO Add a successful message/alert box adding a new tag
  
-
 //fill tag popup table
 async function fillTagTable(tableBody:HTMLTableElement=tagTableBody1) {
     //get all html tags
@@ -216,9 +212,8 @@ async function fillTagTable(tableBody:HTMLTableElement=tagTableBody1) {
     });
 }
 
- 
- 
- const plain = ''//'rgb(224, 221, 210)';//'#e0ddd2'//only works with rgb - becuase style.backgroundColor property is returned in rgb
+//Note: These only works with rgb - becuase style.backgroundColor property is returned in rgb
+ const plain = ''//'rgb(224, 221, 210)';//'#e0ddd2'
  const highlighted = 'rgb(255, 245, 107)' //'#fff56b';
  const clicked = 'rgb(240, 92, 53)'//'#f05c35';
  /**
@@ -313,5 +308,3 @@ async function fillTagTable(tableBody:HTMLTableElement=tagTableBody1) {
         matchFound == true ?  row.style.display = '' : row.style.display = 'none';
     });
  }
-
- //TODO - ENABLE SEARCHBAR

@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron"
-//TODO remove selected tags from an entry
+
 //message Div
 var messageDiv = document.querySelector('#message') as HTMLDivElement
 // Buttons
@@ -42,8 +42,6 @@ window.onload = () => fillTagTable()
 //var btn_addTag = document.querySelector('#t-view') as HTMLDivElement
 var tagTableBody2 = document.querySelector('#tag-table-body') as HTMLTableElement
 var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
-
-//TODO Add a successful message/alert box adding a new tag
 
 //fill tag popup table
 async function fillTagTable(tableBody:HTMLTableElement=tagTableBody2) {
@@ -157,7 +155,6 @@ function filterTable(tagTableBody:HTMLTableElement=tagTableBody2, input:HTMLDivE
    });
 }
 
-//TODO - ENABLE SEARCHBAR
 
 /**
  * Get Selected Tags

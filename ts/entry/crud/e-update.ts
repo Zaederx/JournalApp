@@ -1,7 +1,7 @@
 import paths from 'path'
 import * as fs from 'fs';
 import * as eCreate from './e-create'
-import * as dirs from '../../directory';//TODO add directory variable - easy to change all at once in future
+import * as dirs from '../../directory';
 
 
 /**
@@ -11,6 +11,7 @@ import * as dirs from '../../directory';//TODO add directory variable - easy to 
  * @returns message - success or error message
  */
 export function updateEntry(entry_json:string, entry_filename:string) {
+    // filepath of entry
     var filepath:string = paths.join(dirs.allEntries, entry_filename);
     var message
     try {
@@ -20,8 +21,8 @@ export function updateEntry(entry_json:string, entry_filename:string) {
     catch (error) {
         message = 'Error updating file:'+error
     }
-
     console.log(message)
+    //symlink entry to related tags
     eCreate.symlinkEntryFile(entry_json,entry_filename)
 
     return message
