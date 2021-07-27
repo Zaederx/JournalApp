@@ -200,6 +200,7 @@ $side-panel: rgb(113, 120, 113);
 
 .edit-tags > table{
     width: 100%;
+    overflow-y: scroll;
 }
 
 .edit-tags-popup {
