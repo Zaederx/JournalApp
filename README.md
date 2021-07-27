@@ -1,6 +1,9 @@
 # JournalApp - Refactored and Design Update
  Jounalling App
 
+## Instructions
+Clone or download the repository then `cd` to that folder in the commandline / terminal. Then enter `npm start`and it will load up.
+
 [Trello Page](https://trello.com/b/CXi4WL52)
 
 ## Version 3
