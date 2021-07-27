@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron"
-
+//TODO remove selected tags from an entry
 //message Div
 var messageDiv = document.querySelector('#message') as HTMLDivElement
 // Buttons
@@ -12,7 +12,7 @@ add_tag_btn ? add_tag_btn.onclick = () => createNewTag() : console.warn('add_tag
 remove_tag_btn ? remove_tag_btn.onclick = () => deleteSelectedTags() : console.warn('remove_tag_btn is null')
 
 
-async function createNewTag() {
+export async function createNewTag() {
     //get input
     var tag:string = searchbar.innerText
     //send tag to be persisted

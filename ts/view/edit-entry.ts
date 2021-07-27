@@ -72,12 +72,14 @@ async function saveNewEntry() {
 
 
 //******** Handling The Tag Pop ********** */
-var tags_popup = document.querySelector('#edit-tags-popup') as HTMLDivElement
-var add_tags = document.querySelector('#add-selected-tags') as HTMLDivElement
-add_tags ? add_tags.onclick = () => addSelectedTagsToEntry() : console.log('add_tags btn is null')
+var btn_tags_popup = document.querySelector('#edit-tags-popup') as HTMLDivElement
+var btn_add_tags = document.querySelector('#add-selected-tags') as HTMLDivElement
+var btn_remove_tags = document.querySelector('#remove-selected-tags') as HTMLDivElement
 var main = document.querySelector('#main-container') as HTMLDivElement
 var close_btn = document.querySelector('#close-btn') as HTMLDivElement
 
+btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry() : console.log('add_tags btn is null')
+btn_remove_tags ? btn_remove_tags.onclick = () => removeSelectedTags() : console.warn('btn_remove_tags is null')
 close_btn ? close_btn.onclick = () => toggleEditTagPopup() : console.warn('popup close_btn is null')
 function editEntryTags() {
     console.warn('editEntryTag called')
@@ -93,8 +95,10 @@ function getSelectdTags(tagTableBody:HTMLTableElement=tagTableBody1) {
     var rows = tagTableBody?.querySelectorAll('tr')
     var tags:string[] = []
     rows.forEach( row => {
-        var tag = row.cells[0].innerText
-        tags.push(tag)
+        //add tags if selected/clicked
+        if (row.style.backgroundColor == clicked) {
+            tags.push(row.cells[0].innerHTML)
+        }
     })
     return tags
 }
@@ -114,6 +118,34 @@ async function addSelectedTagsToEntry() {
     })
     //persist changes
     var newEntryJson = JSON.stringify(entry)
+    var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
+    //display message
+    messageDiv.innerText = message
+    //page refresh
+    displayCurrentEntry()
+}
+
+async function removeSelectedTags() {
+    var selectedTags:string[] = getSelectdTags()
+    //get current entry
+    var entryJson = await ipcRenderer.invoke('get-current-entry')
+    var entry:Entry = JSON.parse(entryJson)
+    //for each tag - remove if in list
+    var tagToRemove = new Set(selectedTags)
+    var i = 0
+    var tempTags:string[] = [] 
+    tempTags = entry.tags.slice()
+    tempTags.forEach (tag => {
+        console.log('iteration:',i)
+        console.log('tag:',tag)
+        //if tag is in set of tags to remove - then remove
+        tagToRemove.has(tag) ? entry.tags.splice(i,1) : i++
+        
+        console.log('tagToRemove:',tagToRemove.has(tag))
+    })
+    //persist changes
+    var newEntryJson = JSON.stringify(entry)
+    console.log('newEntryJson:',newEntryJson)
     var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
     //display message
     messageDiv.innerText = message
@@ -150,12 +182,12 @@ function unblurBackground() {
 
 function displayTagPopup() {
     //display edit tag popup
-    tags_popup.style.display = 'grid'
+    btn_tags_popup.style.display = 'grid'
 }
 
 function hideTagPopup() {
     //display edit tag popup
-    tags_popup.style.display = 'none'
+    btn_tags_popup.style.display = 'none'
 }
 
 

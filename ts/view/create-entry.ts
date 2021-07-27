@@ -90,8 +90,10 @@ function getSelectdTags(tagTableBody:HTMLTableElement=tagTableBody3) {
     var rows = tagTableBody?.querySelectorAll('tr')
     var tags:string[] = []
     rows.forEach( row => {
-        var tag = row.cells[0].innerText
-        tags.push(tag)
+        //add tags if selected/clicked
+        if (row.style.backgroundColor == clicked) {
+            tags.push(row.cells[0].innerHTML)
+        }
     })
     return tags
 }
