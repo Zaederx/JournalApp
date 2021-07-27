@@ -1,6 +1,7 @@
 # JournalApp - Refactored and Design Update
  Jounalling App
 
+[See Video](https://youtu.be/YHcCa2SDqf0)
 ## Instructions
 Clone or download the repository then `cd` to that folder in the commandline / terminal. Then enter `npm start`and it will load up.
 
