@@ -3,7 +3,7 @@
 
 [See Video](https://youtu.be/YHcCa2SDqf0)
 ## Instructions
-Clone or download the repository then `cd` to that folder in the commandline / terminal. Then enter `npm start`and it will load up.
+Clone or download the repository then `cd` to that folder in the commandline / terminal. Then enter `npm install` (for node_modules to install) then `npm start`and it will load up.
 
 [Trello Page](https://trello.com/b/CXi4WL52)
 
