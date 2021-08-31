@@ -1,7 +1,7 @@
 # JournalApp - Refactored and Design Update
  Jounalling App
 
-##[See YouTube Video Walthrough](https://youtu.be/YHcCa2SDqf0)
+## [See YouTube Video Walthrough](https://youtu.be/YHcCa2SDqf0)
 ## Instructions
 Clone or download the repository then `cd` to that folder in the commandline / terminal. Then enter `npm install` (for node_modules to install) then `npm start`and it will load up.
 
