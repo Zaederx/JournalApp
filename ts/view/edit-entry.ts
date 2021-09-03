@@ -117,8 +117,10 @@ async function addSelectedTagsToEntry() {
         //if has new - dont add, else add newTag to entry.tags
         tagSet.has(tag) ? null : entry.tags.push(tag)
     })
+
     //persist changes
-    var newEntryJson = JSON.stringify(entry)
+    var entryUpdated = new Entry(title.innerHTML,body.innerHTML,entry.tags)
+    var newEntryJson = JSON.stringify(entryUpdated)
     var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
     //display message
     messageDiv.innerText = message
@@ -249,64 +251,4 @@ async function fillTagTable(tableBody:HTMLTableElement=tagTableBody1) {
     });
  }
  
- /**
-  * Encloses tag names in html.
-  * This is used in preparation for being added
-  * to html table body.
-  * 
-  * i.e.:
-  * ``` 
-  * var html:string = '';
-  * tags.forEach( tag => {
-  *     html += '<tr><td>'+tag+'</td></tr>\n';
-  * });
-  * return html;
-  * ```
-  * @param tags array of tagnames
-  * @return html
-  */
- function tagsToHtml(tags:string[]):string {
-     var html:string = '';
-     tags.forEach( tag => {
-         if (tag.charAt(0) == '.') {/* Do not add .DS_STORE / System files*/}
-         else html += '<tr>\n'+
-         '<td>'+tag+'</td>\n' + 
-         '<td>'+'default'+'</td>\n' + 
-         '<td>'+'default'+'</td>\n'
-         +'</tr>\n';
-     });
-     return html;
- }
- 
- /**
-  * Filters html table against input.
-  * Returns result of the search as a string.
-  * Loops thorugh each `<tr>` and checks if any `td` cell
-  * matches the input. If a match if found in any cell, display that entire row,
-  * otherwise hide the entire row that the cell belongs to.
-  * @param tagTableBody - table to be filtered
-  * @param input - the search bar the take the user input
-  * @param displayViewFunc - the function that returns the view (need to refresh view after filtering to work)
-  * @return res string of html rows that match
-  */
- function filterTable(tagTableBody:HTMLTableElement=tagTableBody1, input:HTMLDivElement=tag_searchbar) {
-    console.log('*** filterTable called ***')
-    //Ensure search value is not undefined, then displayTagView() if an empty string
-    var searchValue:string =  input?.innerText.toLowerCase() == undefined ? '' : input.innerText.toLocaleLowerCase();
 
-    //Get all rows
-    var rows = tagTableBody?.querySelectorAll('tr');
-    var res = '';
-    
-    //In each row, check if any cells have a match
-    rows?.forEach ( row => {
-        var matchFound:boolean = false;
-        var cells = row.querySelectorAll('td');//could also use row.cells
-        cells.forEach ( cell => {
-            matchFound = cell.innerHTML.toLowerCase().indexOf(searchValue) > -1 ?  true : matchFound; 
-        });
-        /*if matchFound in any cell of a row, add the whole row to results
-        @ts-ignore - tsc thinks it will always evaluate to false...It doesn't...*/
-        matchFound == true ?  row.style.display = '' : row.style.display = 'none';
-    });
- }
