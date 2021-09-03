@@ -130,12 +130,13 @@ function fetchBtime(directory:string,filename:string, arr:EntryDate[]) {
                link, and not to file itself.
    */
   //Addtionally - %B inserts File BirthTime (Creation Date)
-    var stat_birth = process.spawnSync('stat',['-f','%B', '-L', directory+filename]);
-    console.log('output',stat_birth.output);
+    var stat_birth = process.spawnSync('stat',['-f','%B', '-L', directory+'/'+filename]);
+    console.log('\x1b[32m%s%s\x1b[0m','stat_birth.output:',stat_birth.output);
 
     //get file birthtime as str -> number
     var bString:string = stat_birth.stdout;
-    var btime:number = Number(stat_birth.stdout);
+    console.log('\x1b[32m%s%s\x1b[0m','stat_birth.stdout:',stat_birth.stdout)
+    var btime:number = Number(bString);
     //create EntryDate - name and btime
     var eDate:EntryDate = new EntryDate(filename, btime);
     //add to list of EntryDates
