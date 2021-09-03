@@ -1,5 +1,4 @@
 import { ipcRenderer } from "electron"
-import { deleteTag } from "../tag/crud/t-delete"
 
 var messageDiv = document.querySelector('#message') as HTMLDivElement
 var title = document.querySelector('#entry-title') as HTMLDivElement
