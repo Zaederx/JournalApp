@@ -24,7 +24,7 @@ function merge(a1:EntryDate[],a2:EntryDate[]) {
   
     //which is bigger add to arr and remove from a1 or a2    
     while (a1.length && a2.length) {
-        arr.push(a1[0].btime < a2[0].btime ? a1.shift() as EntryDate : a2.shift() as EntryDate)
+        arr.push(a1[0].btime > a2[0].btime ? a1.shift() as EntryDate : a2.shift() as EntryDate)
     }
 
     //which ever a has some left add to arr
