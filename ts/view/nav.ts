@@ -3,15 +3,40 @@ import { ipcRenderer } from "electron"
 const panel_tags = document.querySelector('#tags') as HTMLDivElement
 var panel_entries = document.querySelector('#entries') as HTMLDivElement
 
-var btn_tags = document.querySelector('#btn-tags') as HTMLDivElement
-var btn_edit_tags = document.querySelector('#btn-edit-tags') as HTMLDivElement
-var btn_add_entry = document.querySelector('#btn-add-entry') as HTMLDivElement
-var btn_settings = document.querySelector('#btn-settings') as HTMLDivElement
+if (document.querySelector('#btn-tags'))
+{
+    var btn_tags = document.querySelector('#btn-tags') as HTMLDivElement
+    btn_tags ? btn_tags.onclick = () => clickBtnTags() : console.log('btn_tags is null')
+}
+if (document.querySelector('#btn-edit-tags'))
+{
+    var btn_edit_tags = document.querySelector('#btn-edit-tags') as HTMLDivElement
+    btn_edit_tags ? btn_edit_tags.onclick = () => clickBtnEditTags() : console.log('btn_edit_tags is null')
+}
+if (document.querySelector('#btn-add-entry'))
+{
+    var btn_add_entry = document.querySelector('#btn-add-entry') as HTMLDivElement
+    btn_add_entry ? btn_add_entry.onclick = () => clickBtnAddEntry() : console.log('btn_add_entry is null')
+}
 
-var side_panel = document.querySelector('#side-panel') as HTMLDivElement
-var loading = document.querySelector('#loader') as HTMLDivElement
+if (document.querySelector('#btn-settings'))
+{
+    var btn_settings = document.querySelector('#btn-settings') as HTMLDivElement
+    btn_settings ?  btn_settings.onclick = () => clickBtnSettings() : console.log('btn_settings is null')
+}
 
-btn_tags ? btn_tags.onclick = () => clickBtnTags() : console.log('btn_tags is null')
+if (document.querySelector('#side-panel'))
+{
+    var side_panel = document.querySelector('#side-panel') as HTMLDivElement
+}
+
+if (document.querySelector('#loader'))
+{
+    var loading = document.querySelector('#loader') as HTMLDivElement
+}
+
+
+
 
 function clickBtnTags() {
     toggleSidePanel()
@@ -41,20 +66,20 @@ function toggleSidePanel() {
     }
 }
 
-btn_add_entry ? btn_add_entry.onclick = () => clickBtnAddEntry() : console.log('btn_add_entry is null')
+
 function clickBtnAddEntry() {
     //open create entry view
     ipcRenderer.invoke('create-entry-view')
 }
 
-btn_edit_tags ? btn_edit_tags.onclick = () => clickBtnEditTags() : console.log('btn_edit_tags is null')
+
 function clickBtnEditTags() {
     //open edit tags view
     ipcRenderer.invoke('edit-tags')
 }
 
 
-btn_settings ?  btn_settings.onclick = () => clickBtnSettings() : console.log('btn_settings is null')
+
 function clickBtnSettings() {
     //open settings view
     ipcRenderer.invoke('settings-view')

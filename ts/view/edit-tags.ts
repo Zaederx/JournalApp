@@ -1,17 +1,23 @@
 import { ipcRenderer } from "electron"
 
-//message Div
+/** message Div*/
 var messageDiv = document.querySelector('#message') as HTMLDivElement
-// Buttons
+
+/** Buttons */ 
 var add_tag_btn = document.querySelector('#add-new-tag') as HTMLDivElement
 var remove_tag_btn = document.querySelector('#remove-selected-tags') as HTMLDivElement
-var searchbar = document.querySelector('#tag-searchbar') as HTMLDivElement
-searchbar.oninput = () => filterTable()
 
 add_tag_btn ? add_tag_btn.onclick = () => createNewTag() : console.warn('add_tag_btn is null')
 remove_tag_btn ? remove_tag_btn.onclick = () => deleteSelectedTags() : console.warn('remove_tag_btn is null')
 
+/** Searchbar */
+var searchbar = document.querySelector('#tag-searchbar') as HTMLDivElement
+searchbar.oninput = () => filterTable()
 
+
+/**
+ * Creates a new tag
+ */
 async function createNewTag() {
     //get input
     var tag:string = searchbar.innerText
@@ -43,17 +49,26 @@ window.onload = () => fillTagTable()
 var tagTableBody2 = document.querySelector('#tag-table-body') as HTMLTableElement
 var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
 
-//fill tag popup table
+/** fill tag popup table */
 async function fillTagTable(tableBody:HTMLTableElement=tagTableBody2) {
    //get all html tags
    var tagsHTML = await ipcRenderer.invoke('get-tags-table-rows')
-   console.log('tagsHTML',tagsHTML)
+   console.log('tagsHTML', tagsHTML)
    //fill table with html tag information
    tableBody.innerHTML = tagsHTML
    var rows = tableBody?.querySelectorAll('tr');
    //make row clickable - i.e. highlight on click and mouseover events
    rows?.forEach( row => {
-       makeTTRowClickable(row as HTMLTableRowElement);
+        makeTTRowClickable(row as HTMLTableRowElement);
+        //if row is for the all tag - remove event highlighting
+        if (row.cells[0].innerText == 'all') 
+        {
+            row.removeEventListener('mouseover', function(){})
+            row.removeEventListener('mouseleave', function(){})
+            row.removeEventListener('mouseclick', function (){})
+            row.style.backgroundColor = ''
+        }
+       
    });
 }
 
@@ -74,8 +89,13 @@ function makeTTRowClickable(row:HTMLTableRowElement) {
    //if mouse goes over row - highlight it yellow
    row.addEventListener('mouseover', function (event) {
        console.log('mouseover:'+highlighted);
-       if (row.style.backgroundColor == clicked) {console.log('backgroundColor == clicked');row.style.backgroundColor = clicked;}
-       else {
+       if (row.style.backgroundColor == clicked) 
+       {
+        console.log('backgroundColor == clicked');
+        row.style.backgroundColor = clicked;
+        }
+       else 
+       {
            row.style.backgroundColor = (row.style.backgroundColor != clicked && row.style.backgroundColor != highlighted) ?  highlighted : row.style.backgroundColor;
        }
    });
@@ -83,8 +103,14 @@ function makeTTRowClickable(row:HTMLTableRowElement) {
    row.addEventListener('mouseleave',function(event) {
        console.log('left:'+plain);
        console.log('\n\n\n\n\n**********row:'+row.style.backgroundColor+'*************\n\n\n\n\n\n\n')
-       if (row.style.backgroundColor == clicked) {console.log('backgroundColor == clicked');row.style.backgroundColor = clicked;}
-       else {row.style.backgroundColor = row.style.backgroundColor == highlighted ?  plain: row.style.backgroundColor;}
+       if (row.style.backgroundColor == clicked) 
+       {
+        console.log('backgroundColor == clicked');row.style.backgroundColor = clicked;
+        }
+       else 
+       {
+        row.style.backgroundColor = row.style.backgroundColor == highlighted ?  plain: row.style.backgroundColor;
+        }
    });
    //if row is clicked - highlight if red
    row.addEventListener('click',function(event) {

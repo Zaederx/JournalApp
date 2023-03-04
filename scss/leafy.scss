@@ -1,0 +1,271 @@
+$light-limey-green: rgb(190, 202, 192);
+$side-panel-gray: #6F7871;
+
+//@at-root
+$main : rgb(72, 74, 78);
+$body : rgb(190, 202, 192);
+$panel-tag : rgb(243, 236, 211); //#6F7871
+$selected : $body;
+$hover : $body;
+$side-panel : rgb(111, 120, 113);
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 100px 800px;
+    height: 560px;
+}
+
+.grid-container .nav {
+    grid-column: 1;
+    background-color: $light-limey-green;
+    color:black;
+}
+
+.nav-btn {
+    margin: auto;
+    padding-top: 20px;
+    cursor: pointer;
+    color:black;
+}
+
+.nav-btn:hover {
+    background-color: $selected;
+}
+
+.nav-btn > img {
+    height: 50px;
+    margin-left: 20px;
+    margin-bottom: 30px;
+}
+
+.grid-container .main-container {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: 50px 320px auto 50px 100px 20px;//6 columns
+    grid-template-rows: 50px 50px 20px 50px 20px auto 20px;//7 rows
+    background-color: $main;
+    overflow-y: clip;
+    color:white;
+}
+
+.heading {
+    grid-column: 2 / span 2;
+    grid-row: 1;
+    color:white;
+}
+
+.messageDiv {
+    grid-column: 2 / span 2;
+    grid-row: 1;
+    color: $selected;
+}
+.buttons {
+    grid-column: 2 / span 2;
+    grid-row: 2;
+    padding-top: 20px;
+    cursor: pointer;
+    // background-color: $body;
+}
+
+.buttons > div {
+    display: inline;
+    background-color: $body;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.buttons > div:hover {
+   background-color: $hover;
+}
+
+.entry-title {
+    grid-column: 2 / span 2;
+    grid-row: 4;
+    background-color: $body;
+}
+
+.entry-body {
+    grid-column: 2 /span 2;
+    grid-row: 6;
+    background-color: $body;
+}
+
+.entry-tags {
+    grid-column: 5;
+    grid-row: 4 / span 3;
+    background-color: $body;
+}
+.entry-tags > div {
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    margin: 10px;
+    background-color: $panel-tag;
+}
+
+.side-panel {
+    grid-column: 1 / span 2;
+    grid-row: 1 / span 7;
+    background-color: $side-panel-gray;
+    display: none;
+    grid-template-columns: 130px auto;
+    overflow-y: clip;
+    z-index: 1;
+}
+
+.side-panel .tags {
+    overflow-y: scroll;
+}
+
+.side-panel .tags > div{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    background-color: $panel-tag;
+    z-index: 1;
+    cursor: pointer;
+    color:black;
+}
+.side-panel .tags > div.selected {
+    background-color: $selected;
+}
+.side-panel .entries {
+    grid-column: 2;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    background-color: $selected;
+    overflow-y: scroll;
+}
+
+.side-panel .entries > div {
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+    background-color: $panel-tag;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.editable {
+    padding: 5px;
+}
+
+.editable:empty:before {
+    content: attr(data-placeholder);
+    color: rgb(109, 109, 109);
+    white-space: pre-wrap;
+    word-wrap: normal;
+}
+
+.side-panel .active.tag {
+    background-color: $selected;
+}
+
+//loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
+.loader {
+    grid-column: 2 / span 2;
+    grid-row: 3;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    border-bottom: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+    z-index: 3;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.edit-tags {
+    grid-column: 2 /span 2;
+    grid-row: 5 / span 2;
+    text-align: center;
+    background-color: $body;
+}
+.edit-tags > th{
+    margin: auto;
+}
+
+.edit-tags > table{
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.edit-tags-popup {
+    display: none;
+    grid-column: 2 / span 2;
+    grid-row: 5;
+    background-color: $side-panel;
+    z-index: 3;
+}
+
+.edit-tags-popup > * {
+    background-color: $side-panel;
+}
+
+.edit-tags-popup .button {
+    text-align: center;
+    background-color: rgb(224, 206, 102);
+    cursor: pointer;
+}
+
+.edit-tags-popup .button:hover {
+    background-color: $selected;
+}
+
+.grid-container .main-container-blur  {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: 50px 320px auto 50px 100px 20px;//6 columns
+    grid-template-rows: 50px 50px 20px 50px 20px auto 20px;//7 rows
+    background-color: $main;
+}
+//blur everything in .main-container-blur except edit-tags-popup
+.grid-container .main-container-blur > *:not(.edit-tags-popup) {
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+}
+
+//popup table close btn
+.close-btn {
+    font-size: larger;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    color: white;
+    background-color: rgb(219, 107, 107);
+    cursor: pointer;
+}
+
+.close-btn:hover{
+    background-color: rgb(226, 57, 57);
+}
+
+
+.table-row {
+    cursor: pointer;
+}
+
+//table cells
+.table-row > td {
+    padding: 15px;
+    text-align: center;
+}
+
+.tag-searchbar {
+    padding: 15px;
+    background-color: white;
+    color:black;
+}

@@ -224,3 +224,38 @@ ipcMain.handle('remove-entry-tags', async (event,tagnames:string[]) => {
   var message = await tDelete.removeEntrySymlinks(tagnames,this_selectedEntryName)
   return message
 })
+
+
+/** Handle CSS Theme Changes */
+const cssFilepath = path.join('css', 'theme.txt')
+async function getCurrentCssTheme()
+{
+    console.log('function getCurrentCssTheme() called')
+    //read file from css directory
+    var theme = await fs.promises.readFile(cssFilepath, 'utf-8')
+    return theme
+}
+/**
+ * Function to set the current CSS theme
+ * into a file.
+ * @param theme css theme string
+ */
+function setCurrentCSSTheme(theme:string)
+{
+    console.log('function setCurrentCSSTheme(theme:string) called')
+    
+    //try writing to file
+    try {
+        fs.promises.writeFile(cssFilepath,theme,'utf-8')
+    } 
+    //print any exceptions to console
+    catch (e) 
+    {
+        console.log(e)
+    }
+    
+}
+
+ipcMain.handle('get-current-css-theme', (e) => getCurrentCssTheme())
+//@ts-ignore
+ipcMain.handle('set-current-css-theme', (e,theme:string) => setCurrentCSSTheme(theme))

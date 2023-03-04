@@ -21,19 +21,19 @@ import { EntryDate } from '../../classes/EntryDate';
  * 
  */
 export async function readDirFiles(dir:string) {
-  
   console.log('ipcMain: Reading new Entry - ' + dir);
-  
-  var dirFiles:string[] = await fs.promises.readdir(dir,'utf-8')
-  var files:string[] = [];
-  //remove .DS_Store and other '.' files
-  dirFiles.forEach((filename)=> {
+  var filenames:string[] = [];
+  //get all files in the directory
+  var dirFilenames:string[] = await fs.promises.readdir(dir,'utf-8')
+
+  /** remove .DS_Store and other '.' files */
+  dirFilenames.forEach((filename)=> {
     if (filename.charAt(0) != '.') {
-      files.push(filename)
+      filenames.push(filename)
     }
   })
 
-  return files
+  return filenames
 }
 
 /**

@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as eDate from './dateStr';
 import * as dir from '../../directory'
-import {app} from 'electron'
 import paths from 'path'
 
 /**

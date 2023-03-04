@@ -79,7 +79,10 @@ You will need to have Node installed on your computer.
 
 
 ## Setup
-
+Make sure to install dependecies before running the project.
+```
+npm install
+```
 ## Running the Project
 Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then `npm start`. This will generate JavaScript files from the TypeScirpt files that are in the repository (and likewise SASS into CSS) and then it will load up the project on screen.
 
