@@ -13,6 +13,7 @@ import * as tUpdate from './tag/crud/t-update'
 import * as tDelete from './tag/crud/t-delete'
 import { mergeSort } from './algorithms/mergesort'
 
+//var for the selected entry
 var this_selectedEntryName = ''
 
 
