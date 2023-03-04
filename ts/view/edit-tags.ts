@@ -8,7 +8,7 @@ var add_tag_btn = document.querySelector('#add-new-tag') as HTMLDivElement
 var remove_tag_btn = document.querySelector('#remove-selected-tags') as HTMLDivElement
 
 add_tag_btn ? add_tag_btn.onclick = () => createNewTag() : console.warn('add_tag_btn is null')
-remove_tag_btn ? remove_tag_btn.onclick = () => deleteSelectedTags() : console.warn('remove_tag_btn is null')
+remove_tag_btn ? remove_tag_btn.onclick = () => removeSelectedTags() : console.warn('remove_tag_btn is null')
 
 /** Searchbar */
 var searchbar = document.querySelector('#tag-searchbar') as HTMLDivElement
@@ -18,26 +18,52 @@ searchbar.oninput = () => filterTable()
 /**
  * Creates a new tag
  */
-async function createNewTag() {
+async function createNewTag() 
+{
     //get input
     var tag:string = searchbar.innerText
-    //send tag to be persisted
-    var message = await ipcRenderer.invoke('create-tag', tag)
-    // display message
-    messageDiv.innerText = message
-    //refresh tag table
-    fillTagTable()
+    if (tag != null && tag != '') 
+    {
+        //send tag to be persisted
+        var message = await ipcRenderer.invoke('create-tag', tag)
+        // display message
+        messageDiv.innerText = message
+        //refresh tag table
+        fillTagTable()
+    }
 }
 
-async function deleteSelectedTags() {
+async function removeSelectedTags() 
+{
     //get selectedTags
     var tags:string[] = getSelectedTags()
-    //send tag to be deleted
-    var message = await ipcRenderer.invoke('delete-tags', tags)
-    //display message
-    messageDiv.innerText = message
-    //refresh tag table
-    fillTagTable()
+    //remove 'all' tag from tags
+    var tagsCopy = []
+    for(var i = 0; i < tags.length; i++) {
+        //if tag is not 'all' tag
+        if(tags[i] != 'all')
+        { 
+            tagsCopy.push(tags[i])
+        }
+    }
+    //if there's nothing no tags - do nothing
+    if(tagsCopy.length > 0 || tagsCopy.length != null || tagsCopy.length != undefined)
+    {
+        
+        //remove display message if only attempting to remove 'all' tag
+        if(tagsCopy[0] != 'all')
+        {
+            //send tag to be deleted
+            var message = await ipcRenderer.invoke('delete-tags', tagsCopy)
+            //display message
+            messageDiv.innerText = message
+        }
+        //else nothing
+        
+        //refresh tag table
+        fillTagTable()
+    }
+    
 }
 
 
@@ -50,7 +76,8 @@ var tagTableBody2 = document.querySelector('#tag-table-body') as HTMLTableElemen
 var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
 
 /** fill tag popup table */
-async function fillTagTable(tableBody:HTMLTableElement=tagTableBody2) {
+async function fillTagTable(tableBody:HTMLTableElement=tagTableBody2) 
+{
    //get all html tags
    var tagsHTML = await ipcRenderer.invoke('get-tags-table-rows')
    console.log('tagsHTML', tagsHTML)
@@ -63,9 +90,9 @@ async function fillTagTable(tableBody:HTMLTableElement=tagTableBody2) {
         //if row is for the all tag - remove event highlighting
         if (row.cells[0].innerText == 'all') 
         {
-            row.removeEventListener('mouseover', function(){})
-            row.removeEventListener('mouseleave', function(){})
-            row.removeEventListener('mouseclick', function (){})
+            row.addEventListener('mouseover', function(){})
+            row.addEventListener('mouseleave', function(){})
+            row.addEventListener('mouseclick', function (){})
             row.style.backgroundColor = ''
         }
        
@@ -175,7 +202,7 @@ function filterTable(tagTableBody:HTMLTableElement=tagTableBody2, input:HTMLDivE
        cells.forEach ( cell => {
            matchFound = cell.innerHTML.toLowerCase().indexOf(searchValue) > -1 ?  true : matchFound; 
        });
-       /*if matchFound in any cell of a row, add the whole row to results
+       /* if matchFound in any cell of a row, add the whole row to results
        @ts-ignore - tsc thinks it will always evaluate to false...It doesn't...*/
        matchFound == true ?  row.style.display = '' : row.style.display = 'none';
    });
