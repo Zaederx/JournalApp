@@ -103,6 +103,7 @@ $side-panel : rgb(111, 120, 113);
     margin: auto;
     margin: 10px;
     background-color: $panel-tag;
+    color: $main;
 }
 
 .side-panel {
@@ -129,7 +130,7 @@ $side-panel : rgb(111, 120, 113);
     background-color: $panel-tag;
     z-index: 1;
     cursor: pointer;
-    color:black;
+    color: $main;
 }
 .side-panel .tags > div.selected {
     background-color: $selected;
@@ -152,6 +153,7 @@ $side-panel : rgb(111, 120, 113);
     background-color: $panel-tag;
     z-index: 1;
     cursor: pointer;
+    color: $main;
 }
 
 .editable {
