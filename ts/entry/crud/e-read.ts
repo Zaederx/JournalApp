@@ -47,17 +47,19 @@ export async function readDirFiles(dir:string) {
 export async function readDirFilesEntryDate(dir:string) {
   console.log('ipcMain: Reading new Entry - ' + dir);
   
-  var dirFiles:string[] = await fs.promises.readdir(dir,'utf-8')
-  var files:string[] = [];//files without .DS_Store 
+  var dirFilenames:string[] = await fs.promises.readdir(dir,'utf-8')
+  var filenames:string[] = [];//files without .DS_Store 
   //remove .DS_Store and other '.' files
-  dirFiles.forEach((filename)=> {
+  dirFilenames.forEach((filename)=> {
     if (filename.charAt(0) != '.') {
-      files.push(filename)
+      filenames.push(filename)
     }
   })
 
   var arr:EntryDate[] = [];
-  files.forEach( file => fetchBtime(dir,file,arr));
+  //for each filename fecth the birthtime and add to the entryDate array -> arr
+  filenames.forEach( file => fetchBtime(dir,file,arr));
+  //use mergesort to sort the entries and produce new sorted array
   var newArr:EntryDate[] = entryMergeSort.mergeSort(arr)
 
   return newArr
