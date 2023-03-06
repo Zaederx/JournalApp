@@ -2,6 +2,11 @@ import { EntryDate } from "../classes/EntryDate"
 
 /**
  * MergeSort - ascending order - smallest to biggest
+ * i.e. arr[0] = 10, arr[2] = 20 for example
+ * 
+ * This means that when fetching data from the array in ascending order
+ * the entries are put into the navigation in descending order.
+ * (as the smallest date will be then 'pushed down' by the following entry)
  */
  export function mergeSort(arr:EntryDate[]) {
     if (arr.length < 2) {
