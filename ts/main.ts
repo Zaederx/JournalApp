@@ -110,6 +110,10 @@ ipcMain.handle('edit-tags', () => {
   window.loadFile('html/edit-tags.html')
 })
 
+ipcMain.handle('export-entries', () => {
+  window.loadFile('html/export.html')
+})
+
 ipcMain.handle('settings-view',() => {
   window.loadFile('html/settings.html')
 })
@@ -251,3 +255,9 @@ ipcMain.handle('export-entries-txt', (e, entriesArr) => export_entry.exportEntri
 ipcMain.handle('export-entries-json', (e, entriesFilepathsArr:string[]) =>  export_entry.exportEntriesJson(entriesFilepathsArr))
 
 ipcMain.handle('export-entries-pdf', (e, filepathArr:string[]) => export_entry.exportEntriesPdf(filepathArr))
+
+
+
+ipcMain.handle('get-tag-directory-filepath', (e) => {
+  return dir.tagDirectory
+})

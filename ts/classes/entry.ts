@@ -13,14 +13,14 @@ class Entry {
     }
 
     tagsToStringCSV():string {
-        var csv = this ? this.arrToStringCSV()  : 'all'
+        var csv = this ? this.tagsArrToStringCSV()  : 'all'
         return csv
     }
-    stringToArr(tagsString:string):string[] {
+    tagsStringToArr(tagsString:string):string[] {
         var arr:string[] = tagsString.split(',')
         return arr
     }
-    arrToStringCSV(tags:string[]=(this.tags)):string {
+    tagsArrToStringCSV(tags:string[]=(this.tags)):string {
         var entryTags:string = ''
         var count = 0
         tags.forEach((e)=> {
@@ -34,6 +34,19 @@ class Entry {
             
         })
         return entryTags
+    }
+
+    entryToTxt()
+    {
+        var entryTxt = this.title+'\n'
+        entryTxt = this.body+'\n'
+        entryTxt = this.tagsArrToStringCSV()
+        return entryTxt
+    }
+    entryToJson()
+    {
+        var json = { title:this.title, body:this.body , tags:this.tagsArrToStringCSV() }
+        return json
     }
     tagsToHTML(tags:string[]) {
         var tagsHtml = ''

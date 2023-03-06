@@ -15,8 +15,14 @@ if (document.querySelector('#btn-edit-tags'))
 }
 if (document.querySelector('#btn-add-entry'))
 {
-    var btn_add_entry = document.querySelector('#btn-add-entry') as HTMLDivElement
-    btn_add_entry ? btn_add_entry.onclick = () => clickBtnAddEntry() : console.log('btn_add_entry is null')
+    var btn_export = document.querySelector('#btn-add-entry') as HTMLDivElement
+    btn_export ? btn_export.onclick = () => clickBtnAddEntry() : console.log('btn_add_entry is null')
+}
+
+if(document.querySelector('#btn-export'))
+{
+    var btn_export = document.querySelector('#btn-export') as HTMLDivElement
+    btn_export ? btn_export.onclick = () => clickBtnExportEntries() : console.log('btn_add_entry is null')
 }
 
 if (document.querySelector('#btn-settings'))
@@ -78,7 +84,9 @@ function clickBtnEditTags() {
     ipcRenderer.invoke('edit-tags')
 }
 
-
+function clickBtnExportEntries() {
+    ipcRenderer.invoke('export-entries')
+}
 
 function clickBtnSettings() {
     //open settings view
