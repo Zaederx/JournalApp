@@ -12,6 +12,7 @@ A journalling project that I made while experiementing and learning about Node a
 ## Tables of Contents
 * [Background](#background)
 * [Images](#images)
+* [Attribution](#attribution)
 * [Technologies](#technologies)
 * [Requirements to run the project](#requirements-to-run-the-project)
 * [Setup](#setup)
@@ -25,18 +26,21 @@ A journalling project that I made while experiementing and learning about Node a
 I wanted to create an app that would allow people to journal. That meant having a system that interacted with the computers file system directly. Hearing about Node, and also being familiar with JavaScript, it became an ideal choice to work with Node and Electron to create this desktop applicaiton (as Node allow you to run JS on the computer system natively rather than just in the browser and electron renders HTML like a browser to produce app with Node.)
 
 ## Images
+## Version 4 - Themes added + Export + Bug fixes
 
-## Version 3
+
+## Version 3 - Design further updated
 <img width="922" alt="image" src="https://user-images.githubusercontent.com/38586415/127141972-c9b7d851-8dd8-4587-b72e-49c0f8d9d7d8.png">
 
 
-## Version 2
+## Version 2 - Design Updated
 <img width="927" alt="image" src="https://user-images.githubusercontent.com/38586415/123151514-71b91700-d45b-11eb-9bc7-6f81ef35a10e.png">
 
 ## Compared to Version 1...
 <img width="927" alt="image" src="https://user-images.githubusercontent.com/38586415/105251411-57f56a00-5b73-11eb-9cd9-cfa911de121f.png">
 
-Images in Version 1 Attributed to:
+## Attribution
+Icons Attributed to:
 
 Settings button icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 
@@ -47,6 +51,8 @@ Add file icon made by <a href="https://www.flaticon.com/authors/kiranshastry" ti
 Folder icon made by <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 
 File icon made by  <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+
+Export icon from <a href="https://iconmonstr.com/upload-20-svg/" title="iconmonstr">Iconmonstr</a>
 
 ## Technologies
 - [JavaScript](#javascript)
