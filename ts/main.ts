@@ -2,16 +2,21 @@ import {app, BrowserWindow, ipcMain, ipcRenderer } from 'electron';
 import path from 'path'
 import fs from 'fs'
 import * as dir from './directory'
+
+//Entry
 import * as eCreate from './entry/crud/e-create'
 import * as eRead from './entry/crud/e-read'
 import * as eUpdate from './entry/crud/e-update'
 import * as eDelete from './entry/crud/e-delete'
-
+//Tag
 import * as tCreate from './tag/crud/t-create'
 import * as tRead from './tag/crud/t-read'
 import * as tUpdate from './tag/crud/t-update'
 import * as tDelete from './tag/crud/t-delete'
-import { mergeSort } from './algorithms/mergesort'
+
+import * as theme from './theme/theme'
+
+import * as export_entry from './entry/export/export-entry'
 
 //var for the selected entry
 var this_selectedEntryName = ''
@@ -23,18 +28,22 @@ let window:BrowserWindow;
 
 var filename = 'default';
 
-function createWindow () {
+function createWindow () 
+{
   var integration = false;
-  if (process.env.NODE_ENV === 'test-main') {
+  if (process.env.NODE_ENV === 'test-main') 
+  {
      integration = true;
   }
 
-  window = new BrowserWindow({
+  window = new BrowserWindow
+  ({
     width: 921,
     height: 600,
     minWidth: 921,
     minHeight: 478,
-    webPreferences: {
+    webPreferences: 
+    {
         // worldSafeExecuteJavaScript: true ,
         contextIsolation: false,//otherwise "WorldSafe".. message still appears
         nodeIntegration: true, //whether you can access node methods - e.g. requires, anywhere in the app's js
@@ -43,13 +52,15 @@ function createWindow () {
 
   window.loadFile('html/create-entry.html');
 
-  if (process.env.NODE_ENV === 'dev-tools') {
+  if (process.env.NODE_ENV === 'dev-tools') 
+  {
     window.webContents.openDevTools();
   }
 }
 //if directory doesn't exist - create directory
 var directory = path.join(dir.allEntries)
-if (!fs.existsSync(directory)) {
+if (!fs.existsSync(directory)) 
+{
   try {
     fs.promises.mkdir(directory)
     console.log('Successfully created directory')
@@ -227,36 +238,16 @@ ipcMain.handle('remove-entry-tags', async (event,tagnames:string[]) => {
 })
 
 
-/** Handle CSS Theme Changes */
-const cssFilepath = path.join('css', 'theme.txt')
-async function getCurrentCssTheme()
-{
-    console.log('function getCurrentCssTheme() called')
-    //read file from css directory
-    var theme = await fs.promises.readFile(cssFilepath, 'utf-8')
-    return theme
-}
-/**
- * Function to set the current CSS theme
- * into a file.
- * @param theme css theme string
- */
-function setCurrentCSSTheme(theme:string)
-{
-    console.log('function setCurrentCSSTheme(theme:string) called')
-    
-    //try writing to file
-    try {
-        fs.promises.writeFile(cssFilepath,theme,'utf-8')
-    } 
-    //print any exceptions to console
-    catch (e) 
-    {
-        console.log(e)
-    }
-    
-}
 
-ipcMain.handle('get-current-css-theme', (e) => getCurrentCssTheme())
+
+ipcMain.handle('get-current-css-theme', (e) => theme.getCurrentCssTheme())
+
 //@ts-ignore
-ipcMain.handle('set-current-css-theme', (e,theme:string) => setCurrentCSSTheme(theme))
+ipcMain.handle('set-current-css-theme', (e,themeStr:string) => theme.setCurrentCssTheme(themeStr))
+
+//export entries to txt, json or pdf
+ipcMain.handle('export-entries-txt', (e, entriesArr) => export_entry.exportEntriesTxt(entriesArr))
+
+ipcMain.handle('export-entries-json', (e, entriesFilepathsArr:string[]) =>  export_entry.exportEntriesJson(entriesFilepathsArr))
+
+ipcMain.handle('export-entries-pdf', (e, filepathArr:string[]) => export_entry.exportEntriesPdf(filepathArr))
