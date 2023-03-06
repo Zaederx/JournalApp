@@ -6,7 +6,6 @@ var messageDiv = document.querySelector('#message') as HTMLDivElement
 /** Buttons */ 
 var add_tag_btn = document.querySelector('#add-new-tag') as HTMLDivElement
 var remove_tag_btn = document.querySelector('#remove-selected-tags') as HTMLDivElement
-
 add_tag_btn ? add_tag_btn.onclick = () => createNewTag() : console.warn('add_tag_btn is null')
 remove_tag_btn ? remove_tag_btn.onclick = () => removeSelectedTags() : console.warn('remove_tag_btn is null')
 
@@ -33,6 +32,9 @@ async function createNewTag()
     }
 }
 
+/**
+ * Remove selected tags
+ */
 async function removeSelectedTags() 
 {
     //get selectedTags
@@ -123,19 +125,28 @@ function makeTTRowClickable(row:HTMLTableRowElement) {
         }
        else 
        {
+            //set text colour to highlighted if not already clicked and not highlighted
+           row.style.color = (row.style.backgroundColor != clicked && row.style.backgroundColor != highlighted) ?  'black' : row.style.color;
+            //set background color to highlighted if not already clicked and not highlighted
            row.style.backgroundColor = (row.style.backgroundColor != clicked && row.style.backgroundColor != highlighted) ?  highlighted : row.style.backgroundColor;
+           
        }
    });
    //if mouse leaves row - unhighlight it
    row.addEventListener('mouseleave',function(event) {
+        //console log
        console.log('left:'+plain);
        console.log('\n\n\n\n\n**********row:'+row.style.backgroundColor+'*************\n\n\n\n\n\n\n')
+
+       //if background color clicked - keep it clicked
        if (row.style.backgroundColor == clicked) 
        {
         console.log('backgroundColor == clicked');row.style.backgroundColor = clicked;
         }
+        //else (when not clicked) change it to plain
        else 
        {
+        row.style.color = row.style.backgroundColor == highlighted ?  plain: row.style.color;
         row.style.backgroundColor = row.style.backgroundColor == highlighted ?  plain: row.style.backgroundColor;
         }
    });
@@ -146,34 +157,6 @@ function makeTTRowClickable(row:HTMLTableRowElement) {
    });
 }
 
-/**
- * Encloses tag names in html.
- * This is used in preparation for being added
- * to html table body.
- * 
- * i.e.:
- * ``` 
- * var html:string = '';
- * tags.forEach( tag => {
- *     html += '<tr><td>'+tag+'</td></tr>\n';
- * });
- * return html;
- * ```
- * @param tags array of tagnames
- * @return html
- */
-function tagsToHtml(tags:string[]):string {
-    var html:string = '';
-    tags.forEach( tag => {
-        if (tag.charAt(0) == '.') {/* Do not add .DS_STORE / System files*/}
-        else html += '<tr>\n'+
-        '<td>'+tag+'</td>\n' + 
-        '<td>'+'default'+'</td>\n' + 
-        '<td>'+'default'+'</td>\n'
-        +'</tr>\n';
-    });
-    return html;
-}
 
 /**
  * Filters html table against input.
