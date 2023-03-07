@@ -13,7 +13,7 @@ export class Entry {
         if (obj?.entry)
         {
             const {date, title, body, tags} = obj.entry
-            this.date = date
+            this.date = date ? date : dateStr()
             this.title = title
             this.body = body
             this.tags = tags
@@ -21,10 +21,11 @@ export class Entry {
         else
         {
             // regular var assignment
-            this.date = obj.e_date ? obj.e_date : dateStr();
-            this.title = obj.e_title ? obj.e_title : 'default';
-            this.body = obj.e_body ? obj.e_body : 'default';
-            this.tags = obj.e_tags ? obj.e_tags : ['all'];
+            const {e_date, e_title, e_body, e_tags} = obj
+            this.date = e_date ? e_date : dateStr();
+            this.title = e_title ? e_title : 'default';
+            this.body = e_body ? e_body : 'default';
+            this.tags = e_tags ? e_tags : ['all'];
         }
         
     }
