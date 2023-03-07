@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, ipcRenderer } from 'electron';
+import {app, BrowserWindow, dialog, ipcMain, ipcRenderer, OpenDialogReturnValue } from 'electron';
 import path from 'path'
 import fs from 'fs'
 import * as dir from './directory'
@@ -47,6 +47,7 @@ function createWindow ()
         // worldSafeExecuteJavaScript: true ,
         contextIsolation: false,//otherwise "WorldSafe".. message still appears
         nodeIntegration: true, //whether you can access node methods - e.g. requires, anywhere in the app's js
+        enableRemoteModule: true//in order to access dialog remote module
     }
   })
 
@@ -249,15 +250,31 @@ ipcMain.handle('get-current-css-theme', (e) => theme.getCurrentCssTheme())
 //@ts-ignore
 ipcMain.handle('set-current-css-theme', (e,themeStr:string) => theme.setCurrentCssTheme(themeStr))
 
-//export entries to txt, json or pdf
-ipcMain.handle('export-entries-txt', (e, entriesArr) => export_entry.exportEntriesTxt(entriesArr))
 
-ipcMain.handle('export-entries-json', (e, entriesFilepathsArr:string[]) =>  export_entry.exportEntriesJson(entriesFilepathsArr))
 
-ipcMain.handle('export-entries-pdf', (e, filepathArr:string[]) => export_entry.exportEntriesPdf(filepathArr))
 
 
 
 ipcMain.handle('get-tag-directory-filepath', (e) => {
   return dir.tagDirectory
 })
+
+//export entries to txt, json or pdf
+ipcMain.handle('export-entries-txt', async () => {
+  var dialogPath = dir.tagDirectory
+  dialogPath ? console.log(`dialogPath:${dialogPath}`) : console.log('dialogPath is null or undefined')
+  //open dialog window
+  var promise:OpenDialogReturnValue = await dialog.showOpenDialog({ defaultPath: dialogPath, properties: ['openFile', 'multiSelections'] })
+
+   //if not exited
+   if (promise && !promise.canceled)
+   {
+       //get filepaths of entries
+       var entriesFilepathsArr:string[] = promise.filePaths
+       //export entries
+       return await export_entry.exportEntriesTxt(entriesFilepathsArr)
+   }
+   
+})
+
+// ipcMain.handle('show-open-dialog')

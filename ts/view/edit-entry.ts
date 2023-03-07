@@ -1,4 +1,5 @@
 import { ipcRenderer } from "electron"
+import { Entry } from "../classes/entry"
 
 //messageDiv
 var messageDiv = document.querySelector('#message') as HTMLDivElement
@@ -18,7 +19,7 @@ save_new_entry ? save_new_entry.onclick = () => saveNewEntry() : console.log('sa
 edit_entry_tags ? edit_entry_tags.onclick = () => editEntryTags() : console.log('edit_entry_tags is null')
 
 //Functions
-var e = new Entry()
+var e = new Entry({})
 window.onload = () => displayCurrentEntry()
 
 //display entry
@@ -37,7 +38,7 @@ async function updateEntry() {
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
-    var entry = new Entry(title.innerHTML,body.innerHTML, tagsArr)
+    var entry = new Entry({e_title:title.innerHTML,e_body:body.innerHTML, e_tags:tagsArr})
     //turn entry to json format - ready for saving to file
     var entry_json = JSON.stringify(entry);
     //get current entry name
@@ -63,7 +64,7 @@ async function saveNewEntry() {
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
-    var entry = new Entry(title.innerHTML,body.innerHTML, tagsArr)
+    var entry = new Entry({e_title:title.innerHTML,e_body:body.innerHTML, e_tags:tagsArr})
     //send to main for be persisted
     var message = await ipcRenderer.invoke('create-entry', entry)
     //display message
@@ -119,7 +120,7 @@ async function addSelectedTagsToEntry() {
     })
 
     //persist changes
-    var entryUpdated = new Entry(title.innerHTML,body.innerHTML,entry.tags)
+    var entryUpdated = new Entry({e_title:title.innerHTML, e_body:body.innerHTML, e_tags:entry.tags})
     var newEntryJson = JSON.stringify(entryUpdated)
     var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
     //display message

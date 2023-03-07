@@ -15,7 +15,7 @@ export function updateEntry(entry_json:string, entry_filename:string) {
     var filepath:string = paths.join(dirs.allEntries, entry_filename);
     var message
     try {
-        fs.promises.writeFile(filepath,entry_json,'utf-8')
+        fs.promises.writeFile(filepath, entry_json, 'utf-8')
         message = 'File updated successfully'
     }
     catch (error) {

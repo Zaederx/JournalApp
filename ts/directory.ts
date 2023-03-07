@@ -10,3 +10,9 @@ export const allEntries = paths.join(app.getPath('userData'),'tagDirs','all')
  * Directory containing all tag folders - 'tagDirs'
  */
 export const tagDirectory = paths.join(app.getPath('userData'),'tagDirs')
+
+
+/**
+ * Downloads directory
+ */
+export const downloads = paths.join(app.getPath('downloads'))

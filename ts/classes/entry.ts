@@ -1,33 +1,53 @@
+import dateStr from '../entry/crud/dateStr'
 /**
  * Class to describe Journal Entries.
  */
-class Entry {
+export class Entry {
+    date:string;
     title:string;
     body:string;
     tags:string[] = [];
     
-    constructor (title?:string, body?:string, tags?:string[]) {
-        this.title = title ? title : 'default';
-        this.body = body ? body : 'default';
-        this.tags = tags ? tags : ['all'];
+    constructor (obj:{ entry?:Entry, e_date?:string, e_title?:string, e_body?:string, e_tags?:string[]}) {
+        //if using entry instead
+        if (obj?.entry)
+        {
+            const {date, title, body, tags} = obj.entry
+            this.date = date
+            this.title = title
+            this.body = body
+            this.tags = tags
+        }
+        else
+        {
+            // regular var assignment
+            this.date = obj.e_date ? obj.e_date : dateStr();
+            this.title = obj.e_title ? obj.e_title : 'default';
+            this.body = obj.e_body ? obj.e_body : 'default';
+            this.tags = obj.e_tags ? obj.e_tags : ['all'];
+        }
+        
     }
+    
 
-    tagsToStringCSV():string {
-        var csv = this ? this.tagsArrToStringCSV()  : 'all'
+    tagsToStringCSV(e:Entry=this):string {
+        var csv = e ? e.tagsArrToStringCSV() : 'all'
         return csv
     }
     tagsStringToArr(tagsString:string):string[] {
         var arr:string[] = tagsString.split(',')
         return arr
     }
-    tagsArrToStringCSV(tags:string[]=(this.tags)):string {
+    tagsArrToStringCSV(e:Entry=this):string {
         var entryTags:string = ''
         var count = 0
-        tags.forEach((e)=> {
+        e.tags.forEach((e)=> {
+            //start condition - if first iteration - no comma before e
             if (count == 0){
                 entryTags += e
                 count++
             }
+            //else comma before e
             else {
                 entryTags += ','+e
             }
@@ -36,16 +56,19 @@ class Entry {
         return entryTags
     }
 
-    entryToTxt()
+    entryToTxt(e:Entry=this)
     {
-        var entryTxt = this.title+'\n'
-        entryTxt = this.body+'\n'
-        entryTxt = this.tagsArrToStringCSV()
+        var entryTxt = ''
+        entryTxt += 'Date:'+e.date+'\n'
+        entryTxt += 'Title:'+e.title+'\n'
+        entryTxt += 'Body:'+e.body+'\n'
+        entryTxt += 'Tags:'+e.tagsArrToStringCSV()
+        
         return entryTxt
     }
-    entryToJson()
+    entryToJson(e:Entry=this)
     {
-        var json = { title:this.title, body:this.body , tags:this.tagsArrToStringCSV() }
+        var json = {date:e.date, title:e.title, body:e.body, tags:e.tagsArrToStringCSV() }
         return json
     }
     tagsToHTML(tags:string[]) {

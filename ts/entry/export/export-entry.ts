@@ -3,7 +3,12 @@
 import paths from 'path';
 import * as fs from 'fs';
 import * as dir from '../../directory';
+import path from 'path';
+import { Entry } from '../../classes/entry';
  
+/**
+ * NOTE: For each loops do not support async await
+ */
 
 //functions
 /**
@@ -25,8 +30,22 @@ async function getEntry(entry_name: string)
  */
 async function getEntryByFilepath(filepath: string)
 {
-    var entryStr:string = await fs.promises.readFile(filepath,'utf-8')
-    var entry:Entry = JSON.parse(entryStr)
+    console.log('\nfunction getEntryByFilepath is called')
+    console.log('filepath:'+filepath)
+    var entry:Entry|undefined = undefined
+    try {
+        var promise = fs.promises.readFile(filepath,'utf-8')
+        return promise.then((entryStr:string) => {
+            console.log('entryStr:'+entryStr)
+            entry = JSON.parse(entryStr)
+            console.log('entry:'+entry)
+            return entry
+        })
+        
+    } catch (error) {
+        console.warn(error)
+    }
+    
     return entry
 }
 
@@ -35,14 +54,20 @@ async function getEntryByFilepath(filepath: string)
  * system json entry files
  * @param entriesFilepathsArr array of filepaths for entries
  */
-async function getEntries(entriesFilepathsArr:string[]):Promise<Entry[]>
+async function getEntriesByFilepaths(entriesFilepathsArr:string[]):Promise<Entry[]>
 {
+    console.log('\nfunction getEntriesByFilepaths called')
     var entries:Entry[] = []
-    entriesFilepathsArr.forEach(async (filepath) => 
+    for (var i = 0; i < entriesFilepathsArr.length; i++) 
     {
+        //get filepath
+        var filepath = entriesFilepathsArr[i]
+        //get entry by filepath
         var entry = await getEntryByFilepath(filepath);
-        entries.push(entry)
-    }) 
+        //add entry to list of entries
+        entry ? entries.push(entry) : console.log('entry is undefined')
+        console.log('entries',entries)
+    } 
     
     return entries
 }
@@ -61,20 +86,57 @@ export async function exportEntryTxt(entry_name:string)
 /**
  * Export entries as txt files
  * @param entriesFilepathsArr filepaths of entries to be exported
+ * @return string[] of txt
  */
-export async function exportEntriesTxt(entriesFilepathsArr:string[]):Promise<string[]>
+export async function exportEntriesTxt(entriesFilepathsArr:string[])
 {
+    console.log('\nfunction exportEntriesTxt called\n')
     //get entries
-    var entries:Entry[] = await getEntries(entriesFilepathsArr)
+    var entries = await getEntriesByFilepaths(entriesFilepathsArr)
+    console.log('getEntriesByFilename():'+entries.toString())
+    
+    //get file directory path
+    var exportDir = path.join(dir.downloads, 'journal-app-export')
+    console.log('exportDir:'+exportDir)
 
-    //entries to txt
-    var txtArr:string[] = []
-    entries.forEach( entry => 
+    //create directory
+    try 
+    {
+        var exportDirExists:boolean = (await fs.promises.stat(exportDir)).isDirectory()
+        if(!exportDirExists)
         {
-            txtArr.push(entry.entryToTxt())
+            console.log('making export directory:'+exportDir)
+            fs.promises.mkdir(exportDir)
+        }
+        else
+        {
+            console.warn('export directory already exists')
+        }
+        //entries to filesystem
+        entries.forEach( async (entry) => {
+            console.log('entry.title:'+entry.title)
+            //set filepath
+            var filepath = path.join(exportDir, entry.date+'.txt')
+
+            try {
+                //get entry as txt output
+                var obj = {entry:entry}
+                var e = new Entry(obj)
+                var txt = e.entryToTxt()
+                console.log('entry txt output'+ txt)
+                //write file to directory
+                await fs.promises.writeFile(filepath, txt, 'utf-8')
+            } catch (error) {
+                console.warn(error)
+            }
         })
-    //return txt files in array
-    return txtArr
+    }
+    catch (err) 
+    {
+        console.warn('directory already exists:',err)
+    }
+    
+    
 }
 
 
@@ -95,7 +157,7 @@ export async function exportEntryJson(entry_name:string)
 export async function exportEntriesJson(entriesFilepathsArr:string[])
 {
     //get entries
-    var entries:Entry[] = await getEntries(entriesFilepathsArr)
+    var entries:Entry[] = await getEntriesByFilepaths(entriesFilepathsArr)
 
     //entries to txt
     type entryJson = {title:string, body:string, tags:string}
@@ -116,7 +178,7 @@ export async function exportEntriesJson(entriesFilepathsArr:string[])
 export async function exportEntriesPdf(entriesFilepathsArr:string[]): Promise<string[]>
 {
     //get entries
-    var entries = await getEntries(entriesFilepathsArr)
+    var entries = await getEntriesByFilepaths(entriesFilepathsArr)
 
     //entries pdf
     var jsonArr:any[] = []

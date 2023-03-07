@@ -1,20 +1,21 @@
 import * as fs from 'fs';
-import * as eDate from './dateStr';
+import dateStr from './dateStr';
 import * as dir from '../../directory'
 import paths from 'path'
+import { Entry } from '../../classes/entry';
 
 /**
  * Writes a entry's json to the file system.
  * @param event IpcMainEvent
  * @param entryJson json String of entry details
  */
-export async function createEntry(entryJson:string) {
+export async function createEntry(entryJson:string, directory:string=dir.allEntries):Promise<string> {
   console.log('ipcMain: Creating new Entry -' + entryJson);
   //create filename
-  var fileName:string = eDate.dateStr() + ".json";
+  var fileName:string = dateStr() + ".json";
 
   //if directory doesn't exist - create directory
-  if (!fs.existsSync(dir.allEntries)) {
+  if (!fs.existsSync(dir.tagDirectory)) {
     fs.promises.mkdir(dir.tagDirectory)
   }
 
@@ -34,15 +35,26 @@ export async function createEntry(entryJson:string) {
   return message
 }
 
+/**
+ * 
+ * @param entryJson json string
+ * @param filename filename
+ */
 export async function symlinkEntryFile(entryJson:string,filename:string) {
   console.log('*** symlinkEntryFile called ***')
   var entry:Entry = JSON.parse(entryJson)
+  //all entries go into the all directory and then are
+  //symlinked into other directories (tags)
   var targetFilepath = paths.join(dir.allEntries,filename)
   
+  //for each tag
   entry.tags.forEach(async (tag: string)=> {
+    //if tag is not emptystring or all tag
     if (tag != '' && tag != 'all'){
-      var symlinkPath = paths.join(dir.tagDirectory,tag, filename)
+      //create the symlinkPath
+      var symlinkPath = paths.join(dir.tagDirectory,tag,filename)
       console.log('symlinkPath',symlinkPath)
+      //create a symlink using targetFilepath and symlinkPath
       var error = await fs.promises.symlink(targetFilepath,symlinkPath)
       console.log(error)
     }

@@ -1,4 +1,5 @@
 import { ipcRenderer } from "electron"
+import { Entry } from "../classes/entry"
 
 var messageDiv = document.querySelector('#message') as HTMLDivElement
 var title = document.querySelector('#entry-title') as HTMLDivElement
@@ -9,7 +10,7 @@ var btn_delete_entry = document.querySelector('#delete-entry') as HTMLDivElement
 
 
 window.onload = () => displaySelectedEntry()
-var e = new Entry()
+var e = new Entry({})
 
 async function displaySelectedEntry() {
     console.log('displaySelectedEntry called')

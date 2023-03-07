@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as dir from '../../directory';
 import paths from 'path'
+import { Entry } from 'yauzl';
 
 /**
  * Functions used by main to delete Entries.
@@ -29,7 +30,9 @@ export async function deleteEntry(filename:string) {
 function deleteSymlinks(entry:Entry,filename:string) {
     console.log('*** deleteSymlinks ***') 
     //delete each related symlink
+    //@ts-ignore
     entry.tags.forEach(
+        //@ts-ignore
         (tag) => {
             if (tag != '') {
                 console.log('tagname:',tag)
