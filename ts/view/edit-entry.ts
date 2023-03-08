@@ -44,6 +44,7 @@ async function updateEntry() {
     var entry = new Entry({e_title:title.innerHTML,e_body:body.innerHTML, e_tags:tagsArr})
     //turn entry to json format - ready for saving to file
     var entry_json = JSON.stringify(entry);
+    
     //get current entry name
     var entryName = await ipcRenderer.invoke('get-current-entry-name')
     //send to main for be updated
