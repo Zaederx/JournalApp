@@ -1,4 +1,4 @@
-import {app, BrowserWindow, dialog, ipcMain, ipcRenderer, OpenDialogReturnValue } from 'electron';
+import {app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue } from 'electron';
 import path from 'path'
 import fs from 'fs'
 import * as dir from './directory'
@@ -17,9 +17,8 @@ import * as tDelete from './tag/crud/t-delete'
 import * as theme from './theme/theme'
 
 import * as export_entry from './entry/export/export-entry'
+import dateStr from './entry/crud/dateStr'
 
-//var for the selected entry
-var this_selectedEntryName = ''
 
 
 //TODO - option to store file in iCloud
@@ -135,6 +134,8 @@ ipcMain.handle('update-entry', async (event, entry_json, entry_filename) => {
   return message
 })
 
+//var for the selected entry
+var this_selectedEntryName = ''
 ipcMain.handle('update-current-entry', async (event, entry_json) => {
   var message = eUpdate.updateEntry(entry_json, this_selectedEntryName)
   return message
@@ -250,10 +251,8 @@ ipcMain.handle('get-current-css-theme', (e) => theme.getCurrentCssTheme())
 //@ts-ignore
 ipcMain.handle('set-current-css-theme', (e,themeStr:string) => theme.setCurrentCssTheme(themeStr))
 
-
-
-
-
+//get the current date as a string (used for the entry filename)
+ipcMain.handle('get-datestr', () => dateStr())
 
 ipcMain.handle('get-tag-directory-filepath', (e) => {
   return dir.tagDirectory

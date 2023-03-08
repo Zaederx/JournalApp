@@ -1,9 +1,20 @@
 import * as fs from 'fs';
-import dateStr from './dateStr';
 import * as dir from '../../directory'
 import paths from 'path'
-import { Entry } from '../../classes/entry';
 
+function dateStr():string {
+  var date = new Date();
+  var day = date.getDate();
+  var month = date.getMonth();
+  var year = date.getFullYear();
+  var hour = date.getHours();
+  var mins = date.getMinutes();
+  var secs = date.getSeconds();
+
+  var str = day + '-' + (month+1) + '-' + year + '-' + hour + '-' + mins + '-' + secs;
+
+  return str;
+}
 /**
  * Writes a entry's json to the file system.
  * @param event IpcMainEvent
@@ -11,8 +22,10 @@ import { Entry } from '../../classes/entry';
  */
 export async function createEntry(entryJson:string, directory:string=dir.allEntries):Promise<string> {
   console.log('ipcMain: Creating new Entry -' + entryJson);
+  
+  
   //create filename
-  var fileName:string = dateStr() + ".json";
+  var fileName:string =  dateStr() + ".json";
 
   //if directory doesn't exist - create directory
   if (!fs.existsSync(dir.tagDirectory)) {
@@ -42,7 +55,7 @@ export async function createEntry(entryJson:string, directory:string=dir.allEntr
  */
 export async function symlinkEntryFile(entryJson:string,filename:string) {
   console.log('*** symlinkEntryFile called ***')
-  var entry:Entry = JSON.parse(entryJson)
+  var entry = JSON.parse(entryJson)
   //all entries go into the all directory and then are
   //symlinked into other directories (tags)
   var targetFilepath = paths.join(dir.allEntries,filename)

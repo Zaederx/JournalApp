@@ -4,6 +4,7 @@ import paths from 'path';
 import * as fs from 'fs';
 import * as dir from '../../directory';
 import path from 'path';
+//@ts-ignore //TODO
 import { Entry } from '../../classes/entry';
  
 /**
@@ -16,7 +17,7 @@ import { Entry } from '../../classes/entry';
  * the entry filename
  * @param entry_name entry filename
  */
-async function getEntry(entry_name: string)
+export async function getEntry(entry_name: string)
 {
     var filepath = paths.join(dir.tagDirectory, entry_name)
     var entryStr:string = await fs.promises.readFile(filepath,'utf-8')
@@ -116,8 +117,8 @@ export async function exportEntriesTxt(entriesFilepathsArr:string[])
         entries.forEach( async (entry) => {
             console.log('entry.title:'+entry.title)
             //set filepath
-            var filepath = path.join(exportDir, entry.date+'.txt')
-
+            var filepath = path.join(exportDir, entry.date + '.txt')
+            console.log('export filepath:', filepath)
             try {
                 //get entry as txt output
                 var obj = {entry:entry}

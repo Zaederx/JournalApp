@@ -1,24 +1,25 @@
 import { ipcRenderer } from "electron"
-import { Entry } from "../classes/entry"
 
-//messageDiv
+
+//Fetch HTML Elements
 var messageDiv = document.querySelector('#message') as HTMLDivElement
-//  Entry
 var title = document.querySelector('#entry-title') as HTMLDivElement
 var body = document.querySelector('#entry-body') as HTMLDivElement
 var tags = document.querySelector('#entry-tags') as HTMLDivElement
-window.onload = () => displayCurrentEntry()
 
 //Div Buttons
 var update_entry = document.querySelector('#update-entry') as HTMLDivElement
 var save_new_entry = document.querySelector('#save-new-entry') as HTMLDivElement
 var edit_entry_tags = document.querySelector('#edit-entry-tags') as HTMLDivElement
 
+//Enable events
+window.onload = () => displayCurrentEntry()
 update_entry ? update_entry.onclick = () => updateEntry() : console.log('update_entry is null')
 save_new_entry ? save_new_entry.onclick = () => saveNewEntry() : console.log('save_new_entry is null')
 edit_entry_tags ? edit_entry_tags.onclick = () => editEntryTags() : console.log('edit_entry_tags is null')
 
 //Functions
+//@ts-ignore
 var e = new Entry({})
 window.onload = () => displayCurrentEntry()
 
@@ -27,6 +28,7 @@ async function displayCurrentEntry() {
     //get current entryJson
     var entryJson:string = await ipcRenderer.invoke('get-current-entry')
     // parse JSON to an Entry
+    //@ts-ignore
     var entry:Entry = JSON.parse(entryJson)
     // put entry details into html frontend
     title.innerHTML = entry.title
@@ -38,6 +40,7 @@ async function updateEntry() {
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
+    //@ts-ignore
     var entry = new Entry({e_title:title.innerHTML,e_body:body.innerHTML, e_tags:tagsArr})
     //turn entry to json format - ready for saving to file
     var entry_json = JSON.stringify(entry);
@@ -64,6 +67,7 @@ async function saveNewEntry() {
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
+    //@ts-ignore
     var entry = new Entry({e_title:title.innerHTML,e_body:body.innerHTML, e_tags:tagsArr})
     //send to main for be persisted
     var message = await ipcRenderer.invoke('create-entry', entry)
@@ -111,6 +115,7 @@ async function addSelectedTagsToEntry() {
     var selectedTags:string[] = getSelectdTags()
     //get current entry
     var entryJson = await ipcRenderer.invoke('get-current-entry')
+    //@ts-ignore
     var entry:Entry = JSON.parse(entryJson)
     //for each tag - if not already in tags list -> add to list
     var tagSet = new Set(entry.tags)
@@ -120,6 +125,7 @@ async function addSelectedTagsToEntry() {
     })
 
     //persist changes
+    //@ts-ignore
     var entryUpdated = new Entry({e_title:title.innerHTML, e_body:body.innerHTML, e_tags:entry.tags})
     var newEntryJson = JSON.stringify(entryUpdated)
     var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
@@ -133,6 +139,7 @@ async function removeSelectedTags() {
     var selectedTags:string[] = getSelectdTags()
     //get current entry
     var entryJson = await ipcRenderer.invoke('get-current-entry')
+    //@ts-ignore
     var entry:Entry = JSON.parse(entryJson)
     //for each tag - remove if in list
     var tagToRemove = new Set(selectedTags)

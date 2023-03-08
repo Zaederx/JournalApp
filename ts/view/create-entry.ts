@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import { Entry } from "../classes/entry";
+
 var messageDiv = document.querySelector('#message') as HTMLDivElement
 var title = document.querySelector('#entry-title') as HTMLDivElement
 var body = document.querySelector('#entry-body') as HTMLDivElement
@@ -8,11 +8,18 @@ var entry_tags = document.querySelector('#entry-tags') as HTMLDivElement
 var btn_create_entry = document.querySelector('#create-entry') as HTMLDivElement
 
 btn_create_entry ? btn_create_entry.onclick = () => { return clickCreateEntryBtn(); } : console.log('btn_create_entry is null');
+/**
+ * Returns the current date as a string.
+ * @return date as a string
+ */
 
 //Temp
+//@ts-ignore
 var entryTemp:Entry = new Entry({})
 async function clickCreateEntryBtn() {
     //get entry text & put in entry object
+    var dateStr = await ipcRenderer.invoke('get-datestr')
+    entryTemp.date = dateStr
     entryTemp.title = title.innerHTML
     entryTemp.body = body.innerHTML
     //send to backend to be persisted
@@ -103,7 +110,8 @@ function getSelectdTags(tagTableBody:HTMLTableElement=tagTableBody3) {
 async function addSelectedTagsToEntry() {
     //get selected tags
     var selectedTags:string[] = getSelectdTags()
-    //create new entry Temp
+    //create new entry Temp 
+    //@ts-ignore
     entryTemp = new Entry({})
     //for each tag - if not already in tags list -> add to list
     var tagSet = new Set(entryTemp.tags)
@@ -114,6 +122,7 @@ async function addSelectedTagsToEntry() {
     //display message
     messageDiv.innerText = 'Tags Added'
     //display tags
+    //@ts-ignore
     var e = new Entry({})//for access to class methods (not avaiable to converted JSON to Entry)
     var tagsHTML  = e.tagsToHTML(entryTemp.tags)
     console.log('tagHTML:',tagsHTML)

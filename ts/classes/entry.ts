@@ -1,4 +1,3 @@
-import dateStr from '../entry/crud/dateStr'
 /**
  * Class to describe Journal Entries.
  */
@@ -9,11 +8,20 @@ export class Entry {
     tags:string[] = [];
     
     constructor (obj:{ entry?:Entry, e_date?:string, e_title?:string, e_body?:string, e_tags?:string[]}) {
+        var d = new Date();
+        var day = d.getDate();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        var hour = d.getHours();
+        var mins = d.getMinutes();
+        var secs = d.getSeconds();
+
+        var dateStr = day + '-' + (month+1) + '-' + year + '-' + hour + '-' + mins + '-' + secs;
         //if using entry instead
         if (obj?.entry)
         {
             const {date, title, body, tags} = obj.entry
-            this.date = date ? date : dateStr()
+            this.date = date ? date : dateStr
             this.title = title
             this.body = body
             this.tags = tags
@@ -22,7 +30,7 @@ export class Entry {
         {
             // regular var assignment
             const {e_date, e_title, e_body, e_tags} = obj
-            this.date = e_date ? e_date : dateStr();
+            this.date = e_date ? e_date : dateStr;
             this.title = e_title ? e_title : 'default';
             this.body = e_body ? e_body : 'default';
             this.tags = e_tags ? e_tags : ['all'];
@@ -41,12 +49,12 @@ export class Entry {
     }
     tagsArrToStringCSV(e:Entry=this):string {
         var entryTags:string = ''
-        var count = 0
+        var firstIteration = true
         e.tags.forEach((e)=> {
             //start condition - if first iteration - no comma before e
-            if (count == 0){
-                entryTags += e
-                count++
+            if (firstIteration){
+                entryTags += e  
+                firstIteration = false
             }
             //else comma before e
             else {
