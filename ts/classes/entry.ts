@@ -77,20 +77,46 @@ export class Entry {
     }
     entryToJson(e:Entry=this)
     {
-        var json = {date:e.date, title:e.title, body:e.body, tags:e.tags.toString() }
+        var json = {date:e.date, title:e.title, body:e.body, tags:e.tags.toString()}
         return json
     }
     entryToJsonStr(e:Entry=this)
     {
-        var json = e.entryToJson()
-        var jsonStr = JSON.stringify(json)
+        var jsonStr = JSON.stringify(e)
         return jsonStr
     }
-    tagsToHTML(tags:string[]) {
+    tagsToHTML(tags:string[], obj?:{tags:string[], tagsStr:string}) {
         var tagsHtml = ''
-        tags.forEach((tag) => {
-            tagsHtml += '<div>'+tag+'</div>\n'
-        })
+        //if an array of tags is given
+        //return tagsHTML with HTML tag info
+        if (tags)
+        {
+            tags.forEach((tag) => {
+                tagsHtml += '<div>'+tag+'</div>\n'
+            })
+        }
+        //if using obj
+        else if(obj && obj.tags)
+        { 
+            //get tags and tagStr from obj
+            const { tags, tagsStr } = obj
+            //if tags is present - use tags
+            if (tags)
+            {
+                tags.forEach((tag) => {
+                    tagsHtml += '<div>'+tag+'</div>\n'
+                })
+            }
+            //else if tagsStr is present use that
+            else if (tagsStr)
+            {
+                var tArr = this.tagsStringToArr(tagsStr)
+                tArr.forEach((tag) => {
+                    tagsHtml += '<div>'+tag+'</div>\n'
+                })
+            }
+        }
+        console.log('tagsHTML:'+tagsHtml)
         return tagsHtml
     }
 }

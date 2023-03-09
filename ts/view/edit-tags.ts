@@ -10,8 +10,8 @@ add_tag_btn ? add_tag_btn.onclick = () => createNewTag() : console.warn('add_tag
 remove_tag_btn ? remove_tag_btn.onclick = () => removeSelectedTags() : console.warn('remove_tag_btn is null')
 
 /** Searchbar */
-var searchbar = document.querySelector('#tag-searchbar') as HTMLDivElement
-searchbar.oninput = () => filterTable()
+var tag_searchbar = document.querySelector('#tag-searchbar') as HTMLDivElement
+tag_searchbar.oninput = () => filterTable()
 
 
 /**
@@ -20,7 +20,7 @@ searchbar.oninput = () => filterTable()
 async function createNewTag() 
 {
     //get input
-    var tag:string = searchbar.innerText
+    var tag:string = tag_searchbar.innerText
     if (tag != null && tag != '') 
     {
         //send tag to be persisted
@@ -74,11 +74,11 @@ async function removeSelectedTags()
 window.onload = () => fillTagTable()
 
 //var btn_addTag = document.querySelector('#t-view') as HTMLDivElement
-var tagTableBody2 = document.querySelector('#tag-table-body') as HTMLTableElement
+var theTagTableBody = document.querySelector('#tag-table-body') as HTMLTableElement
 var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
 
 /** fill tag popup table */
-async function fillTagTable(tableBody:HTMLTableElement=tagTableBody2) 
+async function fillTagTable(tableBody:HTMLTableElement=theTagTableBody) 
 {
    //get all html tags
    var tagsHTML = await ipcRenderer.invoke('get-tags-table-rows')
@@ -169,7 +169,7 @@ function makeTTRowClickable(row:HTMLTableRowElement) {
  * @param displayViewFunc - the function that returns the view (need to refresh view after filtering to work)
  * @return res string of html rows that match
  */
-function filterTable(tagTableBody:HTMLTableElement=tagTableBody2, input:HTMLDivElement=searchbar) {
+function filterTable(tagTableBody:HTMLTableElement=theTagTableBody, input:HTMLDivElement=tag_searchbar) {
    console.log('*** filterTable called ***')
    //Ensure search value is not undefined, then displayTagView() if an empty string
    var searchValue:string =  input?.innerText.toLowerCase() == undefined ? '' : input.innerText.toLocaleLowerCase();
@@ -197,7 +197,7 @@ function filterTable(tagTableBody:HTMLTableElement=tagTableBody2, input:HTMLDivE
  * @param tagTableBody tableBody to get rows from
  * @returns 
  */
- function getSelectedTags(tagTableBody:HTMLTableElement=tagTableBody2) {
+ function getSelectedTags(tagTableBody:HTMLTableElement=theTagTableBody) {
     var rows = tagTableBody?.querySelectorAll('tr')
     var tags:string[] = []
     rows.forEach( row => {

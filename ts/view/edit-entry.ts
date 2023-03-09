@@ -139,8 +139,8 @@ async function addSelectedTagsToEntry() {
 
     //persist changes
     //@ts-ignore
-    var entryUpdated = new Entry({e_title:title.innerHTML, e_body:body.innerHTML, e_tags:entry.tags})
-    var newEntryJson = JSON.stringify(entryUpdated)
+    var entryUpdated = new Entry({title:title.innerHTML, body:body.innerHTML, tags:entry.tags})
+    var newEntryJson = entryUpdated.entryToJsonStr()
     var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
     //display message
     messageDiv.innerText = message
@@ -193,9 +193,6 @@ function toggleEditTagPopup() {
         hidden = true
     }
 }
-
-
-
 
 function blurBackground() {
     main.className = 'main-container-blur'

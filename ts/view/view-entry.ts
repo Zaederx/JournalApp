@@ -12,8 +12,8 @@ var btn_delete_entry = document.querySelector('#delete-entry') as HTMLDivElement
 
 window.onload = () => displaySelectedEntry()
 //@ts-ignore
-var e = new Entry({})
 
+var e = new Entry()
 async function displaySelectedEntry() {
     console.log('displaySelectedEntry called')
     var entryJson:string = await ipcRenderer.invoke('get-current-entry')

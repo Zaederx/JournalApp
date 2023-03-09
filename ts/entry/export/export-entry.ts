@@ -6,7 +6,7 @@ import * as dir from '../../directory';
 import path from 'path';
 //@ts-ignore //TODO
 import { Entry } from '../../classes/entry';
- 
+ import dateStr from '../crud/dateStr';
 /**
  * NOTE: For each loops do not support async await
  */
@@ -59,6 +59,7 @@ async function getEntriesByFilepaths(entriesFilepathsArr:string[]):Promise<Entry
 {
     console.log('\nfunction getEntriesByFilepaths called')
     var entries:Entry[] = []
+    //for each filepath
     for (var i = 0; i < entriesFilepathsArr.length; i++) 
     {
         //get filepath
@@ -66,10 +67,9 @@ async function getEntriesByFilepaths(entriesFilepathsArr:string[]):Promise<Entry
         //get entry by filepath
         var entry = await getEntryByFilepath(filepath);
         //add entry to list of entries
-        entry ? entries.push(entry) : console.log('entry is undefined')
-        console.log('entries',entries)
+        entry ? entries.push(entry) : console.log('entry is undefined') 
     } 
-    
+    console.log('entries',entries)
     return entries
 }
 
@@ -97,25 +97,22 @@ export async function exportEntriesTxt(entriesFilepathsArr:string[])
     console.log('getEntriesByFilename():'+entries.toString())
     
     //get file directory path
-    var exportDir = path.join(dir.downloads, 'journal-app-export')
+    var exportDir = path.join(dir.downloads, 'journal-app-export-'+dateStr())
     console.log('exportDir:'+exportDir)
 
     //create directory
+    try {
+        console.log('making export directory:'+exportDir)
+        fs.promises.mkdir(exportDir)
+    } catch (error) {
+        console.log('export-entry.ts - function exportEntriesTxt:'+error)
+    }
     try 
     {
-        var exportDirExists:boolean = (await fs.promises.stat(exportDir)).isDirectory()
-        if(!exportDirExists)
-        {
-            console.log('making export directory:'+exportDir)
-            fs.promises.mkdir(exportDir)
-        }
-        else
-        {
-            console.warn('export directory already exists')
-        }
+        
         //entries to filesystem
         entries.forEach( async (entry) => {
-            console.log('entry.title:'+entry.title)
+            console.log('entry.date:'+entry.date)
             //set filepath
             var filepath = path.join(exportDir, entry.date + '.txt')
             console.log('export filepath:', filepath)
@@ -134,7 +131,7 @@ export async function exportEntriesTxt(entriesFilepathsArr:string[])
     }
     catch (err) 
     {
-        console.warn('directory already exists:',err)
+        console.warn('export-entry.ts - function exportEntriesTxt:'+err)
     }
     
     
