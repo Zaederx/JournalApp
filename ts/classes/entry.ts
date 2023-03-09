@@ -28,7 +28,7 @@ export class Entry {
         }
         else
         {
-            // regular var assignment
+            //regular var assignment
             const {date, title, body, tags} = obj
             this.date = date ? date : dateStr;
             this.title = title ? title : 'default';
@@ -82,7 +82,7 @@ export class Entry {
     }
     entryToJsonStr(e:Entry=this)
     {
-        var json = e.entryToJson
+        var json = e.entryToJson()
         var jsonStr = JSON.stringify(json)
         return jsonStr
     }

@@ -49,14 +49,14 @@ async function updateEntry() {
     //create and entry with updated title, boy and tags[]
     //@ts-ignore
     var entry = new Entry({title:title.innerHTML,body:body.innerHTML, tags:tagsArr})
-    //turn entry to json format - ready for saving to file
+    //turn entry to json format - ready for sending via ipcRenderer - can't send complex objects
     var entry_json = JSON.stringify(entry);
     console.info('updateEntry - entry_json: ' + entry_json);
     //get current entry name
     var entryName = await ipcRenderer.invoke('get-current-entry-name')
-    //send to main for be updated
+    //send entry_json and entryName to main to be updated
     var message = await ipcRenderer.invoke('update-entry', entry_json, entryName)
-    //displat message
+    //display message
     messageDiv.innerText = message
 }
 
@@ -80,7 +80,8 @@ async function saveNewEntry() {
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
     //@ts-ignore
-    var entry = new Entry({e_title:title.innerHTML, e_body:body.innerHTML, e_tags:tagsArr})
+    var entry = new Entry({title:title.innerHTML, body:body.innerHTML, tags:tagsArr})
+    console.info('entryToJsonStr():'+entry.entryToJsonStr())
     //send to main to be persisted
     var message = await ipcRenderer.invoke('create-entry', entry.entryToJsonStr())
     //display message
