@@ -13,7 +13,7 @@ var btn_delete_entry = document.querySelector('#delete-entry') as HTMLDivElement
 window.onload = () => displaySelectedEntry()
 //@ts-ignore
 
-var e = new Entry()
+var e = new Entry({})
 async function displaySelectedEntry() {
     console.log('displaySelectedEntry called')
     var entryJson:string = await ipcRenderer.invoke('get-current-entry')
@@ -22,6 +22,7 @@ async function displaySelectedEntry() {
     var entry:Entry = JSON.parse(entryJson)
     title.innerHTML = entry.title
     body.innerHTML = entry.body
+    console.log('view-entry.ts - displaySelectedEntry:entry.tags'+entry.tags)
     var tagsHTML = e.tagsToHTML(entry.tags)
     console.log('tagsHTML:',tagsHTML)
     tags.innerHTML = tagsHTML
@@ -36,6 +37,7 @@ function editEntryView() {
 btn_delete_entry ? btn_delete_entry.onclick = () => deleteCurrentEntry() : console.log('btn_delete_entry is null')
 
 async function deleteCurrentEntry() {
+    console.info('function deleteCurrentEntry called')
     var message = await ipcRenderer.invoke('delete-current-entry')
     messageDiv.innerText = message
 }

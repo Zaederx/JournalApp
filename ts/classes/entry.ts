@@ -1,12 +1,17 @@
 /**
  * Class to describe Journal Entries.
+ * Note: you must pass in an object even if it's an empty one, 
+ * otherwise it causes problems in the constructor.
  */
 export class Entry {
     date:string;
     title:string;
     body:string;
     tags:string[] = [];
-    
+
+    /**
+     * must pass in an object - even if its empty
+     */
     constructor (obj:{ entry?:Entry, date?:string, title?:string, body?:string, tags?:string[]}) {
         var d = new Date();
         var day = d.getDate();
