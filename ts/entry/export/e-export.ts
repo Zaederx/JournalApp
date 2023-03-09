@@ -4,9 +4,11 @@ import paths from 'path';
 import * as fs from 'fs';
 import * as dir from '../../directory';
 import path from 'path';
-//@ts-ignore //TODO
+import PDF from 'pdfkit';
+//@ts-ignore
 import { Entry } from '../../classes/entry';
- import dateStr from '../crud/dateStr';
+import dateStr from '../crud/dateStr';
+
 /**
  * NOTE: For each loops do not support async await
  */
@@ -101,10 +103,9 @@ export async function jsonExportFunc(entry:Entry, filepath:string) {
     await fs.promises.writeFile(filepath, json, 'utf-8')
 }
 export async function pdfExportFunc(entry:Entry, filepath:string) {
-
-    console.log('entry json output'+ entry)
-    //entry to pdf
-    
+    console.log('entry output'+ entry)
+    var e = new Entry({entry:entry})
+    createPDF(e, filepath)
 }
 
 /**
@@ -152,7 +153,25 @@ export async function exportEntries(entriesFilepathsArr:string[], fileExtension:
     }
 }
 
+function createPDF(entry:Entry, filepath:string)
+{
+    //create a new virtual document
+    const doc = new PDF()
 
+    //create an output file
+    doc.pipe(fs.createWriteStream(filepath))
+
+    //add entry text
+    doc
+    .fontSize(20)
+    .text(entry.entryToTxt())
+
+    //save
+    doc.save()
+    
+    //finalise PDF file
+    doc.end()
+}
 
 
 /*************** Exporting - final functions ************** */
@@ -173,3 +192,6 @@ export function exportToPdf(filepaths:string[])
     const extension = '.pdf'
     exportEntries(filepaths, extension, pdfExportFunc)
 }
+
+
+

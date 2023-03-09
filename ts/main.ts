@@ -293,5 +293,19 @@ ipcMain.handle('export-entries-json', async () => {
 
 })
 
-ipcMain.handle('export-entries-pdf', () => {})
+ipcMain.handle('export-entries-pdf', async () => {
+  var dialogPath = dir.tagDirectory
+  dialogPath ? console.log(`dialogPath:${dialogPath}`) : console.log('dialogPath is null or undefined')
+  //open dialog window
+  var promise:OpenDialogReturnValue = await dialog.showOpenDialog({ defaultPath: dialogPath, properties: ['openFile', 'multiSelections'] })
+
+  //if not exited
+  if (promise && !promise.canceled)
+  {
+      //get filepaths of entries
+      var entriesFilepathsArr:string[] = promise.filePaths
+      //export entries
+      return await eExport.exportToPdf(entriesFilepathsArr)
+  }
+})
 // ipcMain.handle('show-open-dialog')
