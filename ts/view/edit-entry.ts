@@ -24,6 +24,9 @@ var e = new Entry({})
 window.onload = () => displayCurrentEntry()
 
 //display entry
+/**
+ * displays current entry
+ */
 async function displayCurrentEntry() {
     //get current entryJson
     var entryJson:string = await ipcRenderer.invoke('get-current-entry')
@@ -36,15 +39,19 @@ async function displayCurrentEntry() {
     tags.innerHTML = e.tagsToHTML(entry.tags)
 }
 
+/**
+ * Updates the current entry
+ * (instead of saving separate copy)
+ */
 async function updateEntry() {
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
     //@ts-ignore
-    var entry = new Entry({e_title:title.innerHTML,e_body:body.innerHTML, e_tags:tagsArr})
+    var entry = new Entry({title:title.innerHTML,body:body.innerHTML, tags:tagsArr})
     //turn entry to json format - ready for saving to file
     var entry_json = JSON.stringify(entry);
-    
+    console.info('updateEntry - entry_json: ' + entry_json);
     //get current entry name
     var entryName = await ipcRenderer.invoke('get-current-entry-name')
     //send to main for be updated
@@ -64,14 +71,18 @@ function tagsToArr(tags:HTMLDivElement) {
     return arr
 }
 
+/**
+ * Saves a completely new copy of the entry
+ * instead of overwriting the first copy
+ */
 async function saveNewEntry() {
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
     //@ts-ignore
-    var entry = new Entry({e_title:title.innerHTML,e_body:body.innerHTML, e_tags:tagsArr})
-    //send to main for be persisted
-    var message = await ipcRenderer.invoke('create-entry', entry)
+    var entry = new Entry({e_title:title.innerHTML, e_body:body.innerHTML, e_tags:tagsArr})
+    //send to main to be persisted
+    var message = await ipcRenderer.invoke('create-entry', entry.entryToJsonStr())
     //display message
     messageDiv.innerText = message
 }

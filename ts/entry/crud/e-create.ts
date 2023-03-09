@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as dir from '../../directory'
 import paths from 'path'
 
+
 function dateStr():string {
   var date = new Date();
   var day = date.getDate();
@@ -21,7 +22,7 @@ function dateStr():string {
  * @param entryJson json String of entry details
  */
 export async function createEntry(entryJson:string, directory:string=dir.allEntries):Promise<string> {
-  console.log('ipcMain: Creating new Entry -' + entryJson);
+  console.log('ipcMain: Creating new Entry:' + entryJson);
   
   
   //create filename
@@ -50,17 +51,22 @@ export async function createEntry(entryJson:string, directory:string=dir.allEntr
 
 /**
  * 
- * @param entryJson json string
+ * @param entryJsonStr json string
  * @param filename filename
  */
-export async function symlinkEntryFile(entryJson:string,filename:string) {
+export async function symlinkEntryFile(entryJsonStr:string,filename:string) {
   console.log('*** symlinkEntryFile called ***')
-  var entry = JSON.parse(entryJson)
+  console.log('entryJson:',entryJsonStr)
+  
+  var entryJson = JSON.parse(entryJsonStr)
+  //@ts-ignore
+  var entry = new Entry(entryJson)
   //all entries go into the all directory and then are
   //symlinked into other directories (tags)
   var targetFilepath = paths.join(dir.allEntries,filename)
   
   //for each tag
+  //@ts-ignore
   entry.tags.forEach(async (tag: string)=> {
     //if tag is not emptystring or all tag
     if (tag != '' && tag != 'all'){

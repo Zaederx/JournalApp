@@ -7,7 +7,7 @@ export class Entry {
     body:string;
     tags:string[] = [];
     
-    constructor (obj:{ entry?:Entry, e_date?:string, e_title?:string, e_body?:string, e_tags?:string[]}) {
+    constructor (obj:{ entry?:Entry, date?:string, title?:string, body?:string, tags?:string[]}) {
         var d = new Date();
         var day = d.getDate();
         var month = d.getMonth();
@@ -29,11 +29,11 @@ export class Entry {
         else
         {
             // regular var assignment
-            const {e_date, e_title, e_body, e_tags} = obj
-            this.date = e_date ? e_date : dateStr;
-            this.title = e_title ? e_title : 'default';
-            this.body = e_body ? e_body : 'default';
-            this.tags = e_tags ? e_tags : ['all'];
+            const {date, title, body, tags} = obj
+            this.date = date ? date : dateStr;
+            this.title = title ? title : 'default';
+            this.body = body ? body : 'default';
+            this.tags = tags ? tags : ['all'];
         }
         
     }
@@ -77,8 +77,14 @@ export class Entry {
     }
     entryToJson(e:Entry=this)
     {
-        var json = {date:e.date, title:e.title, body:e.body, tags:e.tagsArrToStringCSV() }
+        var json = {date:e.date, title:e.title, body:e.body, tags:e.tags.toString() }
         return json
+    }
+    entryToJsonStr(e:Entry=this)
+    {
+        var json = e.entryToJson
+        var jsonStr = JSON.stringify(json)
+        return jsonStr
     }
     tagsToHTML(tags:string[]) {
         var tagsHtml = ''
