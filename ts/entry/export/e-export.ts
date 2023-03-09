@@ -73,23 +73,46 @@ async function getEntriesByFilepaths(entriesFilepathsArr:string[]):Promise<Entry
     return entries
 }
 
+export async function txtExportFunc(entry:Entry, filepath:string) {
+    //get entry as txt output
+    var obj = {entry:entry}
+    var e = new Entry(obj)
+    var txt = e.entryToTxt()
+    console.log('entry txt output'+ txt)
+    //write file to directory
+    await fs.promises.writeFile(filepath, txt, 'utf-8')
+}
 /**
- * Export an entry as a plain text file
- * @param entry_name name of an entry
+ * Note: by some weird quirk, I realised that
+ * entry object created by parsing json lose their functions
+ * and don't work as intended.
+ * You have to create a whole new object that has the same 
+ * properties copied over. 
+ * @param entry 
+ * @param filepath 
  */
-export async function exportEntryTxt(entry_name:string)
-{
-    var entry = await getEntry(entry_name)
-    var txt:string = entry.entryToTxt()
-    return txt
+export async function jsonExportFunc(entry:Entry, filepath:string) {
+    //convert functionless entry to full entry
+    var obj = {entry:entry}
+    var e = new Entry(obj)
+    var json = e.entryToJsonStr()
+    console.log('entry json output'+ json)
+    //write file to directory
+    await fs.promises.writeFile(filepath, json, 'utf-8')
+}
+export async function pdfExportFunc(entry:Entry, filepath:string) {
+
+    console.log('entry json output'+ entry)
+    //entry to pdf
+    
 }
 
 /**
- * Export entries as txt files
- * @param entriesFilepathsArr filepaths of entries to be exported
- * @return string[] of txt
+ * Export an entry as a json file
+ * using the entry's name
+ * @param entry_name name of entry 
  */
-export async function exportEntriesTxt(entriesFilepathsArr:string[])
+export async function exportEntries(entriesFilepathsArr:string[], fileExtension:string, func:Function)
 {
     console.log('\nfunction exportEntriesTxt called\n')
     //get entries
@@ -105,25 +128,19 @@ export async function exportEntriesTxt(entriesFilepathsArr:string[])
         console.log('making export directory:'+exportDir)
         fs.promises.mkdir(exportDir)
     } catch (error) {
-        console.log('export-entry.ts - function exportEntriesTxt:'+error)
+        console.log('export-entry.ts - function exportEntries:'+error)
     }
     try 
     {
-        
         //entries to filesystem
         entries.forEach( async (entry) => {
             console.log('entry.date:'+entry.date)
             //set filepath
-            var filepath = path.join(exportDir, entry.date + '.txt')
+            var filepath = path.join(exportDir, entry.date + fileExtension)
             console.log('export filepath:', filepath)
             try {
-                //get entry as txt output
-                var obj = {entry:entry}
-                var e = new Entry(obj)
-                var txt = e.entryToTxt()
-                console.log('entry txt output'+ txt)
-                //write file to directory
-                await fs.promises.writeFile(filepath, txt, 'utf-8')
+                //unique function for each file type
+                func(entry,filepath)  
             } catch (error) {
                 console.warn(error)
             }
@@ -133,57 +150,26 @@ export async function exportEntriesTxt(entriesFilepathsArr:string[])
     {
         console.warn('export-entry.ts - function exportEntriesTxt:'+err)
     }
-    
-    
 }
 
 
 
-/**
- * Export an entry as a json file
- * using the entry's name
- * @param entry_name name of entry 
- */
-export async function exportEntryJson(entry_name:string)
+
+/*************** Exporting - final functions ************** */
+
+export function exportToTxt(filepaths:string[])
 {
-    var entry = await getEntry(entry_name)
-    var json = entry.entryToJson()
-    return json
+    const extension = '.txt'
+    exportEntries(filepaths, extension, txtExportFunc)
 }
 
-
-export async function exportEntriesJson(entriesFilepathsArr:string[])
+export function exportToJson(filepaths:string[])
 {
-    //get entries
-    var entries:Entry[] = await getEntriesByFilepaths(entriesFilepathsArr)
-
-    //entries to txt
-    type entryJson = {title:string, body:string, tags:string}
-    var jsonArr:entryJson[] = []
-    entries.forEach( entry => 
-        {
-            jsonArr.push(entry.entryToJson())
-        })
-    //return txt files in array
-    return jsonArr
+    const extension = '.json'
+    exportEntries(filepaths, extension, jsonExportFunc)
 }
-
-
-/**
- * 
- * @param entriesFilepathsArr array of filepaths from selected entries
- */
-export async function exportEntriesPdf(entriesFilepathsArr:string[]): Promise<string[]>
+export function exportToPdf(filepaths:string[])
 {
-    //get entries
-    var entries = await getEntriesByFilepaths(entriesFilepathsArr)
-
-    //entries pdf
-    var jsonArr:any[] = []
-    entries.forEach( entry => 
-        {
-            jsonArr.push(entry.entryToJson())
-        })
-    //return txt files in array
-    return jsonArr
+    const extension = '.pdf'
+    exportEntries(filepaths, extension, pdfExportFunc)
 }

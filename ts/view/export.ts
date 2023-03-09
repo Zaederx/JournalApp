@@ -19,30 +19,21 @@ btn_export_pdf ? btn_export_pdf.onclick = () => export_pdf() : console.warn('btn
 async function export_txt()
 {
     console.log("function export_txt called")
-    //send message to ipcMain to export entries
+    //send message to ipcMain to export entries txt
     ipcRenderer.invoke('export-entries-txt')
 }
 
 
-
 async function export_json()
 {
-   
+    console.log("function export_json called")
+    //send message to ipcMain to export entries json
+    ipcRenderer.invoke('export-entries-json')
 }
 
 async function export_pdf()
 {
-    console.log('function export_pdf called')
-    var dialogPath = await ipcRenderer.invoke('get-tag-directory-filepath')
-    //open dialog box
-    var promise:OpenDialogReturnValue = await dialog.showOpenDialog({ defaultPath: dialogPath, properties: ['openFile', 'multiSelections'] })
-
-    //if not exited
-    if (!promise.canceled)
-    {
-        //get filepaths of entries
-        var entriesArr:string[] = promise.filePaths
-        //send entries to be exported
-        ipcRenderer.emit('export-entries-pdf', entriesArr)
-    }
+    console.log("function export_pdf called")
+    //send message to ipcMain to export entries pdf
+    ipcRenderer.invoke('export-entries-pdf')
 }

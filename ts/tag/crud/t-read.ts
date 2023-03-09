@@ -156,10 +156,12 @@ export async function readAllTags():Promise<string[]> {
 }
 
 export async function readTagEntries(tagName:string) {
+    //get paths
     var path = paths.join(dirs.tagDirectory,tagName)
-   var entryDates:EntryDate[] = await eRead.readDirFilesEntryDate(path);
-   var filesHTML = eRead.entryDateToHtml(entryDates)
-   return filesHTML
+    //get entry dates (array of entries arranged by dates)
+    var entryDates:EntryDate[] = await eRead.readDirFilesEntryDate(path);
+    var filesHTML = eRead.entryDateToHtml(entryDates)
+    return filesHTML
 }
 
 /**

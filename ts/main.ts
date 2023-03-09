@@ -8,15 +8,14 @@ import * as eCreate from './entry/crud/e-create'
 import * as eRead from './entry/crud/e-read'
 import * as eUpdate from './entry/crud/e-update'
 import * as eDelete from './entry/crud/e-delete'
+import * as eExport from './entry/export/e-export'
 //Tag
 import * as tCreate from './tag/crud/t-create'
 import * as tRead from './tag/crud/t-read'
 import * as tUpdate from './tag/crud/t-update'
 import * as tDelete from './tag/crud/t-delete'
-
+//Other
 import * as theme from './theme/theme'
-
-import * as export_entry from './entry/export/export-entry'
 import dateStr from './entry/crud/dateStr'
 
 
@@ -26,10 +25,10 @@ import dateStr from './entry/crud/dateStr'
 let window:BrowserWindow;
 
 var filename = 'default';
-
+var integration = false;
 function createWindow () 
 {
-  var integration = false;
+  
   if (process.env.NODE_ENV === 'test-main') 
   {
      integration = true;
@@ -271,9 +270,28 @@ ipcMain.handle('export-entries-txt', async () => {
        //get filepaths of entries
        var entriesFilepathsArr:string[] = promise.filePaths
        //export entries
-       return await export_entry.exportEntriesTxt(entriesFilepathsArr)
+       return await eExport.exportToTxt(entriesFilepathsArr)
    }
    
 })
 
+
+ipcMain.handle('export-entries-json', async () => {
+  var dialogPath = dir.tagDirectory
+  dialogPath ? console.log(`dialogPath:${dialogPath}`) : console.log('dialogPath is null or undefined')
+  //open dialog window
+  var promise:OpenDialogReturnValue = await dialog.showOpenDialog({ defaultPath: dialogPath, properties: ['openFile', 'multiSelections'] })
+
+  //if not exited
+  if (promise && !promise.canceled)
+  {
+      //get filepaths of entries
+      var entriesFilepathsArr:string[] = promise.filePaths
+      //export entries
+      return await eExport.exportToJson(entriesFilepathsArr)
+  }
+
+})
+
+ipcMain.handle('export-entries-pdf', () => {})
 // ipcMain.handle('show-open-dialog')
