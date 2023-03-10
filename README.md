@@ -17,6 +17,7 @@ A journalling project that I made while experiementing and learning about Node a
 * [Requirements to run the project](#requirements-to-run-the-project)
 * [Setup](#setup)
 * [Running the project](#running-the-project)
+* [Testing](#testing)
 * [Project Shortcomings](#shortcomings)
 * [Modifications](#modifications)
 * [Things learned](#things-learned)
@@ -92,18 +93,22 @@ npm install
 ## Running the Project
 Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then `npm start`. This will generate JavaScript files from the TypeScirpt files that are in the repository (and likewise SASS into CSS) and then it will load up the project on screen.
 
+## Testing
+To test the project, please run the following command:
+```
+npm run wdio
+```
 
 ## Project Shortcomings
 I would like to take some time and some point to add a dark mode and some user settings to the project. These projects when working alone without a team do tend to drag on, but I would like to revisit it to add this improvement.
-
 
 ## Modifications
 Findind a way to improve journal file load times would be something I would also like to change with this project.
 
 ## Things learned
-I learned how to use Node and Electron for the first time. I learnt about TypeScript and SASS for the first time too. Also I believe it was this project that was the first time I used  VScode  and i haven't looked back since... :).
+I learned how to use Node and Electron for the first time. I learnt about TypeScript and SASS for the first time too. Also I believe it was this project that was the first time I used  VScode  and I haven't looked back since... :).
 
-Apart from that I've also done some testing in this project with Mocha. I really wanted to try to make an effort to do some testing with this project as it is something that I struggle with knowing how to do. I was pleased that I was able to start out this project with some testing in a BDD style rather than just adding it in at the end.
+Apart from that I've also done some testing in this project with Mocha [in project version 1]. I really wanted to try to make an effort to do some testing with this project as it is something that I struggle with knowing how to do. I was pleased that I was able to start out this project with some testing in a BDD style rather than just adding it in at the end.
 
 
 [Trello Page](https://trello.com/b/CXi4WL52)
