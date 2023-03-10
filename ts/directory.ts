@@ -16,3 +16,7 @@ export const tagDirectory = paths.join(app.getPath('userData'),'tagDirs')
  * Downloads directory
  */
 export const downloads = paths.join(app.getPath('downloads'))
+
+
+//relative to tsconfig
+export const themeFilepath = paths.join('css', 'theme.txt')

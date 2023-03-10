@@ -1,8 +1,8 @@
 import path from "path"
 import fs from 'fs'
-import { app } from 'electron'
+import * as dir from '../directory'
 /** Handle CSS Theme Changes */
-const themeFilepath = path.join(app.getAppPath(), 'settings', 'theme.txt')
+
 /**
  * Function to get the current css
  * theme from file
@@ -10,8 +10,19 @@ const themeFilepath = path.join(app.getAppPath(), 'settings', 'theme.txt')
 export async function getCurrentCssTheme()
 {
     console.log('function getCurrentCssTheme() called')
+    console.log('themeFilepath:'+dir.themeFilepath)
     //read file from css directory
-    var theme = await fs.promises.readFile(themeFilepath, 'utf-8')
+    var theme = ''
+    try {
+        theme = await fs.promises.readFile(dir.themeFilepath, 'utf-8')
+        if (!theme)
+        {
+            theme = '../css/main.css'
+        }
+    }
+    catch (err) {
+        console.log(err)
+    }
     return theme
 }
 
@@ -22,11 +33,11 @@ export async function getCurrentCssTheme()
  */
 export async function setCurrentCssTheme(theme:string)
 {
-    console.log('function setCurrentCSSTheme(theme:string) called')
+    console.log('function setCurrentCssTheme(theme:string) called')
     
     //try writing to file
     try {
-        fs.promises.writeFile(themeFilepath,theme,'utf-8')
+        fs.promises.writeFile(dir.themeFilepath,theme,'utf-8')
     } 
     //print any exceptions to console
     catch (e) 
