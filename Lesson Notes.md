@@ -20,3 +20,5 @@ ipcMain.('send-something', (entryJson) => {
     entry = new Entry(e)
 })
 ```
+
+## To Test Electron Apps - see https://www.electronjs.org/docs/latest/tutorial/automated-testing
