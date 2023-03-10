@@ -1,7 +1,8 @@
 #System files
 .DS_Store
 node_modules
-
+#Electron binary txt
+electronBinarypath.txt
 # JSON entry files
 tagDirs/all
 tagDirs/
