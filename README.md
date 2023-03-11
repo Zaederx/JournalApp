@@ -94,7 +94,15 @@ npm install
 Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then `npm start`. This will generate JavaScript files from the TypeScirpt files that are in the repository (and likewise SASS into CSS) and then it will load up the project on screen.
 
 ## Testing
-To test the project, please run the following command:
+To test the project, make sure to run the application once to get the application binary path file to be generated. Then please run the following commands:
+```
+npm install
+```
+...then to get the filepath file which is generated on startup
+```
+npm start
+```
+...then run
 ```
 npm run wdio
 ```
