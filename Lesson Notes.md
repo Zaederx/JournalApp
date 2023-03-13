@@ -21,7 +21,9 @@ ipcMain.('send-something', (entryJson) => {
 })
 ```
 
-## To Test Electron Apps - see https://www.electronjs.org/docs/latest/tutorial/automated-testing
+## To Test Electron Apps - Spectron Deprecation see [article](https://www.electronjs.org/blog/spectron-deprecation-notice) and WDIO see[latest in automated testing](https://www.electronjs.org/docs/latest/tutorial/automated-testing)
+As spectron has been deprecated, WDIO is now the official successor to Spectron for automated testing. For getting started with WDIO see [getting started](https://webdriver.io/docs/gettingstarted/) also see [wdio-electron-service](https://github.com/webdriverio-community/wdio-electron-service/blob/main/example/e2e/wdio.conf.js)
+  
 
 
 ## Unable to load spec files because they rely on 'browser' object 
@@ -30,7 +32,7 @@ and see - [wdio article](https://webdriver.io/blog/2019/11/01/spec-filtering/)
 ans see most importantly [wdio link](https://webdriver.io/docs/api/browser)
 In the end it was important to import the browser object into the files. For example:
 ```
-import browser from '@wdio/globals'
+import { browser } from '@wdio/globals'
 
 export default class ViewEntry extends Page
 {
@@ -52,3 +54,58 @@ export default class ViewEntry extends Page
     }
 }
 ```
+
+## Note for setting up port number for wdio using chromedirver with electron service
+Important to put the port number twice into the wdio.config.ts file. Once under the electron service `chromedirver:{port:}` and once under the wdio `port` setting.
+Please see [wdio-electron-service example](https://github.com/webdriverio-community/wdio-electron-service/blob/main/example/e2e/wdio.conf.js)
+
+
+## 'Object XX' is undefined - e.g. Entry is undefined.
+Make sure to check that the object has been imported. It does not always check types dependent on settings in tsconfig.
+
+## Cannot find module '../folder/xxx', e.g.: Cannot find module '../classes/entry'
+Make sure that you do not include imports on files that are script on html. i.e.
+```
+<head>
+    <script>var exports = {"__esModule": true};</script>
+    <script src="../js/classes/entry.js" defer></script>//These
+    <script src="../js/view/nav.js" defer></script>//are 
+    <script src="../js/view/create-entry.js" defer></script>//all
+    <script src="../js/view/settings.js" defer></script>//scripts
+    <script src="../js/view/export.js" defer></script>// dont include imports when using electron.
+    <link id="theme-css" rel="stylesheet" href="../css/main.css">
+    <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal App</title>
+</head>
+```
+
+This is error is basically telling you that it can't find the script. Instead, just include the class files or related script as additional scripts in the html.
+Looking at the previous example, create-entry.js requires entry.js. So entry is included in the scripts. I put entry above so that its should be loaded first before create-entry.js
+
+
+## Note - Async await is NOT syntactic sugar for promises - online research + personal observations
+You can have instances where async await is not the best choice and standard promises might be the best choice. Things to note:
+- Async wait does not work within loops
+- Async await is usually best when working with a single promise that returns a result
+- Async await It only puts the dependent line - usually the next line - on hold until, but that does not guarantee that all the code you have written will execute in the order you have written it in (best to use... 
+```
+var promise = ipcRenderer.invoke('invocation')
+promise.then((object) =>
+{
+    //code
+    //code
+    //code 
+})
+```
+...rather than
+```
+var variable = await ipcRenderer.invoke('invocation')
+console.log(variable)
+console.log('When will you be printed????')//code that could be executed before variable code or after - not known. Just depends on how long it takes for invocation to return - psuedo-random
+```
+...if you have multiple lines that are to be executed)
