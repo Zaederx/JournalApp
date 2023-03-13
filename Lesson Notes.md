@@ -110,3 +110,27 @@ console.log(variable)
 console.log('When will you be printed????')//code that could be executed before variable code or after - not known. Just depends on how long it takes for invocation to return - psuedo-random
 ```
 ...if you have multiple lines that are to be executed)
+
+
+## ERROR electron-service: error downloading Chromedriver for Electron v^13.1.0
+You just need to install the chromedriver using the `electron-chromedriver` and the version of electron that you need to use. For example:
+```
+npm install electron-chromedriver@13
+```
+Then include the driver location in the wdio.config.ts like this:
+```
+services: [
+        ['chromedriver',{
+            
+            appPath: electronAppPath,
+            appName: name,
+            // appArgs: [],
+            chromedriver: {
+                port: portNum,//note must put port num twice (once for chrome driver and once for wdio)
+                logFileName: 'wdio-chromedriver.log',
+                chromedriverCustomPath: require.resolve('chromedriver/bin/chromedriver'),//gives the location of the chromedriver
+            },
+            electronVersion:electron
+        }]
+    ],
+```
