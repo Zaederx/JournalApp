@@ -128,14 +128,16 @@ export const config: Options.Testrunner = {
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
     services: [
-        ['electron',{
+        ['chromedriver',{
+            
             appPath: electronAppPath,
             appName: name,
             // appArgs: [],
             chromedriver: {
-                port: portNum,//note mustput port num twice (once for chrome driver and once for wdio)
+                port: portNum,//note must put port num twice (once for chrome driver and once for wdio)
                 logFileName: 'wdio-chromedriver.log',
-                chromedriverCustomPath: require.resolve('chromedriver/bin/chromedriver')
+                chromedriverCustomPath: require.resolve('chromedriver/bin/chromedriver'),
+                // browserCustomPath: require.resolve('')
             },
             electronVersion:electron
         }]
@@ -156,7 +158,7 @@ export const config: Options.Testrunner = {
         binary: electronBinaryPath, // Path to your Electron binary.
         args: [/* cli arguments */] // Optional, perhaps 'app=' + /path/to/your/app/
         },
-        acceptInsecureCerts: true
+        // acceptInsecureCerts: true
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
