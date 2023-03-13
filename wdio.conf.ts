@@ -16,7 +16,6 @@ const { name,
 console.log('electron version:'+electron)
 const portNum = 9519
 export const config: Options.Testrunner = {
-    
     //
     // ====================
     // Runner Configuration
@@ -79,24 +78,8 @@ export const config: Options.Testrunner = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
-    capabilities: [{
     
-        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-        // grid with only 5 firefox instances available you can make sure that not more than
-        // 5 instances get started at a time.
-        // maxInstances: 5,
-        // //
-        // browserName: 'chrome',
-        // 'goog:chromeOptions': {
-        //     binary:electronBinaryPath,
-        //     args:[electronAppPath]
-        // },
-        // acceptInsecureCerts: true
-        // If outputDir is provided WebdriverIO can capture driver session logs
-        // it is possible to configure which logTypes to include/exclude.
-        // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
-        // excludeDriverLogs: ['bugreport', 'server'],
-    }],
+    
     //
     // ===================
     // Test Configurations
@@ -104,7 +87,7 @@ export const config: Options.Testrunner = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'debug',
     //
     // Set specific log levels per logger
     // loggers:
@@ -152,11 +135,33 @@ export const config: Options.Testrunner = {
             chromedriver: {
                 port: portNum,//note mustput port num twice (once for chrome driver and once for wdio)
                 logFileName: 'wdio-chromedriver.log',
+                chromedriverCustomPath: require.resolve('chromedriver/bin/chromedriver')
             },
             electronVersion:electron
         }]
     ],
-    port: portNum,
+    capabilities: [{
+    
+        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
+        // grid with only 5 firefox instances available you can make sure that not more than
+        // 5 instances get started at a time.
+        // maxInstances: 5,
+        // //
+        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
+        // grid with only 5 firefox instances available you can make sure that not more than
+        // 5 instances get started at a time.
+        // maxInstances: 5,
+        // //
+        browserName: 'chrome','goog:chromeOptions': {
+        binary: electronBinaryPath, // Path to your Electron binary.
+        args: [/* cli arguments */] // Optional, perhaps 'app=' + /path/to/your/app/
+        },
+        acceptInsecureCerts: true
+        // If outputDir is provided WebdriverIO can capture driver session logs
+        // it is possible to configure which logTypes to include/exclude.
+        // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
+        // excludeDriverLogs: ['bugreport', 'server'],
+    }],
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
     // see also: https://webdriver.io/docs/frameworks
