@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as dir from '../../directory'
 import paths from 'path'
-
+import { Entry } from '../../classes/entry';
 
 function dateStr():string {
   var date = new Date();
@@ -37,14 +37,16 @@ export async function createEntry(entryJson:string, directory:string=dir.allEntr
   var filepath = paths.join(dir.allEntries,fileName)
   console.warn('createEntry path:', filepath)
   var message
+  var promise;
   try {
-    await fs.promises.writeFile(filepath,entryJson, 'utf-8')
+    promise = fs.promises.writeFile(filepath,entryJson, 'utf-8')
     message ='File saved successfully'
-  } catch (err) {
+    //create symlinks at related tag directories
+    promise.then(() => symlinkEntryFile(entryJson,fileName))  
+   } catch (err) {
     message = 'An error occured in saving the new entry:'+err
   }
-  //create symlinks at related tag directories
-  symlinkEntryFile(entryJson,fileName)
+  
 
   return message
 }
@@ -56,16 +58,15 @@ export async function createEntry(entryJson:string, directory:string=dir.allEntr
  */
 export async function symlinkEntryFile(entryJsonStr:string,filename:string) {
   console.log('*** symlinkEntryFile called ***')
-  console.log('entryJson:',entryJsonStr)
-  
+  console.log('entryJsonStr:',entryJsonStr)
   var entryJson = JSON.parse(entryJsonStr)
+  console.log('entryJson:',entryJson)
   //@ts-ignore
   var entry = new Entry(entryJson)
   //all entries go into the all directory and then are
   //symlinked into other directories (tags)
   var targetFilepath = paths.join(dir.allEntries,filename)
-  
-  //for each tag
+  //for each tag - put a symlink into tag folder
   //@ts-ignore
   entry.tags.forEach(async (tag: string)=> {
     //if tag is not emptystring or all tag
@@ -74,8 +75,12 @@ export async function symlinkEntryFile(entryJsonStr:string,filename:string) {
       var symlinkPath = paths.join(dir.tagDirectory,tag,filename)
       console.log('symlinkPath',symlinkPath)
       //create a symlink using targetFilepath and symlinkPath
-      var error = await fs.promises.symlink(targetFilepath,symlinkPath)
-      console.log(error)
+      try {
+        await fs.promises.symlink(targetFilepath,symlinkPath)
+      }
+      catch (e) {
+        console.log(e)
+      }
     }
   })
 }

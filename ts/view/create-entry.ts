@@ -7,7 +7,7 @@ var entry_tags = document.querySelector('#entry-tags') as HTMLDivElement
 
 var btn_create_entry = document.querySelector('#create-entry') as HTMLDivElement
 
-btn_create_entry ? btn_create_entry.onclick = () => { return clickCreateEntryBtn(); } : console.log('btn_create_entry is null');
+btn_create_entry ? btn_create_entry.onclick = () =>  clickCreateEntryBtn() : console.log('btn_create_entry is null');
 /**
  * Returns the current date as a string.
  * @return date as a string

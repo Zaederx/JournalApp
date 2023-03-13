@@ -19,12 +19,30 @@ import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
 
 
+//produce electron binary file path for the wdio.config.ts
+const appBinaryPath = app.getPath('exe')
+const filename1 = 'electronBinaryPath.txt'
+const appPath = app.getAppPath()
+const filename2 = 'electronAppPath.txt'
+
+console.log('appBinaryPath:'+appBinaryPath)
+console.log('writing path to txt file...')
+try
+{
+  fs.promises.writeFile(filename1,appBinaryPath,'utf-8')
+  fs.promises.writeFile(filename2,appPath,'utf-8')
+}
+catch(err)
+{
+  console.log(err)
+}
+
+
 
 //TODO - option to store file in iCloud
 
 let window:BrowserWindow;
 
-var filename = 'default';
 var integration = false;
 function createWindow () 
 {
@@ -70,7 +88,8 @@ if (!fs.existsSync(directory))
   console.log(app.getPath('home'))
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(createWindow)
+//.then(() => theme.setCurrentCssTheme('../css/main.css'));
 
 app.on('window-all-closed', () => {
   //quit completely even on darwin (mac) if it is a test

@@ -168,7 +168,7 @@ function createPDF(entry:Entry, filepath:string)
 
     //save
     doc.save()
-    
+
     //finalise PDF file
     doc.end()
 }
@@ -181,7 +181,6 @@ export function exportToTxt(filepaths:string[])
     const extension = '.txt'
     exportEntries(filepaths, extension, txtExportFunc)
 }
-
 export function exportToJson(filepaths:string[])
 {
     const extension = '.json'

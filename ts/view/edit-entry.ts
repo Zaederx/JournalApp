@@ -1,3 +1,4 @@
+import { error } from "console"
 import { ipcRenderer } from "electron"
 
 
@@ -141,11 +142,14 @@ async function addSelectedTagsToEntry() {
     //@ts-ignore
     var entryUpdated = new Entry({title:title.innerHTML, body:body.innerHTML, tags:entry.tags})
     var newEntryJson = entryUpdated.entryToJsonStr()
-    var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
-    //display message
-    messageDiv.innerText = message
-    //page refresh
-    displayCurrentEntry()
+    var promise =  ipcRenderer.invoke('update-current-entry',newEntryJson)
+    promise.then((message) => {
+        //display message
+        messageDiv.innerText = message
+        //page refresh
+        displayCurrentEntry()
+    })
+    
 }
 
 async function removeSelectedTags() {
@@ -170,13 +174,20 @@ async function removeSelectedTags() {
     //persist changes
     var newEntryJson = JSON.stringify(entry)
     console.log('newEntryJson:',newEntryJson)
-    var message = await ipcRenderer.invoke('update-current-entry',newEntryJson)
-    //remove old entry symlinks from tag folders
-    var message2 = await ipcRenderer.invoke('remove-entry-tags',selectedTags)
-    //display message
-    messageDiv.innerText = message, message2
-    //page refresh
-    displayCurrentEntry()
+    var promise = ipcRenderer.invoke('update-current-entry',newEntryJson)
+    promise.then(async (message) => {
+        //remove old entry symlinks from tag folders
+        var message2 = await ipcRenderer.invoke('remove-entry-tags',selectedTags)
+        //display message
+        messageDiv.innerText = message, message2
+    })
+    .catch((err) => console.log(err))
+    .then(() => {
+        //page refresh
+        displayCurrentEntry()
+    })
+    .catch(err => {console.log(err)})
+    
 }
 
 var hidden = true
