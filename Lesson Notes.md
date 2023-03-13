@@ -94,13 +94,14 @@ You can have instances where async await is not the best choice and standard pro
 - Async await is usually best when working with a single promise that returns a result
 - Async await It only puts the dependent line - usually the next line - on hold until, but that does not guarantee that all the code you have written will execute in the order you have written it in (best to use... 
 ```
-var promise = ipcRenderer.invoke('invocation')
-promise.then((object) =>
-{
-    //code
-    //code
-    //code 
-})
+    var promise = ipcRenderer.invoke('invocation')
+    promise.then((object) =>
+    {
+        //code
+        //code
+        //code 
+    })
+    
 ```
 ...rather than
 ```
