@@ -126,11 +126,14 @@ services: [
             appName: name,
             // appArgs: [],
             chromedriver: {
-                port: portNum,//note must put port num twice (once for chrome driver and once for wdio)
-                logFileName: 'wdio-chromedriver.log',
+                port: portNum,
+                logFileName: 'wdio-chromedriver.log',//default
                 chromedriverCustomPath: require.resolve('chromedriver/bin/chromedriver'),//gives the location of the chromedriver
             },
             electronVersion:electron
         }]
     ],
 ```
+
+## Docs for the chromedriver service: https://webdriver.io/docs/wdio-chromedriver-service/
+Docs for the chromedriver service setup for the wdio.config.ts
