@@ -137,3 +137,7 @@ services: [
 
 ## Docs for the chromedriver service: https://webdriver.io/docs/wdio-chromedriver-service/
 Docs for the chromedriver service setup for the wdio.config.ts
+
+
+## Always put modules inside of separate folders
+Always put modules inside of separate folders even if it's just one file. By doing this it makes sure that you can always separate files into smaller sections, but that are all goruped under the same functionality.
