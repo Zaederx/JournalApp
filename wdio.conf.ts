@@ -1,6 +1,7 @@
 import type { Options } from '@wdio/types'
 import {app} from 'electron'
 import fs from 'fs'
+import webdriverio from 'webdriverio'
 
 const electronBinaryPath = fs.readFileSync('electronBinaryPath.txt', 'utf-8')
 const electronAppPath = fs.readFileSync('electronAppPath.txt', 'utf-8')
@@ -22,13 +23,16 @@ export const config: Options.Testrunner = {
     // ====================
     // WebdriverIO supports running e2e tests as well as unit and component tests.
     runner: 'local',
+    // hostname:'localhost',
+    // port: portNum,
+    // path: '',
     outputDir: 'wdio-logs',
     autoCompileOpts: {
         autoCompile: true,
         tsNodeOpts: {
             project: './test/tsconfig.json',
             transpileOnly: true,
-            files:true// pay attention to tsconfig.json include and exclude methods
+            files: true// pay attention to tsconfig.json include and exclude methods
         },
         
     },
@@ -134,8 +138,10 @@ export const config: Options.Testrunner = {
             appName: name,
             // appArgs: [],
             chromedriver: {
-                port: portNum,//note must put port num twice (once for chrome driver and once for wdio)
-                logFileName: 'wdio-chromedriver.log',
+                port: portNum,//note must put port num twice (once for chrome driver and once for wdio),
+                path:'/',
+                logFileName: 'wdio-chromedriver.log',//default
+                outputDir: 'chromedriver-logs',
                 chromedriverCustomPath: require.resolve('chromedriver/bin/chromedriver'),
                 // browserCustomPath: require.resolve('')
             },
