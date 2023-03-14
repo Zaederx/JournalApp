@@ -74,11 +74,11 @@ async function removeSelectedTags()
 window.onload = () => fillTagTable()
 
 //var btn_addTag = document.querySelector('#t-view') as HTMLDivElement
-var theTagTableBody = document.querySelector('#tag-table-body') as HTMLTableElement
+var theTagTableBody2 = document.querySelector('#tag-table-body') as HTMLTableElement
 var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
 
 /** fill tag popup table */
-async function fillTagTable(tableBody:HTMLTableElement=theTagTableBody) 
+async function fillTagTable(tableBody:HTMLTableElement=theTagTableBody2) 
 {
    //get all html tags
    var tagsHTML = await ipcRenderer.invoke('get-tags-table-rows')
@@ -169,7 +169,7 @@ function makeTTRowClickable(row:HTMLTableRowElement) {
  * @param displayViewFunc - the function that returns the view (need to refresh view after filtering to work)
  * @return res string of html rows that match
  */
-function filterTable(tagTableBody:HTMLTableElement=theTagTableBody, input:HTMLDivElement=tag_searchbar) {
+function filterTable(tagTableBody:HTMLTableElement=theTagTableBody2, input:HTMLDivElement=tag_searchbar) {
    console.log('*** filterTable called ***')
    //Ensure search value is not undefined, then displayTagView() if an empty string
    var searchValue:string =  input?.innerText.toLowerCase() == undefined ? '' : input.innerText.toLocaleLowerCase();
@@ -197,7 +197,7 @@ function filterTable(tagTableBody:HTMLTableElement=theTagTableBody, input:HTMLDi
  * @param tagTableBody tableBody to get rows from
  * @returns 
  */
- function getSelectedTags(tagTableBody:HTMLTableElement=theTagTableBody) {
+ function getSelectedTags(tagTableBody:HTMLTableElement=theTagTableBody2) {
     var rows = tagTableBody?.querySelectorAll('tr')
     var tags:string[] = []
     rows.forEach( row => {
