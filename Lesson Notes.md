@@ -163,3 +163,7 @@ https://www.npmjs.com/package/webpack-node-externals
 
 ## Clicking on any part of the screen causes unwanted onclick event
 Basically, in my case, it meant that I had more than one object with the same id. The body of the html document and a button. Just have to be extra careful that I don't use the same id with each object.
+
+
+## There's such as thing as a commonjs2
+There isn't much difference between commonjs and commonjs2, but it seems from what I saw online that commonjs2 handles exports differently with a slightly different form. See [link](https://github.com/webpack/webpack/issues/1114#issuecomment-462240689) for the difference
