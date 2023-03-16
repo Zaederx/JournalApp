@@ -4,12 +4,12 @@
     "description": "",
     "main": "js/main.js",
     "scripts": {
-        "bundle": "export NODE_ENV=''; npm run sass && npm run tsc && npm run pack;",
+        "bundle": "npm run sass && npm run tsc && npm run pack;",
         "pack": "webpack",
         "tsc": "tsc",
         "sass": "sass ./scss:./css",
         "start": "electron .",
-        "run-all": "bundle && test && electron .",
+        "run-all": "npm run bundle && npm start",
         "test": "mocha",
         "wdio": "wdio run ./wdio.conf.ts"
     },

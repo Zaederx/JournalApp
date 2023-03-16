@@ -1,5 +1,5 @@
 const path = require('path')
-const outputPath = path.resolve(__dirname, 'js', 'view')
+const outputPath = path.resolve(__dirname, 'js', 'view', 'bundle')
 const nodeExternals = require('webpack-node-externals')
 module.exports = {
     mode: 'production',
@@ -11,12 +11,11 @@ module.exports = {
         settings: './ts/view/settings.ts',
         export: './ts/view/export.ts',
         nav: './ts/view/nav.ts'
-    }
-    ,
+    },
     output: {
         filename: '[name].bundle.js',
         path: outputPath,
-        libraryTarget: 'commonjs-module'
+        libraryTarget: 'commonjs2'//see [link](https://github.com/webpack/webpack/issues/1114#issuecomment-462240689) for the difference
     },
     module: {
         rules: [
