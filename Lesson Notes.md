@@ -160,3 +160,6 @@ https://webpack.js.org/configuration/node/
 ## Webpack node modules externals
 There is a module to exclude electron and other node external modules from webpack module resolution. This will get rid of errors regarding things like the ipcRenderer not being found 
 https://www.npmjs.com/package/webpack-node-externals
+
+## Clicking on any part of the screen causes unwanted onclick event
+Basically, in my case, it meant that I had more than one object with the same id. The body of the html document and a button. Just have to be extra careful that I don't use the same id with each object.
