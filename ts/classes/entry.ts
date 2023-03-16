@@ -12,7 +12,7 @@ export default class Entry {
     /**
      * must pass in an object - even if its empty
      */
-    constructor (obj:{ entry?:Entry, date?:string, title?:string, body?:string, tags?:string[]}) {
+    constructor (obj:{entry?:Entry, date?:string, title?:string, body?:string, tags?:string[]}={}) {
         var d = new Date();
         var day = d.getDate();
         var month = d.getMonth();
@@ -25,7 +25,7 @@ export default class Entry {
         //if using entry instead
         if (obj?.entry)
         {
-            const {date, title, body, tags} = obj.entry
+            const { date, title, body, tags } = obj.entry
             this.date = date ? date : dateStr
             this.title = title
             this.body = body
@@ -34,16 +34,13 @@ export default class Entry {
         else
         {
             //regular var assignment
-            const {date, title, body, tags} = obj
+            const { date, title, body, tags } = obj
             this.date = date ? date : dateStr;
             this.title = title ? title : 'default';
             this.body = body ? body : 'default';
             this.tags = tags ? tags : ['all'];
         }
-        
     }
-    
-
     tagsToStringCSV(e:Entry=this):string {
         var csv = e ? e.tagsArrToStringCSV() : 'all'
         return csv
@@ -56,7 +53,7 @@ export default class Entry {
         var entryTags:string = ''
         var firstIteration = true
         e.tags.forEach((e)=> {
-            //start condition - if first iteration - no comma before e
+            //start condition - if first iteration - no comma before
             if (firstIteration){
                 entryTags += e  
                 firstIteration = false
@@ -65,7 +62,6 @@ export default class Entry {
             else {
                 entryTags += ','+e
             }
-            
         })
         return entryTags
     }

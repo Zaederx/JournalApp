@@ -8,10 +8,10 @@ import { addSelectedTagsToEntry, removeSelectedTags } from "./clickable-filter-t
 import Entry from "../classes/entry"
 
 //Fetch HTML Elements
-var messageDiv = document.querySelector('#message') as HTMLDivElement
-var title = document.querySelector('#entry-title') as HTMLDivElement
-var body = document.querySelector('#entry-body') as HTMLDivElement
-var tags = document.querySelector('#entry-tags') as HTMLDivElement
+const messageDiv = document.querySelector('#message') as HTMLDivElement
+const title = document.querySelector('#entry-title') as HTMLDivElement
+const body = document.querySelector('#entry-body') as HTMLDivElement
+const tags = document.querySelector('#entry-tags') as HTMLDivElement
 
 //Div Buttons
 var update_entry = document.querySelector('#update-entry') as HTMLDivElement

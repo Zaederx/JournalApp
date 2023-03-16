@@ -1,12 +1,12 @@
 import { ipcRenderer } from "electron"
 import Entry from '../classes/entry'
 
-var messageDiv = document.querySelector('#message') as HTMLDivElement
-var title = document.querySelector('#entry-title') as HTMLDivElement
-var body = document.querySelector('#entry-body') as HTMLDivElement
-var tags = document.querySelector('#entry-tags') as HTMLDivElement
-var btn_edit_entry = document.querySelector('#edit-entry') as HTMLDivElement
-var btn_delete_entry = document.querySelector('#delete-entry') as HTMLDivElement
+const messageDiv = document.querySelector('#message') as HTMLDivElement
+const title = document.querySelector('#entry-title') as HTMLDivElement
+const body = document.querySelector('#entry-body') as HTMLDivElement
+const tags = document.querySelector('#entry-tags') as HTMLDivElement
+const btn_edit_entry = document.querySelector('#edit-entry') as HTMLDivElement
+const btn_delete_entry = document.querySelector('#delete-entry') as HTMLDivElement
 
 
 window.onload = () => displaySelectedEntry()

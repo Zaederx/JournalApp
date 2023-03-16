@@ -60,28 +60,35 @@ export async function symlinkEntryFile(entryJsonStr:string,filename:string) {
   console.log('*** symlinkEntryFile called ***')
   console.log('entryJsonStr:',entryJsonStr)
   var entryJson = JSON.parse(entryJsonStr)
-  console.log('entryJson:',entryJson)
+  console.log('entryJson:', entryJson)
   //@ts-ignore
-  var entry = new Entry(entryJson)
-  //all entries go into the all directory and then are
-  //symlinked into other directories (tags)
-  var targetFilepath = paths.join(dir.allEntries,filename)
-  //for each tag - put a symlink into tag folder
-  //@ts-ignore
-  entry.tags.forEach(async (tag: string)=> {
-    //if tag is not emptystring or all tag
-    if (tag != '' && tag != 'all'){
-      //create the symlinkPath
-      var symlinkPath = paths.join(dir.tagDirectory,tag,filename)
-      console.log('symlinkPath',symlinkPath)
-      //create a symlink using targetFilepath and symlinkPath
-      try {
-        await fs.promises.symlink(targetFilepath,symlinkPath)
+  try {
+    var entry = new Entry({entry:entryJson})
+    //all entries go into the all directory and then are
+    //symlinked into other directories (tags)
+    var targetFilepath = paths.join(dir.allEntries,filename)
+    //for each tag - put a symlink into tag folder
+    //@ts-ignore
+    entry.tags.forEach(async (tag: string)=> {
+      //if tag is not emptystring or all tag
+      if (tag != '' && tag != 'all'){
+        //create the symlinkPath
+        var symlinkPath = paths.join(dir.tagDirectory,tag,filename)
+        console.log('symlinkPath',symlinkPath)
+        //create a symlink using targetFilepath and symlinkPath
+        try {
+          await fs.promises.symlink(targetFilepath,symlinkPath)
+        }
+        catch (e) {
+          console.log(e)
+        }
       }
-      catch (e) {
-        console.log(e)
-      }
-    }
-  })
+    })
+  }
+  catch (err)
+  {
+
+  }
+  
 }
 
