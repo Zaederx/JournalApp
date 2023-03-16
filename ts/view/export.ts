@@ -2,10 +2,7 @@
  * File for export html page functionality 
  * */
 import { ipcRenderer } from "electron";
-// import { shell } from 'electron'
-// import * as dir from '../directory'
-import { dialog } from 'electron';
-import { OpenDialogReturnValue } from "electron/main";
+
 
 //variables
 var btn_export_txt = document.querySelector('#btn-export-txt') as HTMLButtonElement;

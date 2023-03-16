@@ -3,7 +3,8 @@ import { plain, highlighted, clicked } from './constants'
   * 
   * @param row HTMLTableRowElement
   */
-export function makeTTRowClickable(row:HTMLTableRowElement) {
+export default function makeTTRowClickable(row:HTMLTableRowElement) {
+    console.log('function makeTTRowClickable called')
     console.log('\n\n\n\n\n**********row:'+row+'*************\n\n\n\n\n\n\n');
     //constants
     //add css class

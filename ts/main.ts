@@ -64,7 +64,8 @@ function createWindow ()
         contextIsolation: false,//otherwise "WorldSafe".. message still appears
         nodeIntegration: true,//whether you can access node methods - e.g. requires/ import, anywhere in the app's js - needed for front end scripts to work
         enableRemoteModule: true,//enable ipcRenderer in fround end js to speak directly to ipcMain - no need for preload script
-        v8CacheOptions:'none'
+        v8CacheOptions:'none',//prevents electron's v8 Chromium browser engine from caching
+        
     }
   })
 

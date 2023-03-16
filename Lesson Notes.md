@@ -141,3 +141,20 @@ Docs for the chromedriver service setup for the wdio.config.ts
 
 ## Always put modules inside of separate folders
 Always put modules inside of separate folders even if it's just one file. By doing this it makes sure that you can always separate files into smaller sections, but that are all goruped under the same functionality.
+
+
+## There's a way to import the 'shell' in electron
+This might be useful at another point, just in case you might want to use the shell in another way. Just something to note.Already found a way to access terminal commands in electron but this might be more flexible.
+```
+// import { shell } from 'electron'
+```
+
+
+## Bundler for project - use Webpack instead of tsc-bundler (because tsc-bundler uses AMD)
+Typescript bundler uses AMD format for it's output, while Electron requires CommonJS. Use webpack instead.
+https://webpack.js.org/guides/getting-started/
+https://webpack.js.org/concepts/modules/
+https://webpack.js.org/configuration/node/
+
+
+## Webpack node modules externals

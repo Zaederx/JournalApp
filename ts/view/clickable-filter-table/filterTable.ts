@@ -5,13 +5,13 @@
   * matches the input. If a match if found in any cell, display that entire row,
   * otherwise hide the entire row that the cell belongs to.
   * @param tagTableBody - table to be filtered
-  * @param input - the search bar the take the user input
+  * @param searchbar - the search bar the take the user input
   * @return res string of html rows that match
   */
-export function filterTable(tagTableBody:HTMLTableElement, input:HTMLDivElement) {
-    console.log('*** filterTable called ***')
+export default function filterTable(tagTableBody:HTMLTableElement, searchbar:HTMLDivElement) {
+    console.log('*** function filterTable called ***')
     //Ensure search value is not undefined, then displayTagView() if an empty string
-    var searchValue:string =  input?.innerText.toLowerCase() == undefined ? '' : input.innerText.toLocaleLowerCase();
+    var searchValue:string =  searchbar?.innerText.toLowerCase() == undefined ? '' : searchbar.innerText.toLocaleLowerCase();
 
     //Get all rows
     var rows = tagTableBody?.querySelectorAll('tr');

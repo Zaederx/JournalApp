@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as dir from '../../directory';
 import paths from 'path'
-import { Entry } from 'yauzl';
+import Entry from '../../classes/entry'
 
 /**
  * Functions used by main to delete Entries.

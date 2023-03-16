@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as dir from '../../directory'
 import paths from 'path'
-import { Entry } from '../../classes/entry';
+import Entry from '../../classes/entry';
 
 function dateStr():string {
   var date = new Date();

@@ -15,6 +15,7 @@
   * @return html
   */
  function tagsToHtml(tags:string[]):string {
+    console.log('function tagsToHTML called')
     var html:string = '';
     tags.forEach( tag => {
         if (tag.charAt(0) == '.') {/* Do not add .DS_STORE / System files*/}

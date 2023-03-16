@@ -5,7 +5,8 @@ import { clicked } from "./constants"
  * @param tagTableBody tableBody to get rows from
  * @returns 
  */
-export function getSelectedTags(tagTableBody:HTMLTableElement) {
+export default function getSelectedTags(tagTableBody:HTMLTableElement) {
+    console.log('function getSelectedTags called')
     var rows = tagTableBody?.querySelectorAll('tr')
     var tags:string[] = []
     rows.forEach( row => {

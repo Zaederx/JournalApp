@@ -1,6 +1,14 @@
-import { getSelectedTags } from "./getSelectedTags"
+import getSelectedTags from "./getSelectedTags"
 
-export async function addSelectedTagsToEntry(entryTemp:any, messageDiv:HTMLDivElement, entry_tags:HTMLDivElement, tagTableBody:HTMLTableElement) {
+/**
+ * 
+ * @param entryTemp selected Entry stored temporarily in a variable
+ * @param messageDiv the div that alert messages and input to
+ * @param entry_tags the div holing the tags belonging the entry 
+ * @param tagTableBody table body to get selected tags from
+ */
+export default async function addSelectedTagsToEntry(entryTemp:any, messageDiv:HTMLDivElement, entry_tags:HTMLDivElement, tagTableBody:HTMLTableElement) {
+    console.log('function addSelectedTagsToEntry called')
     //get selected tags
     var selectedTags:string[] = getSelectedTags(tagTableBody)
     //create new entry Temp 

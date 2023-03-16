@@ -1,15 +1,12 @@
-
 // *** Function Definitions ***
-
 import { blurBackground, unblurBackground } from "./background-blur"
-import { fillTagTable } from "../clickable-filter-table/fillTagTable"
-import { clicked } from "../clickable-filter-table/constants"
+import { fillTagTable, constants as c } from "../clickable-filter-table/table"
 
 //SECTION Toggling Popup
 
 var hidden = true
-export function toggleAddTagPopup(blurDiv:HTMLDivElement, popup:HTMLDivElement, tagTableBody:HTMLTableElement) {
-    console.warn('addEntryTag called')
+export function toggleTagPopup(blurDiv:HTMLDivElement, popup:HTMLDivElement, tagTableBody:HTMLTableElement) {
+    console.warn('function toggleTagPopup called')
     //if hidden open tag popup
     if (hidden == true) {
         displayTagPopup(popup)
@@ -28,11 +25,13 @@ export function toggleAddTagPopup(blurDiv:HTMLDivElement, popup:HTMLDivElement, 
 
 
 function displayTagPopup(popup:HTMLDivElement) {
+    console.log('function displayTagPopup called')
     //display edit tag popup
     popup.style.display = 'grid'
 }
 
 function hideTagPopup(popup:HTMLDivElement) {
+    console.log('function hideTagPopup called')
     //display edit tag popup
     popup.style.display = 'none'
 }
@@ -42,12 +41,13 @@ function hideTagPopup(popup:HTMLDivElement) {
  * @param tagTableBody tableBody to get rows from
  * @returns 
  */
-function getSelectdTags(tagTableBody:HTMLTableElement) {
+function getSelectedTags(tagTableBody:HTMLTableElement) {
+    console.log('function getSelectedTags called')
     var rows = tagTableBody?.querySelectorAll('tr')
     var tags:string[] = []
     rows.forEach( row => {
         //add tags if selected/clicked
-        if (row.style.backgroundColor == clicked) {
+        if (row.style.backgroundColor == c.clicked) {
             tags.push(row.cells[0].innerHTML)
         }
     })

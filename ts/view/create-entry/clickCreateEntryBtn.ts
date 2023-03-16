@@ -1,5 +1,6 @@
 import { ipcRenderer } from "electron"
 export default async function clickCreateEntryBtn(entryTemp:any, title:HTMLDivElement, body:HTMLDivElement, messageDiv:HTMLDivElement) {
+    console.log('function clickCreateEntryBtn called')
     //get entry text & put in entry object
     var dateStr = await ipcRenderer.invoke('get-datestr')
     entryTemp.date = dateStr

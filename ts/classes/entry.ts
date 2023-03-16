@@ -3,7 +3,7 @@
  * Note: you must pass in an object even if it's an empty one, 
  * otherwise it causes problems in the constructor.
  */
-export class Entry {
+export default class Entry {
     date:string;
     title:string;
     body:string;
