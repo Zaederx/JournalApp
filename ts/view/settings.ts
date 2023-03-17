@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron/renderer';
+import { ipcRenderer } from 'electron';
 import * as fs from 'fs';
 import path from 'path';
 

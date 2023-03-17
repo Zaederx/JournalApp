@@ -3,7 +3,7 @@
  * Used by the edit entry page. 
  * @param tags tags
  */
-export function tagsToArr(tags:HTMLDivElement) {
+export default function tagsToArr(tags:HTMLDivElement) {
     console.log('function tagsToArr called')
     var arr:string[] = []
     //get tag names from tags div
