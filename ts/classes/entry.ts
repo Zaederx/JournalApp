@@ -65,7 +65,6 @@ export default class Entry {
         })
         return entryTags
     }
-
     entryToTxt(e:Entry=this)
     {
         var entryTxt = ''

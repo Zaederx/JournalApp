@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron"
-import { tagsToArr } from "./tags-to-array"
+import tagsToArr from "./tags-to-array"
 
 /**
  * Saves a completely new copy of the entry

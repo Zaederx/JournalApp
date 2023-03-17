@@ -1,7 +1,10 @@
 import { ipcRenderer } from "electron"
+import { deactivateLoader } from "./nav/loader"
+import { makeAllTagsClickable } from "./nav/clickable"
+import loadEntries from "./nav/load-entries"
 
 const panel_tags = document.querySelector('#tags') as HTMLDivElement
-var panel_entries = document.querySelector('#entries') as HTMLDivElement
+const panel_entries = document.querySelector('#entries') as HTMLDivElement
 
 if (document.querySelector('#btn-tags'))
 {
@@ -38,7 +41,7 @@ if (document.querySelector('#side-panel'))
 
 if (document.querySelector('#loader'))
 {
-    var loading = document.querySelector('#loader') as HTMLDivElement
+    var loader = document.querySelector('#loader') as HTMLDivElement
 }
 
 
@@ -68,7 +71,7 @@ function toggleSidePanel() {
         displaySidePanel()
         hidden = false
         loadTags()
-        loadEntries()
+        loadEntries(loader, panel_entries)
     }
 }
 
@@ -103,87 +106,16 @@ function loadTags() {
 ipcRenderer.on('recieve-list-all-tags-html', (event, html) => {
     panel_tags.innerHTML = html
     console.log('html:',html)
-    makeAllTagsClickable()
+    makeAllTagsClickable(loader, panel_entries)
     // deactivateLoader() - done by loadEntires() reciever
 })
-
-async function loadEntries() {
-    console.log('loadEntries called')
-    activateLoader()
-    var html = await ipcRenderer.invoke('list-all-entries-html')
-    panel_entries.innerHTML = html
-    console.log('html:',html)
-    makeAllEntriesClickable()
-    deactivateLoader()
-}
-
 
 ipcRenderer.on('recieve-list-all-entries-html', (event,html) => {
     panel_entries.innerHTML = html
     console.log('html:',html)
-    deactivateLoader()
+    deactivateLoader(loader)
 })
 
-function activateLoader() {
-    loading.className = 'loader'
-}
-
-function deactivateLoader() {
-    loading.className = ''
-}
 
 
-//Making tags clickable
-function makeTagDivClickable(tagDiv:HTMLDivElement) {
-    //when a tag is clicked
-    tagDiv.onclick = async() => {
-        //remove active tag class name from currentActiveTag
-        var previousActive = document.querySelector('.active.tag') as HTMLDivElement
-        previousActive.className = ''
-        //make this tag currently active tag
-        tagDiv.className = 'active tag'
-        //get tagname
-        var selectedTagName = tagDiv.innerText
-        //activate loading spinner
-        activateLoader()
-        // fetch the tag's associated entries
-        var entriesHTML = await ipcRenderer.invoke('get-tag-entries-html', selectedTagName)
-        //display tag's associated entries
-        panel_entries.innerHTML = entriesHTML
-        //make entries clickable / open the entry view
-        makeAllEntriesClickable()
-        //remove loading spinner
-        deactivateLoader()
-    }
-}
 
-
-//make entries clickable / open entry view with this entry
-function makeEntryDivClickable(entryDiv:HTMLDivElement) {
-    //when entry is clicked
-    entryDiv.onclick = () => {
-        //get selected entry name
-        var selectedEntryName = entryDiv.innerText
-        //activate loading spinner
-        activateLoader()
-        //set current entry to be read as selected
-        var entry = ipcRenderer.invoke('set-current-entry', selectedEntryName)
-        //remove loading spinner
-        deactivateLoader()
-        //open the entry view
-        ipcRenderer.invoke('entry-view')
-    }
-}
-
-function makeAllTagsClickable() {
-    var tags = document.querySelector('#tags') as HTMLDivElement
-    console.warn('entries:',tags)
-    tags.childNodes.forEach((tag)=> makeTagDivClickable(tag as HTMLDivElement))
-}
-//make all entries clickable
-function makeAllEntriesClickable() {
-    //get all entry divs
-    var entries = document.querySelector('#entries') as HTMLDivElement
-    console.warn('entries:',entries)
-    entries.childNodes.forEach((entry)=> makeEntryDivClickable(entry as HTMLDivElement))
-}
