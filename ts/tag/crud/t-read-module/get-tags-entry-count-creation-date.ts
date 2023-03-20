@@ -1,4 +1,6 @@
-import { readAllTags, getTagEntryCount, getTagCreationDate } from "../t-read"
+import { readAllTags } from './read-all-tags'
+import { getTagEntryCount } from './get-tag-entry-count'
+import { getTagCreationDate } from './get-tag-creation-date'
 import { Tag } from '../../../classes/tag'
 /**
  * Get an array of tags -> tagname, entry count and 
