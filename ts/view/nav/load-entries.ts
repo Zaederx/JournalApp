@@ -3,15 +3,15 @@ import { activateLoader, deactivateLoader } from "./loader"
 import { makeAllEntriesClickable } from "./clickable"
 
 /**
+ * Load entries into sidepanel.
+ * Does this by fetching the entries 
+ * HTML from ipcMain.
+ * 
  * @param loader spinning loader div
  * @param panel_entries side panel of entries
  */
-export default async function loadEntries(loader:HTMLDivElement, panel_entries:HTMLDivElement) {
+export default async function loadEntries(loader:HTMLDivElement) {
     console.log('loadEntries called')
     activateLoader(loader)
-    var html = await ipcRenderer.invoke('list-all-entries-html')
-    panel_entries.innerHTML = html
-    console.log('html:',html)
-    makeAllEntriesClickable(loader)
-    deactivateLoader(loader)
+    ipcRenderer.send('list-all-entries-html')
 }

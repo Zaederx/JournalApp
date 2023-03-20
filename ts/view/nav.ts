@@ -1,10 +1,14 @@
 import { ipcRenderer } from "electron"
 import { deactivateLoader } from "./nav/loader"
-import { makeAllTagsClickable } from "./nav/clickable"
+import { makeAllEntriesClickable, makeAllTagsClickable } from "./nav/clickable"
 import loadEntries from "./nav/load-entries"
 
 const panel_tags = document.querySelector('#tags') as HTMLDivElement
 const panel_entries = document.querySelector('#entries') as HTMLDivElement
+
+
+
+
 
 if (document.querySelector('#btn-tags'))
 {
@@ -70,17 +74,16 @@ function toggleSidePanel() {
     else {
         displaySidePanel()
         hidden = false
-        loadTags()
-        loadEntries(loader, panel_entries)
+        // loadTags()
+        // loadEntries(loader, panel_entries)
     }
 }
 
-
+/** Click button functions - ipcRenderer invoking end */
 function clickBtnAddEntry() {
     //open create entry view
     ipcRenderer.invoke('create-entry-view')
 }
-
 
 function clickBtnEditTags() {
     //open edit tags view
@@ -103,13 +106,24 @@ function loadTags() {
     ipcRenderer.send('list-all-tags-html')
 }
 
-ipcRenderer.on('recieve-list-all-tags-html', (event, html) => {
+
+
+
+/************** ipcRenderer recieving end ************** *
+ * Recieves the list of html tags.
+ * Loads those tags into the panel
+ * and makes them clickable 
+ */
+ipcRenderer.on('recieve-list-all-tags-html', async(event, html) => {
     panel_tags.innerHTML = html
     console.log('html:',html)
-    makeAllTagsClickable(loader, panel_entries)
-    // deactivateLoader() - done by loadEntires() reciever
+    await makeAllTagsClickable(loader, panel_entries)
+    deactivateLoader(loader)
 })
 
+/**
+ * Recieve a list of all entries html
+ */
 ipcRenderer.on('recieve-list-all-entries-html', (event,html) => {
     panel_entries.innerHTML = html
     console.log('html:',html)
@@ -118,4 +132,7 @@ ipcRenderer.on('recieve-list-all-entries-html', (event,html) => {
 
 
 
-
+window.onload = () => {
+    loadEntries(loader)
+    loadTags()
+}

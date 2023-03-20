@@ -1,4 +1,4 @@
-import {app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue, IpcMainEvent} from 'electron';
 import path from 'path'
 import fs from 'fs'
 import * as dir from './directory'
@@ -17,7 +17,8 @@ import * as tDelete from './tag/crud/t-delete'
 //Other
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
-
+import EntryDate from './classes/entry-date';
+import prepareTagsAndEntries from './prep-tags-entries/prep-tags-entries'
 
 //produce electron binary file path for the wdio.config.ts
 const appBinaryPath = app.getPath('exe')
@@ -27,6 +28,7 @@ const filename2 = 'electronAppPath.txt'
 
 console.log('appBinaryPath:'+appBinaryPath)
 console.log('writing path to txt file...')
+
 try
 {
   fs.promises.writeFile(filename1,appBinaryPath,'utf-8')
@@ -36,8 +38,6 @@ catch(err)
 {
   console.log(err)
 }
-
-
 
 //TODO - option to store file in iCloud
 
@@ -74,7 +74,25 @@ function createWindow ()
   {
     window.webContents.openDevTools();
   }
+
+  window.on('ready-to-show', async() => {
+    console.log('window ready-to-show called')
+    var promise = prepareTagsAndEntries()
+    promise.then((html) => {
+      ipcMain.emit('recieve-list-all-tags-html', html.tagsHTML)
+      ipcMain.emit('recieve-list-all-entries-html', html.entriesHTML)
+    })
+    
+  })
+  
+  // window.on('focus', async() => {
+  //   console.log('window ready-to-show called')
+  //   var html = await prepareTagsAndEntries()
+  // })
 }
+
+
+
 //if directory doesn't exist - create directory
 var directory = path.join(dir.allEntries)
 if (!fs.existsSync(directory)) 
@@ -88,9 +106,19 @@ if (!fs.existsSync(directory))
   }
   console.log(app.getPath('home'))
 }
+//vars for tags
+var tagDirectoryNames:string[] = []
+var tagsHTML:string = ''
+//vars for entries
 
+//Read entry names from 'tagDir/all'
+var entryDates:EntryDate[] = []
+//Read entry names from 'tagDir/'
+var filesHtml:string = ''
 app.whenReady().then(createWindow)
 //.then(() => theme.setCurrentCssTheme('../css/main.css'));
+
+
 
 app.on('window-all-closed', () => {
   //quit completely even on darwin (mac) if it is a test
@@ -173,35 +201,12 @@ ipcMain.handle('delete-current-entry', async (event) => {
 
 
 ipcMain.on('list-all-tags-html', async (event) => {
-  //Read all tag directory folder names
-  var tagDirectoryNames = await tRead.readAllTags();
-  console.log('tagDirectoryNames:',tagDirectoryNames)
-  //Put tags folder names into 'div' tags
-  var tagsHTML = tRead.directoryFoldersToHTML(tagDirectoryNames);
-  console.log('tagsHTML',tagsHTML)
   event.reply('recieve-list-all-tags-html', tagsHTML)
 })
 
-
-ipcMain.on('list-all-tags-html-tr', async (event) => {
-  //Read all tag directory folder names
-  var tagDirectoryNames = await tRead.readAllTags();
-  console.log('tagDirectoryNames:',tagDirectoryNames)
-  //Put tags folder names into 'div' tags
-  var tagsHTML = tRead.directoryFoldersToHTML(tagDirectoryNames);
-  console.log('tagsHTML',tagsHTML)
-  event.reply('recieve-list-all-tags-html', tagsHTML)
+ipcMain.on('list-all-entries-html', async (event) => {
+  event.reply('recieve-list-all-tags-html',filesHtml)
 })
-
-ipcMain.handle('list-all-entries-html', async (event) => {
-  //Read entry names from 'tagDir/all'
-  var entryDates = await eRead.readDirFilesEntryDate(dir.allEntries)
-  //Read entry names from 'tagDir/'
-  var filesHtml = eRead.entryDateToHtml(entryDates)
-  return filesHtml
-  // event.reply('recieve-list-all-entries-html',filesHtml)
-})
-
 
 ipcMain.handle('get-last-entry', async () => {
   //Read Filenames in -> 'tagDir/all'
@@ -230,7 +235,7 @@ ipcMain.handle('get-current-entry', async (event) => {
 })
 
 ipcMain.handle('get-tags-table-rows', async (event) => {
-  var tagsHTML = await tRead.getTags_EntryCount_CreationDate()
+  var tagsHTML = await tRead.getTagsEntryCountCreationDate()
   return tagsHTML
 })
 
@@ -238,7 +243,6 @@ ipcMain.handle('get-tag-entries-html', async (event,tagName) => {
   var tagsHTML = await tRead.readTagEntries(tagName)
   return tagsHTML
 })
-
 
 //Tag CRUD
 ipcMain.handle('create-tags', async (event, tags) => {

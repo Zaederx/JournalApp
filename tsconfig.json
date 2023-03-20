@@ -44,8 +44,14 @@
 
     /* Module Resolution Options */
     // "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
-    // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
-    // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+    // "baseUrl": "./",                      /* Base directory to resolve non-absolute module names. */
+    // "paths": {
+    //   "$e-crud/*":["ts/entry/crud/*"],
+    //   "$t-crud/*":["ts/tag/crud/*"],
+    //   "$e-read-module":["ts/entry/crud/e-read-module/e-read-module"], 
+    //   "$t-read-module":["ts/tag/crud/t-read-module/t-read-module"]
+    //   },
+                                /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": ["ts","js"],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": ["./ts/classes/entry"],                      /* List of folders to include type definitions from. */
     // "types": [],                           /* Type declaration files to be included in compilation. */

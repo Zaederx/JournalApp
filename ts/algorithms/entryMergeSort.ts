@@ -1,4 +1,4 @@
-import { EntryDate } from "../classes/EntryDate"
+import EntryDate from "../classes/entry-date"
 
 /**
  * MergeSort - ascending order - smallest to biggest
@@ -8,7 +8,7 @@ import { EntryDate } from "../classes/EntryDate"
  * the entries are put into the navigation in descending order.
  * (as the smallest date will be then 'pushed down' by the following entry)
  */
- export function mergeSort(arr:EntryDate[]) {
+ export default function mergeSort(arr:EntryDate[]) {
     if (arr.length < 2) {
         return arr
     }

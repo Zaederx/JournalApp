@@ -1,6 +1,5 @@
 import { ipcRenderer } from "electron"
 
-import tagsToArr from "./edit-entry/tags-to-array"
 import displayCurrentEntry from "./display/displayCurrentEntry"
 import saveNewEntry from "./edit-entry/saveNewEntry"
 import toggleTagPopup from "./create-entry/tagPopup"

@@ -167,3 +167,12 @@ Basically, in my case, it meant that I had more than one object with the same id
 
 ## There's such as thing as a commonjs2
 There isn't much difference between commonjs and commonjs2, but it seems from what I saw online that commonjs2 handles exports differently with a slightly different form. See [link](https://github.com/webpack/webpack/issues/1114#issuecomment-462240689) for the difference
+
+## Electron BrowserWindow Events
+A list of electron browserwindow event can be found at [electron events](https://www.electronjs.org/docs/latest/api/browser-window#instance-events)
+By browser events I mean the string that is tied to `window.on` or `window.once` methods in order to be triggered by the app during load up.
+```
+window.on('ready-to-show', () => {
+    //code code code
+})
+```

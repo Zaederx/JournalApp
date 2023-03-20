@@ -1,7 +1,7 @@
 /**
  * Has both an Entry file's name and birthtime.
  */
-export class EntryDate {
+export default class EntryDate {
     name:string;
     btime:number;
     /**

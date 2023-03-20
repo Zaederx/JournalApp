@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
 import clickCreateEntryBtn from './create-entry/clickCreateEntryBtn'
-import { toggleTagPopup } from "./create-entry/tagPopup";
+import toggleTagPopup from "./create-entry/tagPopup";
 import { addSelectedTagsToEntry } from "./clickable-filter-table/table";
 import Entry from "../classes/entry"
 import * as html from './create-entry/elements';
