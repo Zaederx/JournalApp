@@ -1,13 +1,13 @@
 import paths from 'path'
-import * as dirs from '../../../directory'
+
 import { readDir } from './read-dir'
 /**
  * Get a tally(count) of a tag directories entries.
  * @param tag - name of the tag
  * @returns 
  */
-export async function getTagEntryCount(tag:string):Promise<number> {
-    var path = paths.join(dirs.tagDirectory,tag)
+export async function getTagEntryCount(dir:string,tag:string):Promise<number> {
+    var path = paths.join(dir,tag)
     var entries = await readDir(path)
     return entries.length
 }

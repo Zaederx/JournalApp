@@ -5,5 +5,6 @@ import { readDirFiles } from './e-read-module/read-dir-files'
 import { readTagDir } from '../../tag/crud/t-read-module/read-tag-dir'
 import { entryDateToHtml } from './e-read-module/entry-date-to-html'
 import { readSingleFile } from './e-read-module/read-single-file'
+import { appendEntries } from './e-read-module/append-entries'
 
-export {  fetchBtime, readAllDirectoryNames, readDirFilesEntryDate, readDirFiles, readTagDir, entryDateToHtml, readSingleFile } 
+export {  fetchBtime, readAllDirectoryNames, readDirFilesEntryDate, readDirFiles, readTagDir, entryDateToHtml, readSingleFile, appendEntries } 

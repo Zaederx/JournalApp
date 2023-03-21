@@ -1,5 +1,4 @@
 import { readDir } from './read-dir'
-import * as dirs from '../../../directory'
 /**
  * Returns array of `tagDir` contents (not recursively).
  * i.e. only at that immediate folder level - not each of the folders descendants
@@ -12,6 +11,6 @@ import * as dirs from '../../../directory'
  * while accessing array of tags directory name.
  * @return directoryContexts    array of tag directory names
  */
-export function readTagDir():Promise<string[]> {
-    return readDir(dirs.tagDirectory)
+export function readTagDir(dir:string):Promise<string[]> {
+    return readDir(dir)
 }

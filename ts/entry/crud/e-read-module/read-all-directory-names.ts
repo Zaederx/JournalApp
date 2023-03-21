@@ -1,4 +1,5 @@
-import * as dirs from '../../../directory'
+import { app } from 'electron'
+import paths from 'path'
 import * as fs from 'fs'
 
 /**
@@ -16,7 +17,7 @@ export async function readAllDirectoryNames() {
     var tagDirectories:string[] = [];
     
     try {
-       var path = dirs.tagDirectory
+        var path = paths.join(app.getPath('userData'), 'tagDir')
         tagDirectories = await fs.promises.readdir(path, {
           withFileTypes: false,
           encoding: 'utf-8'
@@ -26,6 +27,7 @@ export async function readAllDirectoryNames() {
     } catch (err) {
         console.error('Entry folder could not be read');
     }
+
     return tagDirectories;//empty condition
 }
 

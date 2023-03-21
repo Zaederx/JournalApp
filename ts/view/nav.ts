@@ -1,14 +1,11 @@
 import { ipcRenderer } from "electron"
 import { deactivateLoader } from "./nav/loader"
-import { makeAllEntriesClickable, makeAllTagsClickable } from "./nav/clickable"
+import { makeAllEntriesClickable, makeAllTagsClickable, makeTagDivClickable } from "./nav/clickable"
 import loadEntries from "./nav/load-entries"
+import EventEmitter from "events"
 
 const panel_tags = document.querySelector('#tags') as HTMLDivElement
 const panel_entries = document.querySelector('#entries') as HTMLDivElement
-
-
-
-
 
 if (document.querySelector('#btn-tags'))
 {
@@ -110,29 +107,35 @@ function loadTags() {
 
 
 /************** ipcRenderer recieving end ************** *
- * Recieves the list of html tags.
+ * Recieves the list of tags one at a time.
  * Loads those tags into the panel
  * and makes them clickable 
  */
-ipcRenderer.on('recieve-list-all-tags-html', async(event, html) => {
-    panel_tags.innerHTML = html
-    console.log('html:',html)
-    await makeAllTagsClickable(loader, panel_entries)
-    deactivateLoader(loader)
+ipcRenderer.on('recieve-entry-filename', async(event, entryFilename) => {
+    console.log('recieve-entry-filename called')
+    var entryDiv = document.createElement('div')
+    entryDiv.innerHTML = entryFilename
+    panel_entries.appendChild(entryDiv)
+    console.log('html:',entryFilename)
+    await makeTagDivClickable(entryDiv, loader, panel_entries)
 })
+
 
 /**
- * Recieve a list of all entries html
+ * Recieve a list of all entries one at a time.
  */
-ipcRenderer.on('recieve-list-all-entries-html', (event,html) => {
-    panel_entries.innerHTML = html
-    console.log('html:',html)
+ipcRenderer.on('recieve-tag-dirname', (event,dirName) => {
+    console.log('recieve-tag-dirname called')
+    var tagDiv = document.createElement('div')
+    tagDiv.innerHTML = dirName
+    panel_tags.appendChild(tagDiv)
+    console.log('dirName:',dirName)
     deactivateLoader(loader)
 })
 
 
 
-window.onload = () => {
-    loadEntries(loader)
-    loadTags()
-}
+// window.onload = () => {
+//     loadEntries(loader)
+//     loadTags()
+// }

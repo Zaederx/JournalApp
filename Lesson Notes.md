@@ -176,3 +176,25 @@ window.on('ready-to-show', () => {
     //code code code
 })
 ```
+
+
+## Trouble with unrecognised correct export module
+Just changed the export from
+```
+import { module1 } from './module1'
+import { module2 } from './module2'
+export { module1, module2 }
+```
+to a default export and let it have the error message... 
+
+```
+import { module1 } from './module1'
+import { module2 } from './module2'
+export default { module1, module2 }
+```
+Then changing it back to the correct thing.
+```
+import { module1 } from './module1'
+import { module2 } from './module2'
+export { module1, module2 }
+```

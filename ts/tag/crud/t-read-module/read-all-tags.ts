@@ -10,8 +10,8 @@ import { readTagDir } from '../t-read-module/read-tag-dir'
  * @return tags directoryContents with system files
  * (files beginning with '.') removed.
  */
-export async function readAllTags():Promise<string[]> {
-    var directory:string[] = await readTagDir();
+export async function readAllTags(dir:string):Promise<string[]> {
+    var directory:string[] = await readTagDir(dir);
     var tags:string[] = [];
     directory.forEach((tag:string) => {
         if (tag.charAt(0) != '.'){

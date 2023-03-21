@@ -1,8 +1,13 @@
 import { ipcRenderer } from "electron"
 import { activateLoader, deactivateLoader } from "./loader"
 
-//Making tags clickable
-function makeTagDivClickable(tagDiv:HTMLDivElement, loader:HTMLDivElement, panel_entries:HTMLDivElement):Promise<string> {
+/**
+ * 
+ * @param tagDiv the tag div to be make clickable
+ * @param loader the loader that is activated and deactivated at the start and end of the function
+ * @param panel_entries panel_entries 
+ */
+export function makeTagDivClickable(tagDiv:HTMLDivElement, loader:HTMLDivElement, panel_entries:HTMLDivElement):Promise<string> {
     //when a tag is clicked
     return new Promise((resolve,reject) => {
         try {
@@ -35,7 +40,7 @@ function makeTagDivClickable(tagDiv:HTMLDivElement, loader:HTMLDivElement, panel
 
 
 //make entries clickable / open entry view with this entry
-function makeEntryDivClickable(entryDiv:HTMLDivElement, loader:HTMLDivElement):Promise<string> {
+export function makeEntryDivClickable(entryDiv:HTMLDivElement, loader:HTMLDivElement):Promise<string> {
     
     return new Promise((resolve,reject) => {
         try {

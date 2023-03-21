@@ -7,9 +7,9 @@ import EntryDate from '../../../classes/entry-date';
  * 
  * @param tagName 
  */
-export async function readTagEntries(tagName:string) {
+export async function readTagEntries(dir:string,tagName:string) {
     //get paths
-    var path = paths.join(dirs.tagDirectory,tagName)
+    var path = paths.join(dir,tagName)
     //get entry dates (array of entries arranged by dates)
     var entryDates:EntryDate[] = await eRead.readDirFilesEntryDate(path);
     var filesHTML = eRead.entryDateToHtml(entryDates)

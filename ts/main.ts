@@ -1,7 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue, IpcMainEvent} from 'electron';
 import path from 'path'
 import fs from 'fs'
-import * as dir from './directory'
+import * as dirs from './directory'
 
 //Entry
 import * as eCreate from './entry/crud/e-create'
@@ -18,7 +18,8 @@ import * as tDelete from './tag/crud/t-delete'
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
 import EntryDate from './classes/entry-date';
-import prepareTagsAndEntries from './prep-tags-entries/prep-tags-entries'
+
+import c_process from 'child_process'
 
 //produce electron binary file path for the wdio.config.ts
 const appBinaryPath = app.getPath('exe')
@@ -77,12 +78,26 @@ function createWindow ()
 
   window.on('ready-to-show', async() => {
     console.log('window ready-to-show called')
-    var promise = prepareTagsAndEntries()
-    promise.then((html) => {
-      ipcMain.emit('recieve-list-all-tags-html', html.tagsHTML)
-      ipcMain.emit('recieve-list-all-entries-html', html.entriesHTML)
-    })
-    
+    const { allEntries, tagDirectory } = dirs
+    console.log('allEntries:', allEntries)
+    console.log('tagDirectory:', tagDirectory)
+    var childProcess = c_process.spawn('node', ['js/append.js', allEntries, tagDirectory], {stdio: ['inherit', 'inherit', 'inherit', 'ipc']})
+
+    if (childProcess)
+    {
+      console.log('*** childProcess present ***')
+      childProcess.on('message', (message:any) => {
+        console.log('\n parent.on message fired')
+        if (message.entryFilename)
+        {
+          ipcMain.emit('recieve-entry-filename', message.entryFilename)
+        }
+        else if (message.tagDirname)
+        {
+          ipcMain.emit('recieve-tag-dirname', message.tagDirname)
+        }
+      })
+    }
   })
   
   // window.on('focus', async() => {
@@ -94,7 +109,7 @@ function createWindow ()
 
 
 //if directory doesn't exist - create directory
-var directory = path.join(dir.allEntries)
+var directory = path.join(dirs.allEntries)
 if (!fs.existsSync(directory)) 
 {
   try {
@@ -172,7 +187,8 @@ ipcMain.handle('create-entry', async (event,entry_json) => {
 })
 
 ipcMain.handle('read-entry', async (event, entry_filename) => {
-  var message = eRead.readSingleFile(entry_filename)
+  var dir = dirs.allEntries
+  var message = eRead.readSingleFile(dir, entry_filename)
   return message
 })
 
@@ -210,7 +226,7 @@ ipcMain.on('list-all-entries-html', async (event) => {
 
 ipcMain.handle('get-last-entry', async () => {
   //Read Filenames in -> 'tagDir/all'
-  var entryDates = await eRead.readDirFilesEntryDate(dir.allEntries)
+  var entryDates = await eRead.readDirFilesEntryDate(dirs.allEntries)
   //Put filenames into 'div' tags
   var filesHtml = eRead.entryDateToHtml(entryDates)
   //return last entry
@@ -229,18 +245,18 @@ ipcMain.handle('get-current-entry-name', (event) => {
  })
 
 ipcMain.handle('get-current-entry', async (event) => {
-  var entry = await eRead.readSingleFile(this_selectedEntryName)
+  var entry = await eRead.readSingleFile(dirs.allEntries, this_selectedEntryName)
   console.log('current-entry:',entry)
   return entry
 })
 
 ipcMain.handle('get-tags-table-rows', async (event) => {
-  var tagsHTML = await tRead.getTagsEntryCountCreationDate()
+  var tagsHTML = await tRead.getTagsEntryCountCreationDate(dirs.tagDirectory)
   return tagsHTML
 })
 
 ipcMain.handle('get-tag-entries-html', async (event,tagName) => {
-  var tagsHTML = await tRead.readTagEntries(tagName)
+  var tagsHTML = await tRead.readTagEntries(dirs.tagDirectory,tagName)
   return tagsHTML
 })
 
@@ -278,12 +294,12 @@ ipcMain.handle('set-current-css-theme', (e,themeStr:string) => theme.setCurrentC
 ipcMain.handle('get-datestr', () => dateStr())
 
 ipcMain.handle('get-tag-directory-filepath', (e) => {
-  return dir.tagDirectory
+  return dirs.tagDirectory
 })
 
 //export entries to txt, json or pdf
 ipcMain.handle('export-entries-txt', async () => {
-  var dialogPath = dir.tagDirectory
+  var dialogPath = dirs.tagDirectory
   dialogPath ? console.log(`dialogPath:${dialogPath}`) : console.log('dialogPath is null or undefined')
   //open dialog window
   var promise:OpenDialogReturnValue = await dialog.showOpenDialog({ defaultPath: dialogPath, properties: ['openFile', 'multiSelections'] })
@@ -301,7 +317,7 @@ ipcMain.handle('export-entries-txt', async () => {
 
 
 ipcMain.handle('export-entries-json', async () => {
-  var dialogPath = dir.tagDirectory
+  var dialogPath = dirs.tagDirectory
   dialogPath ? console.log(`dialogPath:${dialogPath}`) : console.log('dialogPath is null or undefined')
   //open dialog window
   var promise:OpenDialogReturnValue = await dialog.showOpenDialog({ defaultPath: dialogPath, properties: ['openFile', 'multiSelections'] })
@@ -318,7 +334,7 @@ ipcMain.handle('export-entries-json', async () => {
 })
 
 ipcMain.handle('export-entries-pdf', async () => {
-  var dialogPath = dir.tagDirectory
+  var dialogPath = dirs.tagDirectory
   dialogPath ? console.log(`dialogPath:${dialogPath}`) : console.log('dialogPath is null or undefined')
   //open dialog window
   var promise:OpenDialogReturnValue = await dialog.showOpenDialog({ defaultPath: dialogPath, properties: ['openFile', 'multiSelections'] })

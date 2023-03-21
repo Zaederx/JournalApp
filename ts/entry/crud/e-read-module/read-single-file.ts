@@ -6,11 +6,11 @@ import * as dirs from '../../../directory'
  * @param event 
  * @param filename 
  */
-export async function readSingleFile(filename:string) {
+export async function readSingleFile(dir:string,filename:string) {
     console.log('ipcMain: Reading file - '+filename);
   
     var entry
-    var entry_filepath = paths.join(dirs.allEntries,filename);
+    var entry_filepath = paths.join(dir,filename);
     var message
     try {
       entry = await fs.promises.readFile(entry_filepath,'utf-8')
@@ -21,4 +21,4 @@ export async function readSingleFile(filename:string) {
       message = 'Error reading file'+error
       return message
     }
-  }
+}
