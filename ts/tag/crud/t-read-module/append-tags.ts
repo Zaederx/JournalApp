@@ -31,6 +31,6 @@ function sendSingleTag(dirName:string)
     {
         //message is sent from this (child process)
         //to the parent process
-        process.send({dirName:dirName});
+        process.send({tagDirname:dirName});
     }
 }

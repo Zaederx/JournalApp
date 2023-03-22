@@ -71,8 +71,6 @@ function toggleSidePanel() {
     else {
         displaySidePanel()
         hidden = false
-        // loadTags()
-        // loadEntries(loader, panel_entries)
     }
 }
 
@@ -133,16 +131,16 @@ ipcRenderer.on('recieve-tag-dirname', async (event,dirName) => {
     tagDiv.innerHTML = dirName
     panel_tags.appendChild(tagDiv)
     console.log('dirName:',dirName)
-    await makeEntryDivClickable(tagDiv, loader)
+    await makeTagDivClickable(tagDiv, loader)
     deactivateLoader(loader)
 })
 
 ipcRenderer.on('activate-loader', () => {
-
+    activateLoader(loader)
 })
 
 ipcRenderer.on('deactivate-loader', () => {
-    
+    deactivateLoader(loader)
 })
 
 // window.onload = () => {
