@@ -1,8 +1,7 @@
 import { ipcRenderer } from "electron"
-import { deactivateLoader } from "./nav/loader"
-import { makeAllEntriesClickable, makeAllTagsClickable, makeTagDivClickable } from "./nav/clickable"
-import loadEntries from "./nav/load-entries"
-import EventEmitter from "events"
+import { activateLoader, deactivateLoader } from "./nav/loader"
+import { makeTagDivClickable , makeEntryDivClickable } from "./nav/clickable"
+
 
 const panel_tags = document.querySelector('#tags') as HTMLDivElement
 const panel_entries = document.querySelector('#entries') as HTMLDivElement
@@ -50,6 +49,7 @@ if (document.querySelector('#loader'))
 
 function clickBtnTags() {
     toggleSidePanel()
+    loadTags()
 }
 var hidden = true
 function hideSidePanel() {
@@ -96,11 +96,11 @@ function clickBtnSettings() {
     ipcRenderer.invoke('settings-view')
 }
 
-
+const clearEntries = ''
 function loadTags() {
     console.log('loadTags called')
-    // activateLoader() - done by loadEntries()
-    ipcRenderer.send('list-all-tags-html')
+    panel_entries.innerHTML = clearEntries
+    ipcRenderer.send('ready-to-show')
 }
 
 
@@ -113,27 +113,37 @@ function loadTags() {
  */
 ipcRenderer.on('recieve-entry-filename', async(event, entryFilename) => {
     console.log('recieve-entry-filename called')
+    activateLoader(loader)
     var entryDiv = document.createElement('div')
     entryDiv.innerHTML = entryFilename
     panel_entries.appendChild(entryDiv)
     console.log('html:',entryFilename)
-    await makeTagDivClickable(entryDiv, loader, panel_entries)
+    await makeEntryDivClickable(entryDiv, loader)
+    deactivateLoader(loader)
 })
 
 
 /**
  * Recieve a list of all entries one at a time.
  */
-ipcRenderer.on('recieve-tag-dirname', (event,dirName) => {
+ipcRenderer.on('recieve-tag-dirname', async (event,dirName) => {
     console.log('recieve-tag-dirname called')
+    activateLoader(loader)
     var tagDiv = document.createElement('div')
     tagDiv.innerHTML = dirName
     panel_tags.appendChild(tagDiv)
     console.log('dirName:',dirName)
+    await makeEntryDivClickable(tagDiv, loader)
     deactivateLoader(loader)
 })
 
+ipcRenderer.on('activate-loader', () => {
 
+})
+
+ipcRenderer.on('deactivate-loader', () => {
+    
+})
 
 // window.onload = () => {
 //     loadEntries(loader)

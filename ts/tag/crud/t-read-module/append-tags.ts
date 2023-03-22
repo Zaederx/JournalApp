@@ -1,6 +1,5 @@
+import EntryDate from '../../../classes/entry-date';
 import { readTagDir } from './read-tag-dir'
-import { EventEmitter } from 'events'
-
 
 /**
  *
@@ -8,7 +7,8 @@ import { EventEmitter } from 'events'
  * It does this one tag at a time.
  * @param directoryFolders
  */
-export async function appendTags(dir:string) {
+export async function appendTags(dir:string) 
+{
     var directory:string[] = await readTagDir(dir);
     directory.forEach((tag:string) => {
         //if not the .DS_Store file or another invisible file
@@ -16,7 +16,7 @@ export async function appendTags(dir:string) {
             sendSingleTag(tag)
         }
     });
-  }
+}
 
   /**
    * This function is used to send a tag to the frontend.

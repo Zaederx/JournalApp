@@ -1,6 +1,6 @@
 import * as c_process from 'child_process';
 import EntryDate from "../../../classes/entry-date";
-
+import paths from 'path'
 /**
  * Finds birthtime of an entry (as a number).
  * Once the birthtime is known, it creates an {@link EntryDate}
@@ -23,7 +23,8 @@ export default function fetchBtime(directory:string,filename:string, arr:EntryDa
                  link, and not to file itself.
      */
     //Addtionally - %B inserts File BirthTime (Creation Date)
-      var stat_birth = c_process.spawnSync('stat',['-f','%B', '-L', directory+'/'+filename]);
+      var path = paths.join(directory,filename);
+      var stat_birth = c_process.spawnSync('stat',['-f','%B', '-L', path]);
       //\x1b[32m - change output colour to green, %s string = string, %s again means then another string, then \x1b[0m changes the color back to white
       var stringFormatting = '\x1b[32m%s%s\x1b[0m'
       console.log(stringFormatting,'stat_birth.output:',stat_birth.output);
@@ -44,4 +45,6 @@ export default function fetchBtime(directory:string,filename:string, arr:EntryDa
       //console logging status
       var code:number|null = stat_birth.status;
       console.log('child process: "stat_birth" exited with code',code);
+
+      return arr
   }

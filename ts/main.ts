@@ -76,7 +76,7 @@ function createWindow ()
     window.webContents.openDevTools();
   }
 
-  window.on('ready-to-show', async() => {
+  ipcMain.on('ready-to-show', async(event) => {
     console.log('window ready-to-show called')
     const { allEntries, tagDirectory } = dirs
     console.log('allEntries:', allEntries)
@@ -85,26 +85,33 @@ function createWindow ()
 
     if (childProcess)
     {
-      console.log('*** childProcess present ***')
       childProcess.on('message', (message:any) => {
-        console.log('\n parent.on message fired')
         if (message.entryFilename)
         {
-          ipcMain.emit('recieve-entry-filename', message.entryFilename)
+          console.log('message.entryFilename -> present')
+          event.reply('recieve-entry-filename', message.entryFilename)
         }
         else if (message.tagDirname)
         {
-          ipcMain.emit('recieve-tag-dirname', message.tagDirname)
+          console.log('message.tagDirname -> present')
+          event.reply('recieve-tag-dirname', message.tagDirname)
+        }
+        else if (message == 'start-loader') 
+        {
+          event.reply(message)
+        }
+        else if (message == 'stop-loader')
+        {
+          event.reply(message)
         }
       })
     }
   })
-  
-  // window.on('focus', async() => {
-  //   console.log('window ready-to-show called')
-  //   var html = await prepareTagsAndEntries()
-  // })
 }
+
+
+
+
 
 
 

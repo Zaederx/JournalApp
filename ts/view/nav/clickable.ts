@@ -7,7 +7,7 @@ import { activateLoader, deactivateLoader } from "./loader"
  * @param loader the loader that is activated and deactivated at the start and end of the function
  * @param panel_entries panel_entries 
  */
-export function makeTagDivClickable(tagDiv:HTMLDivElement, loader:HTMLDivElement, panel_entries:HTMLDivElement):Promise<string> {
+export function makeTagDivClickable(tagDiv:HTMLDivElement, loader:HTMLDivElement):Promise<string> {
     //when a tag is clicked
     return new Promise((resolve,reject) => {
         try {
@@ -23,8 +23,8 @@ export function makeTagDivClickable(tagDiv:HTMLDivElement, loader:HTMLDivElement
                 activateLoader(loader)
                 // fetch the tag's associated entries
                 var entriesHTML = await ipcRenderer.invoke('get-tag-entries-html', selectedTagName)
-                //display tag's associated entries
-                panel_entries.innerHTML = entriesHTML
+                // //display tag's associated entries
+                // panel_entries.innerHTML = entriesHTML
                 //make entries clickable / open the entry view
                 makeAllEntriesClickable(loader)
                 //remove loading spinner
@@ -66,14 +66,14 @@ export function makeEntryDivClickable(entryDiv:HTMLDivElement, loader:HTMLDivEle
         
     })
 }
-export function makeAllTagsClickable(loader:HTMLDivElement, panel_entries:HTMLDivElement):Promise<string> {
+export function makeAllTagsClickable(loader:HTMLDivElement):Promise<string> {
     
 
     return new Promise((resolve, reject) => {
         try {
             var tags = document.querySelector('#tags') as HTMLDivElement
             console.warn('entries:',tags)
-            tags.childNodes.forEach((tag) => makeTagDivClickable(tag as HTMLDivElement,loader,panel_entries))
+            tags.childNodes.forEach((tag) => makeTagDivClickable(tag as HTMLDivElement,loader))
             const message = ''
             resolve(message)
         } catch (error) {

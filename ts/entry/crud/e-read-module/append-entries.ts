@@ -1,6 +1,8 @@
 import { readDirFiles } from './read-dir-files'
-import { EventEmitter } from 'events'
 import * as process from 'process'//an extension of node:process
+import EntryDate from '../../../classes/entry-date'
+import fetchBtime from './fetch-btime'
+import entryMergeSort from '../../../algorithms/entryMergeSort'
 
 /**
  * Append Entries
@@ -8,15 +10,30 @@ import * as process from 'process'//an extension of node:process
  */
 export async function appendEntries(dir:string)
 {
+    //send message to start loader
+    startLoader()
+
+    //get all entries
     var entries = await readDirFiles(dir)
+    //for all entries -> sort them by file birthtime
+    var entryDates:EntryDate[] = []
     entries.forEach((entryFilename) => {
+        //add btime to entry and adds to 
+        fetchBtime(dir, entryFilename, entryDates)
+        entryDates = entryMergeSort(entryDates)
+    })
+    //send each entry to front end
+    entryDates.forEach((entryDate) => {
         //if .DS_Store or other invisible file - ignore
-        if (entryFilename.charAt(0) == '.') {/*Do nothing*/}
+        if (entryDate.name.charAt(0) == '.') {/*Do nothing*/}
+        //send entry
         else 
         {
-            sendSingleEntry(entryFilename)
+            sendSingleEntry(entryDate.name)
         }
     })
+    //send message to stop loader
+    stopLoader()
 }
 
 /**
@@ -34,5 +51,23 @@ function sendSingleEntry(entryFilename:string)
         //to the parent process
         process.send({entryFilename:entryFilename});
         console.log('sending message')
+    }
+}
+
+function startLoader() 
+{
+    //send message to start loader
+    if (process.send)
+    {
+        process.send('start-loader')
+    }
+}
+
+function stopLoader()
+{
+    //send message to start loader
+    if (process.send)
+    {
+        process.send('stop-loader')
     }
 }
