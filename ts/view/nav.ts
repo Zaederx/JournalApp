@@ -128,14 +128,15 @@ ipcRenderer.on('recieve-entry-filename', async(event, message) => {
     activateLoader(loader)
     //create entry div
     var entryDiv = document.createElement('div')
-    if (entryFilename != 'undefined')
+    if (entryFilename != undefined)
     {
         entryDiv.innerHTML = entryFilename
         panel_entries.appendChild(entryDiv)
         console.log('entryFilename:', entryFilename)
+        //make entry div clcickable
+        await makeEntryDivClickable(entryDiv, loader)
     }
-    //make entry div clcickable
-    await makeEntryDivClickable(entryDiv, loader)
+    
     //loader
     deactivateLoader(loader)
 })
@@ -171,20 +172,26 @@ ipcRenderer.on('recieve-tag-dirname', async (event,message) => {
 
 ipcRenderer.on('recieve-tag-entries', async (event, message) => {
     console.log('recieve-tag-entries called')
+    var { firstEntry, entryFilename } = message
     //clear panel entries
-    if(message.firstEntry)
+    if(firstEntry)
     {
         panel_entries.innerHTML = clear//entries
     }
     //loader
     activateLoader(loader)
     //create entry div
-    var entryDiv = document.createElement('div')
-    entryDiv.innerHTML = message.entryFilename
-    panel_entries.appendChild(entryDiv)
-    console.log('entryFilename:', message.entryFilename)
-    //make entry div clcickable
-    await makeEntryDivClickable(entryDiv, loader)
+    if (entryFilename != undefined)
+    {
+        var entryDiv = document.createElement('div')
+        entryDiv.innerHTML = entryFilename
+        panel_entries.appendChild(entryDiv)
+        console.log('entryFilename:', entryFilename)
+        //make entry div clcickable
+        await makeEntryDivClickable(entryDiv, loader)
+    }
+    
+    
     deactivateLoader(loader)
 })
 
