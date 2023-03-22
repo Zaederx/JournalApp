@@ -11,5 +11,5 @@ console.log('allEntries:', allEntries)
 console.log('tagDirectory:', tagDirectory)
 
 const path = paths.join(tagDirectory,tagName)
-const clearEntries = true
-appendEntries(path, clearEntries)
+
+appendEntries(path)

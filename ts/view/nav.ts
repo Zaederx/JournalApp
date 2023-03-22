@@ -118,8 +118,9 @@ function loadTags() {
  */
 ipcRenderer.on('recieve-entry-filename', async(event, message) => {
     console.log('recieve-entry-filename called')
+    var { firstEntry, entryFilename } = message
     //clear panel entries
-    if(message.clearEntries)
+    if(firstEntry)
     {
         panel_entries.innerHTML = clear//entries
     }
@@ -127,9 +128,12 @@ ipcRenderer.on('recieve-entry-filename', async(event, message) => {
     activateLoader(loader)
     //create entry div
     var entryDiv = document.createElement('div')
-    entryDiv.innerHTML = message.entryFilename
-    panel_entries.appendChild(entryDiv)
-    console.log('entryFilename:',message.entryFilename)
+    if (entryFilename != 'undefined')
+    {
+        entryDiv.innerHTML = entryFilename
+        panel_entries.appendChild(entryDiv)
+        console.log('entryFilename:', entryFilename)
+    }
     //make entry div clcickable
     await makeEntryDivClickable(entryDiv, loader)
     //loader
@@ -145,7 +149,7 @@ const firstTag = true
 ipcRenderer.on('recieve-tag-dirname', async (event,message) => {
     console.log('recieve-tag-dirname called')
     //clear panel tags on first tag
-    if(message.clearTags)
+    if(message.firstTag)
     {
         panel_tags.innerHTML = clear//tags
     }
@@ -153,7 +157,7 @@ ipcRenderer.on('recieve-tag-dirname', async (event,message) => {
     var tagDiv = document.createElement('div')
     tagDiv.innerHTML = message.tagDirname
     //if first tag
-    if (message.clearTags == firstTag) {
+    if (message.firstTag) {
         console.log('active tag set')
         tagDiv.className = 'active tag'
         console.log(tagDiv.className)
@@ -168,7 +172,7 @@ ipcRenderer.on('recieve-tag-dirname', async (event,message) => {
 ipcRenderer.on('recieve-tag-entries', async (event, message) => {
     console.log('recieve-tag-entries called')
     //clear panel entries
-    if(message.clearEntries)
+    if(message.firstEntry)
     {
         panel_entries.innerHTML = clear//entries
     }

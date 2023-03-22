@@ -8,7 +8,7 @@ import entryMergeSort from '../../../algorithms/entryMergeSort'
  * Append Entries
  * @param dir directory 
  */
-export async function appendEntries(dir:string, clearEntries:boolean)
+export async function appendEntries(dir:string)
 {
     //send message to start loader
     startLoader()
@@ -27,13 +27,15 @@ export async function appendEntries(dir:string, clearEntries:boolean)
     //send each entry to front end
     entryDates.forEach((entryDate) => {
         //if .DS_Store or other invisible file - ignore
-        if (entryDate.name.charAt(0) == '.') {/*Do nothing*/}
+        const char0 = entryDate.name.charAt(0)
+        const name = entryDate.name
+        if (char0 == '.' || name == 'undefined') {/*Do nothing*/}
         //send entry
         else 
         {
             //if first entry clear entries - else don't clear entries
-            (firstEntry) ? sendSingleEntry(entryDate.name, clearEntries) : sendSingleEntry(entryDate.name, clearEntries)
-            clearEntries = false
+            (firstEntry) ? sendSingleEntry(entryDate.name, firstEntry) : sendSingleEntry(entryDate.name, firstEntry)
+            firstEntry = false
         }
     })
     //send message to stop loader
@@ -45,7 +47,7 @@ export async function appendEntries(dir:string, clearEntries:boolean)
  * see [node docs link](https://nodejs.org/api/child_process.html#subprocesssendmessage-sendhandle-options-callback)
  * @param entryFilename entry's filename
  */
-function sendSingleEntry(entryFilename:string, clearEntries:boolean)
+function sendSingleEntry(entryFilename:string, firstEntry:boolean)
 {
     console.log('function sendSingleEntry called')
     
@@ -54,7 +56,7 @@ function sendSingleEntry(entryFilename:string, clearEntries:boolean)
     {
         //message is sent from this (child process)
         //to the parent process
-        process.send({entryFilename:entryFilename, clearEntries:clearEntries});
+        process.send({entryFilename:entryFilename, firstEntry:firstEntry});
         console.log('sending message')
     }
 }
