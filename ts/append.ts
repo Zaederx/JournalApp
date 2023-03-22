@@ -9,6 +9,8 @@ console.log("Node version: " + process.versions.node);
 console.log('allEntries:', allEntries)
 console.log('tagDirectory:', tagDirectory)
 
+const clearEntries = false
+const clearTags = true
 
-appendEntries(allEntries)
-appendTags(tagDirectory)
+appendEntries(allEntries, clearEntries)
+appendTags(tagDirectory, clearTags)

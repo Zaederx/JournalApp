@@ -8,7 +8,7 @@ import entryMergeSort from '../../../algorithms/entryMergeSort'
  * Append Entries
  * @param dir directory 
  */
-export async function appendEntries(dir:string)
+export async function appendEntries(dir:string, clearEntries:boolean)
 {
     //send message to start loader
     startLoader()
@@ -22,6 +22,8 @@ export async function appendEntries(dir:string)
         fetchBtime(dir, entryFilename, entryDates)
         entryDates = entryMergeSort(entryDates)
     })
+
+    var firstEntry = true
     //send each entry to front end
     entryDates.forEach((entryDate) => {
         //if .DS_Store or other invisible file - ignore
@@ -29,7 +31,9 @@ export async function appendEntries(dir:string)
         //send entry
         else 
         {
-            sendSingleEntry(entryDate.name)
+            //if first entry clear entries - else don't clear entries
+            (firstEntry) ? sendSingleEntry(entryDate.name, clearEntries) : sendSingleEntry(entryDate.name, clearEntries)
+            clearEntries = false
         }
     })
     //send message to stop loader
@@ -41,15 +45,16 @@ export async function appendEntries(dir:string)
  * see [node docs link](https://nodejs.org/api/child_process.html#subprocesssendmessage-sendhandle-options-callback)
  * @param entryFilename entry's filename
  */
-function sendSingleEntry(entryFilename:string)
+function sendSingleEntry(entryFilename:string, clearEntries:boolean)
 {
     console.log('function sendSingleEntry called')
+    
     //only if ipc channel is available - send method is available
     if (process.send)
     {
         //message is sent from this (child process)
         //to the parent process
-        process.send({entryFilename:entryFilename});
+        process.send({entryFilename:entryFilename, clearEntries:clearEntries});
         console.log('sending message')
     }
 }

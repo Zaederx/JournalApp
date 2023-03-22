@@ -12,21 +12,21 @@ export function makeTagDivClickable(tagDiv:HTMLDivElement, loader:HTMLDivElement
     return new Promise((resolve,reject) => {
         try {
             tagDiv.onclick = (async() => {
+                //activate loading spinner
+                activateLoader(loader)
                 //remove active tag class name from currentActiveTag
                 var previousActive = document.querySelector('.active.tag') as HTMLDivElement
-                previousActive.className = ''
+                previousActive.className = ' '
                 //make this tag currently active tag
                 tagDiv.className = 'active tag'
                 //get tagname
                 var selectedTagName = tagDiv.innerText
-                //activate loading spinner
-                activateLoader(loader)
                 // fetch the tag's associated entries
-                var entriesHTML = await ipcRenderer.invoke('get-tag-entries-html', selectedTagName)
+                await ipcRenderer.send('get-tag-entries', selectedTagName)
                 // //display tag's associated entries
                 // panel_entries.innerHTML = entriesHTML
                 //make entries clickable / open the entry view
-                makeAllEntriesClickable(loader)
+                // makeAllEntriesClickable(loader)
                 //remove loading spinner
                 deactivateLoader(loader)
             })
@@ -46,16 +46,16 @@ export function makeEntryDivClickable(entryDiv:HTMLDivElement, loader:HTMLDivEle
         try {
             //when entry is clicked
             entryDiv.onclick = () => {
-                //get selected entry name
-                var selectedEntryName = entryDiv.innerText
                 //activate loading spinner
                 activateLoader(loader)
+                //get selected entry name
+                var selectedEntryName = entryDiv.innerText
                 //set current entry to be read as selected
                 ipcRenderer.invoke('set-current-entry', selectedEntryName)
-                //remove loading spinner
-                deactivateLoader(loader)
                 //open the entry view
                 ipcRenderer.invoke('entry-view')
+                //remove loading spinner
+                deactivateLoader(loader)
             }
             const message = 'makeEntryDivClickable successful'
             resolve(message)

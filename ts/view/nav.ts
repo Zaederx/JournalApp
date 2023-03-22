@@ -94,10 +94,17 @@ function clickBtnSettings() {
     ipcRenderer.invoke('settings-view')
 }
 
-const clearEntries = ''
+const clear = ''
+var tagCount = 0
+var entryCount = 0
 function loadTags() {
     console.log('loadTags called')
-    panel_entries.innerHTML = clearEntries
+    //reset panels
+    panel_entries.innerHTML = clear//ENTRIES
+    panel_tags.innerHTML = clear//TAGS
+    //reset count
+    tagCount = 0
+    entryCount = 0
     ipcRenderer.send('ready-to-show')
 }
 
@@ -109,29 +116,71 @@ function loadTags() {
  * Loads those tags into the panel
  * and makes them clickable 
  */
-ipcRenderer.on('recieve-entry-filename', async(event, entryFilename) => {
+ipcRenderer.on('recieve-entry-filename', async(event, message) => {
     console.log('recieve-entry-filename called')
+    //clear panel entries
+    if(message.clearEntries)
+    {
+        panel_entries.innerHTML = clear//entries
+    }
+    //loader
     activateLoader(loader)
+    //create entry div
     var entryDiv = document.createElement('div')
-    entryDiv.innerHTML = entryFilename
+    entryDiv.innerHTML = message.entryFilename
     panel_entries.appendChild(entryDiv)
-    console.log('html:',entryFilename)
+    console.log('entryFilename:',message.entryFilename)
+    //make entry div clcickable
     await makeEntryDivClickable(entryDiv, loader)
+    //loader
     deactivateLoader(loader)
 })
 
 
+const firstTag = true
 /**
  * Recieve a list of all entries one at a time.
+ * Note: clearTags is always true for the first tag
  */
-ipcRenderer.on('recieve-tag-dirname', async (event,dirName) => {
+ipcRenderer.on('recieve-tag-dirname', async (event,message) => {
     console.log('recieve-tag-dirname called')
+    //clear panel tags on first tag
+    if(message.clearTags)
+    {
+        panel_tags.innerHTML = clear//tags
+    }
     activateLoader(loader)
     var tagDiv = document.createElement('div')
-    tagDiv.innerHTML = dirName
+    tagDiv.innerHTML = message.tagDirname
+    //if first tag
+    if (message.clearTags == firstTag) {
+        console.log('active tag set')
+        tagDiv.className = 'active tag'
+        console.log(tagDiv.className)
+    }
+    tagCount++
     panel_tags.appendChild(tagDiv)
-    console.log('dirName:',dirName)
+    console.log('dirName:',message.tagDirname)
     await makeTagDivClickable(tagDiv, loader)
+    deactivateLoader(loader)
+})
+
+ipcRenderer.on('recieve-tag-entries', async (event, message) => {
+    console.log('recieve-tag-entries called')
+    //clear panel entries
+    if(message.clearEntries)
+    {
+        panel_entries.innerHTML = clear//entries
+    }
+    //loader
+    activateLoader(loader)
+    //create entry div
+    var entryDiv = document.createElement('div')
+    entryDiv.innerHTML = message.entryFilename
+    panel_entries.appendChild(entryDiv)
+    console.log('entryFilename:', message.entryFilename)
+    //make entry div clcickable
+    await makeEntryDivClickable(entryDiv, loader)
     deactivateLoader(loader)
 })
 
