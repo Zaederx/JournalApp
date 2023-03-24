@@ -3,9 +3,15 @@ import toggleTagPopup from "./create-entry/tagPopup";
 import { addSelectedTagsToEntry } from "./clickable-filter-table/table";
 import Entry from "../classes/entry"
 
+async function loadFragment()
+{
+    //load tags popup
+    const tags_popup = await (await fetch('./fragments/tags-popup.html')).text()
+    document.querySelector('#tags-popup')!.outerHTML = tags_popup
+}
+var promise = loadFragment()
 
-
-// const messageDiv = document.querySelector('#message') as HTMLDivElement
+promise.then(() => {
 const title = document.querySelector('#entry-title') as HTMLDivElement
 const body = document.querySelector('#entry-body') as HTMLDivElement
 const tags = document.querySelector('#entry-tags') as HTMLDivElement
@@ -30,11 +36,14 @@ const popup = document.querySelector('#add-tags-popup') as HTMLDivElement
 const tagTableBody3 = document.querySelector('#tag-table-body') as HTMLTableElement
 
 //Enable buttons
-btn_open_tags_popup? btn_open_tags_popup.onclick = () => toggleTagPopup(main,popup, tagTableBody3) : console.log('btn_open_tags_popup is null')
+btn_open_tags_popup? btn_open_tags_popup.onclick = () => toggleTagPopup(main, tagTableBody3) : console.log('btn_open_tags_popup is null')
 
 btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(entryTemp,tags, tagTableBody3) : console.log('add_tags btn is null')
 
-btn_close ? btn_close.onclick = () => toggleTagPopup(main, popup, tagTableBody3) : console.warn('popup close_btn is null')
+btn_close ? btn_close.onclick = () => toggleTagPopup(main, tagTableBody3) : console.warn('popup close_btn is null')
+
+
+})
 
 
 

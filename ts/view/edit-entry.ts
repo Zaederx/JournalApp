@@ -1,5 +1,3 @@
-import { ipcRenderer } from "electron"
-
 import displayCurrentEntry from "./display/displayCurrentEntry"
 import saveNewEntry from "./edit-entry/saveNewEntry"
 import toggleTagPopup from "./create-entry/tagPopup"
@@ -7,7 +5,17 @@ import { addSelectedTagsToEntry, removeSelectedTags } from "./clickable-filter-t
 import Entry from "../classes/entry"
 import updateEntry from "./edit-entry/updateEntry"
 
-//Fetch HTML Elements
+
+async function loadFragment()
+{
+    //load tags popup
+    const tags_popup = await (await fetch('./fragments/tags-popup.html')).text()
+    document.querySelector('#tags-popup')!.outerHTML = tags_popup
+}
+var promise = loadFragment()
+
+promise.then(() => {
+    //Fetch HTML Elements
 const messageDiv = document.querySelector('#message') as HTMLDivElement
 const title = document.querySelector('#entry-title') as HTMLDivElement
 const body = document.querySelector('#entry-body') as HTMLDivElement
@@ -40,14 +48,18 @@ var close_btn = document.querySelector('#close-btn') as HTMLDivElement
 
 var tagTableBody1 = document.querySelector('#tag-table-body') as HTMLTableElement
 
+btn_tags_popup ? btn_tags_popup.onclick = () => editEntryTags() : console.log('btn_tags_popup is null')
+
 btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(entryTemp, tags, tagTableBody1) : console.log('add_tags btn is null')
 
 btn_remove_tags ? btn_remove_tags.onclick = () => removeSelectedTags(tagTableBody1, title, body, tags) : console.warn('btn_remove_tags is null')
 
-close_btn ? close_btn.onclick = () => toggleTagPopup(main,btn_tags_popup,tagTableBody1) : console.warn('popup close_btn is null')
+close_btn ? close_btn.onclick = () => toggleTagPopup(main,tagTableBody1) : console.warn('popup close_btn is null')
 
 function editEntryTags() {
     console.warn('editEntryTag called')
-    toggleTagPopup(main,btn_tags_popup,tagTableBody1)
+    toggleTagPopup(main,tagTableBody1)
 }
 
+
+})

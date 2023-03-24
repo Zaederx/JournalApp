@@ -14,9 +14,7 @@ async function loadFragments()
     const side_panel = await (await fetch('./fragments/tags-entries-sidepanel.html')).text()
     document.querySelector('#side-panel')!.outerHTML = side_panel
 
-    //load tags popup
-    const tags_popup = await (await fetch('./fragments/tags-popup.html')).text()
-    document.querySelector('#tags-popup')!.outerHTML = tags_popup
+    
 }
 var promise = loadFragments()
 

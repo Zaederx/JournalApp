@@ -5,18 +5,18 @@ import { fillTagTable, constants as c } from "../clickable-filter-table/table"
 //SECTION Toggling Popup
 
 var hidden = true
-export default function toggleTagPopup(blurDiv:HTMLDivElement, popup:HTMLDivElement, tagTableBody:HTMLTableElement) {
+export default function toggleTagPopup(blurDiv:HTMLDivElement, tagTableBody:HTMLTableElement) {
     console.warn('function toggleTagPopup called')
     //if hidden open tag popup
     if (hidden == true) {
-        displayTagPopup(popup)
+        displayTagPopup()
         fillTagTable(tagTableBody)
         blurBackground(blurDiv)
         hidden = false
     }
     //else hide tag popup
     else {
-        hideTagPopup(popup)
+        hideTagPopup()
         unblurBackground(blurDiv)
         hidden = true
     }
@@ -24,15 +24,15 @@ export default function toggleTagPopup(blurDiv:HTMLDivElement, popup:HTMLDivElem
 
 
 
-function displayTagPopup(popup:HTMLDivElement) {
-    console.log('function displayTagPopup called')
+function displayTagPopup() {
+    console.log('function displayTagPopup called');
     //display edit tag popup
-    popup.style.display = 'grid'
+    (document.querySelector('#add-tags-popup')as HTMLDivElement).style.display = 'grid'
 }
 
-function hideTagPopup(popup:HTMLDivElement) {
-    console.log('function hideTagPopup called')
+function hideTagPopup() {
+    console.log('function hideTagPopup called');
     //display edit tag popup
-    popup.style.display = 'none'
+    (document.querySelector('#add-tags-popup')as HTMLDivElement).style.display = 'none'
 }
 
