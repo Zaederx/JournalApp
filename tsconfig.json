@@ -75,6 +75,6 @@
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },
   // "files": ["./ts/view/create-entry.ts","./ts/view/edit-entry.ts","./ts/view/edit-tags.ts","./ts/view/export.ts","./ts/view/nav.ts","./ts/view/view-entry.ts"],
-  "include": ["./ts/**.ts"],
+  "include": ["./ts/**.ts", "./ts/view/**.ts"],
   "exclude": ["test", "wdio.conf.ts"]
 }
