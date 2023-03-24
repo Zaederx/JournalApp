@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <script>var exports = {"__esModule": true};</script>
+
     <script type="module" src="../js/view/bundle/nav.bundle.js" defer></script>
     <script type="module" src="../js/view/bundle/create-entry.bundle.js" defer></script>
     <script type="module" src="../js/view/bundle/settings.bundle.js"defer></script>
     <link id="theme-css" rel="stylesheet" href="../css/main.css">
     <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; style-src-elem 'self';">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,26 +16,13 @@
 </head>
 <body id="create-entry-body">
     <div class="grid-container">
-        <div id="nav" class="nav">
-            
-            <div id="btn-tags" class="nav-btn">
-                <img src="../img/icons/folder.svg" alt="folder button" class="btn">
-            </div>
-            <div id="btn-edit-tags" class="nav-btn">
-                <img src="../img/icons/iconmonstr-folder-4.svg" alt="entry button" class="btn">
-            </div>
-            <div id="btn-add-entry" class="nav-btn">
-                <img src="../img/icons/add-file.svg" alt="add entry button" class="btn">
-            </div>
-            <div id="btn-export" class="nav-btn">
-                <img src="../img/icons/export.svg" alt="export button" class="btn">
-            </div>
-            <div id="btn-settings" class="nav-btn">
-                <img src="../img/icons/settings-3.svg" alt="settings button" class="btn">
-            </div>
-        </div>
+        
+        <div id="nav"></div>
         
         <div id="main" class="main-container">
+            <!-- For tags and entries -->
+            <div id="side-panel"></div>
+
             <h4 id="heading" class="heading">Create Entry</h4>
             <div id="message" class="messageDiv"></div>
 
@@ -48,34 +36,10 @@
             <div id="entry-tags" class="entry-tags">
                 <div>all</div>
             </div>
-            <!-- Sidepanel -->
-            <div id="side-panel" class="side-panel" style="display: none">
-                <div id="tags" class="tags">
-                    <div class="selected">all</div>
-                </div>
-                <div id="entries" class="entries">
-                    <!-- <div>Loading Entries</div> -->
-                </div>
-            </div>
-            <div id="loader"></div>
+            
 
-            <!-- Tags Popup -->
-            <div id="add-tags-popup" class="edit-tags-popup">
-                <div id="close-btn" class="close-btn">X</div>
-                <div id="add-selected-tags" class="button">Add Selected Tags</div>
-                <!-- <div id="remove-selected-tags" class="button">Remove Selected Tags</div> -->
-                <div id="tag-searchbar"></div>
-                <table>
-                    <thead>
-                        <th>Tag Name</th>
-                        <th>Number of Entries</th>
-                        <th>Creation Date</th>
-                    </thead>
-                    <tbody id="tag-table-body">
-
-                    </tbody>
-                </table>
-            </div>
+            <div id="tags-popup"></div>
+            
         </div> 
         
         

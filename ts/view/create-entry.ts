@@ -1,9 +1,8 @@
-import { ipcRenderer } from "electron";
 import clickCreateEntryBtn from './create-entry/clickCreateEntryBtn'
 import toggleTagPopup from "./create-entry/tagPopup";
 import { addSelectedTagsToEntry } from "./clickable-filter-table/table";
 import Entry from "../classes/entry"
-import * as html from './create-entry/elements';
+
 
 
 // const messageDiv = document.querySelector('#message') as HTMLDivElement
@@ -33,15 +32,13 @@ const tagTableBody3 = document.querySelector('#tag-table-body') as HTMLTableElem
 //Enable buttons
 btn_open_tags_popup? btn_open_tags_popup.onclick = () => toggleTagPopup(main,popup, tagTableBody3) : console.log('btn_open_tags_popup is null')
 
-btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(entryTemp,html.entry_tags, tagTableBody3) : console.log('add_tags btn is null')
+btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(entryTemp,tags, tagTableBody3) : console.log('add_tags btn is null')
 
 btn_close ? btn_close.onclick = () => toggleTagPopup(main, popup, tagTableBody3) : console.warn('popup close_btn is null')
 
 
 
 
- 
- 
  
 
  

@@ -27,5 +27,5 @@ btn_delete_entry ? btn_delete_entry.onclick = () => deleteCurrentEntry() : conso
 async function deleteCurrentEntry() {
     console.info('function deleteCurrentEntry called')
     var message = await ipcRenderer.invoke('delete-current-entry')
-    messageDiv.innerText = message
+    alert(message)
 }

@@ -7,7 +7,7 @@
     <script src="../js/view/bundle/settings.bundle.js"></script>
     <link id="theme-css" rel="stylesheet" href="../css/main.css">
     <!-- Security meta information - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; style-src-elem 'self';">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,25 +16,10 @@
 </head>
 <body id="view-entry">
     <div class="grid-container">
-        <div id="nav" class="nav">
-            <div id="btn-tags" class="nav-btn">
-                <img src="../img/icons/folder.svg" alt="folder button" class="btn">
-            </div>
-            <div id="btn-edit-tags" class="nav-btn">
-                <img src="../img/icons/iconmonstr-folder-4.svg" alt="entry button" class="btn">
-            </div>
-            <div id="btn-add-entry" class="nav-btn">
-                <img src="../img/icons/add-file.svg" alt="add entry button" class="btn">
-            </div>
-            <div id="btn-export" class="nav-btn">
-                <img src="../img/icons/export.svg" alt="export button" class="btn">
-            </div>
-            <div id="btn-settings" class="nav-btn">
-                <img src="../img/icons/settings-3.svg" alt="settings button" class="btn">
-            </div>
-        </div>
+        <div id="nav"></div>
         
         <div id="main" class="main-container">
+            <div id="side-panel"></div>
             <h4 id="heading" class="heading">View Entry</h4>
             <div id="message" class="messageDiv"></div>
             <!-- <div id="centre" -->
@@ -48,20 +33,10 @@
             <div id="entry-body" class="entry-body">
                 Body
             </div>
-
             <div id="entry-tags" class="entry-tags">
                 tags
             </div>
-
-            <div id="side-panel" class="side-panel" style="display: none">
-                <div id="tags" class="tags">
-                    <div class="selected">all</div>
-                </div>
-                <div id="entries" class="entries">
-                    <!-- <div>Loading Entries...</div> -->
-                </div>
-            </div>
-            <div id="loader"></div>
-        </div>    
+        </div>
+        <div id="tags-popup"></div>    
 </body>
 </html>
