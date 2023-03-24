@@ -1,3 +1,10 @@
+/**
+ * Configuration file for webpack
+ * Allows the files under entry to be
+ * bundled with all their supporting js
+ * Prevents missing dependcies.
+ */
+
 const path = require('path')
 const outputPath = path.resolve(__dirname, 'js', 'view', 'bundle')
 const nodeExternals = require('webpack-node-externals')

@@ -23,12 +23,9 @@ import c_process from 'child_process'
 
 //produce electron binary file path for the wdio.config.ts
 const appBinaryPath = app.getPath('exe')
-const filename1 = 'electronBinaryPath.txt'
 const appPath = app.getAppPath()
+const filename1 = 'electronBinaryPath.txt'
 const filename2 = 'electronAppPath.txt'
-
-console.log('appBinaryPath:' + appBinaryPath)
-console.log('writing path to txt file...')
 
 try {
   fs.promises.writeFile(filename1, appBinaryPath, 'utf-8')

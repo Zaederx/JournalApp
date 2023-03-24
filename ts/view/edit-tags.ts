@@ -15,7 +15,7 @@ var remove_tag_btn = document.querySelector('#remove-selected-tags') as HTMLDivE
 add_tag_btn ? add_tag_btn.onclick = () => createNewTag() : console.warn('add_tag_btn is null')
 
 
-remove_tag_btn ? remove_tag_btn.onclick = () => removeSelectedTags(tagTableBody2,messageDiv,title,body,tags) : console.warn('remove_tag_btn is null')
+remove_tag_btn ? remove_tag_btn.onclick = () => removeSelectedTags(tagTableBody2,title,body,tags) : console.warn('remove_tag_btn is null')
 
 /** Searchbar */
 var tag_searchbar = document.querySelector('#tag-searchbar') as HTMLDivElement
@@ -35,7 +35,7 @@ async function createNewTag()
         //send tag to be persisted
         var message = await ipcRenderer.invoke('create-tag', tag)
         // display message
-        messageDiv.innerText = message
+        alert(message)
         //refresh tag table
         fillTagTable(tagTableBody2)
     }

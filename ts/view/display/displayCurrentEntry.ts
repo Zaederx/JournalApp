@@ -1,6 +1,6 @@
 //display entry
 import { ipcRenderer } from "electron"
-
+import Entry from '../../classes/entry'
 /**
  * displays current entry
  */

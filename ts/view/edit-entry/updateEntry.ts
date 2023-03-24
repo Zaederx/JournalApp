@@ -1,5 +1,6 @@
 import { ipcRenderer } from "electron";
 import tagsToArr from "./tags-to-array";
+import Entry from "../../classes/entry";
 
 /**
  * Updates the current entry
@@ -7,12 +8,12 @@ import tagsToArr from "./tags-to-array";
  * @param tags tags div
  * @param messageDiv div that displays messages
  */
-export default async function updateEntry(tags:HTMLDivElement, messageDiv:HTMLDivElement) {
+export default async function updateEntry(title:HTMLDivElement, body:HTMLDivElement, tags:HTMLDivElement) {
     console.log('function updateEntry called')
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
     //create and entry with updated title, boy and tags[]
-    //@ts-ignore
+
     var entry = new Entry({title:title.innerHTML,body:body.innerHTML, tags:tagsArr})
     //turn entry to json format - ready for sending via ipcRenderer - can't send complex objects
     var entry_json = JSON.stringify(entry);
@@ -22,5 +23,5 @@ export default async function updateEntry(tags:HTMLDivElement, messageDiv:HTMLDi
     //send entry_json and entryName to main to be updated
     var message = await ipcRenderer.invoke('update-entry', entry_json, entryName)
     //display message
-    messageDiv.innerText = message
+    alert(message)
 }

@@ -6,7 +6,7 @@ import * as dir from '../../directory';
 import path from 'path';
 import PDF from 'pdfkit';
 //@ts-ignore
-import { Entry } from '../../classes/entry';
+import Entry  from '../../classes/entry';
 import dateStr from '../crud/dateStr';
 
 /**

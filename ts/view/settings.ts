@@ -8,9 +8,10 @@ const DEFAULT_THEME = "../css/main.css"
 const LEAFY_THEME = "../css/leafy.css"
 
 /** CSS */
+var themeCss:HTMLLinkElement
 if (document.querySelector('#theme-css')) 
 {
-    var themeCss = document.querySelector('#theme-css') as HTMLLinkElement
+   themeCss = document.querySelector('#theme-css') as HTMLLinkElement
 }
 
 
@@ -63,7 +64,7 @@ function activate(theme:string)
 {
     console.log('function activate(theme:string) called')
     //activate theme
-    themeCss.setAttribute('href', theme);
+    document.querySelector('#theme-css')?.setAttribute('href', theme);
     //set current css theme in theme.txt file
     setCurrentCssTheme(theme)
 }

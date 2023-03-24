@@ -9,7 +9,10 @@ export default function tagsToArr(tags:HTMLDivElement) {
     //get tag names from tags div
     tags.querySelectorAll('div').forEach( tag => { 
         //add tag names to arr
-        arr.push((tag as HTMLDivElement).innerText)
+        if (tag.innerText != '')
+        {
+            arr.push((tag as HTMLDivElement).innerText)
+        }
     })
     //return arr for tag names
     return arr

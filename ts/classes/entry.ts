@@ -92,7 +92,11 @@ export default class Entry {
         if (tags)
         {
             tags.forEach((tag) => {
-                tagsHtml += '<div>'+tag+'</div>\n'
+                if(tag != '')
+                {
+                    tagsHtml += '<div>'+tag+'</div>\n'
+                }
+                
             })
         }
         //if using obj

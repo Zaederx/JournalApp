@@ -5,7 +5,7 @@ import fetchBtime from './fetch-btime'
 import entryMergeSort from '../../../algorithms/entryMergeSort'
 
 /**
- * Append Entries
+ * Appends entries to the entry list on the frontend.
  * @param dir directory 
  */
 export async function appendEntries(dir:string)

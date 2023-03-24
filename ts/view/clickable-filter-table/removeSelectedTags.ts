@@ -7,7 +7,7 @@ import displayCurrentEntry from "../display/displayCurrentEntry"
  * @param tagTableBody table body of the div you would like to remove tags from
  * @param messageDiv div for alert messages
  */
-export default async function removeSelectedTags(tagTableBody:HTMLTableElement, messageDiv:HTMLDivElement, title:HTMLDivElement, body:HTMLDivElement, tags:HTMLDivElement) {
+export default async function removeSelectedTags(tagTableBody:HTMLTableElement, title:HTMLDivElement, body:HTMLDivElement, tags:HTMLDivElement) {
     console.log('function removeSelectedTags called')
     var selectedTags:string[] = getSelectedTags(tagTableBody)
     //get current entry
@@ -35,7 +35,7 @@ export default async function removeSelectedTags(tagTableBody:HTMLTableElement, 
         //remove old entry symlinks from tag folders
         var message2 = await ipcRenderer.invoke('remove-entry-tags',selectedTags)
         //display message
-        messageDiv.innerText = message, message2
+        alert(message2)
     })
     .catch((err) => console.log(err))
     .then(() => {

@@ -1,5 +1,5 @@
 import getSelectedTags from "./getSelectedTags"
-
+import Entry from '../../classes/entry'
 /**
  * 
  * @param entryTemp selected Entry stored temporarily in a variable
@@ -7,7 +7,7 @@ import getSelectedTags from "./getSelectedTags"
  * @param entry_tags the div holing the tags belonging the entry 
  * @param tagTableBody table body to get selected tags from
  */
-export default async function addSelectedTagsToEntry(entryTemp:any, messageDiv:HTMLDivElement, entry_tags:HTMLDivElement, tagTableBody:HTMLTableElement) {
+export default async function addSelectedTagsToEntry(entryTemp:any, entry_tags:HTMLDivElement, tagTableBody:HTMLTableElement) {
     console.log('function addSelectedTagsToEntry called')
     //get selected tags
     var selectedTags:string[] = getSelectedTags(tagTableBody)
@@ -21,7 +21,8 @@ export default async function addSelectedTagsToEntry(entryTemp:any, messageDiv:H
         tagSet.has(tag) ? null : entryTemp.tags.push(tag)
     })
     //display message
-    messageDiv.innerText = 'Tags Added'
+    var message = 'Tags Added'
+    alert(message)
     //display tags
     //@ts-ignore
     var e = new Entry({})//for access to class methods (not avaiable to converted JSON to Entry)
