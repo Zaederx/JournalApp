@@ -1,19 +1,12 @@
 import { ipcRenderer } from 'electron';
-import * as fs from 'fs';
-import path from 'path';
 
-/** Constants */
+
+/** Constants */ //these are relative to the html page 'settings.html'
 const DARK_THEME = "../css/dark_mode.css"
 const DEFAULT_THEME = "../css/main.css"
 const LEAFY_THEME = "../css/leafy.css"
 
 /** CSS */
-var themeCss:HTMLLinkElement
-if (document.querySelector('#theme-css')) 
-{
-   themeCss = document.querySelector('#theme-css') as HTMLLinkElement
-}
-
 
 /** Theme Buttons */
 var btn_default_theme

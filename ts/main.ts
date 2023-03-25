@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue, IpcMainEvent } from 'electron';
-import path from 'path'
+import paths from 'path'
 import fs from 'fs'
 import * as dirs from './directory'
 
@@ -14,12 +14,15 @@ import * as tCreate from './tag/crud/t-create'
 import * as tRead from './tag/crud/t-read'
 import * as tUpdate from './tag/crud/t-update'
 import * as tDelete from './tag/crud/t-delete'
+//Password
+import * as pCrud from './security/password-crud'
 //Other
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
 import EntryDate from './classes/entry-date';
 
 import c_process from 'child_process'
+import { passwordFileExists } from './security/password-crud';
 
 //produce electron binary file path for the wdio.config.ts
 const appBinaryPath = app.getPath('exe')
@@ -40,7 +43,7 @@ catch (err) {
 let window: BrowserWindow;
 
 var integration = false;
-function createWindow() {
+async function createWindow() {
 
   if (process.env.NODE_ENV === 'test-main') {
     integration = true;
@@ -62,7 +65,25 @@ function createWindow() {
       }
     })
 
-  window.loadFile('html/create-entry.html');
+  
+  const exists = await passwordFileExists()
+  
+  if (exists)
+  {
+    console.log('password file exists')
+    window.loadFile('html/authenticate.html')
+  }
+  else 
+  {
+    console.warn('password file does not exist')
+    window.loadFile('html/create-entry.html');
+    //wait for event from create entry
+    ipcMain.on('password-reminder-?',(event)=> {
+      window.webContents.send('register-password-reminder')
+    })
+  }
+
+  
 
   if (process.env.NODE_ENV === 'dev-tools') {
     window.webContents.openDevTools();
@@ -96,6 +117,11 @@ function createWindow() {
   })
 }
 
+async function retrieveSettingsJson()
+{
+  
+}
+
 
 
 
@@ -104,7 +130,7 @@ function createWindow() {
 
 
 //if directory doesn't exist - create directory
-var directory = path.join(dirs.allEntries)
+var directory = paths.join(dirs.allEntries)
 if (!fs.existsSync(directory)) {
   try {
     fs.promises.mkdir(directory)
@@ -340,3 +366,41 @@ ipcMain.handle('export-entries-pdf', async () => {
   }
 })
 // ipcMain.handle('show-open-dialog')
+
+ipcMain.handle('register-password', (event, password1, password2) => {
+  if(password1 == password2) {
+    try {
+      //hash password
+      var passwordHash = pCrud.hashPassword(password1)
+      //store password hash
+      pCrud.storePasswordHash(dirs.secureFolder,passwordHash)
+      return 'Password registered successfully'
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  else 
+  {
+    return 'Passwords do not match'
+  }
+})
+
+
+const loggedIn = {is:false}
+ipcMain.handle('login', async (event, password) => {
+  //authenticate password
+  var authenticated = await pCrud.functionAutheticatePassword(password)
+  if (authenticated) 
+  {
+    loggedIn.is = true
+    return 'Password successfully authenticated.'
+  }
+  else
+  {
+    return 'Password not authenticated. Please enter a valid password.'
+  }
+})
+
+ipcMain.handle('logout', () => {
+  loggedIn.is = false
+})

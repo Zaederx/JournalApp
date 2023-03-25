@@ -82,6 +82,22 @@ $side-panel: rgb(103, 106, 111);
    background-color: $hover;
 }
 
+.button {
+    display: inline;
+    background-color: $body;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.button:hover {
+    display: inline;
+    background-color: $body;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 3;
+}
+
 .entry-title {
     grid-column: 2 / span 2;
     grid-row: 4;

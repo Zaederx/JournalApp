@@ -16,6 +16,7 @@
     "author": "Zachary Ishmael",
     "license": "ISC",
     "devDependencies": {
+        "@types/bcryptjs": "^2.4.2",
         "@types/node": "^16.3.3",
         "@types/pdfkit": "^0.12.8",
         "@wdio/cli": "^8.5.8",
@@ -35,6 +36,7 @@
         "webpack-node-externals": "^3.0.0"
     },
     "dependencies": {
+        "bcryptjs": "^2.4.3",
         "electron": "^13.1.7",
         "pdfkit": "^0.13.0"
     }

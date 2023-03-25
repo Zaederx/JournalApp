@@ -1,5 +1,6 @@
 import getSelectedTags from "./getSelectedTags"
 import Entry from '../../classes/entry'
+
 /**
  * 
  * @param entryTemp selected Entry stored temporarily in a variable

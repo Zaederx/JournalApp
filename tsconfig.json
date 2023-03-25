@@ -48,8 +48,9 @@
     "paths": {
       "$e-crud/*":["ts/entry/crud/*"],
       "$t-crud/*":["ts/tag/crud/*"],
-      "$e-read-module":["ts/entry/crud/e-read"], 
-      "$t-read-module":["ts/tag/crud/t-read"]
+      "$e-read-module":["ts/entry/crud/e-read.ts"], 
+      "$t-read-module":["ts/tag/crud/t-read.ts"],
+      "$directory":["ts/directory.ts"]
       },
                                 /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": ["ts","js"],                        /* List of root folders whose combined content represents the structure of the project at runtime. */

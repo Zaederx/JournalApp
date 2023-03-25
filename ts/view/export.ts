@@ -3,7 +3,6 @@
  * */
 import { ipcRenderer } from "electron";
 
-
 //variables
 var btn_export_txt = document.querySelector('#btn-export-txt') as HTMLButtonElement;
 var btn_export_json = document.querySelector('#btn-export-json') as HTMLButtonElement;

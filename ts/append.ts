@@ -9,6 +9,5 @@ console.log("Node version: " + process.versions.node);
 console.log('allEntries:', allEntries)
 console.log('tagDirectory:', tagDirectory)
 
-
 appendEntries(allEntries)
 appendTags(tagDirectory)
