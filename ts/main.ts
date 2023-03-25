@@ -18,7 +18,7 @@ import * as tDelete from './tag/crud/t-delete'
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
 import EntryDate from './classes/entry-date';
-
+import { appendEntriesAndTags } from './view/display/append-entries-tags'
 import c_process from 'child_process'
 
 //produce electron binary file path for the wdio.config.ts
@@ -62,40 +62,47 @@ function createWindow() {
       }
     })
 
+<<<<<<< Updated upstream
   window.loadFile('html/create-entry.html');
+=======
+  
+  const exists = await passwordFileExists()
+  
+  if (exists)
+  {
+    console.log('password file exists')
+    window.loadFile('html/authenticate.html')
+  }
+  else 
+  {
+    console.warn('password file does not exist')
+    window.loadFile('html/create-entry.html');
+    //wait for event from create entry
+    //put as 'once' because it sometimes fires 
+    //multiple times on one page load without it...
+    ipcMain.once('password-reminder-?',(event)=> {
+      window.webContents.send('register-password-reminder')
+    })
+  }
+
+  
+>>>>>>> Stashed changes
 
   if (process.env.NODE_ENV === 'dev-tools') {
     window.webContents.openDevTools();
   }
 
-  ipcMain.on('ready-to-show', async (event) => {
-    console.log('window ready-to-show called')
-    const { allEntries, tagDirectory } = dirs
-    console.log('allEntries:', allEntries)
-    console.log('tagDirectory:', tagDirectory)
-    var childProcess = c_process.spawn('node', ['js/append.js', allEntries, tagDirectory], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
-
-    if (childProcess) {
-      childProcess.on('message', (message: any) => {
-        if (message.entryFilename) {
-          console.log('message.entryFilename -> present')
-          event.reply('recieve-entry-filename', message)
-        }
-        else if (message.tagDirname) {
-          console.log('message.tagDirname -> present')
-          event.reply('recieve-tag-dirname', message)
-        }
-        else if (message == 'start-loader') {
-          event.reply(message)
-        }
-        else if (message == 'stop-loader') {
-          event.reply(message)
-        }
-      })
-    }
-  })
+  /**
+   * Append entries and tags to the side-panel
+   */
+  ipcMain.on('ready-to-show', async (event) => appendEntriesAndTags(event))
 }
 
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 
 
 
