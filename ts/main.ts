@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue, IpcMainEvent } from 'electron';
-import paths from 'path'
+import path from 'path'
 import fs from 'fs'
 import * as dirs from './directory'
 
@@ -20,7 +20,7 @@ import * as pCrud from './security/password-crud'
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
 import EntryDate from './classes/entry-date';
-
+import { appendEntriesAndTags } from './view/display/append-entries-tags'
 import c_process from 'child_process'
 import { passwordFileExists } from './security/password-crud';
 
@@ -65,6 +65,9 @@ async function createWindow() {
       }
     })
 
+
+  window.loadFile('html/create-entry.html');
+
   
   const exists = await passwordFileExists()
   
@@ -78,44 +81,24 @@ async function createWindow() {
     console.warn('password file does not exist')
     window.loadFile('html/create-entry.html');
     //wait for event from create entry
-    ipcMain.on('password-reminder-?',(event)=> {
+
+    //put as 'once' because it sometimes fires 
+    //multiple times on one page load without it...
+    ipcMain.once('password-reminder-?',(event)=> {
       window.webContents.send('register-password-reminder')
     })
   }
-
-  
 
   if (process.env.NODE_ENV === 'dev-tools') {
     window.webContents.openDevTools();
   }
 
-  ipcMain.on('ready-to-show', async (event) => {
-    console.log('window ready-to-show called')
-    const { allEntries, tagDirectory } = dirs
-    console.log('allEntries:', allEntries)
-    console.log('tagDirectory:', tagDirectory)
-    var childProcess = c_process.spawn('node', ['js/append.js', allEntries, tagDirectory], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
-
-    if (childProcess) {
-      childProcess.on('message', (message: any) => {
-        if (message.entryFilename) {
-          console.log('message.entryFilename -> present')
-          event.reply('recieve-entry-filename', message)
-        }
-        else if (message.tagDirname) {
-          console.log('message.tagDirname -> present')
-          event.reply('recieve-tag-dirname', message)
-        }
-        else if (message == 'start-loader') {
-          event.reply(message)
-        }
-        else if (message == 'stop-loader') {
-          event.reply(message)
-        }
-      })
-    }
-  })
+  /**
+   * Append entries and tags to the side-panel
+   */
+  ipcMain.on('ready-to-show', async (event) => appendEntriesAndTags(event))
 }
+
 
 async function retrieveSettingsJson()
 {
@@ -129,8 +112,9 @@ async function retrieveSettingsJson()
 
 
 
+
 //if directory doesn't exist - create directory
-var directory = paths.join(dirs.allEntries)
+var directory = path.join(dirs.allEntries)
 if (!fs.existsSync(directory)) {
   try {
     fs.promises.mkdir(directory)

@@ -8,6 +8,7 @@
         "pack": "webpack",
         "tsc": "tsc",
         "sass": "sass ./scss:./css",
+        "sass-watch": "sass ./scss:./css --watch",
         "start": "electron .",
         "run-all": "npm run bundle && npm start",
         "test": "mocha",

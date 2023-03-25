@@ -19,6 +19,7 @@ const tagDirectory = paths.join(app.getPath('userData'),'tagDirs')
 const downloads = paths.join(app.getPath('downloads'))
 
 
+
 /**
  * A folder called 'secure' where security data is sotred for the app
  */
@@ -28,6 +29,18 @@ const secureFolder = paths.join(app.getPath('userData'),'secure')
  * Path to password hash
  */
 const passwordHash = paths.join(app.getPath('userData'),'secure', 'password.txt')
+
+
+/**
+ * Folder that contains the settings json file
+ */
+const settingsFolder = paths.join(app.getPath('userData'), 'settings')
+
+/**
+ * Path directly to the settings.json file
+ */
+const settingsFile = paths.join(app.getPath('userData'), 'settings', 'settings.json')
+
 //Note relative to tsconfig
 /**
  * relative path a txt file which contains a
@@ -36,4 +49,5 @@ const passwordHash = paths.join(app.getPath('userData'),'secure', 'password.txt'
  */
 const themeFilepath = paths.join('css', 'theme.txt')
 
-export { allEntries, tagDirectory, downloads, secureFolder, passwordHash, themeFilepath }
+export { allEntries, tagDirectory, downloads, secureFolder, passwordHash, settingsFolder, settingsFile, themeFilepath }
+
