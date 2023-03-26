@@ -4,7 +4,8 @@
  * otherwise it causes problems in the constructor.
  */
 export default class Entry {
-    date:string;
+    cdate:string; //creation date
+    udate:string;
     title:string;
     body:string;
     tags:string[] = [];
@@ -12,7 +13,7 @@ export default class Entry {
     /**
      * must pass in an object - even if its empty
      */
-    constructor (obj:{entry?:Entry, date?:string, title?:string, body?:string, tags?:string[]}={}) {
+    constructor (obj:{cdate?:string, udate?:string, laccess?:string, title?:string, body?:string, tags?:string[]}={}) {
         var d = new Date();
         var day = d.getDate();
         var month = d.getMonth();
@@ -22,24 +23,14 @@ export default class Entry {
         var secs = d.getSeconds();
 
         var dateStr = day + '-' + (month+1) + '-' + year + '-' + hour + '-' + mins + '-' + secs;
-        //if using entry instead
-        if (obj?.entry)
-        {
-            const { date, title, body, tags } = obj.entry
-            this.date = date ? date : dateStr
-            this.title = title
-            this.body = body
-            this.tags = tags
-        }
-        else
-        {
-            //regular var assignment
-            const { date, title, body, tags } = obj
-            this.date = date ? date : dateStr;
-            this.title = title ? title : 'default';
-            this.body = body ? body : 'default';
-            this.tags = tags ? tags : ['all'];
-        }
+    
+        //regular var assignment
+        const { udate, cdate, title, body, tags } = obj
+        this.cdate = cdate ? cdate : dateStr;
+        this.udate = udate ? udate : dateStr;
+        this.title = title ? title : 'default';
+        this.body = body ? body : 'default';
+        this.tags = tags ? tags : ['all'];
     }
     tagsToStringCSV(e:Entry=this):string {
         var csv = e ? e.tagsArrToStringCSV() : 'all'
@@ -68,7 +59,7 @@ export default class Entry {
     entryToTxt(e:Entry=this)
     {
         var entryTxt = ''
-        entryTxt += 'Date:'+e.date+'\n'
+        entryTxt += 'Date:'+e.udate+'\n'
         entryTxt += 'Title:'+e.title+'\n'
         entryTxt += 'Body:'+e.body+'\n'
         entryTxt += 'Tags:'+e.tagsArrToStringCSV()
@@ -77,7 +68,7 @@ export default class Entry {
     }
     entryToJson(e:Entry=this)
     {
-        var json = {date:e.date, title:e.title, body:e.body, tags:e.tags.toString()}
+        var json = {date:e.udate, title:e.title, body:e.body, tags:e.tags.toString()}
         return json
     }
     entryToJsonStr(e:Entry=this)
@@ -85,42 +76,20 @@ export default class Entry {
         var jsonStr = JSON.stringify(e)
         return jsonStr
     }
-    tagsToHTML(tags:string[], obj?:{tags:string[], tagsStr:string}) {
+    tagsToHTML(tags:string[],) {
         var tagsHtml = ''
         //if an array of tags is given
         //return tagsHTML with HTML tag info
         if (tags)
         {
             tags.forEach((tag) => {
-                if(tag != '')
+                //if tag not empty && not hidden file
+                if(tag != '' && tag.charAt(0) != '.')//if empty tag - because of known forEach problems
                 {
                     tagsHtml += '<div>'+tag+'</div>\n'
                 }
-                
             })
         }
-        //if using obj
-        else if(obj && obj.tags)
-        { 
-            //get tags and tagStr from obj
-            const { tags, tagsStr } = obj
-            //if tags is present - use tags
-            if (tags)
-            {
-                tags.forEach((tag) => {
-                    tagsHtml += '<div>'+tag+'</div>\n'
-                })
-            }
-            //else if tagsStr is present use that
-            else if (tagsStr)
-            {
-                var tArr = this.tagsStringToArr(tagsStr)
-                tArr.forEach((tag) => {
-                    tagsHtml += '<div>'+tag+'</div>\n'
-                })
-            }
-        }
-        console.log('tagsHTML:'+tagsHtml)
         return tagsHtml
     }
 }

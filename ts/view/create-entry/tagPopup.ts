@@ -5,6 +5,11 @@ import { fillTagTable, constants as c } from "../clickable-filter-table/table"
 //SECTION Toggling Popup
 
 var hidden = true
+/**
+ * Opens and closes the tag popup div.
+ * @param blurDiv 
+ * @param tagTableBody 
+ */
 export default function toggleTagPopup(blurDiv:HTMLDivElement, tagTableBody:HTMLTableElement) {
     console.warn('function toggleTagPopup called')
     //if hidden open tag popup

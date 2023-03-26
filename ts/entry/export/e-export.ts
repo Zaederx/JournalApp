@@ -77,8 +77,7 @@ async function getEntriesByFilepaths(entriesFilepathsArr:string[]):Promise<Entry
 
 export async function txtExportFunc(entry:Entry, filepath:string) {
     //get entry as txt output
-    var obj = {entry:entry}
-    var e = new Entry(obj)
+    var e = new Entry(entry)//entry object to full entry with functions
     var txt = e.entryToTxt()
     console.log('entry txt output'+ txt)
     //write file to directory
@@ -95,8 +94,7 @@ export async function txtExportFunc(entry:Entry, filepath:string) {
  */
 export async function jsonExportFunc(entry:Entry, filepath:string) {
     //convert functionless entry to full entry
-    var obj = {entry:entry}
-    var e = new Entry(obj)
+    var e = new Entry(entry)//entry object to full entry with functions
     var json = e.entryToJsonStr()
     console.log('entry json output'+ json)
     //write file to directory
@@ -104,7 +102,7 @@ export async function jsonExportFunc(entry:Entry, filepath:string) {
 }
 export async function pdfExportFunc(entry:Entry, filepath:string) {
     console.log('entry output'+ entry)
-    var e = new Entry({entry:entry})
+    var e = new Entry(entry)//entry object to full entry with functions
     createPDF(e, filepath)
 }
 
@@ -135,9 +133,9 @@ export async function exportEntries(entriesFilepathsArr:string[], fileExtension:
     {
         //entries to filesystem
         entries.forEach( async (entry) => {
-            console.log('entry.date:'+entry.date)
+            console.log('entry.date:'+entry.udate)
             //set filepath
-            var filepath = path.join(exportDir, entry.date + fileExtension)
+            var filepath = path.join(exportDir, entry.udate + fileExtension)
             console.log('export filepath:', filepath)
             try {
                 //unique function for each file type

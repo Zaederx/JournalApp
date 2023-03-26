@@ -23,7 +23,7 @@ export function updateEntry(entry_json:string, entry_filename:string) {
     }
     console.log(message)
     //symlink entry to related tags
-    eCreate.symlinkEntryFile(entry_json,entry_filename)
+    eCreate.symlinkEntryFileToTagFolders(entry_json,entry_filename)
 
     return message
 }

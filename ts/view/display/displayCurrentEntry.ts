@@ -9,10 +9,9 @@ export default async function displayCurrentEntry(title:HTMLDivElement, body:HTM
     //get current entryJson
     var entryJson:string = await ipcRenderer.invoke('get-current-entry')
     // parse JSON to an Entry
-    //@ts-ignore
+    console.warn('entryJson:',entryJson)
     var entry:Entry = JSON.parse(entryJson)
-    //@ts-ignore
-    var e = new Entry({})
+    var e = new Entry()
     // put entry details into html frontend
     title.innerHTML = entry.title
     body.innerHTML = entry.body

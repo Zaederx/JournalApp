@@ -9,7 +9,7 @@ $panel-tag : $main; //#6F7871
 $selected : rgb(129, 155, 204);
 $hover : rgb(140, 161, 216);
 $side-panel: rgb(113, 120, 113);
-
+$before-text-color: rgb(109, 109, 109);
 
 .grid-container {
     display: grid;
@@ -168,13 +168,16 @@ $side-panel: rgb(113, 120, 113);
 
 .editable {
     padding: 5px;
+    overflow-y:auto;
+    white-space: pre-wrap;
+    word-wrap: normal;
 }
 
 .editable:empty:before {
     content: attr(data-placeholder);
-    color: rgb(109, 109, 109);
+    color: $before-text-color;
     white-space: pre-wrap;
-    word-wrap: normal;
+    word-wrap: normal;//how words are broken on screen - see [link](https://www.w3schools.com/cssref/css3_pr_word-wrap.php)
 }
 
 .side-panel .active.tag {

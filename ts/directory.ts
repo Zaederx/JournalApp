@@ -8,11 +8,12 @@ const allEntries = paths.join(app.getPath('userData'),'tagDirs','all')
 
 /**
  * Directory containing all tag folders - 
- * this directory is called 'tagDirs'
+ * this directory is called 'tagDirs' (i.e. tagDirectories)
  */
 const tagDirectory = paths.join(app.getPath('userData'),'tagDirs')
 
 
+const currentEntryDir = paths.join(app.getPath('userData'), 'tagDirs', 'current-entry' )
 /**
  * Downloads directory
  */
@@ -49,5 +50,5 @@ const settingsFile = paths.join(app.getPath('userData'), 'settings', 'settings.j
  */
 const themeFilepath = paths.join('css', 'theme.txt')
 
-export { allEntries, tagDirectory, downloads, secureFolder, passwordHash, settingsFolder, settingsFile, themeFilepath }
+export { allEntries, tagDirectory, currentEntryDir, downloads, secureFolder, passwordHash, settingsFolder, settingsFile, themeFilepath }
 

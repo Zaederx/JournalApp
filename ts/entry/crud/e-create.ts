@@ -42,7 +42,7 @@ export async function createEntry(entryJson:string, directory:string=dir.allEntr
     promise = fs.promises.writeFile(filepath,entryJson, 'utf-8')
     message ='File saved successfully'
     //create symlinks at related tag directories
-    promise.then(() => symlinkEntryFile(entryJson,fileName))  
+    promise.then(() => symlinkEntryFileToTagFolders(entryJson,fileName))  
    } catch (err) {
     message = 'An error occured in saving the new entry:'+err
   }
@@ -52,18 +52,22 @@ export async function createEntry(entryJson:string, directory:string=dir.allEntr
 }
 
 /**
- * 
+ * Symlinks an entry to it's tags.
+ * Takes and entry in json format (because that's the format)
+ * that can be sent through ipc messaging.
+ * It's then converted back into an object within the function
+ * so that the tags can be looped through for symlinking.
  * @param entryJsonStr json string
  * @param filename filename
  */
-export async function symlinkEntryFile(entryJsonStr:string,filename:string) {
+export async function symlinkEntryFileToTagFolders(entryJsonStr:string,filename:string) {
   console.log('*** symlinkEntryFile called ***')
   console.log('entryJsonStr:',entryJsonStr)
   var entryJson = JSON.parse(entryJsonStr)
   console.log('entryJson:', entryJson)
   //@ts-ignore
   try {
-    var entry = new Entry({entry:entryJson})
+    var entry = new Entry(entryJson)
     //all entries go into the all directory and then are
     //symlinked into other directories (tags)
     var targetFilepath = paths.join(dir.allEntries,filename)

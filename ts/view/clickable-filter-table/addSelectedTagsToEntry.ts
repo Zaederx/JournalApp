@@ -25,8 +25,7 @@ export default async function addSelectedTagsToEntry(entryTemp:any, entry_tags:H
     var message = 'Tags Added'
     alert(message)
     //display tags
-    //@ts-ignore
-    var e = new Entry({})//for access to class methods (not avaiable to converted JSON to Entry)
+    var e = new Entry()//for access to class methods (not avaiable to converted JSON to Entry)
     var tagsHTML  = e.tagsToHTML(entryTemp.tags)
     console.log('tagHTML:',tagsHTML)
     entry_tags.innerHTML = tagsHTML

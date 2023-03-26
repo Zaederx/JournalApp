@@ -6,7 +6,7 @@ export default async function clickCreateEntryBtn(entryTemp:Entry, title:HTMLDiv
     var e = new Entry({})
     //get entry text & put in entry object
     var dateStr = await ipcRenderer.invoke('get-datestr')
-    entryTemp.date = dateStr
+    entryTemp.udate = dateStr
     entryTemp.title = title.innerHTML
     entryTemp.body = body.innerHTML
     //add tags

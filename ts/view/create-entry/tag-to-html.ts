@@ -18,7 +18,7 @@
     console.log('function tagsToHTML called')
     var html:string = '';
     tags.forEach( tag => {
-        if (tag.charAt(0) == '.') {/* Do not add .DS_STORE / System files*/}
+        if (tag.charAt(0) == '.' && tag == '') {/* Do not add .DS_STORE / System files*/}
         else html += '<tr>\n'+
         '<td>'+tag+'</td>\n' + 
         '<td>'+'default'+'</td>\n' + 

@@ -23,7 +23,7 @@ export function appendEntriesAndTags(event:IpcMainEvent)
           event.reply('recieve-entry-filename', message)
         }
         else if (message.tagDirname) {
-          //the tagDirname
+          //the tagDirname - relates to nav.ts
           console.log('message.tagDirname -> present')
           event.reply('recieve-tag-dirname', message)
         }

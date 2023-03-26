@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue, IpcMainEvent } from 'electron';
-import path from 'path'
+import paths from 'path'
 import fs from 'fs'
 import * as dirs from './directory'
 
@@ -23,6 +23,8 @@ import EntryDate from './classes/entry-date';
 import { appendEntriesAndTags } from './view/display/append-entries-tags'
 import c_process from 'child_process'
 import { passwordFileExists } from './security/password-crud';
+import Entry from './classes/entry';
+import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
 
 //produce electron binary file path for the wdio.config.ts
 const appBinaryPath = app.getPath('exe')
@@ -114,7 +116,7 @@ async function retrieveSettingsJson()
 
 
 //if directory doesn't exist - create directory
-var directory = path.join(dirs.allEntries)
+var directory = paths.join(dirs.allEntries)
 if (!fs.existsSync(directory)) {
   try {
     fs.promises.mkdir(directory)
@@ -196,15 +198,21 @@ ipcMain.handle('read-entry', async (event, entry_filename) => {
   return message
 })
 
-ipcMain.handle('update-entry', async (event, entry_json, entry_filename) => {
-  var message = eUpdate.updateEntry(entry_json, entry_filename)
-  return message
-})
+// ipcMain.handle('update-entry', async (event, entry_json, entry_filename) => {
+//   var message = eUpdate.updateEntry(entry_json, entry_filename)
+//   return message
+// })
 
 //var for the selected entry
-var this_selectedEntryName = ''
+async function getCurrentEntryName()
+{
+  const json = false// will return an entry when false
+  const entry = await getCurrentEntry(json) as Entry
+  return entry.cdate+'.json'
+}
 ipcMain.handle('update-current-entry', async (event, entry_json) => {
-  var message = eUpdate.updateEntry(entry_json, this_selectedEntryName)
+  var selectedEntryName = await getCurrentEntryName()
+  var message = eUpdate.updateEntry(entry_json, selectedEntryName)
   return message
 })
 
@@ -214,8 +222,9 @@ ipcMain.handle('delete-entry', async (event, entry_filename) => {
 })
 
 ipcMain.handle('delete-current-entry', async (event) => {
-  var message = eDelete.deleteEntry(this_selectedEntryName)
-  this_selectedEntryName = ''
+  var message = eDelete.deleteEntry(await getCurrentEntryName())
+  //delete/remove from current entry tag folder
+  setCurrentEntry('')
   return message
 })
 
@@ -239,19 +248,20 @@ ipcMain.handle('get-last-entry', async () => {
 })
 
 
+ipcMain.handle('set-current-entry', (event, selectedEntryName) => setCurrentEntry(selectedEntryName))
 
-ipcMain.handle('set-current-entry', (event, selectedEntryName) => {
-  this_selectedEntryName = selectedEntryName
-})
 
-ipcMain.handle('get-current-entry-name', (event) => {
-  return this_selectedEntryName
+ipcMain.handle('get-current-entry-name', async (event) => {
+  const json = false// will return an entry when false
+  const entry = await getCurrentEntry(json) as Entry
+  entry.cdate+'.json'
 })
 
 ipcMain.handle('get-current-entry', async (event) => {
-  var entry = await eRead.readSingleFile(dirs.allEntries, this_selectedEntryName)
-  console.log('current-entry:', entry)
-  return entry
+  const json = true
+  var entryJsonStr = await getCurrentEntry(json) as string
+  console.log('current-entry:', entryJsonStr)
+  return entryJsonStr
 })
 
 ipcMain.handle('get-tags-table-rows', async (event) => {
@@ -285,7 +295,10 @@ ipcMain.handle('delete-tags', async (event, tags: string[]) => {
 
 //i.e. delete entry symlink from tag folder
 ipcMain.handle('remove-entry-tags', async (event, tagnames: string[]) => {
-  var message = await tDelete.removeEntrySymlinks(tagnames, this_selectedEntryName)
+  const json = false
+  var e = await getCurrentEntry(json) as Entry
+  const selectedEntryName = e.cdate+'.json'
+  var message = await tDelete.removeEntrySymlinks(tagnames, selectedEntryName)
   return message
 })
 
