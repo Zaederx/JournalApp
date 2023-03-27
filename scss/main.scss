@@ -11,66 +11,27 @@ $hover : rgb(140, 161, 216);
 $side-panel: rgb(113, 120, 113);
 $before-text-color: rgb(109, 109, 109);
 
-.grid-container {
-    display: grid;
-    grid-template-columns: 100px 800px;
-    height: 560px;
-}
+// Only colours
 
 .grid-container .nav {
-    grid-column: 1;
     background-color: $brilliant-blue;
-}
-
-.nav-btn {
-    margin: auto;
-    padding-top: 20px;
-    cursor: pointer;
 }
 
 .nav-btn:hover {
     background-color: $selected;
 }
 
-.nav-btn > img {
-    height: 50px;
-    margin-left: 20px;
-    margin-bottom: 30px;
-}
 
 .grid-container .main-container {
-    grid-column: 2;
-    display: grid;
-    grid-template-columns: 50px 320px auto 50px 100px 20px;//6 columns
-    grid-template-rows: 50px 50px 20px 50px 20px auto 20px;//7 rows
     background-color: $main;
-    overflow-y: clip;
-}
-
-.heading {
-    grid-column: 2 / span 2;
-    grid-row: 1;
 }
 
 .messageDiv {
-    grid-column: 2 / span 2;
-    grid-row: 1;
     color: $selected;
-}
-.buttons {
-    grid-column: 2 / span 2;
-    grid-row: 2;
-    padding-top: 20px;
-    cursor: pointer;
-    // background-color: $body;
 }
 
 .buttons > div {
-    display: inline;
     background-color: $body;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 3;
 }
 
 .buttons > div:hover {
@@ -78,106 +39,49 @@ $before-text-color: rgb(109, 109, 109);
 }
 
 .button {
-    display: inline;
     background-color: $body;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 3;
 }
 
 .button:hover {
-    display: inline;
     background-color: $body;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 3;
 }
 
 .entry-title {
-    grid-column: 2 / span 2;
-    grid-row: 4;
     background-color: $body;
 }
 
 .entry-body {
-    grid-column: 2 /span 2;
-    grid-row: 6;
     background-color: $body;
 }
 
 .entry-tags {
-    grid-column: 5;
-    grid-row: 4 / span 3;
     background-color: $body;
 }
 .entry-tags > div {
-    text-align: center;
-    padding: 10px;
-    margin: auto;
-    margin: 10px;
     background-color: $panel-tag;
 }
 
 .side-panel {
-    grid-column: 1 / span 2;
-    grid-row: 1 / span 7;
     background-color: $side-panel-green;
-    display: none;
-    grid-template-columns: 130px auto;
-    overflow-y: clip;
-    z-index: 1;
-}
-
-.side-panel .tags {
-    overflow-y: scroll;
 }
 
 .side-panel .tags > div{
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-bottom: 10px;
     background-color: $panel-tag;
-    z-index: 1;
-    cursor: pointer;
 }
 .side-panel .tags > div.selected {
     background-color: $selected;
 }
 .side-panel .entries {
-    grid-column: 2;
-    padding-left: 10px;
-    padding-bottom: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
     background-color: $selected;
-    overflow-y: scroll;
 }
 
 .side-panel .entries > div {
-    padding-top: 20px;
-    padding-left: 20px;
-    padding-bottom: 20px;
-    margin-bottom: 10px;
     background-color: $panel-tag;
-    z-index: 1;
-    cursor: pointer;
 }
 
-.editable {
-    padding: 5px;
-    overflow-y:auto;
-    white-space: pre-wrap;
-    word-wrap: normal;
-}
 
 .editable:empty:before {
-    content: attr(data-placeholder);
     color: $before-text-color;
-    white-space: pre-wrap;
-    word-wrap: normal;//how words are broken on screen - see [link](https://www.w3schools.com/cssref/css3_pr_word-wrap.php)
 }
 
 .side-panel .active.tag {
@@ -186,47 +90,21 @@ $before-text-color: rgb(109, 109, 109);
 
 //loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
 .loader {
-    grid-column: 1;
-    grid-row: 2;
-    border: 16px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid #3498db;
-    border-bottom: 16px solid #3498db;
-    width: 120px;
-    height: 120px;
-    position: absolute;
-    left: 275px;
-    top: 50px;
-    z-index: 1;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
-    animation: spin 2s linear infinite;
+    border-color: #f3f3f3!important;
+    border-top-color: #3498db!important;
+    border-bottom-color: #3498db!important;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
 .edit-tags {
-    grid-column: 2 /span 2;
-    grid-row: 5 / span 2;
-    text-align: center;
     background-color: $body;
-}
-.edit-tags > th{
-    margin: auto;
 }
 
 .edit-tags > table{
-    width: 100%;
-    overflow-y: scroll;
+
 }
 
 .edit-tags-popup {
-    display: none;
-    grid-column: 2 / span 2;
-    grid-row: 5;
     background-color: $side-panel;
-    z-index: 3;
 }
 
 .edit-tags-popup > * {
@@ -234,9 +112,7 @@ $before-text-color: rgb(109, 109, 109);
 }
 
 .edit-tags-popup .button {
-    text-align: center;
     background-color: rgb(224, 206, 102);
-    cursor: pointer;
 }
 
 .edit-tags-popup .button:hover {
@@ -244,10 +120,6 @@ $before-text-color: rgb(109, 109, 109);
 }
 
 .grid-container .main-container-blur  {
-    grid-column: 2;
-    display: grid;
-    grid-template-columns: 50px 320px auto 50px 100px 20px;//6 columns
-    grid-template-rows: 50px 50px 20px 50px 20px auto 20px;//7 rows
     background-color: $main;
 }
 //blur everything in .main-container-blur except edit-tags-popup
@@ -258,13 +130,8 @@ $before-text-color: rgb(109, 109, 109);
 
 //popup table close btn
 .close-btn {
-    font-size: larger;
-    text-align: center;
-    width: 20px;
-    height: 20px;
     color: white;
     background-color: rgb(219, 107, 107);
-    cursor: pointer;
 }
 
 .close-btn:hover{
@@ -278,8 +145,7 @@ $before-text-color: rgb(109, 109, 109);
 
 //table cells
 .table-row > td {
-    padding: 15px;
-    text-align: center;
+
 }
 
 .tag-searchbar {

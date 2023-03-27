@@ -12,14 +12,18 @@ export async function getTagsEntryCountCreationDate(dir:string):Promise<string> 
     var tagsHTMLArr:string[] = []
     var tagsStrArr:string[] = await readAllTags(dir)
     console.log('tagsStrArr:',tagsStrArr)
-    //for each - get entry count and creation date
+    //for each tagname - get entry count and creation date
      for(var tName of tagsStrArr) {
-         console.log('tName:',tName)
-        var count = await getTagEntryCount(dir,tName)
-        var date = await getTagCreationDate(dir,tName);
-        var tag = new Tag(tName,count,date)
-        console.log('tag.toHTML:',tag.toHTML())
-        tagsHTMLArr.push(tag.toHTML())
+        //get rid of current-entry and .DS_Store files
+        if (tName != '.' && tName != 'current-entry')
+        {
+            console.log('tName:',tName)
+            var count = await getTagEntryCount(dir,tName)
+            var date = await getTagCreationDate(dir,tName);
+            var tag = new Tag(tName,count,date)
+            console.log('tag.toHTML:',tag.toHTML())
+            tagsHTMLArr.push(tag.toHTML())
+        }
      }
     
     var tagsHTML = ''

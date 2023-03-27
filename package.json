@@ -11,8 +11,8 @@
         "sass-watch": "sass ./scss:./css --watch",
         "start": "electron .",
         "run-all": "npm run bundle && npm start",
-        "test": "mocha",
-        "wdio": "wdio run ./wdio.conf.ts"
+        "test": "",
+        "wdio": "NODE_ENV=test-main; wdio run ./wdio.conf.ts"
     },
     "author": "Zachary Ishmael",
     "license": "ISC",

@@ -4,32 +4,38 @@ import fs from 'fs'
 import Entry from '../../classes/entry'
 
 /**
- * 
+ * Sets the current entry.
+ * This method first tries to delete
+ * the old 'current entry' and then replace it with
+ * the new current entry.
  * @param selectedEntryName 
  */
-export function setCurrentEntry(selectedEntryName:string)
+export async function setCurrentEntry(selectedEntryName:string)
 {
   console.log('function setCurrentEntry called')
-  const removeCurrentEntry = ''
   try 
   {
-    //delete current entry 
-    if (selectedEntryName == removeCurrentEntry) 
+    //check if directory exists
+    var stat = await fs.promises.stat(dirs.currentEntryDir)
+    if(stat.isDirectory())
     {
-      //delete the symlink
-      const path = paths.join(dirs.currentEntryDir,'*')
+      //get array of filenames from directory (there should only be one)
+      var arr = await fs.promises.readdir(dirs.currentEntryDir)
+      var currentEntryName = arr[0]
+      //delete the previous symlink
+      const path = paths.join(dirs.currentEntryDir, currentEntryName)
       fs.promises.rm(path)
     }
-    else 
+    else
     {
       //make the directory
       fs.promises.mkdir(dirs.currentEntryDir)
-      //path to file and path to new symlink
-      const pathToExistingEntry = paths.join(dirs.allEntries, selectedEntryName)
-      const pathToNewSymlink = paths.join(dirs.currentEntryDir, selectedEntryName)
-      //make the symlink
-      fs.promises.symlink(pathToExistingEntry, pathToNewSymlink)
     }
+    //path to file and path to new symlink
+    const pathToExistingEntry = paths.join(dirs.allEntries, selectedEntryName)
+    const pathToNewSymlink = paths.join(dirs.currentEntryDir, selectedEntryName)
+    //make the symlink
+    fs.promises.symlink(pathToExistingEntry, pathToNewSymlink)
   }
   catch (error)
   {
@@ -38,7 +44,9 @@ export function setCurrentEntry(selectedEntryName:string)
 }
 
 /**
- * 
+ * Retrieves the current entry.
+ * Returns this as a json string or as an {@link Entry} object
+ *
  */
 export async function getCurrentEntry(json:boolean):Promise<string | Entry>
 {

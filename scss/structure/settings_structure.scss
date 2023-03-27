@@ -1,0 +1,240 @@
+//only structure
+.grid-container {
+    display: grid;
+    grid-template-columns: [nav]100px [main-container]800px;//screen is 900px across (window is 921px)
+    height: 560px;
+}
+
+.grid-container .nav {
+    grid-column: 1;
+}
+
+.nav-btn {
+    margin: auto;
+    padding-top: 20px;
+    cursor: pointer;
+}
+
+
+.nav-btn > img {
+    height: 50px;
+    margin-left: 20px;
+    margin-bottom: 30px;
+}
+
+.grid-container .main-container {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: [buffer]50px 850px;//6 columns
+    grid-template-rows: [buffer]repeat(11,50px);//7 rows
+    overflow-y: clip;
+}
+
+.heading {
+    grid-column: 2;
+}
+
+.messageDiv {
+    grid-column: 2 / span 2;
+    grid-row: 1;
+}
+.buttons {
+    grid-column: 2;
+    padding-top: 20px;
+    cursor: pointer;
+}
+
+.buttons > div {
+    display: inline;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.buttons > div:hover {
+}
+
+.button {
+    display: inline;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.button:hover {
+    display: inline;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.entry-title {
+    grid-column: 2 / span 2;
+    grid-row: 4;
+}
+
+.entry-body {
+    grid-column: 2 /span 2;
+    grid-row: 6;
+}
+
+.entry-tags {
+    grid-column: 5;
+    grid-row: 4 / span 3;
+}
+.entry-tags > div {
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    margin: 10px;
+}
+
+.side-panel {
+    width: 400px;
+    height: 100%;
+    display: none;
+    grid-template-columns: 130px auto;
+    overflow-y: clip;
+    position: absolute;
+    z-index: 1;
+}
+
+.side-panel .tags {
+    overflow-y: scroll;
+}
+
+.side-panel .tags > div{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.side-panel .entries {
+    grid-column: 2;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    overflow-y: scroll;
+}
+
+.side-panel .entries > div {
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.editable {
+    padding: 5px;
+    overflow-y:auto;
+    white-space: pre-wrap;
+    word-wrap: normal;
+}
+
+.editable:empty:before {
+    content: attr(data-placeholder);
+    white-space: pre-wrap;
+    word-wrap: normal;//how words are broken on screen - see [link](https://www.w3schools.com/cssref/css3_pr_word-wrap.php)
+}
+
+//loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
+.loader {
+    grid-column: 1;
+    grid-row: 2;
+    border: 16px solid;
+    border-radius: 50%;
+    border-top: 16px solid;
+    border-bottom: 16px solid;
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    left: 275px;
+    top: 50px;
+    z-index: 1;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.edit-tags {
+    grid-column: 2 /span 2;
+    grid-row: 5 / span 2;
+    text-align: center;
+}
+.edit-tags > th{
+    margin: auto;
+}
+
+.edit-tags > table{
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.edit-tags-popup {
+    display: none;
+    grid-column: 2 / span 2;
+    grid-row: 5;
+    z-index: 3;
+}
+
+.edit-tags-popup > * {
+}
+
+.edit-tags-popup .button {
+    text-align: center;
+    cursor: pointer;
+}
+
+.edit-tags-popup .button:hover {
+
+}
+
+.grid-container .main-container-blur  {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: 50px 320px auto 50px 100px 20px;//6 columns
+    grid-template-rows: 50px 50px 20px 50px 20px auto 20px;//7 rows
+}
+//blur everything in .main-container-blur except edit-tags-popup
+.grid-container .main-container-blur > *:not(.edit-tags-popup) {
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+}
+
+//popup table close btn
+.close-btn {
+    font-size: larger;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.close-btn:hover{
+}
+
+
+.table-row {
+    cursor: pointer;
+}
+
+//table cells
+.table-row > td {
+    padding: 15px;
+    text-align: center;
+}
+
+.tag-searchbar {
+    padding: 15px;
+}

@@ -25,20 +25,9 @@ import c_process from 'child_process'
 import { passwordFileExists } from './security/password-crud';
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
+import pathsForWDIO from './other/paths-for-wdio'
 
-//produce electron binary file path for the wdio.config.ts
-const appBinaryPath = app.getPath('exe')
-const appPath = app.getAppPath()
-const filename1 = 'electronBinaryPath.txt'
-const filename2 = 'electronAppPath.txt'
 
-try {
-  fs.promises.writeFile(filename1, appBinaryPath, 'utf-8')
-  fs.promises.writeFile(filename2, appPath, 'utf-8')
-}
-catch (err) {
-  console.log(err)
-}
 
 //TODO - option to store file in iCloud
 
@@ -49,6 +38,8 @@ async function createWindow() {
 
   if (process.env.NODE_ENV === 'test-main') {
     integration = true;
+    //produce paths for wdio
+    pathsForWDIO()
   }
 
   window = new BrowserWindow
@@ -101,20 +92,6 @@ async function createWindow() {
   ipcMain.on('ready-to-show', async (event) => appendEntriesAndTags(event))
 }
 
-
-async function retrieveSettingsJson()
-{
-  
-}
-
-
-
-
-
-
-
-
-
 //if directory doesn't exist - create directory
 var directory = paths.join(dirs.allEntries)
 if (!fs.existsSync(directory)) {
@@ -127,15 +104,7 @@ if (!fs.existsSync(directory)) {
   }
   console.log(app.getPath('home'))
 }
-//vars for tags
-var tagDirectoryNames: string[] = []
-var tagsHTML: string = ''
-//vars for entries
 
-//Read entry names from 'tagDir/all'
-var entryDates: EntryDate[] = []
-//Read entry names from 'tagDir/'
-var filesHtml: string = ''
 app.whenReady().then(createWindow)
 //.then(() => theme.setCurrentCssTheme('../css/main.css'));
 
@@ -227,15 +196,6 @@ ipcMain.handle('delete-current-entry', async (event) => {
   setCurrentEntry('')
   return message
 })
-
-
-// ipcMain.on('list-all-tags-html', async (event) => {
-//   event.reply('recieve-list-all-tags-html', tagsHTML)
-// })
-
-// ipcMain.on('list-all-entries-html', async (event) => {
-//   event.reply('recieve-list-all-tags-html',filesHtml)
-// })
 
 ipcMain.handle('get-last-entry', async () => {
   //Read Filenames in -> 'tagDir/all'

@@ -15,7 +15,7 @@ export async function appendTags(dir:string)
     var firstTag = true
     directory.forEach((tag:string) => {
         //if not the .DS_Store file or another invisible file
-        if (tag.charAt(0) != '.') {
+        if (tag.charAt(0) != '.' && tag != 'current-entry') {
             //if first tag - clear the tags - else don't clear tags when sending tagname
             (firstTag) ? sendSingleTag(tag, firstTag) : sendSingleTag(tag,firstTag)
             firstTag = false
