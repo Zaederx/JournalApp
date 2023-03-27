@@ -186,17 +186,20 @@ $before-text-color: rgb(109, 109, 109);
 
 //loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
 .loader {
-    grid-column: 2 / span 2;
-    grid-row: 3;
+    grid-column: 1;
+    grid-row: 2;
     border: 16px solid #f3f3f3;
     border-radius: 50%;
     border-top: 16px solid #3498db;
     border-bottom: 16px solid #3498db;
     width: 120px;
     height: 120px;
+    position: absolute;
+    left: 275px;
+    top: 50px;
+    z-index: 1;
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
-    z-index: 3;
 }
 
 @keyframes spin {
