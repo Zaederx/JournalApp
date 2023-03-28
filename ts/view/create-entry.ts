@@ -9,16 +9,21 @@ async function loadFragment()
     const tags_popup = await (await fetch('./fragments/tags-popup.html')).text()
     document.querySelector('#tags-popup')!.outerHTML = tags_popup
 }
-var promise = loadFragment()
 
-//all DOM manipulation needs to happen after loading fragments
-//(just to make sure that the full page is rendered before accessing anything)
-promise.then(() => {
-    const btn_open_tags_popup = document.querySelector('#btn-add-tags') as HTMLDivElement
-    btn_open_tags_popup ? btn_open_tags_popup.onclick = () => toggleTagPopup(main, tagTableBody3) : console.log('btn_open_tags_popup is null')
-    //is there need for a reminder
-    ipcRenderer.send('password-reminder-?')
-})
+window.onload = () => {
+    var promise = loadFragment()
+    //all DOM manipulation needs to happen after loading fragments
+    //(just to make sure that the full page is rendered before accessing anything)
+    promise.then(() => {
+        const btn_open_tags_popup = document.querySelector('#btn-add-tags') as HTMLDivElement
+        btn_open_tags_popup ? btn_open_tags_popup.onclick = () => toggleTagPopup(main, tagTableBody3) : console.log('btn_open_tags_popup is null')
+        //is there need for a reminder
+        ipcRenderer.send('password-reminder-?')
+    })
+}
+
+
+
 const title = document.querySelector('#entry-title') as HTMLDivElement
 const body = document.querySelector('#entry-body') as HTMLDivElement
 const tags = document.querySelector('#entry-tags') as HTMLDivElement

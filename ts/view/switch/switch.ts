@@ -25,7 +25,7 @@ export async function toggleSwitchInput(switchInput: HTMLInputElement)
  * A function to help turn the password-protection setting on or off.
  * @param bool a string either 'true' or 'false'
  */
-async function setPasswordProtection(bool:'true'|'false')
+export async function setPasswordProtection(bool:'true'|'false')
 {
     
     try 

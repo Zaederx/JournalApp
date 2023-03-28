@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { toggleSwitchInput } from './switch/switch';
+import { setPasswordProtection, toggleSwitchInput } from './switch/switch';
 
 /** Constants */ //these are relative to the html page 'settings.html'
 const DARK_THEME = "../css/dark_mode.css"
@@ -100,8 +100,18 @@ async function loadCssTheme()
 
 loadCssTheme()
 
-
-
+const btn_no_password = document.querySelector('#no-password') as HTMLDivElement
+const btn_password_protection = document.querySelector('#password-protection') as HTMLDivElement
 const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
 
+btn_no_password.onclick = function() 
+{
+    setPasswordProtection('false')
+    switchInput.checked = false
+}
+btn_password_protection.onclick = function() 
+{
+    setPasswordProtection('true')
+    switchInput.checked = true
+}
 switchInput.onchange = () => toggleSwitchInput(switchInput);

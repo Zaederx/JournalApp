@@ -61,25 +61,6 @@ async function createWindow() {
   window.loadFile('html/create-entry.html');
 
   
-  const exists = await passwordFileExists()
-  
-  if (exists)
-  {
-    console.log('password file exists')
-    window.loadFile('html/authenticate.html')
-  }
-  else 
-  {
-    console.warn('password file does not exist')
-    window.loadFile('html/create-entry.html');
-    //wait for event from create entry
-
-    //put as 'once' because it sometimes fires 
-    //multiple times on one page load without it...
-    ipcMain.once('password-reminder-?',(event)=> {
-      window.webContents.send('register-password-reminder')
-    })
-  }
 
   if (process.env.NODE_ENV === 'dev-tools') {
     window.webContents.openDevTools();
@@ -106,8 +87,23 @@ if (!fs.existsSync(directory)) {
 
 app.whenReady().then(createWindow)
 //.then(() => theme.setCurrentCssTheme('../css/main.css'));
-
-
+  
+  //waits for event from create-entry.ts
+  //put as 'once' because it sometimes fires 
+  //multiple times on one page load without it...
+  ipcMain.once('password-reminder-?', async (event)=> {
+    const exists = await passwordFileExists()
+    if (exists)
+    {
+      console.log('password file exists')
+      window.loadFile('html/authenticate.html')
+    }
+    else 
+    {
+      console.warn('password file does not exist')
+      window.webContents.send('register-password-reminder')
+    }
+  })
 
 app.on('window-all-closed', () => {
   //quit completely even on darwin (mac) if it is a test

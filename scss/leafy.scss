@@ -3,11 +3,11 @@ $side-panel-gray: #6F7871;
 
 //@at-root
 $main : rgb(72, 74, 78);
-$body : rgb(190, 202, 192);
+$body : rgb(190, 202, 192);//also used for buttons
 $panel-tag : rgb(243, 236, 211); //#6F7871
-$selected : $main;
-$hover : $body;
-$side-panel : rgb(111, 120, 113);
+$selected : $main;//used for nav hover
+$hover : rgb(135, 170, 140);;//must not be body color
+$side-panel : rgb(111, 115, 120);
 $before-text-color: rgb(109, 109, 109);
 
 .grid-container {
