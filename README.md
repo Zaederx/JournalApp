@@ -55,6 +55,7 @@ File icon made by  <a href="https://www.flaticon.com/authors/freepik" title="Fre
 
 Export icon from <a href="https://iconmonstr.com/upload-20-svg/" title="iconmonstr">Iconmonstr</a>
 
+Slider buttons attributed to W3Schools who have a tutorail on how to make them.
 ## Technologies
 - [JavaScript](#javascript)
 - [TypeScript](#typescript)

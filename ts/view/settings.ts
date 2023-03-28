@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-
+import { toggleSwitchInput } from './switch/switch';
 
 /** Constants */ //these are relative to the html page 'settings.html'
 const DARK_THEME = "../css/dark_mode.css"
@@ -99,3 +99,9 @@ async function loadCssTheme()
 }
 
 loadCssTheme()
+
+
+
+const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+
+switchInput.onchange = () => toggleSwitchInput(switchInput);

@@ -26,8 +26,7 @@ import { passwordFileExists } from './security/password-crud';
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
 import pathsForWDIO from './other/paths-for-wdio'
-
-
+import { retrieveSettingsJson, saveSettingsJson } from './settings/settings-functions'
 
 //TODO - option to store file in iCloud
 
@@ -360,4 +359,19 @@ ipcMain.handle('login', async (event, password) => {
 
 ipcMain.handle('logout', () => {
   loggedIn.is = false
+})
+
+
+ipcMain.handle('get-settings-json', async (event)=> {
+  var settingsJson = await retrieveSettingsJson()
+  console.log('retrieving setting:'+ settingsJson)
+  return settingsJson
+})
+
+ipcMain.handle('set-settings-json', async (event, settingsJsonStr) => {
+  const settings = JSON.parse(settingsJsonStr)
+  console.log('saving setting:')
+  console.log(settings)//on separate console log line so that it prints the object contents
+  var message = await saveSettingsJson(settings)
+  return message
 })
