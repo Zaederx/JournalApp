@@ -10,12 +10,12 @@ Exmaple usage
 file1.ts
 var entryJson = JSON.stringify(entry)
 
-ipcRenderer.('send-something', entryJson)
+ipcRenderer.invoke('send-something', entryJson)
 ```
 
 ```
 main.ts
-ipcMain.('send-something', (entryJson) => {
+ipcMain.handle('send-something', (entryJson) => {
     e = JSON.parse(entryJson)
     entry = new Entry(e)
 })
@@ -198,3 +198,6 @@ import { module1 } from './module1'
 import { module2 } from './module2'
 export { module1, module2 }
 ```
+
+## Better way of setting up main electron app as a TypeScript class
+see [example link](https://gist.github.com/DaveMBush/c162912cb1caf5acf4d2f899814deb99#file-electron-main-ts)

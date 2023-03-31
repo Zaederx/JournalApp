@@ -26,7 +26,8 @@ import { passwordFileExists } from './security/password-crud';
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
 import pathsForWDIO from './other/paths-for-wdio'
-import { retrieveSettingsJson, saveSettingsJson } from './settings/settings-functions'
+import { retrieveSettingsJson as retrieveSettings, saveSettingsJson } from './settings/settings-functions'
+import { settings } from './settings/settings-type';
 
 //TODO - option to store file in iCloud
 
@@ -93,17 +94,58 @@ app.whenReady().then(createWindow)
   //multiple times on one page load without it...
   ipcMain.once('password-reminder-?', async (event)=> {
     const exists = await passwordFileExists()
-    if (exists)
+    const json = false
+    const settings:settings = await retrieveSettings(json)
+    
+    if (exists && settings['password-protection'] == 'true')
     {
       console.log('password file exists')
-      window.loadFile('html/authenticate.html')
+      console.log('password protection is set to true')
+      console.log('opening authentication dialog...')
+      window.webContents.send('open-authentication-dialog')
     }
     else 
     {
       console.warn('password file does not exist')
+      console.log('sending reminder message')
+      //enable login - they are effectively logged in if there is no password set up
+      loggedIn.is = true
+      console.log('loggedIn.is:'+loggedIn.is)
       window.webContents.send('register-password-reminder')
+      console.log('enabling navigation...')
+      window.webContents.send('enable-navigation')
     }
   })
+
+  ipcMain.on('enable-navigation-?', (event) => {
+    if(loggedIn.is == true) {
+      console.log('enabling navigation...')
+      event.reply('enable-navigation')
+    }
+    else
+    {
+      console.log('declining to enable authentication...')
+    }
+  })
+
+var loggedIn = {is:false}
+ipcMain.handle('login', async (event, password) => {
+  //authenticate password
+  var authenticated = await pCrud.functionAutheticatePassword(password)
+  if (authenticated) 
+  {
+    loggedIn.is = true
+    return 'success'
+  }
+  else
+  {
+    return 'Password not authenticated. Please enter a valid password.'
+  }
+})
+
+ipcMain.handle('logout', () => {
+  loggedIn.is = false
+})
 
 app.on('window-all-closed', () => {
   //quit completely even on darwin (mac) if it is a test
@@ -325,8 +367,8 @@ ipcMain.handle('register-password', (event, password1, password2) => {
       //hash password
       var passwordHash = pCrud.hashPassword(password1)
       //store password hash
-      pCrud.storePasswordHash(dirs.secureFolder,passwordHash)
-      return 'Password registered successfully'
+      const message = pCrud.storePasswordHash(dirs.secureFolder,passwordHash)
+      return message
     } catch (error) {
       console.log(error)
     }
@@ -338,28 +380,12 @@ ipcMain.handle('register-password', (event, password1, password2) => {
 })
 
 
-const loggedIn = {is:false}
-ipcMain.handle('login', async (event, password) => {
-  //authenticate password
-  var authenticated = await pCrud.functionAutheticatePassword(password)
-  if (authenticated) 
-  {
-    loggedIn.is = true
-    return 'Password successfully authenticated.'
-  }
-  else
-  {
-    return 'Password not authenticated. Please enter a valid password.'
-  }
-})
 
-ipcMain.handle('logout', () => {
-  loggedIn.is = false
-})
 
 
 ipcMain.handle('get-settings-json', async (event)=> {
-  var settingsJson = await retrieveSettingsJson()
+  const json = true
+  var settingsJson = await retrieveSettings(json)
   console.log('retrieving setting:'+ settingsJson)
   return settingsJson
 })

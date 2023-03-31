@@ -9,7 +9,6 @@ $selected : $main;//used for nav hover
 $hover : rgb(135, 170, 140);;//must not be body color
 $side-panel : rgb(111, 115, 120);
 $before-text-color: rgb(109, 109, 109);
-
 .grid-container {
 
 }
@@ -61,7 +60,7 @@ $before-text-color: rgb(109, 109, 109);
 }
 
 .button:hover {
-    background-color: $body;
+    background-color: $hover;
 }
 
 .entry-title {
@@ -153,7 +152,7 @@ $before-text-color: rgb(109, 109, 109);
     background-color: $main;
 }
 //blur everything in .main-container-blur except edit-tags-popup
-.grid-container .main-container-blur > *:not(.edit-tags-popup) {
+.grid-container .main-container-blur > *:not(.edit-tags-popup, .password-dialog) {
     filter: blur(1px);
     -webkit-filter: blur(1px);
 }
@@ -181,3 +180,12 @@ $before-text-color: rgb(109, 109, 109);
     background-color: white;
     color:black;
 }
+
+.password-dialog {
+    background-color: $side-panel;
+}
+
+.password {
+    background-color: $body;
+}
+

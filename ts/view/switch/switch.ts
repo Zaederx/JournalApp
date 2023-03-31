@@ -33,12 +33,4 @@ export async function setPasswordProtection(bool:'true'|'false')
         var settingsJson = JSON.stringify(settings)
         ipcRenderer.invoke('set-settings-json', settingsJson)
     }
-    
-    
-    
-        
-    
-    
-    
-    
 }

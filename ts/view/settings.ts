@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { setPasswordProtection } from './switch/switch';
+import { activate } from './load-themes';
 
 //SECTION - Theme Buttons
 /** Constants */ //these are relative to the html page 'settings.html'
@@ -53,70 +54,24 @@ function activateButton(button:HTMLButtonElement, theme:string)
     button.onclick = () => activate(theme);
 }
 
-/** Functions */
-function activate(theme:string) 
-{
-    console.log('function activate(theme:string) called')
-    //activate theme
-    document.querySelector('#theme-css')?.setAttribute('href', theme);
-    //set current css theme in theme.txt file
-    setCurrentCssTheme(theme)
-}
-
-
-//set filepath and filename
-// const cssFilepath = path.join('..','..', 'css', 'theme.txt')
-
-/**
- * Function to set the current CSS theme
- * into a file.
- * @param theme css theme string
- */
-function setCurrentCssTheme(theme:string)
-{
-    console.log('function setCurrentCssTheme')
-    ipcRenderer.invoke('set-current-css-theme', theme)
-    console.log('setting theme:'+theme)
-}
-
-async function getCurrentCssTheme()
-{
-    console.log('function getCurrentCssTheme called')
-    var theme:string = await ipcRenderer.invoke('get-current-css-theme');
-    console.log('getting theme:'+theme)
-    return theme
-}
-
-/**
- * Function for loading current css
- * theme from file.
- * 
- * For consistency across page loading.
- */
-async function loadCssTheme()
-{
-   var theme = await getCurrentCssTheme()
-   activate(theme)
-}
-
-loadCssTheme()
-
-
 
 //SECTION Toggle Password Protection
+//declare html element constants
 const btn_no_password = document.querySelector('#no-password') as HTMLDivElement
 const btn_password_protection = document.querySelector('#password-protection') as HTMLDivElement
 const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
 const p_switch = document.querySelector('#password-switch') as HTMLDivElement
 
+//assign element functionality
 p_switch.onclick = toggleSwitch
 btn_no_password.onclick = uncheckSwitch
 btn_password_protection.onclick = checkSwitch
 
 
+//define functionality
 function toggleSwitch() {
     if (switchInput.checked) { uncheckSwitch()}
-    else { switchInput.checked = true; setPasswordProtection('true') }
+    else { checkSwitch() }
 }
 function uncheckSwitch() 
 {
@@ -127,5 +82,42 @@ function checkSwitch()
 {
     switchInput.checked = true
     setPasswordProtection('true')
+    var promise = loadPasswordDialog()
+
+    promise.then(() => {
+        var p1 = document.querySelector('#password1') as HTMLDivElement
+        var p2 = document.querySelector('#password2') as HTMLDivElement
+        var btn_register = document.querySelector('#register') as HTMLElement
+
+        btn_register.onclick = () => registerPassword(p1,p2)
+    })
 }
 
+
+async function loadPasswordDialog()
+{
+    //load password dialog - fetching it from files
+    const passwordDialog = await (await fetch('./fragments/password-dialog.html')).text()
+    document.querySelector('#password-dialog')!.outerHTML = passwordDialog
+}
+async function registerPassword(p1:HTMLDivElement,p2:HTMLDivElement)
+{
+    //send password1 and password2 to be registered if they match
+    if (p1.innerText == p2.innerText)
+    {
+        var message = await ipcRenderer.invoke('register-password', p1.innerText, p2.innerText) as string
+        alert(message);
+        //hide password dialog
+        var passwordDialog = document.querySelector('#password-dialog') as HTMLDivElement
+        passwordDialog.style.display = 'none'
+        
+        //clear password1 and password2 contenteditable divs
+        p1.innerText = ''
+        p2.innerText = ''
+    }
+    else
+    {
+        alert('Passwords do not match.')
+    }
+    
+}

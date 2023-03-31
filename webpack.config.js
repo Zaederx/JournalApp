@@ -19,6 +19,7 @@ module.exports = {
         register: './ts/view/register.ts',
         settings: './ts/view/settings.ts',
         export: './ts/view/export.ts',
+        login: './ts/view/login.ts',
         nav: './ts/view/nav.ts'
     },
     output: {

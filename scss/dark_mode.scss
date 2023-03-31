@@ -146,7 +146,7 @@ $side-panel: rgb(103, 106, 111);
     background-color: $main;
 }
 //blur everything in .main-container-blur except edit-tags-popup
-.grid-container .main-container-blur > *:not(.edit-tags-popup) {
+.grid-container .main-container-blur > *:not(.edit-tags-popup, .password-dialog) {
     filter: blur(1px);
     -webkit-filter: blur(1px);
 }
@@ -172,4 +172,12 @@ $side-panel: rgb(103, 106, 111);
 .tag-searchbar {
     background-color: black;
     color:white;
+}
+
+.password-dialog {
+    background-color: $side-panel;
+}
+
+.password {
+    background-color: $body;
 }

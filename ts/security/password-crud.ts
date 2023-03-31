@@ -3,6 +3,10 @@ import * as fs from 'fs'
 import bcrypt from 'bcryptjs'
 import * as dirs from '../directory'
 
+/**
+ * Hashes password
+ * @param password password to be hashed
+ */
 export function hashPassword(password:string)
 {
   var salt = bcrypt.genSaltSync(10);
@@ -10,6 +14,10 @@ export function hashPassword(password:string)
   return hash
 }
 
+/**
+ * Authenticates password against stored password hash
+ * @param password password to be authenticated against stored password hash
+ */
 export async function functionAutheticatePassword(password:string)
 {
   const hash = await retrievePasswordHash()
@@ -19,7 +27,9 @@ export async function functionAutheticatePassword(password:string)
   }
 }
 
-
+/**
+ * Retrieve password hash from a stored file.
+ */
 export async function retrievePasswordHash()
 {
   try {
@@ -45,8 +55,11 @@ export function storePasswordHash(dir:string,password:string)
   try {
     //create path
     var path = paths.join(dir,'password.txt')
+    //make folder (in case it's not already there)
+    fs.promises.mkdir(dirs.secureFolder)
     //write password to path
     fs.promises.writeFile(path, password)
+    return 'Password stored successfully'
   } catch (error) {
     console.log(error)
   }

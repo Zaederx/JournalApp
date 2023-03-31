@@ -20,6 +20,11 @@ var promise = loadFragments()
 
 //MUST USE PROMISE TO GET BUTTONS AND ACTIVATE AFTER DYNAMIC LOADING OF NAVIGATION
 promise.then(() => {
+    ipcRenderer.send('enable-navigation-?')
+})
+
+
+ipcRenderer.on('enable-navigation', () => {
     const panel_tags = document.querySelector('#tags') as HTMLDivElement
     const panel_entries = document.querySelector('#entries') as HTMLDivElement
     var btn_tags = document.querySelector('#btn-tags') as HTMLDivElement
@@ -63,9 +68,6 @@ promise.then(() => {
         }
     }
 })
-
-
-
 
 
 

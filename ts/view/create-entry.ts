@@ -2,25 +2,20 @@ import clickCreateEntryBtn from './create-entry/clickCreateEntryBtn'
 import toggleTagPopup from "./create-entry/tagPopup";
 import { addSelectedTagsToEntry } from "./clickable-filter-table/table";
 import Entry from "../classes/entry"
-import { ipcRenderer } from 'electron';
-async function loadFragment()
-{
-    //load tags popup
-    const tags_popup = await (await fetch('./fragments/tags-popup.html')).text()
-    document.querySelector('#tags-popup')!.outerHTML = tags_popup
-}
 
 window.onload = () => {
-    var promise = loadFragment()
+    
+    var promise = loadFragments()
     //all DOM manipulation needs to happen after loading fragments
     //(just to make sure that the full page is rendered before accessing anything)
     promise.then(() => {
         const btn_open_tags_popup = document.querySelector('#btn-add-tags') as HTMLDivElement
         btn_open_tags_popup ? btn_open_tags_popup.onclick = () => toggleTagPopup(main, tagTableBody3) : console.log('btn_open_tags_popup is null')
         //is there need for a reminder
-        ipcRenderer.send('password-reminder-?')
+        // ipcRenderer.send('password-reminder-?')
     })
 }
+
 
 
 
@@ -51,12 +46,15 @@ btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(entryTemp,tag
 btn_close ? btn_close.onclick = () => toggleTagPopup(main, tagTableBody3) : console.warn('popup close_btn is null')
 
 
-ipcRenderer.on('register-password-reminder', () => {
-    alert('Please go to settings to password protect your application. Otherwise please check the option under settings to "use without password".')
-})
-
-
-
+async function loadFragments()
+{
+    //load tags popup
+    const tags_popup = await (await fetch('./fragments/tags-popup.html')).text()
+    document.querySelector('#tags-popup')!.outerHTML = tags_popup
+    //load password dialog - fetching it from files
+    const authDialog = await (await fetch('./fragments/authentication-dialog.html')).text()
+    document.querySelector('#auth-dialog')!.outerHTML = authDialog
+}
  
 
  

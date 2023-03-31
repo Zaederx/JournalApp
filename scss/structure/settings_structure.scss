@@ -208,8 +208,7 @@
 }
 //blur everything in .main-container-blur except edit-tags-popup
 .grid-container .main-container-blur > *:not(.edit-tags-popup) {
-    filter: blur(1px);
-    -webkit-filter: blur(1px);
+    
 }
 
 //popup table close btn
@@ -237,4 +236,18 @@
 
 .tag-searchbar {
     padding: 15px;
+}
+
+.password-dialog {
+    width: 500px;
+    height: 300px;
+    display: grid;
+}
+  
+.password {
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+    padding-top: 30px;
+    height: 50px;
 }
