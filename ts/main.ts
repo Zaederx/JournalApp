@@ -30,6 +30,7 @@ import { retrieveSettingsJson as retrieveSettings, saveSettingsJson } from './se
 import { settings } from './settings/settings-type';
 
 //TODO - option to store file in iCloud
+//TODO - SEND AND EMAIL IN NODE.JS - temporary password for login recovery
 
 let window: BrowserWindow;
 

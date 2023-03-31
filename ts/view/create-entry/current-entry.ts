@@ -8,11 +8,12 @@ import Entry from '../../classes/entry'
  * This method first tries to delete
  * the old 'current entry' and then replace it with
  * the new current entry.
- * @param selectedEntryName 
+ * @param selectedEntryName entry selected in the panel to be the current entry
  */
 export async function setCurrentEntry(selectedEntryName:string)
 {
   console.log('function setCurrentEntry called')
+  console.log('selectedEntryName:' +selectedEntryName)
   try 
   {
     //check if directory exists
@@ -21,12 +22,17 @@ export async function setCurrentEntry(selectedEntryName:string)
     {
       //get array of filenames from directory (there should only be one)
       var arr = await fs.promises.readdir(dirs.currentEntryDir)
-      var currentEntryName = arr[0]
-      //delete the previous symlink
-      const path = paths.join(dirs.currentEntryDir, currentEntryName)
-      fs.promises.rm(path)
+      var currentEntryName = arr[0]//the previous current entry - if there is one
+      console.log('currentEntryName:'+currentEntryName)
+      //if there is a previous 'current entry' - remove it
+      if (currentEntryName)
+      {
+        //delete the previous symlink
+        const path = paths.join(dirs.currentEntryDir, currentEntryName)
+        fs.promises.rm(path)
+      }
     }
-    else
+    else//if directory doesn't exist
     {
       //make the directory
       fs.promises.mkdir(dirs.currentEntryDir)

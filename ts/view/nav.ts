@@ -125,7 +125,7 @@ function loadTags(panel_entries:HTMLDivElement, panel_tags:HTMLDivElement) {
  * Loads those tags into the panel
  * and makes them clickable 
  */
-ipcRenderer.on('recieve-entry-filename', async(event, message) => {
+ipcRenderer.on('recieve-entry-filename', async(event, message:{firstEntry:boolean, entryFilename:string}) => {
     console.log('recieve-entry-filename called')
     var { firstEntry, entryFilename } = message
     const panel_entries = document.querySelector('#entries')
@@ -137,14 +137,14 @@ ipcRenderer.on('recieve-entry-filename', async(event, message) => {
     }
     //loader
     activateLoader(loader)
-    //create entry div
+    //create entry div with name and add to panel
     var entryDiv = document.createElement('div')
     if (entryFilename != undefined)
     {
-        entryDiv.innerHTML = entryFilename
+        entryDiv.innerText = entryFilename
         panel_entries?.appendChild(entryDiv)
         console.log('entryFilename:', entryFilename)
-        //make entry div clcickable
+        //make entry div clickable
         await makeEntryDivClickable(entryDiv, loader)
     }
     

@@ -45,6 +45,7 @@ function deleteSymlinks(entry:Entry,filename:string) {
                 }
             }
         })
+
 }
 /**
  * Gets the entry associated with the name given
