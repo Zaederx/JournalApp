@@ -1,3 +1,4 @@
+//VIEWABLE screen width and height is 900px x 560px - entire window is 921px x 600px
 //only structure
 .grid-container {
     display: grid;
@@ -90,8 +91,8 @@
 }
 
 .side-panel {
-    width: 400px;
-    height: 100%;
+    width: 400px;//half of the main screen [main screen is 800px which is the width minus the navigation
+    height: 560px;// window height (600px) minus 40px
     display: none;
     grid-template-columns: 130px auto;
     overflow-y: clip;
