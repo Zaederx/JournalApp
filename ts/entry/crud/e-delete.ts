@@ -12,13 +12,21 @@ export async function deleteEntry(filename:string) {
     var message
     try {
         var entry = await retrieveEntry(filename)
-        deleteSymlinks(entry,filename)
-        message = 'Successfully deleted entry'
+        if (typeof entry === 'string') {
+            message = 'Error retrieving entry'
+            throw new Error('e-delete.js:retieveEntry function failed within deleteEntry function')
+        }
+        else
+        {
+            //delete symlinks
+            deleteSymlinks(entry,filename)
+            message = 'Successfully deleted entry'
+        }
     }
-    catch (error) {
-        console.log('Error deleting file:'+error);
+    catch (error) 
+    {
+        console.log('e-delete.js:Error deleting file:'+error);
         message = 'Error deleting file:'+filename;
-        console.log('e-delete.js:file - filename:',filename);
     }
     return message
 }
@@ -35,7 +43,7 @@ function deleteSymlinks(entry:Entry,filename:string) {
         //@ts-ignore
         (tag) => {
             if (tag != '') {
-                console.log('tagname:',tag)
+                console.log('deleting entry file from tag folder:',tag)
                 try {
                     var path =  paths.join(dir.tagDirectory,tag,filename)
                     fs.promises.unlink(path)
@@ -50,12 +58,20 @@ function deleteSymlinks(entry:Entry,filename:string) {
 /**
  * Gets the entry associated with the name given
  */
-async function retrieveEntry(entryName:string):Promise<Entry> {
+async function retrieveEntry(entryName:string):Promise<Entry|string> {
     console.log('*** retrieveEntry called ***')
-    var path = paths.join(dir.allEntries,entryName)
-    //note utf-8 means -> string. if not specified return Promise<Buffer>
-    var entryJson = await fs.promises.readFile(path,'utf-8') 
-
-    var entry:Entry = JSON.parse(entryJson) as Entry
-    return entry
+    var entry:Entry
+    try
+    {
+        var path = paths.join(dir.allEntries,entryName)
+        //note utf-8 means -> string. if not specified return Promise<Buffer>
+        var entryJson = await fs.promises.readFile(path,'utf-8') 
+        entry = JSON.parse(entryJson) as Entry
+        return entry
+    }
+    catch(error)
+    {
+        console.log('e-delete: Problem retrieving entry:'+error)
+    }
+    return 'Problem retrieving entry'
 }

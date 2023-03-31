@@ -1,6 +1,7 @@
 import { ipcRenderer } from "electron";
 import tagsToArr from "./tags-to-array";
 import Entry from "../../classes/entry";
+import dateStr from "../../entry/crud/dateStr";
 
 /**
  * Updates the current entry
@@ -12,9 +13,15 @@ export default async function updateEntry(title:HTMLDivElement, body:HTMLDivElem
     console.log('function updateEntry called')
     //get entry tags from html tags div
     var tagsArr = tagsToArr(tags)
-    //create and entry with updated title, boy and tags[]
-
-    var entry = new Entry({title:title.innerHTML,body:body.innerHTML, tags:tagsArr})
+    //get current entry json
+    var entryJson = await ipcRenderer.invoke('get-current-entry')
+    //parse to an entry object
+    var entry = JSON.parse(entryJson) as Entry
+    //updated title, body and tags[]
+    entry.title = title.innerText
+    entry.body = body.innerText
+    entry.tags = tagsArr
+    entry.udate = dateStr()//update the edit/update date
     //turn entry to json format - ready for sending via ipcRenderer - can't send complex objects
     var entry_json = JSON.stringify(entry);
     console.info('updateEntry - entry_json: ' + entry_json);

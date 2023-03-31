@@ -24,9 +24,10 @@ function dateStr():string {
 export async function createEntry(entryJson:string, directory:string=dir.allEntries):Promise<string> {
   console.log('ipcMain: Creating new Entry:' + entryJson);
   
-  
+  //json string to object
+  var entry:Entry = JSON.parse(entryJson);
   //create filename
-  var fileName:string =  dateStr() + ".json";
+  var fileName:string =  entry.cdate + ".json";
 
   //if directory doesn't exist - create directory
   if (!fs.existsSync(dir.tagDirectory)) {

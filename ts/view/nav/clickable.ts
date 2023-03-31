@@ -46,7 +46,6 @@ export function makeEntryDivClickable(entryDiv:HTMLDivElement, loader:HTMLDivEle
         try {
             //when entry is clicked
             entryDiv.onclick = () => {
-                
                 //activate loading spinner
                 activateLoader(loader)
                 //get selected entry name

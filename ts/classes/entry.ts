@@ -5,7 +5,7 @@
  */
 export default class Entry {
     cdate:string; //creation date
-    udate:string;
+    udate:string; //edit / updated date
     title:string;
     body:string;
     tags:string[] = [];
@@ -22,7 +22,7 @@ export default class Entry {
         var mins = d.getMinutes();
         var secs = d.getSeconds();
 
-        var dateStr = day + '-' + (month+1) + '-' + year + '-' + hour + '-' + mins + '-' + secs;
+        const dateStr = day + '-' + (month+1) + '-' + year + '-' + hour + '-' + mins + '-' + secs;
     
         //regular var assignment
         const { udate, cdate, title, body, tags } = obj

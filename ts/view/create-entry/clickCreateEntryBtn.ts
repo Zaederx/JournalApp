@@ -12,8 +12,11 @@ export default async function clickCreateEntryBtn(entryTemp:Entry, title:HTMLDiv
     //add tags
     var tagNames:string[] = []
     tags.childNodes.forEach( div => {
-        if(div.textContent != '')
+        const tag = div.textContent
+        //@ts-ignore
+        if(tag != '' || tag != '\n')
         tagNames.push(div?.textContent as string)
+
     })
     entryTemp.tags = tagNames
     //send to backend to be persisted
