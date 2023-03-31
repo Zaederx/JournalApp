@@ -11,11 +11,17 @@ export default async function clickCreateEntryBtn(entryTemp:Entry, title:HTMLDiv
     entryTemp.body = body.innerHTML
     //add tags
     var tagNames:string[] = []
+    for(var i=0; i < tags.children.length; i++) {
+        const tag = tags.children[i].textContent
+        if(tag != '')
+        {
+            tagNames.push(tag as string)
+            console.log('tag "'+ tag +'" added')
+        }
+    }
     tags.childNodes.forEach( div => {
-        const tag = div.textContent
-        //@ts-ignore
-        if(tag != '' || tag != '\n')
-        tagNames.push(div?.textContent as string)
+        
+        
 
     })
     entryTemp.tags = tagNames
