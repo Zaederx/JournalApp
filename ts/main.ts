@@ -29,7 +29,7 @@ import pathsForWDIO from './other/paths-for-wdio'
 import { retrieveSettingsJson as retrieveSettings, saveSettingsJson } from './settings/settings-functions'
 import { settings } from './settings/settings-type';
 
-//IMPORTANT - load settings toggle check from saved settings
+//IMPORTANT - 
 //TODO - option to store file in iCloud
 //TODO - SEND AND EMAIL IN NODE.JS - temporary password for login recovery
 
@@ -94,7 +94,7 @@ app.whenReady().then(createWindow)
   //waits for event from create-entry.ts
   //put as 'once' because it sometimes fires 
   //multiple times on one page load without it...
-  ipcMain.once('password-reminder-?', async (event)=> {
+  ipcMain.on('password-reminder-?', async (event)=> {
     const exists = await passwordFileExists()
     const json = false
     const settings:settings = await retrieveSettings(json)
