@@ -75,6 +75,10 @@ async function createWindow() {
   ipcMain.on('ready-to-show', async (event) => appendEntriesAndTags(event))
 }
 
+/**
+ * important in determining whether to present
+ * password dialog
+ */
 var windowJustOpened = false
 app.on('activate',() => {
   loggedIn.is = false
