@@ -66,10 +66,10 @@
 }
 
 .button:hover {
-    display: inline;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 3;
+    // display: inline;
+    // padding: 10px;
+    // cursor: pointer;
+    // z-index: 3;
 }
 
 .entry-title {
@@ -259,4 +259,12 @@
     padding: 10px;
     padding-top: 30px;
     height: 50px;
+}
+
+.btn-login {
+    padding-top: 40px;
+    text-align: center;
+    display: inline;
+    margin: 10px;
+    cursor: pointer;
 }

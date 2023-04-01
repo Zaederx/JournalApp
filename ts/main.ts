@@ -75,6 +75,11 @@ async function createWindow() {
   ipcMain.on('ready-to-show', async (event) => appendEntriesAndTags(event))
 }
 
+var windowJustOpened = false
+app.on('activate',() => {
+  loggedIn.is = false
+  windowJustOpened = true
+})
 //if directory doesn't exist - create directory
 var directory = paths.join(dirs.allEntries)
 if (!fs.existsSync(directory)) {
@@ -89,24 +94,26 @@ if (!fs.existsSync(directory)) {
 }
 
 app.whenReady().then(createWindow)
-//.then(() => theme.setCurrentCssTheme('../css/main.css'));
+//.then(() => theme.setCurrentCssTheme('./css/main.css'));
   
   //waits for event from create-entry.ts
   //put as 'once' because it sometimes fires 
   //multiple times on one page load without it...
   ipcMain.on('password-reminder-?', async (event)=> {
-    const exists = await passwordFileExists()
+    //reset login to false - forces user to login everytime it opens
+    const passwordExists = await passwordFileExists()
     const json = false
     const settings:settings = await retrieveSettings(json)
     
-    if (exists && settings['password-protection'] == 'true')
+    if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false || windowJustOpened)
     {
+      windowJustOpened = false
       console.log('password file exists')
       console.log('password protection is set to true')
       console.log('opening authentication dialog...')
       window.webContents.send('open-authentication-dialog')
     }
-    else 
+    else if(windowJustOpened)
     {
       console.warn('password file does not exist')
       console.log('sending reminder message')
@@ -115,7 +122,7 @@ app.whenReady().then(createWindow)
       console.log('loggedIn.is:'+loggedIn.is)
       window.webContents.send('register-password-reminder')
       console.log('enabling navigation...')
-      window.webContents.send('enable-navigation')
+      window.webContents.send('enable-navigation')//send message to nav.ts to enable
     }
   })
 

@@ -70,7 +70,8 @@ btn_password_protection.onclick = checkSwitch
 
 
 //define functionality
-function toggleSwitch() {
+function toggleSwitch() 
+{
     if (switchInput.checked) { uncheckSwitch()}
     else { checkSwitch() }
 }

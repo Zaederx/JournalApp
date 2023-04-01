@@ -154,9 +154,17 @@ $before-text-color: rgb(109, 109, 109);
 }
 
 .password-dialog {
-    background-color: $side-panel;
+    background-color: $main;
 }
 
 .password {
     background-color: $body;
+}
+
+.btn-login {
+    background-color: $body;
+}
+
+.btn-login:hover {
+    background-color: $hover;
 }
