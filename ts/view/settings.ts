@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { setPasswordProtection } from './switch/switch';
 import { activate } from './load-themes';
-
+import { type settings } from '../settings/settings-type';
 //SECTION - Theme Buttons
 /** Constants */ //these are relative to the html page 'settings.html'
 const DARK_THEME = "../css/dark_mode.css"
@@ -57,6 +57,7 @@ function activateButton(button:HTMLButtonElement, theme:string)
 
 //SECTION Toggle Password Protection
 //declare html element constants
+window.onload = () => checkUpdateSwitchStatus()
 const btn_no_password = document.querySelector('#no-password') as HTMLDivElement
 const btn_password_protection = document.querySelector('#password-protection') as HTMLDivElement
 const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
@@ -120,4 +121,15 @@ async function registerPassword(p1:HTMLDivElement,p2:HTMLDivElement)
         alert('Passwords do not match.')
     }
     
+}
+
+/**
+ * Checks the settings status for passowrd protection
+ * and then updates the switch accordingly
+ */
+async function checkUpdateSwitchStatus()
+{
+    const settingsJson:string = await ipcRenderer.invoke('get-settings-json')
+    var settings = JSON.parse(settingsJson) as settings
+    if (settings['password-protection'] == 'false') { uncheckSwitch() }
 }

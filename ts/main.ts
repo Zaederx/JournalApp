@@ -29,6 +29,7 @@ import pathsForWDIO from './other/paths-for-wdio'
 import { retrieveSettingsJson as retrieveSettings, saveSettingsJson } from './settings/settings-functions'
 import { settings } from './settings/settings-type';
 
+//IMPORTANT - load settings toggle check from saved settings
 //TODO - option to store file in iCloud
 //TODO - SEND AND EMAIL IN NODE.JS - temporary password for login recovery
 
@@ -166,7 +167,7 @@ app.on('activate', () => {
 });
 
 
-// Display HTML Views
+//SECTION Display HTML Views
 //Entry Create
 ipcMain.handle('create-entry-view', () => {
   window.loadFile('html/create-entry.html')
@@ -193,7 +194,7 @@ ipcMain.handle('settings-view', () => {
   window.loadFile('html/settings.html')
 })
 
-// entry C.R.U.D.
+//SECTION Entry C.R.U.D.
 ipcMain.handle('create-entry', async (event, entry_json) => {
   var message = eCreate.createEntry(entry_json)
   return message
@@ -205,11 +206,6 @@ ipcMain.handle('read-entry', async (event, entry_filename) => {
   return message
 })
 
-// ipcMain.handle('update-entry', async (event, entry_json, entry_filename) => {
-//   var message = eUpdate.updateEntry(entry_json, entry_filename)
-//   return message
-// })
-
 //var for the selected entry
 async function getCurrentEntryName()
 {
@@ -217,6 +213,7 @@ async function getCurrentEntryName()
   const entry = await getCurrentEntry(json) as Entry
   return entry.cdate+'.json'
 }
+
 ipcMain.handle('update-current-entry', async (event, entry_json) => {
   var selectedEntryName = await getCurrentEntryName()
   var message = eUpdate.updateEntry(entry_json, selectedEntryName)
@@ -275,7 +272,7 @@ ipcMain.on('get-tag-entries', async (event, tagName) => {
   })
 })
 
-//Tag CRUD
+//SECTION Tag CRUD
 ipcMain.handle('create-tags', async (event, tags) => {
   var tagsHTML = await tCreate.createTags(tags)
   return tagsHTML
@@ -312,6 +309,7 @@ ipcMain.handle('get-tag-directory-filepath', (e) => {
   return dirs.tagDirectory
 })
 
+//SECTION - Export
 //export entries to txt, json or pdf
 ipcMain.handle('export-entries-txt', async () => {
   var dialogPath = dirs.tagDirectory
@@ -380,13 +378,10 @@ ipcMain.handle('register-password', (event, password1, password2) => {
   }
 })
 
-
-
-
-
+//SECTION - SETTINGS 
 ipcMain.handle('get-settings-json', async (event)=> {
-  const json = true
-  var settingsJson = await retrieveSettings(json)
+  const jsonStr = true
+  var settingsJson = await retrieveSettings(jsonStr) as string
   console.log('retrieving setting:'+ settingsJson)
   return settingsJson
 })

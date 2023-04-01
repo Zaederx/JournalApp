@@ -47,7 +47,7 @@ export async function saveSettingsJson(settings:settings)
 /**
  * Retrieve settings from the system.
  */
-export async function retrieveSettingsJson(json:boolean):Promise<string|any>
+export async function retrieveSettingsJson(jsonStr:boolean):Promise<string|any>
 {
   console.log('retrieveSettingsJson called')
   //check if file exists
@@ -55,7 +55,7 @@ export async function retrieveSettingsJson(json:boolean):Promise<string|any>
   {
     var settingsJson:string = await fs.promises.readFile(dirs.settingsFile, 'utf-8')
     console.log('settingsJson:'+settingsJson)
-    if (json) { return settingsJson }
+    if (jsonStr) { return settingsJson }
     else { return JSON.parse(settingsJson) }//return an object
   }
   catch (error)
