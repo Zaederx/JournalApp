@@ -1,6 +1,6 @@
 import fs from 'fs';
 import * as dirs from '../directory'
-import type { settings } from './settings-type'
+import { Settings, settings } from './settings-type'
 
 /**
  * Write settings to the filesystem.
@@ -8,7 +8,8 @@ import type { settings } from './settings-type'
  */
 export async function saveSettingsJson(settings:settings) 
 {
-  console.log('%csaveSettingsJson called', 'color:green')
+  var stringFormatting = '\x1b[32m%s\x1b[0m'
+  console.log(stringFormatting,'saveSettingsJson called')
   
   //check if directory exists
   try
@@ -54,6 +55,7 @@ export async function retrieveSettingsJson(jsonStr:boolean):Promise<string|any>
   try 
   {
     var settingsJson:string = await fs.promises.readFile(dirs.settingsFile, 'utf-8')
+    
     console.log('settingsJson:'+settingsJson)
     if (jsonStr) { return settingsJson }
     else { return JSON.parse(settingsJson) }//return an object
@@ -61,6 +63,8 @@ export async function retrieveSettingsJson(jsonStr:boolean):Promise<string|any>
   catch (error)
   {
     console.log('error retrieveing settings:'+error)
+    console.log('Now going to use defaults.')
+    saveSettingsJson(Settings.defaults)
   }
   return 'NO FILE FOUND'
 }

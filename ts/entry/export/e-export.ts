@@ -9,11 +9,12 @@ import PDF from 'pdfkit';
 import Entry  from '../../classes/entry';
 import dateStr from '../crud/dateStr';
 
-/**
- * NOTE: For each loops do not support async await
+/*
+ * NOTE: For each loops do not support async await.
+ * Results in undefined behaviour.
  */
 
-//functions
+
 /**
  * Retrieve entry from filesystem by giving
  * the entry filename
@@ -133,9 +134,9 @@ export async function exportEntries(entriesFilepathsArr:string[], fileExtension:
     {
         //entries to filesystem
         entries.forEach( async (entry) => {
-            console.log('entry.date:'+entry.udate)
+            console.log('entry.date:'+entry.cdate)
             //set filepath
-            var filepath = path.join(exportDir, entry.udate + fileExtension)
+            var filepath = path.join(exportDir, entry.cdate + fileExtension)
             console.log('export filepath:', filepath)
             try {
                 //unique function for each file type

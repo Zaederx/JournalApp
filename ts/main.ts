@@ -114,6 +114,7 @@ app.whenReady().then(createWindow)
     console.log('loggedIn.is:'+loggedIn.is)
     console.log('windowJustOpened:'+windowJustOpened) 
 
+    //open authentication dialog
     if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false && windowJustOpened)
     {
       windowJustOpened = false
@@ -122,7 +123,8 @@ app.whenReady().then(createWindow)
       console.log('opening authentication dialog...')
       window.webContents.send('open-authentication-dialog')
     }
-    else if(settings['password-protection'] == 'false' && windowJustOpened)
+    //send reminder
+    else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true' && windowJustOpened)
     {
       if (!passwordFileExists) { console.warn('password file does not exist') }
 

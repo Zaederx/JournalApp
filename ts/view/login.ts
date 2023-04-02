@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron"
 import { blurBackground, unblurBackground } from "./create-entry/background-blur"
-
+import { settings } from '../settings/settings-type'
 
 window.onload = () => {
     var promise = loadAuthDialog()
@@ -14,10 +14,21 @@ window.onload = () => {
 
 ipcRenderer.on('open-authentication-dialog', () => openAuthDialog())
 
-ipcRenderer.on('register-password-reminder', () => {
+ipcRenderer.on('register-password-reminder', async () => {
     console.log('registering password reminder...')
-    const message = 'Please go to settings to password protect your application. Otherwise please check the option under settings to "use without password".'
-    alert(message)
+    const message = 'Please go to settings to password protect your application. Otherwise please enter "disable reminder" and click ok to remove password reminder.'
+    var response = prompt(message)
+    if (response == 'disable reminder')
+    {
+        //change settings - disable reminder
+        var settings = await ipcRenderer.invoke('get-settings-json') as settings
+        //stringify to json str
+        var settingsJson = JSON.stringify(settings) 
+        //set to main to to persisted/saved to file
+        var message2 = await ipcRenderer.invoke('set-settings-json', settingsJson)
+        console.log(message2)
+        //TODO - make sure to update program to not trigger reminder if 
+    }
 })
 
 //Function Defintions
