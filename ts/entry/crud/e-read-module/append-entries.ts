@@ -15,29 +15,39 @@ export async function appendEntries(dir:string)
 
     //get all entries
     var entries = await readDirFiles(dir)
-    //for all entries -> sort them by file birthtime
-    var entryDates:EntryDate[] = []
-    entries.forEach((entryFilename) => {
-        //add btime to entry and adds to 
-        fetchBtime(dir, entryFilename, entryDates)
-        entryDates = entryMergeSort(entryDates)
-    })
 
-    var firstEntry = true
-    //send each entry to front end
-    entryDates.forEach((entryDate) => {
-        //if .DS_Store or other invisible file - ignore
-        const char0 = entryDate.name.charAt(0)
-        const name = entryDate.name
-        if (char0 == '.' || name == 'undefined') {/*Do nothing*/}
-        //send entry
-        else 
-        {
-            //if first entry clear entries - else don't clear entries
-            (firstEntry) ? sendSingleEntry(entryDate.name, firstEntry) : sendSingleEntry(entryDate.name, firstEntry)
-            firstEntry = false
-        }
-    })
+    //if there are no entries - send message to clear panel and have no entries
+    if (entries.length == 0) 
+    {
+        const entryFilename = 'NO-ENTRIES'
+        const firstTag = true
+        sendSingleEntry(entryFilename, firstTag)
+    }
+    else 
+    {
+        //for all entries -> sort them by file birthtime
+        var entryDates:EntryDate[] = []
+        entries.forEach((entryFilename) => {
+            //add btime to entry and adds to 
+            fetchBtime(dir, entryFilename, entryDates)
+            entryDates = entryMergeSort(entryDates)
+        })
+
+        var firstEntry = true
+        //send each entry to front end
+        entryDates.forEach((entryDate) => {
+            //if .DS_Store or other invisible file - ignore
+            const char0 = entryDate.name.charAt(0)
+            const name = entryDate.name
+            if (char0 != '.' || name != 'undefined')
+            //send entry
+            {
+                //if first entry clear entries - else don't clear entries
+                (firstEntry) ? sendSingleEntry(entryDate.name, firstEntry) : sendSingleEntry(entryDate.name, firstEntry)
+                firstEntry = false
+            }
+        })
+    }
     //send message to stop loader
     stopLoader()
 }

@@ -6,10 +6,13 @@ import { readTagDir } from './read-tag-dir'
  *
  * Appends all tags to the tag list (sending them to the frontend).
  * It does this one tag at a time.
+ * Needs to send whether it is the firstTag, so that the frontend
+ * knows to clear the list of tags (rather than repeat append the same tags)
  * @param directoryFolders
  */
 export async function appendTags(dir:string) 
 {
+    /* load / append tags to tags list */
     var firstTag = true
     var directory:string[] = await readTagDir(dir);
     var firstTag = true

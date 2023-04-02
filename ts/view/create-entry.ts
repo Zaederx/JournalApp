@@ -30,7 +30,7 @@ promise.then(() => {
     /** Tags popup  */
     const btn_add_tags = document.querySelector('#add-selected-tags') as HTMLDivElement
     const btn_close = document.querySelector('#close-btn') as HTMLDivElement
-    //main container - to be blurred when pop is displayed
+    //main container - to be blurred when popup is displayed
     const main = document.querySelector('#main') as HTMLDivElement
 
     //Fetch tablebody element

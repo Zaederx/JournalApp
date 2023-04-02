@@ -86,6 +86,6 @@ export async function passwordFileExists():Promise<boolean>
   {
     console.log(error)
   }
-  
+  console.log('passwordFileExists() = true')
   return exists
 }

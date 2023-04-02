@@ -29,7 +29,7 @@ export async function setCurrentEntry(selectedEntryName:string)
       {
         //delete the previous symlink
         const path = paths.join(dirs.currentEntryDir, currentEntryName)
-        fs.promises.rm(path)
+        fs.promises.unlink(path)//use unlink instead of rm (rm doesn't always work properly on symlinks and gives a strange error)
       }
     }
     else//if directory doesn't exist
@@ -38,10 +38,10 @@ export async function setCurrentEntry(selectedEntryName:string)
       fs.promises.mkdir(dirs.currentEntryDir)
     }
     //path to file and path to new symlink
-    const pathToExistingEntry = paths.join(dirs.allEntries, selectedEntryName)
+    const pathToSelectedEntry = paths.join(dirs.allEntries, selectedEntryName)
     const pathToNewSymlink = paths.join(dirs.currentEntryDir, selectedEntryName)
     //make the symlink
-    fs.promises.symlink(pathToExistingEntry, pathToNewSymlink)
+    return fs.promises.symlink(pathToSelectedEntry, pathToNewSymlink)
   }
   catch (error)
   {
@@ -54,22 +54,37 @@ export async function setCurrentEntry(selectedEntryName:string)
  * Returns this as a json string or as an {@link Entry} object
  *
  */
-export async function getCurrentEntry(json:boolean):Promise<string | Entry>
+export async function getCurrentEntry(json:boolean):Promise<string | Entry | undefined >
 {
-  //retrieve entry string (json) - only entry in the current entry directory
-  var arr:string[] = await fs.promises.readdir(dirs.currentEntryDir, 'utf-8')
-  var filename = arr[0]
-  const path = paths.join(dirs.currentEntryDir, filename)
-  const entryJsonStr:string = await fs.promises.readFile(path, 'utf-8')
-  if (json)
+  try
   {
-    return entryJsonStr//entry as a string of json
+    //retrieve entry string (json) - only entry in the current entry directory
+    var arr:string[] = await fs.promises.readdir(dirs.currentEntryDir, 'utf-8')
+    if (arr.length == 0) {
+      throw new Error('No current entry set.')
+    }
+    else
+    {
+      var filename = arr[0]
+      const path = paths.join(dirs.currentEntryDir, filename)
+      const entryJsonStr:string = await fs.promises.readFile(path, 'utf-8')
+      if (json)
+      {
+        return entryJsonStr//entry as a string of json
+      }
+      else
+      {
+        var entryObj =  JSON.parse(entryJsonStr)//without the functions
+        var entry:Entry = new Entry(entryObj);//entry object complete with functions
+        return entry
+      }
+    }
   }
-  else
+  catch (error)
   {
-    var entryObj =  JSON.parse(entryJsonStr)//without the functions
-    var entry:Entry = new Entry(entryObj);//entry object complete with functions
-    return entry
+    console.log(error)
   }
+  
+  
 }
 

@@ -33,7 +33,7 @@ ipcRenderer.on('enable-navigation', () => {
     var btn_export = document.querySelector('#btn-export') as HTMLDivElement
     var btn_settings = document.querySelector('#btn-settings') as HTMLDivElement
     var side_panel = document.querySelector('#side-panel') as HTMLDivElement
-    var loader = document.querySelector('#loader') as HTMLDivElement
+    // var loader = document.querySelector('#loader') as HTMLDivElement
     //ENABLE BUTTONS
     btn_tags ? btn_tags.onclick = () => clickBtnTags() : console.log('btn_tags is null')
     btn_edit_tags ? btn_edit_tags.onclick = () => clickBtnEditTags() : console.log('btn_edit_tags is null')
@@ -104,17 +104,14 @@ function clickBtnSettings() {
 }
 
 const clear = ''
-var tagCount = 0
-var entryCount = 0
+
 function loadTags(panel_entries:HTMLDivElement, panel_tags:HTMLDivElement) {
     console.log('loadTags called')
     //reset panels
     panel_entries.innerHTML = clear//ENTRIES
     panel_tags.innerHTML = clear//TAGS
     //reset count
-    tagCount = 0
-    entryCount = 0
-    ipcRenderer.send('ready-to-show')
+    ipcRenderer.send('ready-to-show-sidepanel')
 }
 
 
@@ -125,78 +122,54 @@ function loadTags(panel_entries:HTMLDivElement, panel_tags:HTMLDivElement) {
  * Loads those tags into the panel
  * and makes them clickable 
  */
-ipcRenderer.on('recieve-entry-filename', async(event, message:{firstEntry:boolean, entryFilename:string}) => {
-    console.log('recieve-entry-filename called')
-    var { firstEntry, entryFilename } = message
-    const panel_entries = document.querySelector('#entries')
-    const loader = document.querySelector('#loader') as HTMLDivElement
-    //clear panel entries
-    if(firstEntry && panel_entries)
-    {
-        panel_entries.innerHTML = clear//entries
-    }
-    //loader
-    activateLoader(loader)
-    //create entry div with name and add to panel
-    var entryDiv = document.createElement('div')
-    if (entryFilename != undefined)
-    {
-        entryDiv.innerText = entryFilename
-        panel_entries?.appendChild(entryDiv)
-        console.log('entryFilename:', entryFilename)
-        //make entry div clickable
-        await makeEntryDivClickable(entryDiv, loader)
-    }
-    
-    //loader
-    deactivateLoader(loader)
-})
 
 
-const firstTag = true
 /**
  * Recieve a list of all entries one at a time.
  * Note: clearTags is always true for the first tag
  */
 ipcRenderer.on('recieve-tag-dirname', async (event,message) => {
     console.log('recieve-tag-dirname called')
-    const panel_tags = document.querySelector('#tags')
     const loader = document.querySelector('#loader') as HTMLDivElement
+    // activateLoader(loader)
+    const { firstTag, tagDirname } = message
+    const panel_tags = document.querySelector('#tags')
     //clear panel tags on first tag
-    if(message.firstTag && panel_tags)
+    if(firstTag && panel_tags)
     {
         panel_tags.innerHTML = clear//tags
     }
-    activateLoader(loader)
     var tagDiv = document.createElement('div')
-    tagDiv.innerHTML = message.tagDirname
+    tagDiv.innerHTML = tagDirname
     //if first tag
-    if (message.firstTag) {
+    if (firstTag) {
         console.log('active tag set')
         tagDiv.className = 'active tag'
         console.log(tagDiv.className)
     }
-    tagCount++
     panel_tags?.appendChild(tagDiv)
-    console.log('dirName:',message.tagDirname)
+    console.log('dirName:', tagDirname)
     await makeTagDivClickable(tagDiv, loader)
-    deactivateLoader(loader)
+    //loader
+    // deactivateLoader(loader)
 })
 
 ipcRenderer.on('recieve-tag-entries', async (event, message) => {
     console.log('recieve-tag-entries called')
-    const panel_entries = document.querySelector('#entries')
+    //activate loader
     const loader = document.querySelector('#loader') as HTMLDivElement
+    // activateLoader(loader)
+
+    //get panel for tag entries
+    const panel_entries = document.querySelector('#entries')
     var { firstEntry, entryFilename } = message
     //clear panel entries
     if(firstEntry && panel_entries)
     {
         panel_entries.innerHTML = clear//entries
     }
-    //loader
-    activateLoader(loader)
     //create entry div
-    if (entryFilename != undefined)
+    if (entryFilename != undefined && entryFilename != 'NO-ENTRIES')
     {
         var entryDiv = document.createElement('div')
         entryDiv.innerHTML = entryFilename
@@ -207,7 +180,7 @@ ipcRenderer.on('recieve-tag-entries', async (event, message) => {
     }
     
     
-    deactivateLoader(loader)
+    // deactivateLoader(loader)
 })
 
 ipcRenderer.on('activate-loader', () => {
@@ -220,7 +193,3 @@ ipcRenderer.on('deactivate-loader', () => {
     deactivateLoader(loader)
 })
 
-// window.onload = () => {
-//     loadEntries(loader)
-//     loadTags()
-// }

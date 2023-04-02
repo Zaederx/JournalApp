@@ -15,12 +15,12 @@ export function appendEntriesAndTags(event:IpcMainEvent)
     var childProcess = c_process.spawn('node', ['js/append.js', allEntries, tagDirectory], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
     //if successful in creating child process..
     if (childProcess) {
-      //replt to the event with...
-      childProcess.on('message', (message: any) => {
+      //reply to the event with...
+      childProcess.on('message', (message:any) => {
         if (message.entryFilename) {
           //the entry filename
           console.log('message.entryFilename -> present')
-          event.reply('recieve-entry-filename', message)
+          event.reply('recieve-tag-entries', message)
         }
         else if (message.tagDirname) {
           //the tagDirname - relates to nav.ts
@@ -28,10 +28,10 @@ export function appendEntriesAndTags(event:IpcMainEvent)
           event.reply('recieve-tag-dirname', message)
         }
         else if (message == 'start-loader') {
-          event.reply(message)
+          event.reply('activate-loader')
         }
         else if (message == 'stop-loader') {
-          event.reply(message)
+          event.reply('deactivate-loader')
         }
       })
     }

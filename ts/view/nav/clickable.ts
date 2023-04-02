@@ -45,16 +45,19 @@ export function makeEntryDivClickable(entryDiv:HTMLDivElement, loader:HTMLDivEle
     return new Promise((resolve,reject) => {
         try {
             //when entry is clicked
-            entryDiv.onclick = () => {
+            entryDiv.onclick = async () => {
                 //activate loading spinner
                 activateLoader(loader)
                 //get selected entry name
                 var selectedEntryName = entryDiv.innerText
                 //set current entry to be read as selected
                 console.log('entry'+selectedEntryName+'clicked')
-                ipcRenderer.invoke('set-current-entry', selectedEntryName)
-                //open the entry view
-                ipcRenderer.invoke('entry-view')
+                var promise = ipcRenderer.invoke('set-current-entry', selectedEntryName)
+                
+                promise.then(() => {
+                    //open the entry view
+                    ipcRenderer.invoke('entry-view')
+                })
                 //remove loading spinner
                 deactivateLoader(loader)
             }

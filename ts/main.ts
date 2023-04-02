@@ -70,9 +70,10 @@ async function createWindow() {
   }
 
   /**
+   * 
    * Append entries and tags to the side-panel
    */
-  ipcMain.on('ready-to-show', async (event) => appendEntriesAndTags(event))
+  ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event))
 }
 
 /**
@@ -80,7 +81,8 @@ async function createWindow() {
  * password dialog
  */
 var windowJustOpened = false
-app.on('activate',() => {
+app.on('browser-window-focus',() => {
+  console.log('app.on("browser-window-focus") has been triggered')
   loggedIn.is = false
   windowJustOpened = true
 })
@@ -101,15 +103,18 @@ app.whenReady().then(createWindow)
 //.then(() => theme.setCurrentCssTheme('./css/main.css'));
   
   //waits for event from create-entry.ts
-  //put as 'once' because it sometimes fires 
-  //multiple times on one page load without it...
   ipcMain.on('password-reminder-?', async (event)=> {
-    //reset login to false - forces user to login everytime it opens
     const passwordExists = await passwordFileExists()
-    const json = false
-    const settings:settings = await retrieveSettings(json)
-    
-    if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false || windowJustOpened)
+    const jsonStr = false
+    const settings:settings = await retrieveSettings(jsonStr)
+
+    console.log('passwordExists:'+passwordExists) 
+    console.log('settings:')
+    console.log(settings)
+    console.log('loggedIn.is:'+loggedIn.is)
+    console.log('windowJustOpened:'+windowJustOpened) 
+
+    if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false && windowJustOpened)
     {
       windowJustOpened = false
       console.log('password file exists')
@@ -117,9 +122,10 @@ app.whenReady().then(createWindow)
       console.log('opening authentication dialog...')
       window.webContents.send('open-authentication-dialog')
     }
-    else if(windowJustOpened)
+    else if(settings['password-protection'] == 'false' && windowJustOpened)
     {
-      console.warn('password file does not exist')
+      if (!passwordFileExists) { console.warn('password file does not exist') }
+
       console.log('sending reminder message')
       //enable login - they are effectively logged in if there is no password set up
       loggedIn.is = true
@@ -131,13 +137,14 @@ app.whenReady().then(createWindow)
   })
 
   ipcMain.on('enable-navigation-?', (event) => {
+    console.log('enable navigation attempt:')
     if(loggedIn.is == true) {
       console.log('enabling navigation...')
       event.reply('enable-navigation')
     }
     else
     {
-      console.log('declining to enable authentication...')
+      console.log('declining to enable navigation...')
     }
   })
 
@@ -276,10 +283,22 @@ ipcMain.handle('get-tags-table-rows', async (event) => {
 })
 
 ipcMain.on('get-tag-entries', async (event, tagName) => {
+  //get directories
   const { allEntries, tagDirectory } = dirs
+  //start a child process
   var childProcess = c_process.spawn('node', ['js/send-entries.js', allEntries, tagDirectory, tagName], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
+
+  //recieve messages from child process on this the main process & send/forward to renderer process
   childProcess.on('message', (message:any) => {
-    event.reply('recieve-tag-entries', message)
+    if (message.entryFilename) {
+      event.reply('recieve-tag-entries', message)
+    }
+    else if (message == 'start-loader') {
+      event.reply('activate-loader')
+    }
+    else if (message == 'stop-loader') {
+      event.reply('deactivate-loader')
+    }
   })
 })
 
