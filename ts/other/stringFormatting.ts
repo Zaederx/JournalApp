@@ -25,11 +25,16 @@ function stringFormatting(colour:colour, args:number)
         stringFormatting += '%s'//number of string arguments
         if (i == args - 1)
         {
-            stringFormatting+='\x1b[0m'//change colour back to black
+            stringFormatting+='\x1b[0m'//change colour back to normal/default
         }
     }
     return stringFormatting
 }
+/**
+ * A function for printing console output with colour in Node.js terminal
+ * @param colour a colour to be used for the ouput (one of six to choose from)
+ * @param args an indeterminate amount of string arguments
+ */
 export function printFormatted(colour:colour, ...args:string[]) {
     const formatting = stringFormatting(colour, args.length)
     console.log(formatting,...args)

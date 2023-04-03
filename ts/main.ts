@@ -29,6 +29,8 @@ import pathsForWDIO from './other/paths-for-wdio'
 import { retrieveSettingsJson as retrieveSettings, saveSettingsJson } from './settings/settings-functions'
 import { settings } from './settings/settings-type';
 import { printFormatted } from './other/stringFormatting'
+import { createAllTagDirectory } from './fs-helpers/helpers';
+import createWindow from './other/create-window'
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system)
 //TODO - option to store file in iCloud
 //TODO - SEND AND EMAIL IN NODE.JS - temporary password for login recovery
@@ -36,45 +38,11 @@ import { printFormatted } from './other/stringFormatting'
 let window: BrowserWindow;
 
 var integration = false;
-async function createWindow() {
 
-  if (process.env.NODE_ENV === 'test-main') {
-    integration = true;
-    //produce paths for wdio
-    pathsForWDIO()
-  }
-
-  window = new BrowserWindow
-    ({
-      width: 921,
-      height: 600,
-      minWidth: 921,
-      minHeight: 478,
-      webPreferences:
-      {
-        // worldSafeExecuteJavaScript: true ,
-        contextIsolation: false,//otherwise "WorldSafe".. message still appears
-        nodeIntegration: true,//whether you can access node methods - e.g. requires/ import, anywhere in the app's js - needed for front end scripts to work
-        enableRemoteModule: true,//enable ipcRenderer in fround end js to speak directly to ipcMain - no need for preload script
-        v8CacheOptions: 'none',//prevents electron's v8 Chromium browser engine from caching
-      }
-    })
-
-
-  window.loadFile('html/create-entry.html');
-
-  
-
-  if (process.env.NODE_ENV === 'dev-tools') {
-    window.webContents.openDevTools();
-  }
-
-  /**
-   * 
-   * Append entries and tags to the side-panel
-   */
-  ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event))
-}
+app.whenReady().then(async () => { 
+  createAllTagDirectory()
+  window = await createWindow(window,integration)
+})
 
 /**
  * important in determining whether to present
@@ -83,75 +51,69 @@ async function createWindow() {
 var windowJustOpened = false
 app.on('browser-window-focus',() => {
   printFormatted('blue','app.on("browser-window-focus") has been triggered')
-  loggedIn.is = false
+  loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
   windowJustOpened = true
+  window.reload()//reloading the page will trigger 'password-reminder-?' in login.ts - making auth-dialog appear
 })
 
 
-//if directory doesn't exist - create directory
-var directory = paths.join(dirs.allEntries)
-if (!fs.existsSync(directory)) {
-  try {
-    fs.promises.mkdir(directory)
-    console.log('Successfully created directory')
-  }
-  catch (error) {
-    console.log('Error creating directory:', error)
-  }
-  console.log(app.getPath('home'))
-}
 
-app.whenReady().then(createWindow)
-//.then(() => theme.setCurrentCssTheme('./css/main.css'));
+
+/**
+   * 
+   * Append entries and tags to the side-panel
+   */
+ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event))
+
   
   //waits for event from create-entry.ts
-  ipcMain.on('password-reminder-?', async (event)=> {
-    printFormatted('blue','password-reminder-? triggered')
-    const passwordExists = await passwordFileExists()
-    const jsonStr = false
-    const settings:settings = await retrieveSettings(jsonStr)
+ipcMain.on('password-reminder-?', async (event)=> {
+  printFormatted('blue','password-reminder-? triggered')
+  const passwordExists = await passwordFileExists()
+  const jsonStr = false
+  const settings:settings = await retrieveSettings(jsonStr)
 
-    console.log('passwordExists:'+passwordExists) 
-    console.log('settings:')
-    console.log(settings)
-    console.log('loggedIn.is:'+loggedIn.is)
-    console.log('windowJustOpened:'+windowJustOpened) 
+  console.log('passwordExists:'+passwordExists) 
+  console.log('settings:')
+  console.log(settings)
+  console.log('loggedIn.is:'+loggedIn.is)
+  console.log('windowJustOpened:'+windowJustOpened) 
 
-    //open authentication dialog
-    if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false && windowJustOpened)
-    {
-      windowJustOpened = false
-      printFormatted('green','password file exists')
-      printFormatted('green','password protection is set to true')
-      printFormatted('green','opening authentication dialog...')
-      window.webContents.send('open-authentication-dialog')
-    }
-    //send reminder
-    else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true' && windowJustOpened)
-    {
-      if (!passwordFileExists) { printFormatted('yellow','password file does not exist') }
+  //open authentication dialog
+  if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false && windowJustOpened)
+  {
+    windowJustOpened = false
+    printFormatted('green','password file exists')
+    printFormatted('green','password protection is set to true')
+    printFormatted('green','opening authentication dialog...')
+    window.webContents.send('open-authentication-dialog')
+  }
+  //send reminder
+  else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true' && windowJustOpened)
+  {
+    if (!passwordFileExists) { printFormatted('yellow','password file does not exist') }
 
-      printFormatted('white','sending reminder message')
-      //enable login - they are effectively logged in if there is no password set up
-      loggedIn.is = true
-      printFormatted('green','loggedIn.is:'+loggedIn.is)
-      window.webContents.send('register-password-reminder')
-      console.log('enabling navigation...')
-      window.webContents.send('enable-navigation')//send message to nav.ts to enable
-    }
-  })
+    printFormatted('white','sending reminder message')
+    //enable login - they are effectively logged in if there is no password set up
+    loggedIn.is = true
+    printFormatted('green','loggedIn.is:'+loggedIn.is)
+    window.webContents.send('register-password-reminder')
+    console.log('enabling navigation...')
+    window.webContents.send('enable-navigation')//send message to nav.ts to enable
+  }
+})
 
-  ipcMain.on('enable-navigation-?', (event) => {
-    console.log('enable navigation attempt:')
-    if(loggedIn.is == true) {
-      printFormatted('green','enabling navigation...')
-      event.reply('enable-navigation')
-    }
-    else
-    {
-      printFormatted('red','declining to enable navigation...')
-    }
-  })
+ipcMain.on('enable-navigation-?', (event) => {
+  console.log('enable navigation attempt:')
+  if(loggedIn.is == true) {
+    printFormatted('green','enabling navigation...')
+    event.reply('enable-navigation')
+  }
+  else
+  {
+    printFormatted('red','declining to enable navigation...')
+  }
+})
 
 var loggedIn = {is:false}
 ipcMain.handle('login', async (event, password) => {
@@ -185,7 +147,7 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    createWindow(window,integration);
   }
 });
 
