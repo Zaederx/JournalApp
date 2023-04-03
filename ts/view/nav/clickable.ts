@@ -43,9 +43,11 @@ export function makeTagDivClickable(tagDiv:HTMLDivElement, loader:HTMLDivElement
 export function makeEntryDivClickable(entryDiv:HTMLDivElement, loader:HTMLDivElement):Promise<string> {
     
     return new Promise((resolve,reject) => {
-        try {
+        try 
+        {
             //when entry is clicked
-            entryDiv.onclick = async () => {
+            entryDiv.onclick = async () => 
+            {
                 //activate loading spinner
                 activateLoader(loader)
                 //get selected entry name

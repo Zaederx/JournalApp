@@ -3,10 +3,27 @@ import * as dirs from '../../directory'
 import fs from 'fs'
 import Entry from '../../classes/entry'
 import * as fs_helpers from '../../fs-helpers/helpers'
+import { printFormatted } from '../../other/stringFormatting'
 
 
 
-
+function createCurrentEntrySymlink(selectedEntryName:string) {
+  //path to file and path to new symlink
+  const pathToSelectedEntry = paths.join(dirs.allEntries, selectedEntryName)
+  const pathToNewSymlink = paths.join(dirs.currentEntryDir, selectedEntryName)
+  try 
+  {
+    //make the symlink
+    var createdSymlink = fs.promises.symlink(pathToSelectedEntry, pathToNewSymlink)
+    createdSymlink.then(() => {
+      printFormatted('green','symlink was created in current entry folder.')
+    })
+  }
+  catch (error:any)
+  {
+    printFormatted('red', error.message)
+  }
+}
 /**
  * Sets the current entry.
  * This method first tries to delete
@@ -16,31 +33,34 @@ import * as fs_helpers from '../../fs-helpers/helpers'
  */
 export async function setCurrentEntry(selectedEntryName:string):Promise<void>
 {
-  console.log('function setCurrentEntry called')
-  console.log('selectedEntryName:' +selectedEntryName)
+  printFormatted('blue','function setCurrentEntry called')
+  printFormatted('green','selectedEntryName:' +selectedEntryName)
   try 
   {
     var directoryExists = await fs_helpers.isThereTheDirectory(dirs.currentEntryDir)
     if(directoryExists)//check if there is already and entry
     {
-      console.log('The "current-entry" directory exists.')
+      printFormatted('green','The "current-entry" directory exists.')
        const { entryExists, currentEntryName } = await fs_helpers.isThereACurrentEntry()
       //if there is a previous 'current entry' - remove it
       if (entryExists)
       {
-        console.log('currentEntryName:'+currentEntryName)
+        printFormatted('green','currentEntryName:'+currentEntryName)
         //delete the previous symlink
         const path = paths.join(dirs.currentEntryDir, currentEntryName)
-        fs.promises.unlink(path)//use unlink instead of rm (rm doesn't always work properly on symlinks and gives a strange error)
+        const symlinkRemoved = fs.promises.unlink(path)//use unlink instead of rm (rm doesn't always work properly on symlinks and gives a strange error)
+        symlinkRemoved.then(() =>createCurrentEntrySymlink(selectedEntryName))
       }
       else 
       {
-        console.log('A current entry does not exist.')
+        printFormatted('yellow','A current entry does not exist.')
+        printFormatted('white', 'Setting a current entry.')
+        createCurrentEntrySymlink(selectedEntryName)
       }
     }
     else//if directory doesn't exist
     {
-      console.log('"current-entry" directory does not exist.')
+      printFormatted('yellow','"current-entry" directory does not exist.')
       console.log('creating directory "current-entry"...')
       //make the directory
       var madeDir = fs.promises.mkdir(dirs.currentEntryDir)
@@ -48,18 +68,10 @@ export async function setCurrentEntry(selectedEntryName:string):Promise<void>
         console.log('directory "current-entry" created')
       })
     }
-    //path to file and path to new symlink
-    const pathToSelectedEntry = paths.join(dirs.allEntries, selectedEntryName)
-    const pathToNewSymlink = paths.join(dirs.currentEntryDir, selectedEntryName)
-    //make the symlink
-    var createdSymlink = fs.promises.symlink(pathToSelectedEntry, pathToNewSymlink)
-    createdSymlink.then(() => {
-      console.log('symlink was created in current entry folder.')
-    })
   }
   catch (error)
   {
-    console.log('Problem setting current entry:'+ error)
+    printFormatted('red','Problem setting current entry:'+ error)
   }
 }
 

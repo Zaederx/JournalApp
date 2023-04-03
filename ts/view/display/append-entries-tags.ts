@@ -1,6 +1,7 @@
 import c_process from 'child_process'
 import { IpcMainEvent } from 'electron'
 import * as dirs from '../../directory'
+import { printFormatted } from '../../other/stringFormatting'
 
 /**
  * Append entries and tags.
@@ -8,7 +9,7 @@ import * as dirs from '../../directory'
  */
 export function appendEntriesAndTags(event:IpcMainEvent)
 {
-  console.log('window ready-to-show called')
+  printFormatted('blue','window ready-to-show-sidepanel called')
     //fetch addresses
     const { allEntries, tagDirectory } = dirs
     //create a child process that fills the side panel with entries and tags
