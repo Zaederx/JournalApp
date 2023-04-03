@@ -5,6 +5,7 @@ import { addSelectedTagsToEntry, removeSelectedTags } from "./clickable-filter-t
 import Entry from "../classes/entry"
 import updateEntry from "./edit-entry/updateEntry"
 
+console.info('edit-entry called')
 async function loadFragment()
 {
     //load tags popup

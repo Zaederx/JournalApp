@@ -181,3 +181,11 @@ $side-panel: rgb(103, 106, 111);
 .password {
     background-color: $body;
 }
+
+.btn-login {
+    background-color: $body;
+}
+
+.btn-login:hover {
+    background-color: $hover;
+}

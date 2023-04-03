@@ -189,3 +189,10 @@ $before-text-color: rgb(109, 109, 109);
     background-color: $body;
 }
 
+.btn-login {
+    background-color: $body;
+}
+
+.btn-login:hover {
+    background-color: $hover;
+}

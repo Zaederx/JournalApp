@@ -9,7 +9,7 @@ const btn_edit_entry = document.querySelector('#edit-entry') as HTMLDivElement
 const btn_delete_entry = document.querySelector('#delete-entry') as HTMLDivElement
 
 
-window.onload = () => displayCurrentEntry(title,body,tags)
+displayCurrentEntry(title,body,tags)
 
 
 //EDIT ENTRY

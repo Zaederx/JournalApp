@@ -42,7 +42,7 @@ export async function setCurrentEntry(selectedEntryName:string):Promise<void>
     {
       printFormatted('green','The "current-entry" directory exists.')
        const { entryExists, currentEntryName } = await fs_helpers.isThereACurrentEntry()
-      //if there is a previous 'current entry' - remove it
+      //if there is a previous 'current entry' - remove it before creating a new symlink
       if (entryExists)
       {
         printFormatted('green','currentEntryName:'+currentEntryName)
@@ -51,14 +51,14 @@ export async function setCurrentEntry(selectedEntryName:string):Promise<void>
         const symlinkRemoved = fs.promises.unlink(path)//use unlink instead of rm (rm doesn't always work properly on symlinks and gives a strange error)
         symlinkRemoved.then(() =>createCurrentEntrySymlink(selectedEntryName))
       }
-      else 
+      else //just create the symlink
       {
         printFormatted('yellow','A current entry does not exist.')
         printFormatted('white', 'Setting a current entry.')
         createCurrentEntrySymlink(selectedEntryName)
       }
     }
-    else//if directory doesn't exist
+    else //if directory doesn't exist
     {
       printFormatted('yellow','"current-entry" directory does not exist.')
       console.log('creating directory "current-entry"...')

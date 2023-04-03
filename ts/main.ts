@@ -86,6 +86,8 @@ app.on('browser-window-focus',() => {
   loggedIn.is = false
   windowJustOpened = true
 })
+
+
 //if directory doesn't exist - create directory
 var directory = paths.join(dirs.allEntries)
 if (!fs.existsSync(directory)) {
@@ -104,6 +106,7 @@ app.whenReady().then(createWindow)
   
   //waits for event from create-entry.ts
   ipcMain.on('password-reminder-?', async (event)=> {
+    printFormatted('blue','password-reminder-? triggered')
     const passwordExists = await passwordFileExists()
     const jsonStr = false
     const settings:settings = await retrieveSettings(jsonStr)
@@ -118,20 +121,20 @@ app.whenReady().then(createWindow)
     if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false && windowJustOpened)
     {
       windowJustOpened = false
-      console.log('password file exists')
-      console.log('password protection is set to true')
-      console.log('opening authentication dialog...')
+      printFormatted('green','password file exists')
+      printFormatted('green','password protection is set to true')
+      printFormatted('green','opening authentication dialog...')
       window.webContents.send('open-authentication-dialog')
     }
     //send reminder
     else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true' && windowJustOpened)
     {
-      if (!passwordFileExists) { console.warn('password file does not exist') }
+      if (!passwordFileExists) { printFormatted('yellow','password file does not exist') }
 
-      console.log('sending reminder message')
+      printFormatted('white','sending reminder message')
       //enable login - they are effectively logged in if there is no password set up
       loggedIn.is = true
-      console.log('loggedIn.is:'+loggedIn.is)
+      printFormatted('green','loggedIn.is:'+loggedIn.is)
       window.webContents.send('register-password-reminder')
       console.log('enabling navigation...')
       window.webContents.send('enable-navigation')//send message to nav.ts to enable
@@ -141,12 +144,12 @@ app.whenReady().then(createWindow)
   ipcMain.on('enable-navigation-?', (event) => {
     console.log('enable navigation attempt:')
     if(loggedIn.is == true) {
-      console.log('enabling navigation...')
+      printFormatted('green','enabling navigation...')
       event.reply('enable-navigation')
     }
     else
     {
-      console.log('declining to enable navigation...')
+      printFormatted('red','declining to enable navigation...')
     }
   })
 

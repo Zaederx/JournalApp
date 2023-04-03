@@ -13,9 +13,9 @@ async function loadFragments()
     //load side panel
     const side_panel = await (await fetch('./fragments/tags-entries-sidepanel.html')).text()
     document.querySelector('#side-panel')!.outerHTML = side_panel
-
     
 }
+
 var promise = loadFragments()
 
 //MUST USE PROMISE TO GET BUTTONS AND ACTIVATE AFTER DYNAMIC LOADING OF NAVIGATION

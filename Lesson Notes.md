@@ -273,3 +273,11 @@ export async function setCurrentEntry(selectedEntryName:string):Promise<void>
 }
 
 ```
+
+
+## If using scripts that have the `defer` keyword on them, don't use window.onload(() => functionCall()) in the script
+It seems to cause problems with the order of execution or something and doesn't allow some of the scripts to work. For example:
+```
+<script src="../js/view/bundle/nav.bundle.js" defer></script>
+```
+Inside the script, I don't use `window.onload`
