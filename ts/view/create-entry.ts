@@ -1,6 +1,6 @@
 import clickCreateEntryBtn from './create-entry/clickCreateEntryBtn'
 import toggleTagPopup from "./create-entry/tagPopup";
-import { addSelectedTagsToEntry } from "./clickable-filter-table/table";
+import { addSelectedTagsToEntry, removeSelectedTags } from "./clickable-filter-table/table";
 import Entry from "../classes/entry"
 
 
@@ -9,14 +9,14 @@ const title = document.querySelector('#entry-title') as HTMLDivElement
 const body = document.querySelector('#entry-body') as HTMLDivElement
 const tags = document.querySelector('#entry-tags') as HTMLDivElement
 //Temp
-var entryTemp:Entry = new Entry({})
+
 /** Create and Add Tgas buttons */
 const btn_create_entry = document.querySelector('#create-entry') as HTMLDivElement
 //for the 'Add Tags' btn
 const btn_open_tags_popup = document.querySelector('#btn-add-tags') as HTMLDivElement
 
 //enable create entry button
-btn_create_entry ? btn_create_entry.onclick = () =>  clickCreateEntryBtn(entryTemp, title, body, tags) : console.log('btn_create_entry is null');
+btn_create_entry ? btn_create_entry.onclick = () =>  clickCreateEntryBtn(title, body, tags) : console.log('btn_create_entry is null');
 
 
 //SECTION - TagsPopup
@@ -29,6 +29,7 @@ promise.then(() => {
     btn_open_tags_popup ? btn_open_tags_popup.onclick = () => toggleTagPopup(main, tagTableBody3) : console.log('btn_open_tags_popup is null')
     /** Tags popup  */
     const btn_add_tags = document.querySelector('#add-selected-tags') as HTMLDivElement
+    var btn_remove_tags = document.querySelector('#remove-selected-tags') as HTMLDivElement
     const btn_close = document.querySelector('#close-btn') as HTMLDivElement
     //main container - to be blurred when popup is displayed
     const main = document.querySelector('#main') as HTMLDivElement
@@ -37,8 +38,8 @@ promise.then(() => {
     const tagTableBody3 = document.querySelector('#tag-table-body') as HTMLTableElement
 
     //Enable buttons
-    btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(entryTemp,tags, tagTableBody3) : console.log('add_tags btn is null')
-
+    btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(tags, tagTableBody3) : console.log('add_tags btn is null')
+    btn_remove_tags ? btn_remove_tags.onclick = () => removeSelectedTags(tagTableBody3, title, body, tags) : console.warn('btn_remove_tags is null')
     btn_close ? btn_close.onclick = () => toggleTagPopup(main, tagTableBody3) : console.warn('popup close_btn is null')
 })
 

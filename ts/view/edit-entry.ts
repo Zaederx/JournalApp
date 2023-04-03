@@ -47,7 +47,7 @@ var tagTableBody1 = document.querySelector('#tag-table-body') as HTMLTableElemen
 
 btn_tags_popup ? btn_tags_popup.onclick = () => toggleTagPopup(main,tagTableBody1) : console.log('btn_tags_popup is null')
 
-btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(entryTemp, tags, tagTableBody1) : console.log('add_tags btn is null')
+btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(tags, tagTableBody1) : console.log('add_tags btn is null')
 
 btn_remove_tags ? btn_remove_tags.onclick = () => removeSelectedTags(tagTableBody1, title, body, tags) : console.warn('btn_remove_tags is null')
 

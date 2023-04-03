@@ -51,10 +51,10 @@ export function makeEntryDivClickable(entryDiv:HTMLDivElement, loader:HTMLDivEle
                 //get selected entry name
                 var selectedEntryName = entryDiv.innerText
                 //set current entry to be read as selected
-                console.log('entry'+selectedEntryName+'clicked')
-                var promise = ipcRenderer.invoke('set-current-entry', selectedEntryName)
+                console.log('entry '+selectedEntryName+' clicked')
+                var entrySet = ipcRenderer.invoke('set-current-entry', selectedEntryName)
                 
-                promise.then(() => {
+                entrySet.then(() => {
                     //open the entry view
                     ipcRenderer.invoke('entry-view')
                 })

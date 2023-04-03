@@ -201,3 +201,75 @@ export { module1, module2 }
 
 ## Better way of setting up main electron app as a TypeScript class
 see [example link](https://gist.github.com/DaveMBush/c162912cb1caf5acf4d2f899814deb99#file-electron-main-ts)
+
+
+## If you are using a more than one layer of try catches
+If you find yourself using a try catch within a try catch, you should probably create a separate function that contains the code that has the second try catch.
+Code Example: This originally was a bit confusing when I was trying to put the `isThereTheDirectory` functionality within the `setCurrentEntry` function by itself (not wrapped in a function). Just makes things so much neater and clearer.
+```
+/**
+ * Checks whether the current entry directory exists.
+ * @return true or false
+ */
+async function isThereTheDirectory()
+{
+  var isThere = false
+  try {
+    var stat = await fs.promises.stat(dirs.currentEntryDir)
+  } catch (error) {
+    console.log(error)
+    return isThere//false
+  }
+  isThere = true
+  return isThere
+}
+/**
+ * Sets the current entry.
+ * This method first tries to delete
+ * the old 'current entry' and then replace it with
+ * the new current entry.
+ * @param selectedEntryName entry selected in the panel to be the current entry
+ */
+export async function setCurrentEntry(selectedEntryName:string):Promise<void>
+{
+  console.log('function setCurrentEntry called')
+  console.log('selectedEntryName:' +selectedEntryName)
+  try 
+  {
+    var directoryExists = await isThereTheDirectory()
+    if(directoryExists)//check if there is already and entry
+    {
+      console.log('"current-entry" directory exists.')
+       const { entryExists, currentEntryName } = await isThereAnEntry()
+      //if there is a previous 'current entry' - remove it
+      if (entryExists)
+      {
+        //delete the previous symlink
+        const path = paths.join(dirs.currentEntryDir, currentEntryName)
+        fs.promises.unlink(path)//use unlink instead of rm (rm doesn't always work properly on symlinks and gives a strange error)
+      }
+    }
+    else//if directory doesn't exist
+    {
+      console.log('"current-entry" directory does not exist.')
+      console.log('creating directory "current-entry"...')
+      //make the directory
+      var madeDir = fs.promises.mkdir(dirs.currentEntryDir)
+      madeDir.then(() => {
+        console.log('directory "current-entry" created')
+      })
+    }
+    //path to file and path to new symlink
+    const pathToSelectedEntry = paths.join(dirs.allEntries, selectedEntryName)
+    const pathToNewSymlink = paths.join(dirs.currentEntryDir, selectedEntryName)
+    //make the symlink
+    var createdSymlink = fs.promises.symlink(pathToSelectedEntry, pathToNewSymlink)
+    return createdSymlink
+  }
+  catch (error)
+  {
+    console.log('Problem setting current entry:'+ error)
+  }
+}
+
+```

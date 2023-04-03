@@ -1,5 +1,6 @@
 import getSelectedTags from "./getSelectedTags"
 import Entry from '../../classes/entry'
+import { ipcRenderer } from "electron"
 
 /**
  * 
@@ -8,13 +9,14 @@ import Entry from '../../classes/entry'
  * @param entry_tags the div holing the tags belonging the entry 
  * @param tagTableBody table body to get selected tags from
  */
-export default async function addSelectedTagsToEntry(entryTemp:any, entry_tags:HTMLDivElement, tagTableBody:HTMLTableElement) {
+export default async function addSelectedTagsToEntry(entry_tags:HTMLDivElement, tagTableBody:HTMLTableElement) {
     console.log('function addSelectedTagsToEntry called')
     //get selected tags
     var selectedTags:string[] = getSelectedTags(tagTableBody)
     //create new entry Temp 
     //@ts-ignore
-    entryTemp = new Entry({})
+    var entryTempJson = await ipcRenderer.invoke('get-current-entry')
+    var entryTemp = JSON.parse(entryTempJson)
     //for each tag - if not already in tags list -> add to list
     var tagSet = new Set(entryTemp.tags)
     selectedTags.forEach (tag => {

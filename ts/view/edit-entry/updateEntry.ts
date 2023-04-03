@@ -24,7 +24,7 @@ export default async function updateEntry(title:HTMLDivElement, body:HTMLDivElem
     entry.udate = dateStr()//update the edit/update date
     //turn entry to json format - ready for sending via ipcRenderer - can't send complex objects
     var entry_json = JSON.stringify(entry);
-    console.info('updateEntry - entry_json: ' + entry_json);
+    console.info('c%updateEntry - entry_json: ' + entry_json, 'color:green');
     // //get current entry name
     
     //send entry_json and entryName to main to be updated

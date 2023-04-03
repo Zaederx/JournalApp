@@ -20,6 +20,7 @@ var promise = loadFragments()
 
 //MUST USE PROMISE TO GET BUTTONS AND ACTIVATE AFTER DYNAMIC LOADING OF NAVIGATION
 promise.then(() => {
+    console.log("ipcRenderer.send('enable-navigation-?') called")
     ipcRenderer.send('enable-navigation-?')
 })
 
@@ -176,7 +177,8 @@ ipcRenderer.on('recieve-tag-entries', async (event, message) => {
         panel_entries?.appendChild(entryDiv)
         console.log('entryFilename:', entryFilename)
         //make entry div clcickable
-        await makeEntryDivClickable(entryDiv, loader)
+        var clickableSuccess = await makeEntryDivClickable(entryDiv, loader)
+        console.log(clickableSuccess)
     }
     
     

@@ -28,6 +28,7 @@ import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-en
 import pathsForWDIO from './other/paths-for-wdio'
 import { retrieveSettingsJson as retrieveSettings, saveSettingsJson } from './settings/settings-functions'
 import { settings } from './settings/settings-type';
+import { string } from 'yargs';
 
 //IMPORTANT - 
 //TODO - option to store file in iCloud
@@ -233,9 +234,11 @@ async function getCurrentEntryName()
   const entry = await getCurrentEntry(json) as Entry
   return entry.cdate+'.json'
 }
-
+var stringFormatting = '\x1b[32m%s%s\x1b[0m'
 ipcMain.handle('update-current-entry', async (event, entry_json) => {
   var selectedEntryName = await getCurrentEntryName()
+  console.log(stringFormatting, 'selectedEntryName:',selectedEntryName )
+  console.log(stringFormatting, 'entry_json:', entry_json )
   var message = eUpdate.updateEntry(entry_json, selectedEntryName)
   return message
 })

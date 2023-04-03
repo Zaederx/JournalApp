@@ -2,6 +2,10 @@ import paths from 'path'
 import * as dirs from '../../directory'
 import fs from 'fs'
 import Entry from '../../classes/entry'
+import * as fs_helpers from '../../fs-helpers/helpers'
+
+
+
 
 /**
  * Sets the current entry.
@@ -10,38 +14,48 @@ import Entry from '../../classes/entry'
  * the new current entry.
  * @param selectedEntryName entry selected in the panel to be the current entry
  */
-export async function setCurrentEntry(selectedEntryName:string)
+export async function setCurrentEntry(selectedEntryName:string):Promise<void>
 {
   console.log('function setCurrentEntry called')
   console.log('selectedEntryName:' +selectedEntryName)
   try 
   {
-    //check if directory exists
-    var stat = await fs.promises.stat(dirs.currentEntryDir)
-    if(stat.isDirectory())
+    var directoryExists = await fs_helpers.isThereTheDirectory(dirs.currentEntryDir)
+    if(directoryExists)//check if there is already and entry
     {
-      //get array of filenames from directory (there should only be one)
-      var arr = await fs.promises.readdir(dirs.currentEntryDir)
-      var currentEntryName = arr[0]//the previous current entry - if there is one
-      console.log('currentEntryName:'+currentEntryName)
+      console.log('The "current-entry" directory exists.')
+       const { entryExists, currentEntryName } = await fs_helpers.isThereACurrentEntry()
       //if there is a previous 'current entry' - remove it
-      if (currentEntryName)
+      if (entryExists)
       {
+        console.log('currentEntryName:'+currentEntryName)
         //delete the previous symlink
         const path = paths.join(dirs.currentEntryDir, currentEntryName)
         fs.promises.unlink(path)//use unlink instead of rm (rm doesn't always work properly on symlinks and gives a strange error)
       }
+      else 
+      {
+        console.log('A current entry does not exist.')
+      }
     }
     else//if directory doesn't exist
     {
+      console.log('"current-entry" directory does not exist.')
+      console.log('creating directory "current-entry"...')
       //make the directory
-      fs.promises.mkdir(dirs.currentEntryDir)
+      var madeDir = fs.promises.mkdir(dirs.currentEntryDir)
+      madeDir.then(() => {
+        console.log('directory "current-entry" created')
+      })
     }
     //path to file and path to new symlink
     const pathToSelectedEntry = paths.join(dirs.allEntries, selectedEntryName)
     const pathToNewSymlink = paths.join(dirs.currentEntryDir, selectedEntryName)
     //make the symlink
-    return fs.promises.symlink(pathToSelectedEntry, pathToNewSymlink)
+    var createdSymlink = fs.promises.symlink(pathToSelectedEntry, pathToNewSymlink)
+    createdSymlink.then(() => {
+      console.log('symlink was created in current entry folder.')
+    })
   }
   catch (error)
   {
@@ -56,22 +70,32 @@ export async function setCurrentEntry(selectedEntryName:string)
  */
 export async function getCurrentEntry(json:boolean):Promise<string | Entry | undefined >
 {
+  
   try
   {
-    //retrieve entry string (json) - only entry in the current entry directory
+    var directoryExists = await fs_helpers.isThereTheDirectory(dirs.currentEntryDir)
+    if (!directoryExists) {
+      throw new Error('The "current-entry" directory does not exist')
+    }
+    //get the directory's filenames (should only be the current entry)
     var arr:string[] = await fs.promises.readdir(dirs.currentEntryDir, 'utf-8')
+    console.log('arr:'+arr)
+    //if no entry found - throw an error
     if (arr.length == 0) {
       throw new Error('No current entry set.')
     }
+    //else return the current entry
     else
     {
-      var filename = arr[0]
+      var filename = arr[0]//current entry filename
       const path = paths.join(dirs.currentEntryDir, filename)
       const entryJsonStr:string = await fs.promises.readFile(path, 'utf-8')
+      //return as json string 
       if (json)
       {
         return entryJsonStr//entry as a string of json
       }
+      //or as js object
       else
       {
         var entryObj =  JSON.parse(entryJsonStr)//without the functions
@@ -80,9 +104,22 @@ export async function getCurrentEntry(json:boolean):Promise<string | Entry | und
       }
     }
   }
-  catch (error)
+  catch (error:any)
   {
-    console.log(error)
+    if (error.message == 'The "current-entry" directory does not exist')
+    {
+      //create directory
+      var promise = fs.promises.mkdir(dirs.currentEntryDir)
+      promise.then(() => {
+        var message = 'Created directory "current-entry".'
+        console.log(message)
+      })
+    }
+    else if (error.message == 'No current entry set.')
+    {
+      //TODO SET CURRENT ENTRY
+    }
+
   }
   
   

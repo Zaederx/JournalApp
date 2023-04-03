@@ -59,16 +59,17 @@ export default class Entry {
     entryToTxt(e:Entry=this)
     {
         var entryTxt = ''
-        entryTxt += 'Date:'+e.udate+'\n'
+        entryTxt += 'Creation Date:'+e.cdate+'\n'
+        entryTxt += 'Last Updated Date:'+e.udate+'\n'
         entryTxt += 'Title:'+e.title+'\n'
         entryTxt += 'Body:'+e.body+'\n'
         entryTxt += 'Tags:'+e.tagsArrToStringCSV()
         
         return entryTxt
     }
-    entryToJson(e:Entry=this)
+    entryToJsonObj(e:Entry=this)
     {
-        var json = {date:e.udate, title:e.title, body:e.body, tags:e.tags.toString()}
+        var json = {cdate:e.cdate, title:e.title, body:e.body, tags:e.tags.toString()}
         return json
     }
     entryToJsonStr(e:Entry=this)
