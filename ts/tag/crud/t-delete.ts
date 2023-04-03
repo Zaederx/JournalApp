@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import paths from 'path'
 import * as dir from '../../directory'
+import { printFormatted } from '../../other/stringFormatting';
 
 /**
  * Deletes a tag matching the speficied name
@@ -10,25 +11,34 @@ export function deleteTag(tagname:string):string {
     var success:string = 'Tag '+ tagname+' deleted'; 
     var failure:string = 'Error: Tag '+ tagname +' not deleted';
     var path = paths.join(dir.tagDirectory,tagname)
-    fs.rmdir(path,{
-        recursive: true
-    }, () => {
-        console.log(success);
-        return success;
-    });
+    fs.rmdir(path,
+        {
+            recursive: true
+        }, () => 
+        {
+            printFormatted('green',success);
+            return success;
+        });
     return failure;
 }
-export function deleteTags(tags: string[]): string | PromiseLike<string> {
-    var message = ''
-    try {
-        tags.forEach(tag => {
-            deleteTag(tag)
-        })
+/**
+ * Deletes a list of tags
+ * @param tags list of tags
+ */
+export async function deleteTags(tags: string[]): Promise<string> {
+    var message
+    try 
+    {
+        tags.forEach(tag => 
+            {
+                deleteTag(tag)
+            })
         message = 'Successfully deleted tags'
     }
-    catch (error) {
-        console.log(error)
-        message = 'Problem deleting tag'
+    catch (error:any) 
+    {
+        printFormatted('red',error.message)
+        message = 'Problem deleting tags'
     }
     
     return message

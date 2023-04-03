@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue, IpcMainEvent } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue } from 'electron';
 import paths from 'path'
 import fs from 'fs'
 import * as dirs from './directory'
@@ -283,8 +283,8 @@ ipcMain.handle('create-tag', async (event, tags) => {
 })
 
 ipcMain.handle('delete-tags', async (event, tags: string[]) => {
-  var tagsHTML = await tDelete.deleteTags(tags)
-  return tagsHTML
+  var message = await tDelete.deleteTags(tags)
+  return message
 })
 
 //i.e. delete entry symlink from tag folder

@@ -281,3 +281,7 @@ It seems to cause problems with the order of execution or something and doesn't 
 <script src="../js/view/bundle/nav.bundle.js" defer></script>
 ```
 Inside the script, I don't use `window.onload`
+
+
+## Promises do not mix well with for loops
+I had a case where the `for` loop was incrementing inside the promise `then` statement. Weird stuff. Just important to note again. Be careful when you are using promises inside of loops. Undefined behaviour, not just for `forEach`.
