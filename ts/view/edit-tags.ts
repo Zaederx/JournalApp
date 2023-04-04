@@ -1,26 +1,8 @@
 import { ipcRenderer } from "electron"
 import { fillTagTable, filterTable, removeSelectedTags } from "./clickable-filter-table/table"
-import { highlighted } from "./clickable-filter-table/constants"
-import { clicked } from "./clickable-filter-table/constants"
+import { highlighted, clicked } from "./clickable-filter-table/constants"
+import createNewTag from './edit-tags/create-new-tag'
 
-/**
- * Creates a new tag
- */
-async function createNewTag(tag_searchbar:HTMLDivElement, tagTableBody2:HTMLTableElement) 
-{
-    console.log('function createNewTag called')
-    //get input
-    var tag:string = tag_searchbar.innerText
-    if (tag != null && tag != '') 
-    {
-        //send tag to be persisted
-        var message = await ipcRenderer.invoke('create-tag', tag)
-        // display message
-        alert(message)
-        //refresh tag table
-        fillTagTable(tagTableBody2)
-    }
-}
 //IMPORTANT - BECAUSE i'M USING DEFER ON SCRIPTS - DON'T USE WINDOW ONLOAD - CAUSES PROBLEMS
 // window.onload = () => { 
     var tagTableBody2 = document.querySelector('#tag-table-body') as HTMLTableElement
@@ -65,7 +47,6 @@ async function createNewTag(tag_searchbar:HTMLDivElement, tagTableBody2:HTMLTabl
                 }
                 //alert the user
                 alert(message)
-                
             }
         }
     }
