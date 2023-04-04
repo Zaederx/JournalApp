@@ -8,9 +8,6 @@ import createNewTag from './edit-tags/create-new-tag'
     var tagTableBody2 = document.querySelector('#tag-table-body') as HTMLTableElement
     var tag_searchbar = document.querySelector('#tag-searchbar')  as HTMLDivElement
 
-    const title = document.querySelector('#entry-title') as HTMLDivElement
-    const body = document.querySelector('#entry-body') as HTMLDivElement
-    const tags = document.querySelector('#entry-tags') as HTMLDivElement
     /** Buttons */ 
     var add_tag_btn = document.querySelector('#add-new-tag') as HTMLDivElement
     var remove_tag_btn = document.querySelector('#remove-selected-tags') as HTMLDivElement
