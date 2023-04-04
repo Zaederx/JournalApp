@@ -25,9 +25,28 @@
 .grid-container .main-container {
     grid-column: 2;
     display: grid;
-    grid-template-columns: 50px 320px auto 50px 100px 20px;//6 columns
-    grid-template-rows: 50px 50px 20px 50px 20px 370px;//7 rows
+    grid-template-columns: 
+    [gap]50px [main-center-left]320px [main-center-right]260px 
+    [gap]50px [tags]100px [gap]20px;//6 columns
+    grid-template-rows: 
+    [page-title]50px [buttons]50px [gap]20px
+    [etitle]50px [gap]20px [ebody]350px [gap]20px;//7 rows
     overflow-y: hidden;
+}
+
+.grid-container .main-container-blur  {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: 
+    [gap]50px [main-center-left]320px [main-center-right]260px 
+    [gap]50px [tags]100px [gap]20px;//6 columns
+    grid-template-rows: 
+    [page-title]50px [buttons]50px [gap]20px 
+    [etitle]50px [gap]20px [ebody]350px [gap]20px;//7 rows
+}
+//blur everything in .main-container-blur except edit-tags-popup
+.grid-container .main-container-blur > *:not(.edit-tags-popup) {
+
 }
 
 .heading {
@@ -227,16 +246,7 @@ table {
 
 }
 
-.grid-container .main-container-blur  {
-    grid-column: 2;
-    display: grid;
-    grid-template-columns: 50px 320px auto 50px 100px 20px;//6 columns
-    grid-template-rows: 50px 50px 20px 50px 20px 370px;//7 rows
-}
-//blur everything in .main-container-blur except edit-tags-popup
-.grid-container .main-container-blur > *:not(.edit-tags-popup) {
 
-}
 
 //popup table close btn
 .close-btn {
