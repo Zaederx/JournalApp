@@ -54,6 +54,13 @@ app.on('browser-window-focus',() => {
   loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
   windowJustOpened = true
   window.reload()//reloading the page will trigger 'password-reminder-?' in login.ts - making auth-dialog appear
+
+  //TODO //IMPORTANT -  (node:2139) UnhandledPromiseRejectionWarning: TypeError: Object has been destroyed
+   /* at IpcMainImpl.<anonymous> (/Users/zacharyishmael/Documents/GitHub/Electron/CV/JournalApp/js/main.js:96:16)
+    (node:2139) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 4)
+    enable navigation attempt:
+    declining to enable navigation...
+    */
 })
 
 
