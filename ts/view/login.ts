@@ -14,7 +14,10 @@ window.onload = () => {
 
 ipcRenderer.on('open-authentication-dialog', () => openAuthDialog())
 
-ipcRenderer.on('register-password-reminder', async () => {
+ipcRenderer.on('register-password-reminder', () => registerPasswordReminder())
+
+async function registerPasswordReminder() 
+{
     console.log('registering password reminder...')
     const message = 'Please go to settings to password protect your application. Otherwise please enter "disable reminder" and click ok to remove password reminder.'
     var response = prompt(message)
@@ -29,7 +32,7 @@ ipcRenderer.on('register-password-reminder', async () => {
         console.log(message2)
         //TODO - make sure to update program to not trigger reminder if 
     }
-})
+}
 
 //Function Defintions
 async function loadAuthDialog()
@@ -41,7 +44,12 @@ async function loadAuthDialog()
     document.querySelector('#auth-dialog')!.outerHTML = authDialog
 }
 
-async function login() 
+/**
+ * Used to login to the application.
+ * Once login button is clicked, password from contenteditable div
+ * is passed to the ipcRenderer on the login channel.
+ */
+async function clickLogin() 
 {
     //get password and send to be logged in
     var password = document.querySelector('#password') as HTMLDivElement
@@ -69,12 +77,27 @@ function openAuthDialog()
     authDialog.style.display = 'grid'
     //set btn_login
     const btn_login = document.querySelector('#login') as HTMLDivElement
-    btn_login.onclick = login
+    btn_login.onclick = clickLogin
     //blur background
     const main = document.querySelector('#main') as HTMLBodyElement
     blurBackground(main)
+    //add enter key listner
+    document.addEventListener('keydown', loginEnterListener)
 }
 
+function loginEnterListener(event: KeyboardEvent)
+{
+    var keyname = event.key
+    var keycode = event.code
+    console.log('keyname:'+keyname+', keycode:'+keycode)
+    if (keyname == 'Enter')
+    {
+        //prevent it from having caret movement - i.e. no text cursor movement down
+        event.preventDefault()
+        //login
+        clickLogin()
+    }
+}
 function closeAuthDialog()
 {
     //open authentication dialog
@@ -83,4 +106,6 @@ function closeAuthDialog()
     //blur background
     const main = document.querySelector('#main') as HTMLBodyElement
     unblurBackground(main)
+    //remove enter key listener
+    document.removeEventListener('keydown', loginEnterListener)
 }
