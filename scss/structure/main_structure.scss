@@ -180,14 +180,6 @@
     grid-row: 5 / span 2;
     text-align: center;
 }
-.edit-tags > th{
-    margin: auto;
-}
-
-.edit-tags > table{
-    width: 100%;
-    overflow-y: scroll;
-}
 
 .edit-tags-popup {
     display: none;
@@ -208,6 +200,9 @@
 
 }
 
+table {
+    width: -webkit-fill-available;
+}
 .table-row {
     cursor: pointer;
 }
@@ -223,6 +218,7 @@
 }
 
 .table-scroll-div {
+    height: 340px;
     overflow-y: scroll;
 }
 
