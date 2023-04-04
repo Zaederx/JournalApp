@@ -40,6 +40,7 @@
     grid-row: 1;
 }
 .buttons {
+    width: 750px;
     grid-column: 2;
     padding-top: 20px;
     cursor: pointer;
@@ -243,7 +244,6 @@
 
 .password-dialog {
     position: absolute;
-    top: 300px;
     left: 200px;
     top: 150px;
     width: 500px;
