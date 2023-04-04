@@ -12,9 +12,9 @@ window.onload = () => {
     })
 }
 
-ipcRenderer.on('open-authentication-dialog', () => openAuthDialog())
+ipcRenderer.on('open-authentication-dialog', openAuthDialog)
 
-ipcRenderer.on('register-password-reminder', () => registerPasswordReminder())
+ipcRenderer.on('register-password-reminder', registerPasswordReminder)
 
 async function registerPasswordReminder() 
 {
@@ -87,6 +87,7 @@ function openAuthDialog()
 
 function loginEnterListener(event: KeyboardEvent)
 {
+    console.log('function loginEnterLister called')
     var keyname = event.key
     var keycode = event.code
     console.log('keyname:'+keyname+', keycode:'+keycode)
@@ -100,6 +101,7 @@ function loginEnterListener(event: KeyboardEvent)
 }
 function closeAuthDialog()
 {
+    console.log('closing authentication dialog...')
     //open authentication dialog
     const authDialog = document.querySelector('#auth-dialog') as HTMLDivElement
     authDialog.style.display = 'none'
