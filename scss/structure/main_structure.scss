@@ -222,13 +222,13 @@
     padding: 15px;
 }
 
-.tag-table-body {
-    display: block;
-    height: 300px;
-    width: 320px;
+.table-scroll-div {
     overflow-y: scroll;
 }
 
+.tag-table-body {
+
+}
 
 .grid-container .main-container-blur  {
     grid-column: 2;
