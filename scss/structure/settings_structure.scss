@@ -116,6 +116,8 @@
 }
 
 .side-panel .entries {
+    position: relative;
+    height: 560px;
     grid-column: 2;
     padding-left: 10px;
     padding-bottom: 10px;
@@ -240,9 +242,12 @@
 }
 
 .password-dialog {
+    position: absolute;
+    top: 300px;
+    left: 200px;
+    top: 150px;
     width: 500px;
     height: 300px;
-    display: grid;
 }
   
 .password {
