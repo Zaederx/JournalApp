@@ -120,7 +120,7 @@ ipcMain.on('password-reminder-?', async (event)=> {
   {
     windowJustOpened = false
     printFormatted('green','Showing password reminder and enabling navigation.')
-    if (!passwordFileExists) { printFormatted('yellow','password file does not exist') }
+    if (!passwordExists) { printFormatted('yellow','password file does not exist') }
 
     printFormatted('white','sending reminder message')
     //enable login - they are effectively logged in if there is no password set up
@@ -135,7 +135,13 @@ ipcMain.on('password-reminder-?', async (event)=> {
   else if (settings['password-protection'] == 'false' && settings['password-reminder'] == 'false' && windowJustOpened) {
     printFormatted('green','Enabling navigation...')
     windowJustOpened = false
-    window.webContents.send('enable-navigation')
+    window.webContents.send('enable-navigation')//send message to nav.ts to enable
+  }
+  //if password does not exist and password protection is true - tampering has most likely occured - alert user and prompt to reset password via email
+  else if (!passwordExists && settings['password-protection'] == 'true')
+  {
+    //send message to reset password
+    //TODO //IMPORTANT - CREATE A RESET PASSWORD FIELD
   }
 })
 

@@ -251,9 +251,18 @@
 }
   
 .password {
+    -webkit-text-security: disc;
     text-align: center;
     margin: 20px;
     padding: 10px;
     padding-top: 30px;
     height: 50px;
+}
+
+.btn-login {
+    padding-top: 40px;
+    text-align: center;
+    display: inline;
+    margin: 10px;
+    cursor: pointer;
 }
