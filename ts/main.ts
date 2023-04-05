@@ -44,6 +44,22 @@ app.whenReady().then(async () => {
   window = await createWindow(window,integration)
 })
 
+app.on('window-all-closed', () => {
+  //quit completely even on darwin (mac) if it is a test
+  if (process.env.NODE_ENV === 'test') {
+    app.quit()
+  }
+  else if (process.platform !== 'darwin') {
+    app.quit()
+  }
+});
+
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow(window,integration);
+  }
+});
+
 /**
  * important in determining whether to present
  * password dialog
@@ -53,7 +69,11 @@ app.on('browser-window-focus',() => {
   printFormatted('blue','app.on("browser-window-focus") has been triggered')
   loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
   windowJustOpened = true
+
+  //if on mac - because x doesn't quit app - reload window to trigger password reminder again (which comes on page script load)
   window.reload()//reloading the page will trigger 'password-reminder-?' in login.ts - making auth-dialog appear
+
+  
 
   //TODO //IMPORTANT -  (node:2139) UnhandledPromiseRejectionWarning: TypeError: Object has been destroyed
    /* at IpcMainImpl.<anonymous> (/Users/zacharyishmael/Documents/GitHub/Electron/CV/JournalApp/js/main.js:96:16)
@@ -95,18 +115,27 @@ ipcMain.on('password-reminder-?', async (event)=> {
     printFormatted('green','opening authentication dialog...')
     window.webContents.send('open-authentication-dialog')
   }
-  //send reminder
+  //send reminder and enable navigation
   else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true' && windowJustOpened)
   {
+    windowJustOpened = false
+    printFormatted('green','Showing password reminder and enabling navigation.')
     if (!passwordFileExists) { printFormatted('yellow','password file does not exist') }
 
     printFormatted('white','sending reminder message')
     //enable login - they are effectively logged in if there is no password set up
     loggedIn.is = true
+
     printFormatted('green','loggedIn.is:'+loggedIn.is)
+    //show reminder
     window.webContents.send('register-password-reminder')
     console.log('enabling navigation...')
     window.webContents.send('enable-navigation')//send message to nav.ts to enable
+  }
+  else if (settings['password-protection'] == 'false' && settings['password-reminder'] == 'false' && windowJustOpened) {
+    printFormatted('green','Enabling navigation...')
+    windowJustOpened = false
+    window.webContents.send('enable-navigation')
   }
 })
 
@@ -141,22 +170,7 @@ ipcMain.handle('logout', () => {
   loggedIn.is = false
 })
 
-app.on('window-all-closed', () => {
-  //quit completely even on darwin (mac) if it is a test
-  if (process.env.NODE_ENV === 'test') {
-    app.quit()
-  }
-  else if (process.platform !== 'darwin') {
-    app.quit()
-  }
-});
 
-
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow(window,integration);
-  }
-});
 
 
 //SECTION Display HTML Views

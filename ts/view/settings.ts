@@ -57,7 +57,7 @@ function activateButton(button:HTMLButtonElement, theme:string)
 
 //SECTION Toggle Password Protection
 //declare html element constants
-window.onload = () => checkUpdateSwitchStatus()
+checkUpdateSwitchStatus()
 const btn_no_password = document.querySelector('#no-password') as HTMLDivElement
 const btn_password_protection = document.querySelector('#password-protection') as HTMLDivElement
 const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;

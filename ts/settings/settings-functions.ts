@@ -55,8 +55,6 @@ export async function retrieveSettingsJson(jsonStr:boolean):Promise<string|any>
   try 
   {
     var settingsJson:string = await fs.promises.readFile(dirs.settingsFile, 'utf-8')
-    
-    console.log('settingsJson:'+settingsJson)
     if (jsonStr) { return settingsJson }
     else { return JSON.parse(settingsJson) }//return an object
   }
