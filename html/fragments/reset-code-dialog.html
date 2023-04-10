@@ -1,0 +1,40 @@
+<div id="reset-code-dialog" class="dialog">
+    <div id="reset-code-div" contenteditable="true" class="editable reset-code">
+
+    </div>
+    <input id="reset-code-checkbox" type="checkbox">
+
+    <div id="enter-code" class="button">Enter Code</div>
+</div>
+<script>//for checkbox hide and display reset code
+    var checkbox  = document.querySelector('#reset-code-checkbox')
+    
+    checkbox.onchange = toggleCodeVisibility
+
+    function toggleCodeVisibility()
+    {
+        //if checked = uncheck
+        if(checkbox.checked) 
+        {
+            checkbox.checked = false
+            hidePassword()
+        }
+        else 
+        {
+            checkbox.checked = true
+            showPassword()
+        }
+    }
+
+    function hidePassword()
+    {
+        const resetCodeDiv = document.querySelector('#reset-code-div')
+        resetCodeDiv.classList.add('password')
+    }
+
+    function showPassword()
+    {
+        const resetCodeDiv = document.querySelector('#reset-code-div')
+        resetCodeDiv.classList.remove('password')
+    }
+</script>
