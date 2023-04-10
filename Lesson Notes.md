@@ -285,3 +285,10 @@ Inside the script, I don't use `window.onload`
 
 ## Promises do not mix well with for loops
 I had a case where the `for` loop was incrementing inside the promise `then` statement. Weird stuff. Just important to note again. Be careful when you are using promises inside of loops. Undefined behaviour, not just for `forEach`.
+
+## Sending mail in Node.js - Nodemailer
+See [link](https://mailtrap.io/blog/sending-emails-with-nodemailer/)
+
+
+## Make elements wait for click to return data - using promises
+see [link](https://www.gimtec.io/articles/convert-on-click-to-promise/)
