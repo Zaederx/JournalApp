@@ -174,8 +174,12 @@ $side-panel: rgb(103, 106, 111);
     color:white;
 }
 
-.password-dialog {
+.dialog {
     background-color: $side-panel;
+}
+
+.email {
+    background-color: $body;
 }
 
 .password {

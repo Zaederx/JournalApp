@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, OpenDialogReturnValue } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, IpcMainEvent, OpenDialogReturnValue } from 'electron';
 import paths from 'path'
 import fs from 'fs'
 import * as dirs from './directory'
@@ -14,26 +14,33 @@ import * as tCreate from './tag/crud/t-create'
 import * as tRead from './tag/crud/t-read'
 import * as tUpdate from './tag/crud/t-update'
 import * as tDelete from './tag/crud/t-delete'
-//Password
-import * as pCrud from './security/password-crud'
+//Password & Security
+import * as authCrud from './security/auth-crud'
+import { v4 as uuidv4 } from 'uuid'
+//emailing
+import nodemailer from 'nodemailer'
 //Other
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
-import EntryDate from './classes/entry-date';
 import { appendEntriesAndTags } from './view/display/append-entries-tags'
 import c_process from 'child_process'
-import { passwordFileExists } from './security/password-crud';
+import { passwordFileExists } from './security/auth-crud';
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
-import pathsForWDIO from './other/paths-for-wdio'
 import { retrieveSettingsJson as retrieveSettings, saveSettingsJson } from './settings/settings-functions'
 import { settings } from './settings/settings-type';
 import { printFormatted } from './other/stringFormatting'
 import { createAllTagDirectory } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
+import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-email'
+import { IpcMainInvokeEvent } from 'electron/main';
+
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system)
 //TODO - option to store file in iCloud
 //TODO - SEND AND EMAIL IN NODE.JS - temporary password for login recovery
+
+//NOTE - `ipcMain.handle` works with `ipcRenderer.invoke`
+// `on` (from ipcMain, ipcRenderer and window.webContents) works with `send` (from ipcMain `event.reply`, ipcRenderer and window.webContents)
 
 let window: BrowserWindow;
 
@@ -54,9 +61,13 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('activate', () => {
+/**
+ * This is need for window to be reopened once closed. (as mac app hang on the dock when closed, waiting to be reopened - from my understanding)
+ * "Emitted when the application is activated. Various actions can trigger this event, such as launching the application for the first time, attempting to re-launch the application when it's already running, or clicking on the application's dock or taskbar icon." - electronjs.org
+ */
+app.on('activate', async () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow(window,integration);
+    window = await createWindow(window,integration);
   }
 });
 
@@ -68,10 +79,11 @@ var windowJustOpened = false
 app.on('browser-window-focus',() => {
   printFormatted('blue','app.on("browser-window-focus") has been triggered')
   loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
-  windowJustOpened = true
 
+
+ 
   //if on mac - because x doesn't quit app - reload window to trigger password reminder again (which comes on page script load)
-  window.reload()//reloading the page will trigger 'password-reminder-?' in login.ts - making auth-dialog appear
+  // window.reload()//reloading the page will trigger 'password-reminder-?' in login.ts - making auth-dialog appear
 
   
 
@@ -83,7 +95,9 @@ app.on('browser-window-focus',() => {
     */
 })
 
+// app.on('window-close-', () => {
 
+// })
 
 
 /**
@@ -93,74 +107,10 @@ app.on('browser-window-focus',() => {
 ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event))
 
   
-  //waits for event from create-entry.ts
-ipcMain.on('password-reminder-?', async (event)=> {
-  printFormatted('blue','password-reminder-? triggered')
-  const passwordExists = await passwordFileExists()
-  const jsonStr = false
-  const settings:settings = await retrieveSettings(jsonStr)
-
-  console.log('passwordExists:'+passwordExists) 
-  console.log('settings:')
-  console.log(settings)
-  console.log('loggedIn.is:'+loggedIn.is)
-  console.log('windowJustOpened:'+windowJustOpened) 
-
-  //open authentication dialog
-  if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false && windowJustOpened)
-  {
-    windowJustOpened = false
-    printFormatted('green','password file exists')
-    printFormatted('green','password protection is set to true')
-    printFormatted('green','opening authentication dialog...')
-    window.webContents.send('open-authentication-dialog')
-  }
-  //send reminder and enable navigation
-  else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true' && windowJustOpened)
-  {
-    windowJustOpened = false
-    printFormatted('green','Showing password reminder and enabling navigation.')
-    if (!passwordExists) { printFormatted('yellow','password file does not exist') }
-
-    printFormatted('white','sending reminder message')
-    //enable login - they are effectively logged in if there is no password set up
-    loggedIn.is = true
-
-    printFormatted('green','loggedIn.is:'+loggedIn.is)
-    //show reminder
-    window.webContents.send('register-password-reminder')
-    console.log('enabling navigation...')
-    window.webContents.send('enable-navigation')//send message to nav.ts to enable
-  }
-  else if (settings['password-protection'] == 'false' && settings['password-reminder'] == 'false' && windowJustOpened) {
-    printFormatted('green','Enabling navigation...')
-    windowJustOpened = false
-    window.webContents.send('enable-navigation')//send message to nav.ts to enable
-  }
-  //if password does not exist and password protection is true - tampering has most likely occured - alert user and prompt to reset password via email
-  else if (!passwordExists && settings['password-protection'] == 'true')
-  {
-    //send message to reset password
-    //TODO //IMPORTANT - CREATE A RESET PASSWORD FIELD
-  }
-})
-
-ipcMain.on('enable-navigation-?', (event) => {
-  console.log('enable navigation attempt:')
-  if(loggedIn.is == true) {
-    printFormatted('green','enabling navigation...')
-    event.reply('enable-navigation')
-  }
-  else
-  {
-    printFormatted('red','declining to enable navigation...')
-  }
-})
-
 var loggedIn = {is:false}
 ipcMain.handle('login', async (event, password) => {
   //authenticate password
-  var authenticated = await pCrud.functionAutheticatePassword(password)
+  var authenticated = await authCrud.autheticatePassword(password)
   if (authenticated) 
   {
     loggedIn.is = true
@@ -175,6 +125,137 @@ ipcMain.handle('login', async (event, password) => {
 ipcMain.handle('logout', () => {
   loggedIn.is = false
 })
+
+  //waits for event from create-entry.ts
+ipcMain.on('password-reminder-?', async (event, inDialog:'true'|'false')=> {
+  printFormatted('blue','password-reminder-? triggered')
+  const passwordExists = await passwordFileExists()
+  const jsonStr = false
+  const settings:settings = await retrieveSettings(jsonStr)
+
+  printFormatted('green','settings:',settings)
+  //print passwordExists
+  if (passwordExists) printFormatted('green','passwordExists:',passwordExists) 
+  else printFormatted('red','passwordExists:',passwordExists)
+  //print loggedIn.is
+  if (loggedIn.is)printFormatted('green','loggedIn.is:',loggedIn.is)
+  else printFormatted('red','loggedIn.is:',loggedIn.is)
+  //print windowJustOpened
+  if (windowJustOpened) printFormatted('green','windowJustOpened:',windowJustOpened)
+  else printFormatted('red','windowJustOpened:',windowJustOpened)
+
+  //open authentication dialog
+  if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false)
+  {
+    printFormatted('green','password file exists')
+    printFormatted('green','password protection is set to true')
+    printFormatted('green','opening authentication dialog...')
+    windowJustOpened = false
+    event.reply('open-authentication-dialog')
+  }
+  //send reminder and enable navigation
+  else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true')
+  {
+    loggedIn.is = true//enable login - they are effectively logged in if there is no password set up
+    
+    if (!passwordExists) 
+    {
+      printFormatted('yellow','password file does not exist') 
+    }
+    printFormatted('green','loggedIn.is:'+loggedIn.is)
+    printFormatted('green','Showing password reminder and enabling navigation.')
+    
+    //show reminder
+    event.reply('register-password-reminder')
+    event.reply('enable-navigation')//send message to nav.ts to enable
+  }
+  //enable navigation without sending a reminder
+  else if (settings['password-protection'] == 'false' && settings['password-reminder'] == 'false') {
+    printFormatted('green','Enabling navigation...')
+    windowJustOpened = false
+    event.reply('enable-navigation')//send message to nav.ts to enable
+  }
+  //if password does not exist and password protection is true - tampering has most likely occured - alert user and prompt to reset password via email
+  else if (!passwordExists && settings['password-protection'] == 'true')
+  {
+    //alert user to problem and that they will receive an email with a reset code
+    const message = 'Password file is missing.\n This could be the sign of something malicious.\n Please reset your password by entering you email address you gave upon registration.\n An email will be sent. Be sure to check your bin or spam folder just in case you do not find the mail in your inbox.'
+
+    
+
+    printFormatted('yellow', 'Alerting user of missing password file and reset mesaures.')
+    event.reply('open-reset-password-confirm-prompt',message)
+  }
+})
+
+
+//SECTION - Reset Password - 3 parts
+//1) check the email matches and send reset code
+ipcMain.on('send-reset-password-email', async (event, email) => {
+  printFormatted('blue', 'ipcMain.on(send-reset-password-email)')
+  const message = 'Email does not match stored email.\nPlease enter the email used for this application.'
+  //if email matches stored email hash
+  const emailAuthenticated = await authCrud.autheticateEmail(email)
+  //send email with reset code to user email
+  if (emailAuthenticated)
+  {
+    //uuidv4 code & hash the code
+    var code = uuidv4()
+    var codeHash = authCrud.hash(code)
+    //store reset codeHash
+    const message = await authCrud.storeResetCodeHash(codeHash)
+    if (message == undefined) 
+    {
+      printFormatted('red', 'Code was not stored successfully')
+    }
+    else if (message == true)
+    {
+      printFormatted('green', 'Code stored successfully.')
+      printFormatted('green', 'Sending reset password email to user...')
+      //send email with reset code (unhashed)
+      sendResetPasswordEmail(email,code)
+      //open reset code dialog - for them to input the code they recieved in email
+      event.reply('open-reset-code-dialog')
+    }
+  }
+  else//send them back to step 1) the form to input their email to be checked
+  {
+    printFormatted('green', 'Email did not match stored email.')
+    event.reply('reset-password-confirm-prompt', message)
+  }
+})
+
+//2 do codes match
+ipcMain.on('does-reset-code-match-?', resetCodeMatches)
+
+async function resetCodeMatches(event:IpcMainEvent,resetCode:string)
+{
+  var codesMatch = await authCrud.autheticateResetCode(resetCode)
+  if(codesMatch)
+  {//progress to step 3 - open the email password dailog box
+    event.reply('open-email-password-dialog')
+  }
+  else
+  {//go back to step 2 - open the reset code dialog
+    event.reply('open-reset-code-dialog')
+  }
+}
+
+
+
+ipcMain.on('enable-navigation-?', (event) => {
+  printFormatted('blue', 'ipcMain.on("enable-navigation-?" fired')
+  printFormatted('white','enable navigation attempt:')
+  if(loggedIn.is == true) {
+    printFormatted('green','enabling navigation...')
+    event.reply('enable-navigation')
+  }
+  else
+  {
+    printFormatted('red','declining to enable navigation...')
+  }
+})
+
 
 
 
@@ -386,22 +467,43 @@ ipcMain.handle('export-entries-pdf', async () => {
 })
 // ipcMain.handle('show-open-dialog')
 
-ipcMain.handle('register-password', (event, password1, password2) => {
-  if(password1 == password2) {
-    try {
-      //hash password
-      var passwordHash = pCrud.hashPassword(password1)
-      //store password hash
-      const message = pCrud.storePasswordHash(dirs.secureFolder,passwordHash)
-      return message
-    } catch (error) {
-      console.log(error)
+ipcMain.handle('register-email-password', async (event, email, password1, password2) => {
+  var response = {emailHashStored:false, passwordHashStored:false, error:''}
+  if(email && password1 == password2) 
+  {
+    try 
+    {
+      //hash email and password
+      var emailHash = authCrud.hash(email)
+      var passwordHash = authCrud.hash(password1)
+
+      //send email to verify address
+      var code = uuidv4()
+
+      sendVerificationEmail(email, code)
+
+      //store email and password hashes
+      const emailHashStored = await authCrud.storeEmailHash(emailHash)
+      const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
+      return response = {emailHashStored, passwordHashStored, error:''}
+    } 
+    catch (error:any) 
+    {
+      printFormatted('red',error.message)
+      return {error:error.message}
     }
   }
-  else 
-  {
-    return 'Passwords do not match'
+  if (!email) 
+  { 
+    response.emailHashStored = false
+    response.error = 'Email not present'
   }
+  if (!(password1 == password2)) 
+  { 
+    response.passwordHashStored = false
+    response.error += 'Passwords do not match.' 
+  }
+  return response
 })
 
 //SECTION - SETTINGS 
@@ -418,4 +520,16 @@ ipcMain.handle('set-settings-json', async (event, settingsJsonStr) => {
   console.log(settings)//on separate console log line so that it prints the object contents
   var message = await saveSettingsJson(settings)
   return message
+})
+
+ipcMain.handle('email-stored-boolean', async () => {
+  var emailHashStored:string|undefined = await authCrud.retrieveEmailHash()
+  if(emailHashStored) 
+  {
+    return true
+  }
+  else 
+  {
+    return false
+  }
 })

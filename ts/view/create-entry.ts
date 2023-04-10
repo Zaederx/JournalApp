@@ -1,7 +1,6 @@
 import clickCreateEntryBtn from './create-entry/clickCreateEntryBtn'
 import toggleTagPopup from "./create-entry/tagPopup";
 import { addSelectedTagsToEntry, removeSelectedTags } from "./clickable-filter-table/table";
-import Entry from "../classes/entry"
 
 
 console.log('create-entry.js onload called...')
@@ -10,7 +9,7 @@ const body = document.querySelector('#entry-body') as HTMLDivElement
 const tags = document.querySelector('#entry-tags') as HTMLDivElement
 //Temp
 
-/** Create and Add Tgas buttons */
+/** Create and Add Tags buttons */
 const btn_create_entry = document.querySelector('#create-entry') as HTMLDivElement
 //for the 'Add Tags' btn
 const btn_open_tags_popup = document.querySelector('#btn-add-tags') as HTMLDivElement

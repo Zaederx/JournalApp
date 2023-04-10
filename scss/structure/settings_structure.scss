@@ -242,14 +242,23 @@
     padding: 15px;
 }
 
-.password-dialog {
+.dialog {
+    width: 500px;
+    height: 600px;
+    display: hidden;
     position: absolute;
     left: 200px;
     top: 150px;
-    width: 500px;
-    height: 300px;
 }
-  
+
+.email {
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+    padding-top: 30px;
+    height: 50px;
+}
+
 .password {
     -webkit-text-security: disc;
     text-align: center;
@@ -258,6 +267,7 @@
     padding-top: 30px;
     height: 50px;
 }
+
 
 .btn-login {
     padding-top: 40px;

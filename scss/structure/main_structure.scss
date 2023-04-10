@@ -58,6 +58,7 @@
     grid-column: 2 / span 2;
     grid-row: 1;
 }
+
 .buttons {
     grid-column: 2 / span 2;
     grid-row: 2;
@@ -76,9 +77,10 @@
 }
 
 .button {
+    height: 40px;
     text-align: center;
     display: inline;
-    padding: 10px;
+    padding-top: 20px;
     margin: 10px;
     cursor: pointer;
     z-index: 3;
@@ -246,8 +248,6 @@ table {
 
 }
 
-
-
 //popup table close btn
 .close-btn {
     font-size: larger;
@@ -260,15 +260,36 @@ table {
 .close-btn:hover{
 }
 
-
-
-.password-dialog {
+.dialog {
     width: 500px;
-    height: 300px;
-    display: grid;
+    height: 400px;
+    display: hidden;
     position: absolute;
     left: 200px;
     top: 150px;
+}
+
+.message {
+    text-align: left;
+    margin: 20px;
+    height: 120px;
+    overflow: hidden;
+}
+
+.email {
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+    padding-top: 30px;
+    height: 50px;
+}
+
+.reset-code {
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+    padding-top: 30px;
+    height: 50px;
 }
 
 .password {
@@ -279,6 +300,7 @@ table {
     padding-top: 30px;
     height: 50px;
 }
+
 
 .btn-login {
     padding-top: 40px;

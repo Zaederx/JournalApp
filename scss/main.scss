@@ -153,10 +153,12 @@ $before-text-color: rgb(109, 109, 109);
     background-color: white;
 }
 
-
-
-.password-dialog {
+.dialog {
     background-color: $main;
+}
+
+.email {
+    background-color: $body;
 }
 
 .password {

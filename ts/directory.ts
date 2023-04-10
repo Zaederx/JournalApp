@@ -19,19 +19,21 @@ const currentEntryDir = paths.join(app.getPath('userData'), 'tagDirs', 'current-
  */
 const downloads = paths.join(app.getPath('downloads'))
 
-
-
 /**
  * A folder called 'secure' where security data is sotred for the app
  */
 const secureFolder = paths.join(app.getPath('userData'),'secure')
 
+const verificationCodeHash = paths.join(app.getPath('userData'), 'secure', 'verification-code.txt')
+const resetCodeHash = paths.join(app.getPath('userData'), 'secure', 'reset-code.txt')
+
 /**
  * Path to password hash
  */
-const passwordHash = paths.join(app.getPath('userData'),'secure', 'password.txt')
+const passwordHash = paths.join(app.getPath('userData'), 'secure', 'password.txt')
 
 
+const emailHash = paths.join(app.getPath('userData'), 'secure', 'email.txt')
 /**
  * Folder that contains the settings json file
  */
@@ -50,5 +52,5 @@ const settingsFile = paths.join(app.getPath('userData'), 'settings', 'settings.j
  */
 const themeFilepath = paths.join('css', 'theme.txt')
 
-export { allEntries, tagDirectory, currentEntryDir, downloads, secureFolder, passwordHash, settingsFolder, settingsFile, themeFilepath }
+export { allEntries, tagDirectory, currentEntryDir, downloads, secureFolder, verificationCodeHash, resetCodeHash, passwordHash, emailHash, settingsFolder, settingsFile, themeFilepath }
 

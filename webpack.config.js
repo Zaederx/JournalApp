@@ -17,7 +17,7 @@ module.exports = {
         'edit-tags': './ts/view/edit-tags.ts',
         'view-entry': './ts/view/view-entry.ts',
         'load-themes': './ts/view/load-themes.ts',
-        register: './ts/view/register.ts',
+        'register': './ts/view/register.ts',
         settings: './ts/view/settings.ts',
         export: './ts/view/export.ts',
         login: './ts/view/login.ts',

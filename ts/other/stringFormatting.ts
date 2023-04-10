@@ -35,7 +35,7 @@ function stringFormatting(colour:colour, args:number)
  * @param colour a colour to be used for the ouput (one of six to choose from)
  * @param args an indeterminate amount of string arguments
  */
-export function printFormatted(colour:colour, ...args:string[]) {
+export function printFormatted(colour:colour, ...args:any[]) {
     const formatting = stringFormatting(colour, args.length)
     console.log(formatting,...args)
 }

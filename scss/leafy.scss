@@ -181,8 +181,12 @@ $before-text-color: rgb(109, 109, 109);
     color:black;
 }
 
-.password-dialog {
+.dialog {
     background-color: $side-panel;
+}
+
+.email {
+    background-color: $body;
 }
 
 .password {

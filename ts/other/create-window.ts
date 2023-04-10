@@ -3,7 +3,6 @@ import pathsForWDIO from './paths-for-wdio'
 export default async function createWindow(window:BrowserWindow, integration:boolean) {
 
     if (process.env.NODE_ENV === 'test-main') {
-      integration = true;
       //produce paths for wdio
       pathsForWDIO()
     }
