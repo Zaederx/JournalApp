@@ -213,6 +213,7 @@ ipcMain.on('password-reminder-?', async (event, inDialog:'true'|'false')=> {
   else if (settings['password-protection'] == 'false' && settings['password-reminder'] == 'false') {
     printFormatted('green','Enabling navigation...')
     windowJustOpened = false
+    loggedIn.is = true
     event.reply('enable-navigation')//send message to nav.ts to enable
   }
   //if password does not exist and password protection is true - tampering has most likely occured - alert user and prompt to reset password via email
