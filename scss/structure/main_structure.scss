@@ -263,7 +263,7 @@ table {
 .dialog {
     width: 500px;
     height: 400px;
-    display: hidden;
+    display: grid;
     position: absolute;
     left: 200px;
     top: 150px;

@@ -46,7 +46,7 @@ export async function sendResetPasswordEmail(recipientEmail:string, resetCode:st
     'Thank you for using The Journal App.\n'+
     'Please use this code to login and reset your password.\n'+
     'Code for logging in:'+resetCode,
-    html:html+'\n<p>Code for verifying email:'+resetCode+'</p>'
+    html:html+'\n<p>Code for reseting password:'+resetCode+'</p>'
   }
   let transporter = nodemailer.createTransport(transport)
 
@@ -87,7 +87,7 @@ export async function sendVerificationEmail(recipientEmail:string, verificationC
   try 
   {
     const response =  await transporter.sendMail(mailOptions)
-    printFormatted('green', 'Email sent successfully:'+response)
+    printFormatted('green', 'Email sent successfully:'+response.response)
   } catch (error:any) 
   {
     printFormatted('red', error.message)

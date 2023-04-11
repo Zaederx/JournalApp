@@ -80,13 +80,14 @@ export function storePasswordHash(passwordHash:string)
  * Function fo retrieveing file contents.
  * @param filepath filepath of the file you wish to get contents from.
  */
-async function retrieve(filepath:string)
+async function retrieve(filepath:string):Promise<string|undefined>
 {
   try {
     const passwordHash = await fs.promises.readFile(filepath, 'utf-8')
     return passwordHash
    } catch (error:any) {
      printFormatted('red', error.message)
+     return undefined
    }
 }
 /**

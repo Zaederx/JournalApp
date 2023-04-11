@@ -292,3 +292,9 @@ See [link](https://mailtrap.io/blog/sending-emails-with-nodemailer/)
 
 ## Make elements wait for click to return data - using promises
 see [link](https://www.gimtec.io/articles/convert-on-click-to-promise/)
+
+## Make app quit gracefully on Control + C (Ctrl+C)
+see link [github electron issue on the topic](https://github.com/electron/electron/issues/5273)
+
+## How to access local storage from main in electron app
+see [stackoverflow](https://stackoverflow.com/questions/50205905/is-it-possible-to-access-and-read-localstorage-for-an-electron-application)

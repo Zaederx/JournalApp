@@ -1,13 +1,10 @@
 import { BrowserWindow } from 'electron'
 import pathsForWDIO from './paths-for-wdio'
-export default async function createWindow(window:BrowserWindow, integration:boolean) {
+export default async function createWindow(integration:boolean) {
 
-    if (process.env.NODE_ENV === 'test-main') {
-      //produce paths for wdio
-      pathsForWDIO()
-    }
+    
   
-    window = new BrowserWindow
+    var window = new BrowserWindow
       ({
         width: 921,
         height: 600,
@@ -26,10 +23,14 @@ export default async function createWindow(window:BrowserWindow, integration:boo
   
     window.loadFile('html/create-entry.html');
   
-    
+    await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")')
   
-    if (process.env.NODE_ENV === 'dev-tools') {
+    if (process.env.NODE_ENV === 'test-main') {
+      //produce paths for wdio
       window.webContents.openDevTools();
+      pathsForWDIO()
     }
+      
+    
     return window
   }

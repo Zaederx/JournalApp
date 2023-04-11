@@ -7,6 +7,7 @@ import { setPasswordProtection } from './switch/switch';
 import { type settings } from '../settings/settings-type';
 import * as fragments from './fragments/load-fragments'
 
+
 var checkedStatus = checkUpdateSwitchStatus()//don't use `window.onload` - because script uses `defer`
 
 checkedStatus.then(enableSwitch)
@@ -44,7 +45,7 @@ async function uncheckSwitch()
 
 async function checkSwitch() 
 {
-    const loadEPDialog = loadEmailPasswordDialog()
+    const loadEPDialog = fragments.loadEmailPasswordDialog()
 
     loadEPDialog.then(() => 
     {
@@ -71,14 +72,6 @@ async function checkSwitch()
             }
         })
     })
-}
-
-
-async function loadEmailPasswordDialog()
-{
-    //load password dialog - fetching it from files
-    const passwordDialog = await (await fetch('./fragments/password-dialog.html')).text()
-    document.querySelector('#password-dialog')!.outerHTML = passwordDialog
 }
 
 

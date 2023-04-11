@@ -23,6 +23,7 @@ import nodemailer from 'nodemailer'
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
 import { appendEntriesAndTags } from './view/display/append-entries-tags'
+import process from 'process'
 import c_process from 'child_process'
 import { passwordFileExists } from './security/auth-crud';
 import Entry from './classes/entry';
@@ -33,7 +34,6 @@ import { printFormatted } from './other/stringFormatting'
 import { createAllTagDirectory } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
 import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-email'
-import { IpcMainInvokeEvent } from 'electron/main';
 
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system)
 //TODO - option to store file in iCloud
@@ -48,15 +48,21 @@ var integration = false;
 
 app.whenReady().then(async () => { 
   createAllTagDirectory()
-  window = await createWindow(window,integration)
+  window = await createWindow(integration)
+  
 })
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async() => {
   //quit completely even on darwin (mac) if it is a test
   if (process.env.NODE_ENV === 'test') {
-    app.quit()
+    await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
+    //quit app when done setting the value of inDialog on frontend
+    ipcMain.on('set-inDialog-done', () => {
+      app.quit()
+    })
   }
   else if (process.platform !== 'darwin') {
+    await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
     app.quit()
   }
 });
@@ -67,9 +73,42 @@ app.on('window-all-closed', () => {
  */
 app.on('activate', async () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    window = await createWindow(window,integration);
+    window = await createWindow(integration);
+    await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
   }
 });
+
+
+/**
+ * before quit 
+ */
+app.on('before-quit', async() => {
+  printFormatted('blue', 'event bofore-quit was fired')
+  await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
+  process.exit(0)
+  // printFormatted('blue', 'event SIGINT was fired')
+  // window.webContents.send('set-inDialog','false')
+  // var done = new Promise(async(resolve) => {
+  //   ipcMain.on('set-inDialog-done', async() => {
+  //     resolve('done')
+  //   })
+  // })
+  // done.then((res) => {
+  //   printFormatted('green','response:',res)
+  // })
+  
+})
+
+/**For Windows
+ * Activated if the app closes suddenly without
+ * quitting properly. i.e. control + c being pressed in terminal
+ * or force quit.
+ */
+process.on('SIGINT', async () => {
+  printFormatted('blue', 'event SIGINT was fired')
+  await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
+  process.exit(0)
+})
 
 /**
  * important in determining whether to present
@@ -147,11 +186,12 @@ ipcMain.on('password-reminder-?', async (event, inDialog:'true'|'false')=> {
   //open authentication dialog
   if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false)
   {
+    
     printFormatted('green','password file exists')
     printFormatted('green','password protection is set to true')
     printFormatted('green','opening authentication dialog...')
     windowJustOpened = false
-    event.reply('open-authentication-dialog')
+    event.reply('open-login-dialog')
   }
   //send reminder and enable navigation
   else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true')
@@ -162,8 +202,8 @@ ipcMain.on('password-reminder-?', async (event, inDialog:'true'|'false')=> {
     {
       printFormatted('yellow','password file does not exist') 
     }
-    printFormatted('green','loggedIn.is:'+loggedIn.is)
-    printFormatted('green','Showing password reminder and enabling navigation.')
+    printFormatted('green','loggedIn.is now set to:'+loggedIn.is)
+    printFormatted('green','Showing password reminder and enabling navigation...')
     
     //show reminder
     event.reply('register-password-reminder')
@@ -199,24 +239,27 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
   //send email with reset code to user email
   if (emailAuthenticated)
   {
-    //uuidv4 code & hash the code
-    var code = uuidv4()
-    var codeHash = authCrud.hash(code)
-    //store reset codeHash
-    const message = await authCrud.storeResetCodeHash(codeHash)
-    if (message == undefined) 
-    {
-      printFormatted('red', 'Code was not stored successfully')
-    }
-    else if (message == true)
-    {
-      printFormatted('green', 'Code stored successfully.')
-      printFormatted('green', 'Sending reset password email to user...')
-      //send email with reset code (unhashed)
-      sendResetPasswordEmail(email,code)
-      //open reset code dialog - for them to input the code they recieved in email
-      event.reply('open-reset-code-dialog')
-    }
+    //uuidv4 code & hash the code//IMPORTANT UNCOMMENT CODE
+    // var code = uuidv4()//IMPORTANT UNCOMMENT CODE
+    // var codeHash = authCrud.hash(code)//IMPORTANT UNCOMMENT CODE
+    // //store reset codeHash//IMPORTANT UNCOMMENT CODE
+    // const message = await authCrud.storeResetCodeHash(codeHash)//IMPORTANT UNCOMMENT CODE
+    // if (message == undefined) 
+    // {
+    //   printFormatted('red', 'Code was not stored successfully')
+    // }
+    // else if (message == true)
+    // {
+    //   printFormatted('green', 'Code stored successfully.')
+    //   printFormatted('green', 'Sending reset password email to user...')
+    //   //send email with reset code (unhashed)
+    //   sendResetPasswordEmail(email,code)//IMPORTANT uncomment later - commented for testing purposes
+    //   
+    //   //open reset code dialog - for them to input the code they recieved in email
+    //   event.reply('open-reset-code-dialog')
+    // }
+    printFormatted('yellow', 'Assume email is sent...mock... delete this message later.')
+    event.reply('open-reset-code-dialog')//IMPORTANT - DELETE LATER
   }
   else//send them back to step 1) the form to input their email to be checked
   {
@@ -226,17 +269,23 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
 })
 
 //2 do codes match
-ipcMain.on('does-reset-code-match-?', resetCodeMatches)
+ipcMain.on('does-reset-code-match-?', doesRestCodeMatch)
 
-async function resetCodeMatches(event:IpcMainEvent,resetCode:string)
+async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
 {
+  printFormatted('blue', 'does-reset-code-match listener fired')
   var codesMatch = await authCrud.autheticateResetCode(resetCode)
+  printFormatted('white', 'do reset codes match...')
   if(codesMatch)
-  {//progress to step 3 - open the email password dailog box
+  {
+    printFormatted('green', 'Yes. code given matches stored code.')
+    //progress to step 3 - open the email password dailog box
     event.reply('open-email-password-dialog')
   }
   else
-  {//go back to step 2 - open the reset code dialog
+  {
+    printFormatted('red', 'No. code given does not match stored code.')
+    //go back to step 2 - open the reset code dialog
     event.reply('open-reset-code-dialog')
   }
 }
@@ -508,21 +557,23 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
 
 //SECTION - SETTINGS 
 ipcMain.handle('get-settings-json', async (event)=> {
+  printFormatted('blue', 'get-settings-json called')
   const jsonStr = true
   var settingsJson = await retrieveSettings(jsonStr) as string
-  console.log('retrieving setting:'+ settingsJson)
+  printFormatted('green','retrieved settings:',settingsJson)
   return settingsJson
 })
 
 ipcMain.handle('set-settings-json', async (event, settingsJsonStr) => {
+  printFormatted('blue', 'set-settings-json called')
   const settings = JSON.parse(settingsJsonStr)
-  console.log('saving setting:')
-  console.log(settings)//on separate console log line so that it prints the object contents
+  printFormatted('green','saving settings:',settings)
   var message = await saveSettingsJson(settings)
   return message
 })
 
 ipcMain.handle('email-stored-boolean', async () => {
+  printFormatted('blue', 'email-stored-boolean called/fired')
   var emailHashStored:string|undefined = await authCrud.retrieveEmailHash()
   if(emailHashStored) 
   {
