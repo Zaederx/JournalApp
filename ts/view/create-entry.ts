@@ -1,6 +1,7 @@
 import clickCreateEntryBtn from './create-entry/clickCreateEntryBtn'
 import toggleTagPopup from "./create-entry/tagPopup";
 import { addSelectedTagsToEntry, removeSelectedTags } from "./clickable-filter-table/table";
+import { loadTagsPopup } from './fragments/load-fragments';
 
 
 console.log('create-entry.js onload called...')
@@ -45,13 +46,7 @@ promise.then(() => {
 
 
 
-async function loadTagsPopup()
-{
-    console.log('loadTagsPopup called...')
-    //load tags popup
-    const tags_popup = await (await fetch('./fragments/tags-popup.html')).text()
-    document.querySelector('#tags-popup')!.outerHTML = tags_popup
-}
+
  
 
  

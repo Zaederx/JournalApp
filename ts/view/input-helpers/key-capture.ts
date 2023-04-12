@@ -1,14 +1,61 @@
-function deleteKeyStrokes(event:KeyboardEvent)
+import { printFormatted } from '../../other/stringFormatting'
+export type keystrokes = {keys:string}
+
+
+/**
+ * Listener for `paste` events for pasting from clipboard.
+ * It makes sure that pasting does not contain styling.
+ * @param event keyboard event
+ */
+export function pasteWithoutStyle(event:any)
 {
-    const passwordField = document.querySelector('#password') as HTMLDivElement
+    console.warn('function pasteWithoutStyle called')
+    console.log('typeof e:',typeof event)
+    
+    if (event.clipboardData && event.clipboardData.getData) {
+        event.target.textContent = event.clipboardData.getData('text/plain')
+        // event.preventDefault()
+    }
+}
+
+/**
+ * Captures keystrokes in a keystrokes object.
+ * Type keystrokes used so that the variable could be declared constant
+ * and not be accidentally overwritten/redeclared.
+ * @param event `keypress` events
+ * @param keystrokes 
+ */
+export function captureKeystrokes(event:KeyboardEvent, keystrokes:keystrokes)
+{
+    printFormatted('blue', 'function captureKeystrokes called')
+    var keyname = event.key
+    // var keycode = event.code
+    //save password keystrokes
+    keystrokes.keys += keyname
+    console.log('passwordKeystrokes:'+keystrokes.keys)
+}
+
+/**
+ * Deletes keys from var `captureKeystrokes` when characters are deleted
+ * from password div.
+ * Characters in password div are all the same circle and cannot be used for passwords.
+ * To capture actually key press character, the captureKeystrokes function is used.
+ * To delete these acurally requires the use of this `deleteKeystrokes` function
+ * @param event keyboard event
+ */
+export function deleteKeystrokes(event:KeyboardEvent, element:HTMLDivElement, keystrokes:keystrokes)
+{
+    printFormatted('blue', 'function deleteKeystrokes called')
+    printFormatted('green', 'element:',element)
     var keyname = event.key
     //if backspace is pressed - delete the previous keystroke
     if (keyname == 'Backspace')
     {
         console.log('backspace pressed')
         //get password length
-        var p_length = passwordField.innerText.length//needs to be minus one -> because doesn't register the backspace till after
-        var s_length = passwordKeystrokes.length
+        if (element.innerText) { var p_length = element.innerText.length }
+        else {var p_length = 0}//if null - set p_length to zero
+        var s_length = keystrokes.keys.length
         const first_char = 0
 
         // const diff = difference(p_length,s_length)
@@ -18,28 +65,28 @@ function deleteKeyStrokes(event:KeyboardEvent)
          //function should only return positive difference
         
         //remove anything beyong p_length
-        passwordKeystrokes = passwordKeystrokes.slice(first_char,p_length)//also needs to be minus 1
-        var s_length = passwordKeystrokes.length
+        keystrokes.keys = keystrokes.keys.slice(first_char,p_length)//also needs to be minus 1
+        var s_length = keystrokes.keys.length
         console.log('s_length after slice:'+s_length)
         
-        console.log('passwordKeystrokes:'+passwordKeystrokes)
+        console.log('keystrokes:'+keystrokes.keys)
     }
 }
 
-function captureKeystrokes(event:KeyboardEvent)
-{
-    console.log('function captureKeyStrokes listener')
-    var keyname = event.key
-    // var keycode = event.code
-    //save password keystrokes
-    passwordKeystrokes += keyname
-    console.log('passwordKeystrokes:'+passwordKeystrokes)
-}
 
 
-function loginEnterListener(event: KeyboardEvent)
+
+/**
+ * Listens for enter keyboard event.
+ * Prevents line caret movement downwards 
+ * (you know that line that indicates where you are in the text) 
+ * and then calls a function that you specify.
+ * @param event KeyboardEvent
+ * @param func function to be called when enter is pressed
+ */
+export function submitEnterListener(event:KeyboardEvent, func:Function)
 {
-    console.log('function loginEnterLister called')
+    printFormatted('blue','function loginEnterListener called')
     var keyname = event.key
     var keycode = event.code
     // console.log('keyname:'+keyname+', keycode:'+keycode)
@@ -47,7 +94,7 @@ function loginEnterListener(event: KeyboardEvent)
     {
         //prevent it from having caret movement - i.e. no text cursor movement down
         event.preventDefault()
-        //login
-        clickLogin()
+        //a function - login for example
+        func()
     }
 }

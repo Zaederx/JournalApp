@@ -1,5 +1,7 @@
 //VIEWABLE screen width and height is 900px x 560px - entire window is 921px x 600px
 //only structure
+
+//Separate stylsheet because settings page has slightly different strutural/positional needed
 .grid-container {
     display: grid;
     grid-template-columns: [nav]100px [main-container]800px;//screen is 900px across (window is 921px)
@@ -245,7 +247,7 @@
 .dialog {
     width: 500px;
     height: 600px;
-    display: hidden;
+    display: none;
     position: absolute;
     left: 200px;
     top: 150px;

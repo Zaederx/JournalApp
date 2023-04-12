@@ -83,7 +83,7 @@ app.on('activate', async () => {
  * before quit 
  */
 app.on('before-quit', async() => {
-  printFormatted('blue', 'event bofore-quit was fired')
+  printFormatted('blue', 'event before-quit was fired')
   await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
   process.exit(0)
   // printFormatted('blue', 'event SIGINT was fired')

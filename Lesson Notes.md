@@ -298,3 +298,19 @@ see link [github electron issue on the topic](https://github.com/electron/electr
 
 ## How to access local storage from main in electron app
 see [stackoverflow](https://stackoverflow.com/questions/50205905/is-it-possible-to-access-and-read-localstorage-for-an-electron-application)
+
+
+## Promise race condition article I came across - good programming reading
+```
+hello()
+async function hello () {
+    var total = 0;
+    await Promise.all([1,2,3].map(async (i) => total += await i));
+    printFormatted('red','total:',total);
+}
+```
+
+
+## Note to self, don't pass DOM elements through promises.
+For some reason this does not seem to work for me.
+Just call the dom element anew if possible.

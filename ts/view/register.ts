@@ -6,19 +6,30 @@ import { ipcRenderer } from 'electron'
 import { setPasswordProtection } from './switch/switch';
 import { type settings } from '../settings/settings-type';
 import * as fragments from './fragments/load-fragments'
+import { captureKeystrokes, deleteKeystrokes, keystrokes, submitEnterListener } from './input-helpers/key-capture';
+import { printFormatted } from '../other/stringFormatting';
 
 
+const p1Keystrokes:keystrokes = {keys:''}
+const p2Keystrokes:keystrokes = {keys:''}
+
+//check switch status and then enable switch
 var checkedStatus = checkUpdateSwitchStatus()//don't use `window.onload` - because script uses `defer`
-
 checkedStatus.then(enableSwitch)
+//load registration dialog ready for when user clicks the switch
+fragments.loadRegisterEmailPasswordDialog()
+
+
 
 function enableSwitch()
 {
+    printFormatted('blue', 'function enableSwitch called')
     const btn_no_password_protection = document.querySelector('#no-password') as HTMLDivElement
     const btn_password_protection = document.querySelector('#password-protection') as HTMLDivElement
     
     const p_switch = document.querySelector('#password-switch') as HTMLDivElement
-
+    var epDialog = document.querySelector('#email-password-dialog') as HTMLDivElement
+    printFormatted('green', 'epDialog:', epDialog)
     //assign element functionality
     p_switch.onclick = toggleSwitch
     btn_no_password_protection.onclick = uncheckSwitch
@@ -30,6 +41,8 @@ function enableSwitch()
 //SECTION Toggle Password Protection
 function toggleSwitch() 
 {
+    printFormatted('blue', 'function toggleSwitch called')
+    var epDialog = document.querySelector('#email-password-dialog') as HTMLDivElement
     const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
     if (switchInput.checked) { uncheckSwitch()}
     else { checkSwitch() }
@@ -37,41 +50,45 @@ function toggleSwitch()
 
 async function uncheckSwitch() 
 {
+    printFormatted('blue', 'function uncheckSwitch called')
     //set switch to unchecked
     const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
     switchInput.checked = false
     setPasswordProtection('false')
 }
-
-async function checkSwitch() 
+//called outside the function as fetch always seems to load after it should do
+function checkSwitch() 
 {
-    const loadEPDialog = fragments.loadEmailPasswordDialog()
+    printFormatted('blue', 'function checkSwitch called')
+    var epDialog = document.querySelector('#email-password-dialog') as HTMLDivElement
+    //display dialog
+    epDialog.style.display = 'grid'
+    //get password fields
+    const p1Div = epDialog.querySelector('#password1') as HTMLDivElement
+    const p2Div = epDialog.querySelector('#password2') as HTMLDivElement
+        /* Add listeners to the password divs - to capture the hidden character keystrokes */
+    p1Div.addEventListener('keypress', function captureKeysListener(event) {captureKeystrokes(event,p1Keystrokes)})//keypress captures only 'normal' key presses (no special keys like alt or )
+    p1Div.addEventListener('keydown', function deleteKeysListener(event) {deleteKeystrokes(event,p1Div,p1Keystrokes)})
+    p1Div.addEventListener('keydown', function loginListener(event) {
+        submitEnterListener(event, ()=>{})})//without the function, it still stops default behaviour on enter of line caret moving down
 
-    loadEPDialog.then(() => 
+    //add enter key listener
+    p2Div.addEventListener('keypress', function captureKeysListener(event) {captureKeystrokes(event,p1Keystrokes)})//keypress captures only 'normal' key presses (no special keys like alt or )
+    p2Div.addEventListener('keydown', function deleteKeysListener(event) {deleteKeystrokes(event,p1Div,p1Keystrokes)})
+    p2Div.addEventListener('keydown', function loginListener(event) {
+        submitEnterListener(event, clickRegisterEmailPasswordButton)})//without the function, it still stops default behaviour on enter of line caret moving down//submit login on enter being pressed
+    var btn_register = epDialog.querySelector('#register') as HTMLElement
+    btn_register.onclick = () => clickRegisterEmailPasswordButton().then((success:boolean|undefined) => 
     {
-        const p1Div = document.querySelector('#password1') as HTMLDivElement
-        const p2Div = document.querySelector('#password2') as HTMLDivElement
-         /* Add listeners to the password divs - to capture the hidden character keystrokes */
-        p1Div.addEventListener('keypress', captureKeystrokes)//keypress captures only 'normal' key presses (no special keys like alt or )
-        p1Div.addEventListener('keyup', deleteKeyStrokes)
-        p1Div.addEventListener('keydown', loginEnterListener)
-
-        //add enter key listener
-        p2Div.addEventListener('keypress', captureKeystrokes)//keypress captures only 'normal' key presses (no special keys like alt or )
-        p2Div.addEventListener('keyup', deleteKeyStrokes)//when keys are deleted
-        p2Div.addEventListener('keydown', loginEnterListener)//submit login on enter being pressed
-        var btn_register = document.querySelector('#register') as HTMLElement
-        btn_register.onclick = () => clickRegisterEmailPasswordButton().then((success:boolean|undefined) => 
+        if (success)
         {
-            if (success)
-            {
-                //set switch to checked
-                const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
-                switchInput.checked = true
-                setPasswordProtection('true')
-            }
-        })
+            //set switch to checked
+            const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+            switchInput.checked = true
+            setPasswordProtection('true')
+        }
     })
+    
 }
 
 
@@ -86,11 +103,11 @@ async function checkUpdateSwitchStatus()
     const settingsJson:string = await ipcRenderer.invoke('get-settings-json')
     var settings = JSON.parse(settingsJson) as settings
     if (settings['password-protection'] == 'false') { uncheckSwitch() }
+    return settings['password-protection']
 }
 
 //TODO - HOW TO PASSWORD PROTECT A FOLDER THROUGH ELECTRON - maybe chmod
-var p1Keystrokes = ''
-var p2Keystrokes = ''
+
 export async function clickRegisterEmailPasswordButton()
 {
     //get email and both password divs
@@ -125,56 +142,3 @@ export async function clickRegisterEmailPasswordButton()
     }
 }
 
-function deleteKeyStrokes(event:KeyboardEvent)
-{
-    const passwordField = document.querySelector('#password') as HTMLDivElement
-    var keyname = event.key
-    //if backspace is pressed - delete the previous keystroke
-    if (keyname == 'Backspace')
-    {
-        console.log('backspace pressed')
-        //get password length
-        var p_length = passwordField.innerText.length//needs to be minus one -> because doesn't register the backspace till after
-        var s_length = p1Keystrokes.length
-        const first_char = 0
-
-        // const diff = difference(p_length,s_length)
-        console.log('p_length:'+p_length)
-        console.log('s_length:'+s_length)
-        // console.log('difference:'+diff)
-         //function should only return positive difference
-        
-        //remove anything beyong p_length
-        p1Keystrokes = p1Keystrokes.slice(first_char,p_length)//also needs to be minus 1
-        var s_length = p1Keystrokes.length
-        console.log('s_length after slice:'+s_length)
-        
-        console.log('passwordKeystrokes:'+p1Keystrokes)
-    }
-}
-
-function captureKeystrokes(event:KeyboardEvent)
-{
-    console.log('function captureKeyStrokes listener')
-    var keyname = event.key
-    // var keycode = event.code
-    //save password keystrokes
-    p2Keystrokes += keyname
-    console.log('passwordKeystrokes:'+p2Keystrokes)
-}
-
-
-function loginEnterListener(event: KeyboardEvent)
-{
-    console.log('function loginEnterLister called')
-    var keyname = event.key
-    var keycode = event.code
-    // console.log('keyname:'+keyname+', keycode:'+keycode)
-    if (keyname == 'Enter')
-    {
-        //prevent it from having caret movement - i.e. no text cursor movement down
-        event.preventDefault()
-        //login
-        clickRegisterEmailPasswordButton()
-    }
-}

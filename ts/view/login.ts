@@ -1,9 +1,9 @@
 import { ipcRenderer } from "electron"
 import { blurBackground, unblurBackground } from "./create-entry/background-blur"
-import { settings } from '../settings/settings-type'
 import { clickRegisterEmailPasswordButton } from "./register"
 import * as fragments from './fragments/load-fragments'
 import { printFormatted } from '../other/stringFormatting'
+import { captureKeystrokes, deleteKeystrokes, pasteWithoutStyle, submitEnterListener } from "./input-helpers/key-capture"
 
 passwordReminderOrLogin()//only works if not in a dialog
 
@@ -14,14 +14,17 @@ ipcRenderer.on('set-inDialog', (event:Electron.IpcRendererEvent, bool:'true'|'fa
     ipcRenderer.send('set-inDialog-done')
 })
 /**
- * Needed for login dialog function
+ * Needed for login dialog and registration (email and password) dialog
  */
-var passwordKeystrokes = ''
+type keystrokes = {keys:string}
+const loginPasswordKeystrokes:keystrokes = {keys:''}
+const regPasswordkeystrokes1:keystrokes = {keys:''}//for email password dialog #password 
+const regPasswordkeystrokes2:keystrokes = {keys:''}//for email password dialog #password 2
 
 //SECTION - LOGIN PROCESS
-ipcRenderer.on('open-login-dialog', openLoginDialog)
+ipcRenderer.on('open-login-dialog', openLoginDialog)//check
 //OR send reminder to setup login
-ipcRenderer.on('register-password-reminder', registerPasswordReminder)
+ipcRenderer.on('register-password-reminder', registerPasswordReminder)//check
 
 //SECTION - RESET PASSWORD PROCESS
 //1) prompt the user for their email that they registered with
@@ -31,7 +34,7 @@ ipcRenderer.on('open-reset-password-confirm-prompt', openPasswordConfirmPrompt)
 //2) open reset code dialog and send to ipcMain
 ipcRenderer.on('open-reset-code-dialog', openResetCodeDialog)
 
-//3) open the email and password dialog box
+//3) open the email and password dialog box - (register email and password dialog)
 ipcRenderer.on('open-email-password-dialog', openEmailPasswordDialog)
 
 
@@ -73,13 +76,18 @@ async function clickSubmitResetCode()
     //set inDialog to false
     window.localStorage.setItem('inDialog','false')
 }
+
 async function openResetCodeDialog() 
 {
     printFormatted('blue', 'open-reset-code-dialog')
     //store whether the user is in a dialog
     window.localStorage.setItem('inDialog', 'true')
     //display load reset code dialog
-    await fragments.loadResetCodeDialog()
+    var resetCodeDialog = await fragments.loadResetCodeDialog()
+    //set each editable div to not paste the style of what is copy pasted
+    resetCodeDialog.querySelectorAll('.editable').forEach((div) => {
+        div?.addEventListener('paste', pasteWithoutStyle)
+    })
     //enable reset code dialog
     const btn_enter_code = document.querySelector('#enter-code') as HTMLDivElement
     btn_enter_code ? btn_enter_code.onclick = clickSubmitResetCode : console.log('btn_enter_code is null')
@@ -90,11 +98,79 @@ async function openEmailPasswordDialog()
     printFormatted('blue', 'open-reset-code-dialog')
     //store whether the user is in a dialog
     window.localStorage.setItem('inDialog', 'true')
-    await fragments.loadEmailPasswordDialog()
+    var epDialog = await fragments.loadRegisterEmailPasswordDialog()
+    epDialog.style.display = 'grid'
     //enable register password button from email-password dialog
-    const btn_register = document.querySelector('#register') as HTMLDivElement
+    const btn_register = epDialog.querySelector('#register') as HTMLDivElement
     btn_register ? btn_register.onclick = clickRegisterEmailPasswordButton : console.log('btn_register is null')
+
+    //set up toggling password visibility
+    var checkbox  = epDialog.querySelector('#p-checkbox') as HTMLInputElement
+    var p1 = epDialog.querySelector('#password1') as HTMLDivElement
+    var p2 = epDialog.querySelector('#password2') as HTMLDivElement
+    
+    //toggle password visibility with checkbox input
+    checkbox.onchange = () => togglePasswordVisibility(checkbox,p1,p2)
+
+    //add listeners for password
+    addPasswordListeners(p1, regPasswordkeystrokes1)
+    addPasswordListeners(p2, regPasswordkeystrokes2)
+    //add paste listener for each editable div
+    epDialog.querySelectorAll('.editable').forEach((div) => {
+        div.addEventListener('paste', pasteWithoutStyle)
+    })
 }
+
+/**
+ * 
+ * @param element 
+ */
+function addPasswordListeners(element:HTMLDivElement, keystrokes:keystrokes)
+{
+    element.addEventListener('keypress', function captureKeysListener(event) {
+        captureKeystrokes(event,keystrokes)
+    }) //keypress captures only 'normal' key presses (no special keys like alt, options or meta)
+    element.addEventListener('keydown',  function deleteKeysListener(event) {
+        deleteKeystrokes(event,element,keystrokes)
+    })
+    element.addEventListener('keydown', function loginListener(event) {
+        submitEnterListener(event,clickLogin)
+    })
+}
+
+/**
+ * 
+ * @param checkbox checkbox input
+ * @param p1 password1 input
+ * @param p2 password2 input (for double checking that password1 is entered correctly)
+ */
+function togglePasswordVisibility(checkbox:HTMLInputElement, p1:HTMLDivElement, p2: HTMLDivElement)
+{
+    //if checked = uncheck
+    if(checkbox.checked) 
+    {
+        checkbox.checked = false
+        hidePassword(p1,p2)
+    }
+    else 
+    {
+        checkbox.checked = true
+        showPassword(p1,p2)
+    }
+}
+
+function hidePassword(p1:HTMLDivElement, p2:HTMLDivElement)
+{
+    p1?.classList.add('password')
+    p2?.classList.add('password')
+}
+
+function showPassword(p1:HTMLDivElement, p2:HTMLDivElement)
+{
+    p1?.classList.remove('password')
+    p2?.classList.remove('password')
+}
+
 
 /**
  * Custom prompt for user info
@@ -106,26 +182,25 @@ function customPrompt(message:string, placeholder?:string):Promise<Promise<strin
     printFormatted('blue', 'function customPrompt called')
     var loadPrompt = fragments.loadCustomPrompt()
 
-    return loadPrompt.then(() => 
+    return loadPrompt.then((customPromptDialog) => 
     {
-        //display prompt
-        const promptDialog = document.querySelector('#custom-prompt') as HTMLDivElement
-        promptDialog.style.display = 'grid'
+        //display custom prompt dialog
+        customPromptDialog.style.display = 'grid'
         //set message in message div
-        const messageDiv = document.querySelector('#prompt-message') as HTMLDivElement
+        const messageDiv = customPromptDialog.querySelector('#prompt-message') as HTMLDivElement
         messageDiv.innerText = message
         //get email div and confirm button
-        const dialog = document.querySelector('#dialog') as HTMLDivElement
-        const btn_confirm = document.querySelector('#confirm') as HTMLDivElement
+        const input = customPromptDialog.querySelector('#input') as HTMLDivElement
+        const btn_confirm = customPromptDialog.querySelector('#confirm') as HTMLDivElement
         //set placeholder attribute on dialog
-        placeholder ? dialog.setAttribute('data-placeholder', placeholder) : console.log('no placeholder provided for custom prompt')
+        placeholder ? input.setAttribute('data-placeholder', placeholder) : console.log('no placeholder provided for custom prompt')
         //get email from div and return the value
 
         //@ts-ignore
         HTMLElement.prototype.waitForClick = function(this:HTMLDivElement) 
         {
             var element = this
-            return  waitForClickPromise(element,dialog,promptDialog)
+            return  waitForClickPromise(element,input,customPromptDialog)
         }
 
         //@ts-ignore
@@ -155,14 +230,20 @@ async function openPasswordConfirmPrompt(event:any,message:string)
     }
 }
 
-function waitForClickPromise(element:any,dialog:HTMLDivElement, promptDialog:HTMLDivElement):Promise<string> 
+/**
+ * Ensures that the dialog waits submit to be pressed to take in input.
+ * @param element element to add the function onto
+ * @param input input field to take text in from 
+ * @param promptDialog the enter dialog prompt object
+ */
+function waitForClickPromise(element:any,input:HTMLDivElement, promptDialog:HTMLDivElement):Promise<string> 
 {
     printFormatted('blue', 'function waitForClickPromise called')
     return new Promise((resolve, reject) => 
     {
         element.addEventListener('click', () => {
             console.log('btn_confirm is clicked')
-            const response = dialog.innerText
+            const response = input.innerText
             if (response) 
             {
                 //hide promptDialog & return email
@@ -208,7 +289,7 @@ async function registerPasswordReminder()
             var settingsJson = JSON.stringify(settings) 
             //remove escape characters
             settingsJson.replaceAll('\\','')
-            printFormatted('yellow', 'settingsJson:',settingsJson)
+            printFormatted('green', 'settingsJson:',settingsJson)
             //set to main to be persisted/saved to file
             var message2 = await ipcRenderer.invoke('set-settings-json', settingsJson)
             printFormatted('green',message2)
@@ -229,8 +310,8 @@ async function clickLogin()
     printFormatted('blue', 'function clickLogin called')
     //get password and send to be logged in
     // var password = document.querySelector('#password') as HTMLDivElement
-    var message = await ipcRenderer.invoke('login', passwordKeystrokes)
-    console.log('passwordKeystrokes:',passwordKeystrokes)
+    var message = await ipcRenderer.invoke('login', loginPasswordKeystrokes.keys)
+    console.log('loginPasswordKeystrokes:',loginPasswordKeystrokes.keys)
     if(message == 'success') 
     {
         alert('Login successful.')
@@ -246,93 +327,41 @@ async function clickLogin()
 
 }
 
+
+
 /**
  * Opens the loging dialog and preps it to take
  * keystrokes of input as hidden text is used 
  * for all characters
  */
-function openLoginDialog() 
+async function openLoginDialog() 
 {
     printFormatted('blue', 'function openLoginDialog called')
-    printFormatted('green','opening authentication dialog...')
+    printFormatted('green', 'opening authentication dialog...')
     //open authentication dialog
-    const authDialog = document.querySelector('#auth-dialog') as HTMLDivElement
-    authDialog.style.display = 'grid'
+    const authDialog = await fragments.loadLoginDialog()
+    authDialog.querySelectorAll('.editable').forEach((div) => {
+        div.addEventListener('paste', pasteWithoutStyle)
+    })
     //set btn_login
-    const passwordField = document.querySelector('#password') as HTMLDivElement
-    const btn_login = document.querySelector('#login') as HTMLDivElement
+    const passwordField = authDialog.querySelector('#password') as HTMLDivElement
+    const btn_login = authDialog.querySelector('#login') as HTMLDivElement
     btn_login.onclick = clickLogin
     //blur background
     const main = document.querySelector('#main') as HTMLBodyElement
     blurBackground(main)
     //add key listners for capturing keystrokes, deleting keystrokes and logging in on enter
-    passwordField.addEventListener('keypress', captureKeystrokes)//keypress captures only 'normal' key presses (no special keys like alt, options or meta)
-    passwordField.addEventListener('keyup', deleteKeystrokes)
-    passwordField.addEventListener('keydown', loginEnterListener)
-}
-
-/**
- * Deletes keys from var `captureKeystrokes` when characters are deleted
- * from password div.
- * Characters in password div are all the same circle and cannot be used for passwords.
- * To capture actually key press character, the captureKeystrokes function is used.
- * To delete these acurally requires the use of this `deleteKeystrokes` function
- * @param event keyboard event
- */
-function deleteKeystrokes(event:KeyboardEvent)
-{
-    printFormatted('blue', 'function deleteKeystrokes called')
-    const passwordField = document.querySelector('#password') as HTMLDivElement
-    var keyname = event.key
-    //if backspace is pressed - delete the previous keystroke
-    if (keyname == 'Backspace')
-    {
-        console.log('backspace pressed')
-        //get password length
-        var p_length = passwordField.innerText.length//needs to be minus one -> because doesn't register the backspace till after
-        var s_length = passwordKeystrokes.length
-        const first_char = 0
-
-        // const diff = difference(p_length,s_length)
-        console.log('p_length:'+p_length)
-        console.log('s_length:'+s_length)
-        // console.log('difference:'+diff)
-         //function should only return positive difference
-        
-        //remove anything beyong p_length
-        passwordKeystrokes = passwordKeystrokes.slice(first_char,p_length)//also needs to be minus 1
-        var s_length = passwordKeystrokes.length
-        console.log('s_length after slice:'+s_length)
-        
-        console.log('passwordKeystrokes:'+passwordKeystrokes)
-    }
-}
-
-function captureKeystrokes(event:KeyboardEvent)
-{
-    printFormatted('blue', 'function captureKeystrokes called')
-    var keyname = event.key
-    // var keycode = event.code
-    //save password keystrokes
-    passwordKeystrokes += keyname
-    console.log('passwordKeystrokes:'+passwordKeystrokes)
+    passwordField.addEventListener('keypress', function captureKeysListener(event) {captureKeystrokes(event,loginPasswordKeystrokes)})//keypress captures only 'normal' key presses (no special keys like alt, options or meta)
+    passwordField.addEventListener('keydown', function deleteKeysListner(event) {
+        var element = this
+        printFormatted('green', 'this:',this)
+        deleteKeystrokes(event, element, loginPasswordKeystrokes)
+    })
+    passwordField.addEventListener('keydown', function loginListener(event) {
+    submitEnterListener(event, clickLogin)})
 }
 
 
-function loginEnterListener(event: KeyboardEvent)
-{
-    printFormatted('blue','function loginEnterLister called')
-    var keyname = event.key
-    var keycode = event.code
-    // console.log('keyname:'+keyname+', keycode:'+keycode)
-    if (keyname == 'Enter')
-    {
-        //prevent it from having caret movement - i.e. no text cursor movement down
-        event.preventDefault()
-        //login
-        clickLogin()
-    }
-}
 
 function closeAuthDialog()
 {
@@ -345,4 +374,3 @@ function closeAuthDialog()
     const main = document.querySelector('#main') as HTMLBodyElement
     unblurBackground(main)
 }
-
