@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron"
 import { blurBackground, unblurBackground } from "./create-entry/background-blur"
-import { openVerificationCodeDialog, registerEmailPassword } from "./register"
+import { openVerificationCodeDialog, clickRegisterEmailPasswordButton } from "./register"
 import * as fragments from './fragments/load-fragments'
 import { printFormatted } from '../other/stringFormatting'
 import { pasteWithoutStyle, submitEnterListener } from "./input-helpers/key-capture"
@@ -119,7 +119,7 @@ async function openRegisterEmailPasswordDialog()
     //invokes register-email-password dialog onclick if fields are valid
     const btn_register = epDialog.querySelector('#register') as HTMLDivElement
     btn_register ? 
-    btn_register.onclick = registerEmailPassword : 
+    btn_register.onclick = clickRegisterEmailPasswordButton : 
     console.log('btn_register is null')
 }
 

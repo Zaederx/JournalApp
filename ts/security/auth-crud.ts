@@ -40,7 +40,7 @@ export async function store(filepath:string,filecontent:string)
   return response
 }
 
-export async function storeVerificationCode(codeHash:string)
+export async function storeVerificationCodeHash(codeHash:string)
 {
   return store(dirs.verificationCodeHash, codeHash)
 }

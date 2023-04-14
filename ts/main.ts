@@ -80,13 +80,12 @@ ipcMain.handle('settings-view', () => {
 
 const setInDialogFalse = 'localStorage.setItem("inDialog","false")'
 app.on('window-all-closed', async() => {
+  printFormatted('blue', 'app.on(window-all-closed) was called/fired')
   //quit completely even on darwin (mac) if it is a test
   if (process.env.NODE_ENV === 'test') {
     await window.webContents.executeJavaScript(setInDialogFalse) 
     //quit app when done setting the value of inDialog on frontend
-    ipcMain.on('set-inDialog-done', () => {
-      app.quit()
-    })
+    app.quit()
   }
   else if (process.platform !== 'darwin') {
     await window.webContents.executeJavaScript(setInDialogFalse) 
@@ -99,6 +98,7 @@ app.on('window-all-closed', async() => {
  * "Emitted when the application is activated. Various actions can trigger this event, such as launching the application for the first time, attempting to re-launch the application when it's already running, or clicking on the application's dock or taskbar icon." - electronjs.org
  */
 app.on('activate', async () => {
+  printFormatted('blue', 'app.on(activate) was called/fired')
   if (BrowserWindow.getAllWindows().length === 0) {
     window = await createWindow(integration);
     await window.webContents.executeJavaScript(setInDialogFalse) 
@@ -301,8 +301,10 @@ async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
 }
 
 ipcMain.handle('check-verification-code', async (event, verificationCode) => {
- const valid = await authCrud.autheticateVerificationCode(verificationCode)
- return valid
+  printFormatted('blue', 'function checkVerificationCode called')
+  const valid = await authCrud.autheticateVerificationCode(verificationCode)
+  printFormatted('green', 'verification code is valid:',valid)
+  return valid
 })
 //step 3
 //SECTION -REGISTER EMAIL AND PASSWORDS
@@ -319,12 +321,14 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
 
       //send email to verify address
       var code = uuidv4()
-
+      var codeHash = authCrud.hash(code)
       // sendVerificationEmail(email, code)//IMPORTANT - UNCOMMENT
 
       //store email and password hashes
       // const emailHashStored = await authCrud.storeEmailHash(emailHash)//IMPORTANT - UNCOMMENT
       const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
+      const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
+      printFormatted('yellow', 'verification code',code)
       return response = {emailHashStored:true, passwordHashStored, error:''}//IMPORTANT - REMOVE TRUE FROM emailHashStored
     } 
     catch (error:any) 

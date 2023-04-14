@@ -57,8 +57,9 @@ async function uncheckSwitch()
  * Displays the register email password dialog
  * and if registration is successful, checked the switch.
  */
-function checkSwitch() 
+async function checkSwitch() 
 {
+    await fragments.loadRegisterEmailPasswordDialog()
     printFormatted('blue', 'function checkSwitch called')
     //display the already loaded email password dialog
     var epDialog = document.querySelector('#email-password-dialog') as HTMLDivElement
@@ -74,24 +75,36 @@ function checkSwitch()
     p2Div.addEventListener('keydown', function loginListener(event) {
         submitEnterListener(event, clickRegisterEmailPasswordButton)})//without the function, it still stops default behaviour on enter of line caret moving down//submit login on enter being pressed
     var btn_register = epDialog.querySelector('#register') as HTMLElement
-    btn_register.onclick = registerEmailPassword
+    btn_register.onclick = clickRegisterEmailPasswordButton
     
 }
-export async function registerEmailPassword() 
+
+
+export async function clickRegisterEmailPasswordButton() 
 {
-    var success = await clickRegisterEmailPasswordButton()
+    printFormatted('blue', 'function clickRegisterEmailPasswordButton called')
+    var success = await registerEmailPassword()
         
     if (success)
     {
-        printFormatted('green','clickRegisterEmailPasswordButton successful')
+        printFormatted('green','clickRegisterEmailPasswordButton returned successful')
         var success2 = await openVerificationCodeDialog()
         if(success2) 
         {
+            printFormatted('green', 'openVerificationCodeDialog returned successful')
             //set switch to checked
             const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
             switchInput.checked = true
             setPasswordProtection('true')
-        }    
+        } 
+        else
+        {
+            printFormatted('green', 'openVerificationCodeDialog returned unsuccessful')
+        }   
+    }
+    else 
+    {
+        printFormatted('blue', 'clickRegisterEmailPasswordButton unsuccessful')
     }
 }
 /**
@@ -131,7 +144,7 @@ async function checkUpdateSwitchStatus()
 
 //TODO - HOW TO PASSWORD PROTECT A FOLDER THROUGH ELECTRON - maybe chmod
 
-export async function clickRegisterEmailPasswordButton()
+export async function registerEmailPassword()
 {
     printFormatted('blue', 'function clickRegisterEmailPasswordButton called')
     //get email and both password divs
@@ -173,5 +186,6 @@ export async function clickRegisterEmailPasswordButton()
             return success 
         }
     }
+    return false
 }
 

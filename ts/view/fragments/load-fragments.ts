@@ -106,9 +106,10 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
     printFormatted('blue', 'function customPrompt called')
     var loadPrompt = loadCustomPrompt()
 
-    return loadPrompt.then((customPromptDialog) => 
+    return loadPrompt.then(() => 
     {
         //display custom prompt dialog
+        var customPromptDialog = document.querySelector('#custom-prompt') as HTMLDivElement
         customPromptDialog.style.display = 'grid'
         //set message in message div
         const messageDiv = document.querySelector('#prompt-message') as HTMLDivElement
@@ -151,6 +152,7 @@ function waitForClickPromise(element:any,input:HTMLDivElement, promptDialog:HTML
             const response = input.innerText
             if (response) 
             {
+                printFormatted('green', 'response:',response)
                 //hide promptDialog & return email
                 promptDialog.style.display = 'none'
                 resolve(response)//returns the response

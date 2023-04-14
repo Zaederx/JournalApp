@@ -24,7 +24,9 @@ const downloads = paths.join(app.getPath('downloads'))
  */
 const secureFolder = paths.join(app.getPath('userData'),'secure')
 
+
 const verificationCodeHash = paths.join(app.getPath('userData'), 'secure', 'verification-code.txt')
+
 const resetCodeHash = paths.join(app.getPath('userData'), 'secure', 'reset-code.txt')
 
 /**
