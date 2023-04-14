@@ -328,7 +328,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
       // const emailHashStored = await authCrud.storeEmailHash(emailHash)//IMPORTANT - UNCOMMENT
       const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
       const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
-      printFormatted('yellow', 'verification code',code)
+      printFormatted('yellow', 'verification code:',code)
       return response = {emailHashStored:true, passwordHashStored, error:''}//IMPORTANT - REMOVE TRUE FROM emailHashStored
     } 
     catch (error:any) 

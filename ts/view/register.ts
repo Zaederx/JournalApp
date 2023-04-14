@@ -138,7 +138,11 @@ async function checkUpdateSwitchStatus()
 {
     const settingsJson:string = await ipcRenderer.invoke('get-settings-json')
     var settings = JSON.parse(settingsJson) as settings
-    if (settings['password-protection'] == 'false') { uncheckSwitch() }
+    if (settings['password-protection'] == 'false') { 
+        //set visual switch to false
+        const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+        switchInput.checked = false
+     }
     return settings['password-protection']
 }
 

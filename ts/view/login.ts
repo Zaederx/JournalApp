@@ -39,6 +39,13 @@ ipcRenderer.on('open-email-password-dialog', openRegisterEmailPasswordDialog)//c
 ipcRenderer.on('open-verification-code-dialog', openVerificationCodeDialog)
 
 
+
+//enter email verification code button
+var btn_verify_email = document.querySelector('#btn-verify-email-code') as HTMLDivElement
+btn_verify_email ?
+btn_verify_email.onclick = openVerificationCodeDialog :
+printFormatted('black', 'btn_verifiy_email is null')
+
 /**
  * Fires an ipc message to `password-reminder-?`.
  * This then diecides what dialog to show the user upon opening the app.
@@ -51,13 +58,13 @@ async function passwordReminderOrLogin()
     console.log('...or should we be asking for authentication?')
     console.log('so sending password-reminder-? ipc message')
     //check whether the user is in a dialog/presented a dialog
-    var inDialog = window.localStorage.getItem('inDialog')
-    console.info('inDialog:'+inDialog)
+    // var inDialog = window.localStorage.getItem('inDialog')
+    // console.info('inDialog:'+inDialog)
     //if not in a dialog send a reminder
-    if (inDialog == 'false' || inDialog == null) 
-    {
+    // if (inDialog == 'false' || inDialog == null) 
+    // {
         ipcRenderer.send('password-reminder-?');
-    }
+    // }
 }
 
 /**
