@@ -152,7 +152,7 @@ $before-text-color: rgb(109, 109, 109);
     background-color: $main;
 }
 //blur everything in .main-container-blur except edit-tags-popup
-.grid-container .main-container-blur > *:not(.edit-tags-popup, .password-dialog) {
+.grid-container .main-container-blur > *:not(.edit-tags-popup, .password-dialog, .dialog) {
     filter: blur(1px);
     -webkit-filter: blur(1px);
 }

@@ -314,3 +314,42 @@ async function hello () {
 ## Note to self, don't pass DOM elements through promises.
 For some reason this does not seem to work for me.
 Just call the dom element anew if possible.
+
+
+## What is bubble up and capturing
+Bubble up is how an event on a nested element is carried out on the ancestor elements (i.e. usually if an event is placed on the parent div, events on descendents `bubble up` or travel to ancestor div to be triggered )
+see [link - bubbling and capturing](https://javascript.info/bubbling-and-capturings)
+Notes:
+
+### You can stop bubbling by using event.stopPropagation() - 
+```
+<body onclick="alert(`the bubbling doesn't reach here`)">
+  <button onclick="event.stopPropagation()">Click me</button>
+</body>
+```
+
+
+## When making contenteditable password divs - div.innerText vs div.innerHTML
+You can use webkit to produce hidden password `innerText` in the element that is displayed to the user, but have readable `innerHTML` presented in the code that can be submitted on button clicks.
+
+```
+.editable {
+    padding: 5px;
+    overflow-y:auto;
+    white-space: pre-wrap;
+    word-wrap: normal;
+}
+.editable:empty:before {
+    content: attr(data-placeholder);
+    white-space: pre-wrap;
+    word-wrap: normal;//how words are broken on screen - see [link](https://www.w3schools.com/cssref/css3_pr_word-wrap.php)
+}
+.password {
+    -webkit-text-security: disc;
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+    padding-top: 30px;
+    height: 50px;
+}
+```

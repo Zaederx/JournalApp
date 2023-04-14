@@ -1,5 +1,17 @@
-import { pasteWithoutStyle } from '../input-helpers/key-capture'
+import { printFormatted } from "../../other/stringFormatting";
 
+/**
+ * Hide the fragment/element given a selector for the element
+ * @param selector selector for the fragment
+ */
+export function hideFragment(selector:string, classList:string[])
+{
+    const element = document.querySelector(selector) as HTMLElement;
+    classList.forEach((clazz) => {//clazz - because class is a keyword
+        element.classList.remove(clazz)
+    })
+    element.innerHTML = ''
+}
 
 /**
  * Loads the tags popup
@@ -66,9 +78,88 @@ export async function loadCustomPrompt()
 {
     //load password dialog - fetching it from files
     const customPromptHTML = await (await fetch('./fragments/custom-prompt.html')).text()
-    document.querySelector('#custom-prompt') as HTMLDivElement
     var customPrompt = document.querySelector('#custom-prompt') as HTMLDivElement
     customPrompt.outerHTML = customPromptHTML
     
     return customPrompt
+}
+
+export async function loadVerifyEmailDialog() {
+    //load password dialog - fetching it from files
+    const verificationCodeHTML = await (await fetch('./fragments/verification-code.html')).text()
+    var customPrompt = document.querySelector('#verification-code-dialog') as HTMLDivElement
+    customPrompt.outerHTML = verificationCodeHTML
+    return customPrompt
+}
+
+
+/**
+ * Custom prompt for user info.
+ * Just place a div with id `custom-prompt`
+ * then when this is called, it will load the prompt into
+ * the specified div.
+ * @param message message to be presented
+ * @param placeholder placeholder text (optional)
+ */
+export function customPrompt(message:string, placeholder?:string):Promise<Promise<string>>
+{
+    printFormatted('blue', 'function customPrompt called')
+    var loadPrompt = loadCustomPrompt()
+
+    return loadPrompt.then((customPromptDialog) => 
+    {
+        //display custom prompt dialog
+        customPromptDialog.style.display = 'grid'
+        //set message in message div
+        const messageDiv = document.querySelector('#prompt-message') as HTMLDivElement
+        messageDiv.innerText = message
+        //get email div and confirm button
+        const input = customPromptDialog.querySelector('#input') as HTMLDivElement
+        const btn_confirm = customPromptDialog.querySelector('#confirm') as HTMLDivElement
+        //set placeholder attribute on dialog
+        placeholder ? input.setAttribute('data-placeholder', placeholder) : console.log('no placeholder provided for custom prompt')
+        //get email from div and return the value
+        //see link for detail on how this works (https://www.gimtec.io/articles/convert-on-click-to-promise/)
+        //@ts-ignore - 
+        HTMLElement.prototype.waitForClick = function(this:HTMLDivElement) 
+        {
+            var element = this
+            return  waitForClickPromise(element,input,customPromptDialog)
+        }
+
+        //@ts-ignore
+        return btn_confirm.waitForClick()
+    })
+}
+
+
+/**
+ * Ensures that the dialog waits submit to be pressed to take in input.
+ * @param element element to add the function onto
+ * @param input input field to take text in from 
+ * @param promptDialog the enter dialog prompt object
+ * 
+ * For details on how this works see [link](https://www.gimtec.io/articles/convert-on-click-to-promise/)
+ */
+function waitForClickPromise(element:any,input:HTMLDivElement, promptDialog:HTMLDivElement):Promise<string> 
+{
+    printFormatted('blue', 'function waitForClickPromise called')
+    return new Promise((resolve, reject) => 
+    {
+        element.addEventListener('click', () => {
+            console.log('btn_confirm is clicked')
+            const response = input.innerText
+            if (response) 
+            {
+                //hide promptDialog & return email
+                promptDialog.style.display = 'none'
+                resolve(response)//returns the response
+            }
+            else 
+            { 
+                alert('Please do not leave the field blank.'); 
+                reject(); 
+            }
+        })
+    })
 }

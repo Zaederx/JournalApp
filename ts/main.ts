@@ -51,18 +51,45 @@ app.whenReady().then(async () => {
   window = await createWindow(integration)
   
 })
+//SECTION Display HTML Views
+//Entry Create
+ipcMain.handle('create-entry-view', () => {
+  window.loadFile('html/create-entry.html')
+})
+//Entry Read
+ipcMain.handle('entry-view', () => {
+  window.loadFile('html/view-entry.html')
+})
+//Entry Update & Delete
+ipcMain.handle('edit-entry-view', () => {
+  window.loadFile('html/edit-entry.html')
+})
 
+//  Tag - Create, Read, Update, Delete
+ipcMain.handle('edit-tags', () => {
+  window.loadFile('html/edit-tags.html')
+})
+
+ipcMain.handle('export-entries', () => {
+  window.loadFile('html/export.html')
+})
+
+ipcMain.handle('settings-view', () => {
+  window.loadFile('html/settings.html')
+})
+
+const setInDialogFalse = 'localStorage.setItem("inDialog","false")'
 app.on('window-all-closed', async() => {
   //quit completely even on darwin (mac) if it is a test
   if (process.env.NODE_ENV === 'test') {
-    await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
+    await window.webContents.executeJavaScript(setInDialogFalse) 
     //quit app when done setting the value of inDialog on frontend
     ipcMain.on('set-inDialog-done', () => {
       app.quit()
     })
   }
   else if (process.platform !== 'darwin') {
-    await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
+    await window.webContents.executeJavaScript(setInDialogFalse) 
     app.quit()
   }
 });
@@ -74,29 +101,16 @@ app.on('window-all-closed', async() => {
 app.on('activate', async () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     window = await createWindow(integration);
-    await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
+    await window.webContents.executeJavaScript(setInDialogFalse) 
   }
 });
-
-
 /**
  * before quit 
  */
 app.on('before-quit', async() => {
   printFormatted('blue', 'event before-quit was fired')
-  await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
+  await window.webContents.executeJavaScript(setInDialogFalse) 
   process.exit(0)
-  // printFormatted('blue', 'event SIGINT was fired')
-  // window.webContents.send('set-inDialog','false')
-  // var done = new Promise(async(resolve) => {
-  //   ipcMain.on('set-inDialog-done', async() => {
-  //     resolve('done')
-  //   })
-  // })
-  // done.then((res) => {
-  //   printFormatted('green','response:',res)
-  // })
-  
 })
 
 /**For Windows
@@ -106,7 +120,7 @@ app.on('before-quit', async() => {
  */
 process.on('SIGINT', async () => {
   printFormatted('blue', 'event SIGINT was fired')
-  await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")') 
+  await window.webContents.executeJavaScript(setInDialogFalse) 
   process.exit(0)
 })
 
@@ -118,20 +132,10 @@ var windowJustOpened = false
 app.on('browser-window-focus',() => {
   printFormatted('blue','app.on("browser-window-focus") has been triggered')
   loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
-
-
  
   //if on mac - because x doesn't quit app - reload window to trigger password reminder again (which comes on page script load)
   // window.reload()//reloading the page will trigger 'password-reminder-?' in login.ts - making auth-dialog appear
 
-  
-
-  //TODO //IMPORTANT -  (node:2139) UnhandledPromiseRejectionWarning: TypeError: Object has been destroyed
-   /* at IpcMainImpl.<anonymous> (/Users/zacharyishmael/Documents/GitHub/Electron/CV/JournalApp/js/main.js:96:16)
-    (node:2139) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 4)
-    enable navigation attempt:
-    declining to enable navigation...
-    */
 })
 
 // app.on('window-close-', () => {
@@ -148,11 +152,13 @@ ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(even
   
 var loggedIn = {is:false}
 ipcMain.handle('login', async (event, password) => {
+  printFormatted('blue', 'ipcMain.handle(login) called')
   //authenticate password
   var authenticated = await authCrud.autheticatePassword(password)
   if (authenticated) 
   {
     loggedIn.is = true
+    printFormatted('green', 'loggedIn.is:',loggedIn.is)
     return 'success'
   }
   else
@@ -162,7 +168,9 @@ ipcMain.handle('login', async (event, password) => {
 })
 
 ipcMain.handle('logout', () => {
+  printFormatted('blue', 'ipcMain.handle(logout called','logout')
   loggedIn.is = false
+  printFormatted('red', 'loggedIn.is:',loggedIn.is)
 })
 
   //waits for event from create-entry.ts
@@ -186,14 +194,13 @@ ipcMain.on('password-reminder-?', async (event, inDialog:'true'|'false')=> {
   //open authentication dialog
   if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false)
   {
-    
     printFormatted('green','password file exists')
     printFormatted('green','password protection is set to true')
-    printFormatted('green','opening authentication dialog...')
+    printFormatted('green','opening login dialog...')
     windowJustOpened = false
     event.reply('open-login-dialog')
   }
-  //send reminder and enable navigation
+  //send reminder and enable navigation - set loggedIn.is to true
   else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true')
   {
     loggedIn.is = true//enable login - they are effectively logged in if there is no password set up
@@ -220,14 +227,16 @@ ipcMain.on('password-reminder-?', async (event, inDialog:'true'|'false')=> {
   else if (!passwordExists && settings['password-protection'] == 'true')
   {
     //alert user to problem and that they will receive an email with a reset code
-    const message = 'Password file is missing.\n This could be the sign of something malicious.\n Please reset your password by entering you email address you gave upon registration.\n An email will be sent. Be sure to check your bin or spam folder just in case you do not find the mail in your inbox.'
+    const message = 'Password file is missing.\n This could be the sign of something malicious.\n Please reset your password by entering your email address you gave upon registration.\n An email will be sent. Be sure to check your bin or spam folder just in case you do not find the mail in your inbox.'
 
     
 
     printFormatted('yellow', 'Alerting user of missing password file and reset mesaures.')
-    event.reply('open-reset-password-confirm-prompt',message)
+    event.reply('open-reset-password-confirm-prompt', message)
   }
 })
+
+
 
 
 //SECTION - Reset Password - 3 parts
@@ -240,7 +249,7 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
   //send email with reset code to user email
   if (emailAuthenticated)
   {
-    //uuidv4 code & hash the code//IMPORTANT UNCOMMENT CODE
+    // uuidv4 code & hash the code
     // var code = uuidv4()//IMPORTANT UNCOMMENT CODE
     // var codeHash = authCrud.hash(code)//IMPORTANT UNCOMMENT CODE
     // //store reset codeHash//IMPORTANT UNCOMMENT CODE
@@ -255,7 +264,7 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
     //   printFormatted('green', 'Sending reset password email to user...')
     //   //send email with reset code (unhashed)
     //   sendResetPasswordEmail(email,code)//IMPORTANT uncomment later - commented for testing purposes
-    //   
+      
     //   //open reset code dialog - for them to input the code they recieved in email
     //   event.reply('open-reset-code-dialog')
     // }
@@ -291,7 +300,51 @@ async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
   }
 }
 
+ipcMain.handle('check-verification-code', async (event, verificationCode) => {
+ const valid = await authCrud.autheticateVerificationCode(verificationCode)
+ return valid
+})
+//step 3
+//SECTION -REGISTER EMAIL AND PASSWORDS
+//or step 1 if email and password are not set
+ipcMain.handle('register-email-password', async (event, email, password1, password2) => {
+  var response = {emailHashStored:false, passwordHashStored:false, error:''}
+  if(email && password1 == password2) 
+  {
+    try 
+    {
+      //hash email and password
+      var emailHash = authCrud.hash(email)
+      var passwordHash = authCrud.hash(password1)
 
+      //send email to verify address
+      var code = uuidv4()
+
+      // sendVerificationEmail(email, code)//IMPORTANT - UNCOMMENT
+
+      //store email and password hashes
+      // const emailHashStored = await authCrud.storeEmailHash(emailHash)//IMPORTANT - UNCOMMENT
+      const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
+      return response = {emailHashStored:true, passwordHashStored, error:''}//IMPORTANT - REMOVE TRUE FROM emailHashStored
+    } 
+    catch (error:any) 
+    {
+      printFormatted('red',error.message)
+      return {error:error.message}
+    }
+  }
+  if (!email) 
+  { 
+    response.emailHashStored = false
+    response.error = 'Email not present'
+  }
+  if (!(password1 == password2)) 
+  { 
+    response.passwordHashStored = false
+    response.error += 'Passwords do not match.' 
+  }
+  return response
+})
 
 ipcMain.on('enable-navigation-?', (event) => {
   printFormatted('blue', 'ipcMain.on("enable-navigation-?" fired')
@@ -310,32 +363,7 @@ ipcMain.on('enable-navigation-?', (event) => {
 
 
 
-//SECTION Display HTML Views
-//Entry Create
-ipcMain.handle('create-entry-view', () => {
-  window.loadFile('html/create-entry.html')
-})
-//Entry Read
-ipcMain.handle('entry-view', () => {
-  window.loadFile('html/view-entry.html')
-})
-//Entry Update & Delete
-ipcMain.handle('edit-entry-view', () => {
-  window.loadFile('html/edit-entry.html')
-})
 
-//  Tag - Create, Read, Update, Delete
-ipcMain.handle('edit-tags', () => {
-  window.loadFile('html/edit-tags.html')
-})
-
-ipcMain.handle('export-entries', () => {
-  window.loadFile('html/export.html')
-})
-
-ipcMain.handle('settings-view', () => {
-  window.loadFile('html/settings.html')
-})
 
 //SECTION Entry C.R.U.D.
 ipcMain.handle('create-entry', async (event, entry_json) => {
@@ -517,44 +545,7 @@ ipcMain.handle('export-entries-pdf', async () => {
 })
 // ipcMain.handle('show-open-dialog')
 
-ipcMain.handle('register-email-password', async (event, email, password1, password2) => {
-  var response = {emailHashStored:false, passwordHashStored:false, error:''}
-  if(email && password1 == password2) 
-  {
-    try 
-    {
-      //hash email and password
-      var emailHash = authCrud.hash(email)
-      var passwordHash = authCrud.hash(password1)
 
-      //send email to verify address
-      var code = uuidv4()
-
-      sendVerificationEmail(email, code)
-
-      //store email and password hashes
-      const emailHashStored = await authCrud.storeEmailHash(emailHash)
-      const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
-      return response = {emailHashStored, passwordHashStored, error:''}
-    } 
-    catch (error:any) 
-    {
-      printFormatted('red',error.message)
-      return {error:error.message}
-    }
-  }
-  if (!email) 
-  { 
-    response.emailHashStored = false
-    response.error = 'Email not present'
-  }
-  if (!(password1 == password2)) 
-  { 
-    response.passwordHashStored = false
-    response.error += 'Passwords do not match.' 
-  }
-  return response
-})
 
 //SECTION - SETTINGS 
 ipcMain.handle('get-settings-json', async (event)=> {

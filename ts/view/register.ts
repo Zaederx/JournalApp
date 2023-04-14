@@ -6,19 +6,16 @@ import { ipcRenderer } from 'electron'
 import { setPasswordProtection } from './switch/switch';
 import { type settings } from '../settings/settings-type';
 import * as fragments from './fragments/load-fragments'
-import { captureKeystrokes, deleteKeystrokes, keystrokes, submitEnterListener } from './input-helpers/key-capture';
+import { submitEnterListener } from './input-helpers/key-capture';
 import { printFormatted } from '../other/stringFormatting';
+import { validEmail } from './login';
 
-
-const p1Keystrokes:keystrokes = {keys:''}
-const p2Keystrokes:keystrokes = {keys:''}
 
 //check switch status and then enable switch
 var checkedStatus = checkUpdateSwitchStatus()//don't use `window.onload` - because script uses `defer`
 checkedStatus.then(enableSwitch)
 //load registration dialog ready for when user clicks the switch
 fragments.loadRegisterEmailPasswordDialog()
-
 
 
 function enableSwitch()
@@ -42,10 +39,9 @@ function enableSwitch()
 function toggleSwitch() 
 {
     printFormatted('blue', 'function toggleSwitch called')
-    var epDialog = document.querySelector('#email-password-dialog') as HTMLDivElement
     const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
     if (switchInput.checked) { uncheckSwitch()}
-    else { checkSwitch() }
+    else { checkSwitch() } //only checks switch of registration is successful
 }
 
 async function uncheckSwitch() 
@@ -56,41 +52,68 @@ async function uncheckSwitch()
     switchInput.checked = false
     setPasswordProtection('false')
 }
-//called outside the function as fetch always seems to load after it should do
+//called outside the function as fetch always seems to load after expected
+/**
+ * Displays the register email password dialog
+ * and if registration is successful, checked the switch.
+ */
 function checkSwitch() 
 {
     printFormatted('blue', 'function checkSwitch called')
+    //display the already loaded email password dialog
     var epDialog = document.querySelector('#email-password-dialog') as HTMLDivElement
-    //display dialog
     epDialog.style.display = 'grid'
     //get password fields
     const p1Div = epDialog.querySelector('#password1') as HTMLDivElement
     const p2Div = epDialog.querySelector('#password2') as HTMLDivElement
         /* Add listeners to the password divs - to capture the hidden character keystrokes */
-    p1Div.addEventListener('keypress', function captureKeysListener(event) {captureKeystrokes(event,p1Keystrokes)})//keypress captures only 'normal' key presses (no special keys like alt or )
-    p1Div.addEventListener('keydown', function deleteKeysListener(event) {deleteKeystrokes(event,p1Div,p1Keystrokes)})
+  
     p1Div.addEventListener('keydown', function loginListener(event) {
         submitEnterListener(event, ()=>{})})//without the function, it still stops default behaviour on enter of line caret moving down
 
-    //add enter key listener
-    p2Div.addEventListener('keypress', function captureKeysListener(event) {captureKeystrokes(event,p1Keystrokes)})//keypress captures only 'normal' key presses (no special keys like alt or )
-    p2Div.addEventListener('keydown', function deleteKeysListener(event) {deleteKeystrokes(event,p1Div,p1Keystrokes)})
     p2Div.addEventListener('keydown', function loginListener(event) {
         submitEnterListener(event, clickRegisterEmailPasswordButton)})//without the function, it still stops default behaviour on enter of line caret moving down//submit login on enter being pressed
     var btn_register = epDialog.querySelector('#register') as HTMLElement
-    btn_register.onclick = () => clickRegisterEmailPasswordButton().then((success:boolean|undefined) => 
+    btn_register.onclick = registerEmailPassword
+    
+}
+export async function registerEmailPassword() 
+{
+    var success = await clickRegisterEmailPasswordButton()
+        
+    if (success)
     {
-        if (success)
+        printFormatted('green','clickRegisterEmailPasswordButton successful')
+        var success2 = await openVerificationCodeDialog()
+        if(success2) 
         {
             //set switch to checked
             const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
             switchInput.checked = true
             setPasswordProtection('true')
-        }
-    })
-    
+        }    
+    }
 }
-
+/**
+ * Open verify email dialog and send
+ * 'check-verification-code' ipc message
+ * with the verification code on confirm.
+ * 
+ * @return returns whether verification was successful
+ */
+export async function openVerificationCodeDialog():Promise<boolean> {
+    printFormatted('blue', 'function openVerifyEmailDialog called')
+    //load dialog into the DOM
+    var dialog = await fragments.loadVerifyEmailDialog()
+    //display the dialog
+    dialog.style.display = 'grid';
+    const message = 'Please enter your email verification code into the field/box provided.'
+    const placeholder = 'verification code'
+    const verificationCode = await fragments.customPrompt(message, placeholder)
+    //check verification code
+    const valid = await ipcRenderer.invoke('check-verification-code', verificationCode)
+    return valid
+}
 
 /**
  * Checks the settings status for password protection
@@ -110,14 +133,15 @@ async function checkUpdateSwitchStatus()
 
 export async function clickRegisterEmailPasswordButton()
 {
+    printFormatted('blue', 'function clickRegisterEmailPasswordButton called')
     //get email and both password divs
     const emailDiv = document.querySelector('#email') as HTMLDivElement
     
     //take content of each div
     const email = emailDiv.innerText
-    const p1 = p1Keystrokes
-    const p2 = p2Keystrokes
-
+    const p1 = document.querySelector('#password1')?.innerHTML
+    const p2 = document.querySelector('#password2')?.innerHTML
+    printFormatted('green', 'email:', email, '\np1:', p1, '\np2:', p2)
     //alert if there is no email
     if(!email) {alert('No email present')}
 
@@ -128,7 +152,7 @@ export async function clickRegisterEmailPasswordButton()
     }
 
     //register passwords if the do match and alert the user
-    else if (email && p1 == p2) 
+    else if (validEmail(email) && p1 == p2) //IMPORTANT add password validator
     {
         const response =  await ipcRenderer.invoke('register-email-password', email, p1, p2)
         const { emailHashStored, passwordHashStored, error } = response
@@ -136,9 +160,18 @@ export async function clickRegisterEmailPasswordButton()
         else if (emailHashStored && passwordHashStored) 
         { 
             alert('Email and password registered successfully. Please remember this password and email for future use.')
-            return true
+            //remove dialog
+            const selector = '#email-password-dialog'
+            const classList = ['dialog']
+            fragments.hideFragment(selector, classList)
+            var success = true
+            return success
         }
-        else { return false }
+        else 
+        { 
+            var success = false
+            return success 
+        }
     }
 }
 

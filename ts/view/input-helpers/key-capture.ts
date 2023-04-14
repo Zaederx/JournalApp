@@ -43,7 +43,7 @@ export function captureKeystrokes(event:KeyboardEvent, keystrokes:keystrokes)
  * To delete these acurally requires the use of this `deleteKeystrokes` function
  * @param event keyboard event
  */
-export function deleteKeystrokes(event:KeyboardEvent, element:HTMLDivElement, keystrokes:keystrokes)
+export async function deleteKeystrokes(event:KeyboardEvent, element:HTMLDivElement, keystrokes:keystrokes)
 {
     printFormatted('blue', 'function deleteKeystrokes called')
     printFormatted('green', 'element:',element)
@@ -51,25 +51,29 @@ export function deleteKeystrokes(event:KeyboardEvent, element:HTMLDivElement, ke
     //if backspace is pressed - delete the previous keystroke
     if (keyname == 'Backspace')
     {
-        console.log('backspace pressed')
-        //get password length
-        if (element.innerText) { var p_length = element.innerText.length }
-        else {var p_length = 0}//if null - set p_length to zero
-        var s_length = keystrokes.keys.length
-        const first_char = 0
+        keystrokes.keys = element.innerHTML
+        // console.log('backspace pressed')
+        // //get password length
 
-        // const diff = difference(p_length,s_length)
-        console.log('p_length:'+p_length)
-        console.log('s_length:'+s_length)
-        // console.log('difference:'+diff)
-         //function should only return positive difference
+        // if (element.innerText) { var p_length = element.innerText.length-1 }
+        // else {var p_length = 0}//if null - set p_length to zero
+        // var s_length = keystrokes.keys.length
+        // const first_char = 0
+
+        // //password length and stokes (keystrokes length)
+        // console.log('p_length:'+p_length)
+        // console.log('s_length:'+s_length)
+
         
-        //remove anything beyong p_length
-        keystrokes.keys = keystrokes.keys.slice(first_char,p_length)//also needs to be minus 1
-        var s_length = keystrokes.keys.length
-        console.log('s_length after slice:'+s_length)
+        // //remove anything beyong p_length
+        // keystrokes.keys = keystrokes.keys.slice(first_char,p_length)//also needs to be minus 1
+        // var s_length = keystrokes.keys.length
+        // console.log('s_length after slice:'+s_length)
         
-        console.log('keystrokes:'+keystrokes.keys)
+        // console.log('keystrokes:'+keystrokes.keys)
+        // return new Promise((resolve)=> {
+        //     keystrokes.keys
+        // }) 
     }
 }
 

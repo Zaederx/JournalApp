@@ -68,14 +68,15 @@ export async function sendResetPasswordEmail(recipientEmail:string, resetCode:st
  */
 export async function sendVerificationEmail(recipientEmail:string, verificationCode:string)
 {
+  printFormatted('blue', 'function sendVerificationEmail called')
   const transport = await getTransport();
   const filepath = paths.join(__dirname, '..','..','html','email','verification-email.html')
   const html = await fs.promises.readFile(filepath,'utf-8')
   let mailOptions = 
   {
-    from:'"The Journal App" <do-not-reply@the-journal-app.com>',
+    from:'"The Journal App" <do-not-reply@the-journal-app.com>',//this seems to be ignored by mail clients in favour of auth{username} for authenticity
     to: recipientEmail,
-    subject: 'Reset password',
+    subject: 'Verify your email',
     text: 
     'Thank you for using The Journal App.\n'+
     'Please use this code to login and reset your password.\n'+
@@ -87,7 +88,9 @@ export async function sendVerificationEmail(recipientEmail:string, verificationC
   try 
   {
     const response =  await transporter.sendMail(mailOptions)
-    printFormatted('green', 'Email sent successfully:'+response.response)
+    const message = 'Email sent successfully:'+response.response
+    printFormatted('green', message)
+    return message
   } catch (error:any) 
   {
     printFormatted('red', error.message)
