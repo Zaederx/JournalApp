@@ -48,7 +48,7 @@ export async function saveSettingsJson(settings:settings)
 /**
  * Retrieve settings from the system.
  */
-export async function retrieveSettingsJson(jsonStr:boolean):Promise<string|any>
+export async function retrieveSettings(jsonStr:boolean):Promise<string|any>
 {
   printFormatted('blue','retrieveSettingsJson called')
   //check if file exists

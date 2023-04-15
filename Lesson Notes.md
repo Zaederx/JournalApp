@@ -353,3 +353,7 @@ You can use webkit to produce hidden password `innerText` in the element that is
     height: 50px;
 }
 ```
+
+
+## Objects are 'references passed by value' - see [link](https://www.30secondsofcode.org/articles/s/javascript-pass-by-reference-or-pass-by-value/)
+Long story short, if you want a variable to be mutated within a function, either you a global (not always the best option) or an object that is set to constant. As long as the object is not reassigned (the reason why we make it constant is so it can't be reassinged and attempts to do so will throw an error), the values inside the object can be changed within a function and that will change the original objects value. 

@@ -17,8 +17,6 @@ import * as tDelete from './tag/crud/t-delete'
 //Password & Security
 import * as authCrud from './security/auth-crud'
 import { v4 as uuidv4 } from 'uuid'
-//emailing
-import nodemailer from 'nodemailer'
 //Other
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
@@ -28,13 +26,13 @@ import c_process from 'child_process'
 import { passwordFileExists } from './security/auth-crud';
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
-import { retrieveSettingsJson as retrieveSettings, saveSettingsJson } from './settings/settings-functions'
+import {retrieveSettings, saveSettingsJson } from './settings/settings-functions'
 import { settings } from './settings/settings-type';
 import { printFormatted } from './other/stringFormatting'
 import { createAllTagDirectory } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
 import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-email'
-
+import { authenticationAction } from './security/auth-action'
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system)
 //TODO - option to store file in iCloud
 //TODO - SEND AND EMAIL IN NODE.JS - temporary password for login recovery
@@ -44,7 +42,7 @@ import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-e
 
 let window: BrowserWindow;
 
-var integration = false;
+var integration = true;
 
 app.whenReady().then(async () => { 
   createAllTagDirectory()
@@ -97,13 +95,13 @@ app.on('window-all-closed', async() => {
  * This is need for window to be reopened once closed. (as mac app hang on the dock when closed, waiting to be reopened - from my understanding)
  * "Emitted when the application is activated. Various actions can trigger this event, such as launching the application for the first time, attempting to re-launch the application when it's already running, or clicking on the application's dock or taskbar icon." - electronjs.org
  */
-app.on('activate', async () => {
+app.on('activate', async (event) => {
   printFormatted('blue', 'app.on(activate) was called/fired')
   if (BrowserWindow.getAllWindows().length === 0) {
     window = await createWindow(integration);
-    await window.webContents.executeJavaScript(setInDialogFalse) 
   }
 });
+
 /**
  * before quit 
  */
@@ -124,23 +122,26 @@ process.on('SIGINT', async () => {
   process.exit(0)
 })
 
+
+app.on('browser-window-blur', () => {
+  loggedIn.is = false
+})
+
 /**
  * important in determining whether to present
  * password dialog
  */
-var windowJustOpened = false
-app.on('browser-window-focus',() => {
+const windowJustOpened = {is:false}
+app.on('browser-window-focus', () => {
   printFormatted('blue','app.on("browser-window-focus") has been triggered')
-  loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
+  // loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
  
   //if on mac - because x doesn't quit app - reload window to trigger password reminder again (which comes on page script load)
   // window.reload()//reloading the page will trigger 'password-reminder-?' in login.ts - making auth-dialog appear
 
 })
 
-// app.on('window-close-', () => {
 
-// })
 
 
 /**
@@ -173,68 +174,10 @@ ipcMain.handle('logout', () => {
   printFormatted('red', 'loggedIn.is:',loggedIn.is)
 })
 
+
+
   //waits for event from create-entry.ts
-ipcMain.on('password-reminder-?', async (event, inDialog:'true'|'false')=> {
-  printFormatted('blue','password-reminder-? triggered')
-  const passwordExists = await passwordFileExists()
-  const jsonStr = false
-  const settings:settings = await retrieveSettings(jsonStr)
-
-  printFormatted('green','settings:',settings)
-  //print passwordExists
-  if (passwordExists) printFormatted('green','passwordExists:',passwordExists) 
-  else printFormatted('red','passwordExists:',passwordExists)
-  //print loggedIn.is
-  if (loggedIn.is)printFormatted('green','loggedIn.is:',loggedIn.is)
-  else printFormatted('red','loggedIn.is:',loggedIn.is)
-  //print windowJustOpened
-  if (windowJustOpened) printFormatted('green','windowJustOpened:',windowJustOpened)
-  else printFormatted('red','windowJustOpened:',windowJustOpened)
-
-  //open authentication dialog
-  if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false)
-  {
-    printFormatted('green','password file exists')
-    printFormatted('green','password protection is set to true')
-    printFormatted('green','opening login dialog...')
-    windowJustOpened = false
-    event.reply('open-login-dialog')
-  }
-  //send reminder and enable navigation - set loggedIn.is to true
-  else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true')
-  {
-    loggedIn.is = true//enable login - they are effectively logged in if there is no password set up
-    
-    if (!passwordExists) 
-    {
-      printFormatted('yellow','password file does not exist') 
-    }
-    printFormatted('green','loggedIn.is now set to:'+loggedIn.is)
-    printFormatted('green','Showing password reminder and enabling navigation...')
-    
-    //show reminder
-    event.reply('register-password-reminder')
-    event.reply('enable-navigation')//send message to nav.ts to enable
-  }
-  //enable navigation without sending a reminder
-  else if (settings['password-protection'] == 'false' && settings['password-reminder'] == 'false') {
-    printFormatted('green','Enabling navigation...')
-    windowJustOpened = false
-    loggedIn.is = true
-    event.reply('enable-navigation')//send message to nav.ts to enable
-  }
-  //if password does not exist and password protection is true - tampering has most likely occured - alert user and prompt to reset password via email
-  else if (!passwordExists && settings['password-protection'] == 'true')
-  {
-    //alert user to problem and that they will receive an email with a reset code
-    const message = 'Password file is missing.\n This could be the sign of something malicious.\n Please reset your password by entering your email address you gave upon registration.\n An email will be sent. Be sure to check your bin or spam folder just in case you do not find the mail in your inbox.'
-
-    
-
-    printFormatted('yellow', 'Alerting user of missing password file and reset mesaures.')
-    event.reply('open-reset-password-confirm-prompt', message)
-  }
-})
+ipcMain.on('password-reminder-?',(event) => authenticationAction(event,loggedIn,windowJustOpened))
 
 
 
@@ -310,7 +253,7 @@ ipcMain.handle('check-verification-code', async (event, verificationCode) => {
 //SECTION -REGISTER EMAIL AND PASSWORDS
 //or step 1 if email and password are not set
 ipcMain.handle('register-email-password', async (event, email, password1, password2) => {
-  var response = {emailHashStored:false, passwordHashStored:false, error:''}
+  var response = {emailHashStored:false, passwordHashStored:false, codeHashStored:false,error:''}
   if(email && password1 == password2) 
   {
     try 
@@ -329,7 +272,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
       const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
       const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
       printFormatted('yellow', 'verification code:',code)
-      return response = {emailHashStored:true, passwordHashStored, error:''}//IMPORTANT - REMOVE TRUE FROM emailHashStored
+      return response = {emailHashStored:true, passwordHashStored, codeHashStored, error:''}//IMPORTANT - REMOVE TRUE FROM emailHashStored
     } 
     catch (error:any) 
     {

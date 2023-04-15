@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron'
 import pathsForWDIO from './paths-for-wdio'
-export default async function createWindow(integration:boolean) {
+export default async function createWindow(integration:boolean=true) {
 
     
   
@@ -14,7 +14,7 @@ export default async function createWindow(integration:boolean) {
         {
           // worldSafeExecuteJavaScript: true ,
           contextIsolation: false,//otherwise "WorldSafe".. message still appears
-          nodeIntegration: true,//whether you can access node methods - e.g. requires/ import, anywhere in the app's js - needed for front end scripts to work
+          nodeIntegration: integration,//whether you can access node methods - e.g. requires/ import, anywhere in the app's js - needed for front end scripts to work
           enableRemoteModule: true,//enable ipcRenderer in fround end js to speak directly to ipcMain - no need for preload script
           v8CacheOptions: 'none',//prevents electron's v8 Chromium browser engine from caching
         }

@@ -6,15 +6,11 @@ import { printFormatted } from '../other/stringFormatting'
 import { pasteWithoutStyle, submitEnterListener } from "./input-helpers/key-capture"
 import { customPrompt } from "./fragments/load-fragments"
 
-passwordReminderOrLogin()//only works if not in a dialog
+//once on opening - for first script load
+passwordReminderOrLogin()
 
-ipcRenderer.on('set-inDialog', (event:Electron.IpcRendererEvent, bool:'true'|'false') => {
-    printFormatted('blue', 'set-inDialog called')
-    window.localStorage.setItem('inDialog', bool)
-    // //send message that inDialog value is persisted
-    // ipcRenderer.send('set-inDialog-done')
-})
-
+//everytime on focus - doesn't get called on first script load for some reason
+window.onfocus = passwordReminderOrLogin
 
 //SECTION - LOGIN PROCESS
 ipcRenderer.on('open-login-dialog', openLoginDialog)//check
@@ -23,14 +19,13 @@ ipcRenderer.on('register-password-reminder', registerPasswordReminder)//check
 
 //SECTION - RESET PASSWORD PROCESS
 //1) prompt the user for their email that they registered with
-//put in login instead of register - because login.ts is already attached to every page
-ipcRenderer.on('open-reset-password-confirm-prompt', openPasswordConfirmPrompt)
+ipcRenderer.on('open-reset-password-confirm-prompt', openResetPasswordConfirmPrompt)
 
 //2) open reset code dialog and send to ipcMain
 ipcRenderer.on('open-reset-code-dialog', openResetCodeDialog)
 
 //3) open the register email and password dialog box - (register email and password dialog)
-//SECTION  - REGISTER EMAIL AND PASSWORDS
+//SECTION - REGISTER EMAIL AND PASSWORDS
 //if password is not set, this is step 1)
 ipcRenderer.on('open-email-password-dialog', openRegisterEmailPasswordDialog)//check
 
@@ -38,13 +33,18 @@ ipcRenderer.on('open-email-password-dialog', openRegisterEmailPasswordDialog)//c
 // 2) - 
 ipcRenderer.on('open-verification-code-dialog', openVerificationCodeDialog)
 
-
+//forgot password button
+var btn_forgot_password = document.querySelector('#btn-forgot-password') as HTMLDivElement
+const m_forgot_password = 'Please enter the email address you registered with.'
+btn_forgot_password ?
+btn_forgot_password.onclick = (event) => openResetPasswordConfirmPrompt(event, m_forgot_password) :
+printFormatted('black', 'btn_forgot_password is null')
 
 //enter email verification code button
 var btn_verify_email = document.querySelector('#btn-verify-email-code') as HTMLDivElement
 btn_verify_email ?
 btn_verify_email.onclick = openVerificationCodeDialog :
-printFormatted('black', 'btn_verifiy_email is null')
+printFormatted('black', 'btn_verify_email is null')
 
 /**
  * Fires an ipc message to `password-reminder-?`.
@@ -57,14 +57,8 @@ async function passwordReminderOrLogin()
     console.log('do we need a password setup reminder?')
     console.log('...or should we be asking for authentication?')
     console.log('so sending password-reminder-? ipc message')
-    //check whether the user is in a dialog/presented a dialog
-    // var inDialog = window.localStorage.getItem('inDialog')
-    // console.info('inDialog:'+inDialog)
-    //if not in a dialog send a reminder
-    // if (inDialog == 'false' || inDialog == null) 
-    // {
-        ipcRenderer.send('password-reminder-?');
-    // }
+    ipcRenderer.send('password-reminder-?');
+    
 }
 
 /**
@@ -171,7 +165,7 @@ function showPassword(p1:HTMLDivElement, p2:HTMLDivElement)
  * @param event 
  * @param message message to be sent
  */
-async function openPasswordConfirmPrompt(event:any,message:string)
+async function openResetPasswordConfirmPrompt(event:any,message:string)
 {
     printFormatted('blue', 'open-reset-password-confirm-prompt called')
     //store whether the user is in a dialog
@@ -253,13 +247,13 @@ async function clickLogin()
     }
     else 
     {
-        alert(message)
+        alert(await message)
     }
 
 }
 
 /**
- * Opens the loging dialog and preps it to take
+ * Opens the login dialog and preps it to take
  * keystrokes of input as hidden text is used 
  * for all characters
  */
@@ -293,12 +287,10 @@ function closeLoginDialog()
 {
     printFormatted('blue', 'function closeAuthDialog called')
     console.log('closing authentication dialog...')
-    //open authentication dialog
-    const loginDialog = document.querySelector('#login-dialog') as HTMLDivElement
+    //close login dialog
     var selector = '#login-dialog'
     var classList = ['dialog']
     fragments.hideFragment(selector, classList)
-    // loginDialog.style.display = 'none'
     //blur background
     const main = document.querySelector('#main') as HTMLBodyElement
     unblurBackground(main)
