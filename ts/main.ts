@@ -201,22 +201,22 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
     var codeHash = authCrud.hash(code)
     //store reset codeHash
     const message = await authCrud.storeResetCodeHash(codeHash)
-    // if (message == undefined) 
-    // {
-    //   printFormatted('red', 'Code was not stored successfully')
-    // }
-    // else if (message == true)
-    // {
-    //   printFormatted('green', 'Code stored successfully.')
-    //   printFormatted('green', 'Sending reset password email to user...')
-    //   //send email with reset code (unhashed)
-    //   sendResetPasswordEmail(email,code)//IMPORTANT uncomment later - commented for testing purposes
+    if (message == undefined) 
+    {
+      printFormatted('red', 'Code was not stored successfully')
+    }
+    else if (message == true)
+    {
+      printFormatted('green', 'Code stored successfully.')
+      printFormatted('green', 'Sending reset password email to user...')
+      //send email with reset code (unhashed)
+      sendResetPasswordEmail(email,code)//IMPORTANT uncomment later - commented for testing purposes
       
-    //   //open reset code dialog - for them to input the code they recieved in email
-    //   event.reply('open-reset-code-dialog')
-    // }
-    printFormatted('yellow', 'Assume email is sent...mock... delete this message later.')
-    printFormatted('yellow', 'code:',code)
+      //open reset code dialog - for them to input the code they recieved in email
+      event.reply('open-reset-code-dialog')
+    }
+    
+   
     event.reply('open-reset-code-dialog')//IMPORTANT - DELETE LATER
   }
   else//send them back to step 1) the form to input their email to be checked
@@ -273,14 +273,14 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
       //send email to verify address
       var code = uuidv4()
       var codeHash = authCrud.hash(code)
-      // sendVerificationEmail(email, code)//IMPORTANT - UNCOMMENT
+      sendVerificationEmail(email, code)
 
       //store email and password hashes
-      // const emailHashStored = await authCrud.storeEmailHash(emailHash)//IMPORTANT - UNCOMMENT
+      const emailHashStored = await authCrud.storeEmailHash(emailHash)
       const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
       const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
       printFormatted('yellow', 'verification code:',code)
-      return response = {emailHashStored:true, passwordHashStored, codeHashStored, error:''}//IMPORTANT - REMOVE TRUE FROM emailHashStored
+      return response = {emailHashStored, passwordHashStored, codeHashStored, error:''}
     } 
     catch (error:any) 
     {
