@@ -117,14 +117,13 @@ export async function clickRegisterEmailPasswordButton()
 export async function openVerificationCodeDialog():Promise<boolean> {
     printFormatted('blue', 'function openVerifyEmailDialog called')
     //load dialog into the DOM
-    var dialog = await fragments.loadVerifyEmailDialog()
-    //display the dialog
-    dialog.style.display = 'grid';
     const message = 'Please enter your email verification code into the field/box provided.'
     const placeholder = 'verification code'
     const verificationCode = await fragments.customPrompt(message, placeholder)
     //check verification code
     const valid = await ipcRenderer.invoke('check-verification-code', verificationCode)
+    //authentication action - pick up 
+    ipcRenderer.send('authentication-action')
     return valid
 }
 
@@ -179,7 +178,7 @@ export async function registerEmailPassword()
             alert('Email and password registered successfully. Please remember this password and email for future use.')
             //remove dialog
             const selector = '#email-password-dialog'
-            const classList = ['dialog']
+            const classList = ['dialog', 'email-password-dialog']
             fragments.hideFragment(selector, classList)
             var success = true
             return success

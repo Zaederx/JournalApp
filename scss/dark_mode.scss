@@ -9,7 +9,7 @@ $panel-tag : $main; //#6F7871
 $selected : $main;
 $hover : rgb(78, 94, 122);
 $side-panel: rgb(103, 106, 111);
-
+$before-text-color: white;
 .grid-container {
     color:white;
 }
@@ -31,7 +31,7 @@ $side-panel: rgb(103, 106, 111);
 
 .grid-container .main-container {
     background-color: $main;
-    color:white;
+    color: $before-text-color;
 }
 
 .heading {
@@ -191,5 +191,14 @@ $side-panel: rgb(103, 106, 111);
 }
 
 .btn-login:hover {
+    background-color: $hover;
+}
+
+.btn-forgot-password {
+    width: 120px;
+    height: 20px;
+    cursor: pointer;
+}
+.btn-forgot-password:hover {
     background-color: $hover;
 }

@@ -200,3 +200,12 @@ $before-text-color: rgb(109, 109, 109);
 .btn-login:hover {
     background-color: $hover;
 }
+
+.btn-forgot-password {
+    width: 120px;
+    height: 20px;
+    cursor: pointer;
+}
+.btn-forgot-password:hover {
+    background-color: $hover;
+}

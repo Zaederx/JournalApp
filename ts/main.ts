@@ -79,6 +79,7 @@ ipcMain.handle('settings-view', () => {
 const setInDialogFalse = 'localStorage.setItem("inDialog","false")'
 app.on('window-all-closed', async() => {
   printFormatted('blue', 'app.on(window-all-closed) was called/fired')
+  loggedIn.is = false
   //quit completely even on darwin (mac) if it is a test
   if (process.env.NODE_ENV === 'test') {
     await window.webContents.executeJavaScript(setInDialogFalse) 
@@ -86,6 +87,7 @@ app.on('window-all-closed', async() => {
     app.quit()
   }
   else if (process.platform !== 'darwin') {
+    printFormatted('yellow', 'on mac system')
     await window.webContents.executeJavaScript(setInDialogFalse) 
     app.quit()
   }
@@ -107,6 +109,7 @@ app.on('activate', async (event) => {
  */
 app.on('before-quit', async() => {
   printFormatted('blue', 'event before-quit was fired')
+  loggedIn.is = false
   await window.webContents.executeJavaScript(setInDialogFalse) 
   process.exit(0)
 })
@@ -137,7 +140,7 @@ app.on('browser-window-focus', () => {
   // loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
  
   //if on mac - because x doesn't quit app - reload window to trigger password reminder again (which comes on page script load)
-  // window.reload()//reloading the page will trigger 'password-reminder-?' in login.ts - making auth-dialog appear
+  // window.reload()//reloading the page will trigger 'authentication-action' in login.ts - making auth-dialog appear
 
 })
 
@@ -151,7 +154,7 @@ app.on('browser-window-focus', () => {
 ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event))
 
   
-var loggedIn = {is:false}
+const loggedIn = {is:false}
 ipcMain.handle('login', async (event, password) => {
   printFormatted('blue', 'ipcMain.handle(login) called')
   //authenticate password
@@ -160,6 +163,7 @@ ipcMain.handle('login', async (event, password) => {
   {
     loggedIn.is = true
     printFormatted('green', 'loggedIn.is:',loggedIn.is)
+
     return 'success'
   }
   else
@@ -177,7 +181,7 @@ ipcMain.handle('logout', () => {
 
 
   //waits for event from create-entry.ts
-ipcMain.on('password-reminder-?',(event) => authenticationAction(event,loggedIn,windowJustOpened))
+ipcMain.on('authentication-action',(event) => authenticationAction(event,loggedIn,windowJustOpened))
 
 
 
@@ -193,10 +197,10 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
   if (emailAuthenticated)
   {
     // uuidv4 code & hash the code
-    // var code = uuidv4()//IMPORTANT UNCOMMENT CODE
-    // var codeHash = authCrud.hash(code)//IMPORTANT UNCOMMENT CODE
-    // //store reset codeHash//IMPORTANT UNCOMMENT CODE
-    // const message = await authCrud.storeResetCodeHash(codeHash)//IMPORTANT UNCOMMENT CODE
+    var code = uuidv4()
+    var codeHash = authCrud.hash(code)
+    //store reset codeHash
+    const message = await authCrud.storeResetCodeHash(codeHash)
     // if (message == undefined) 
     // {
     //   printFormatted('red', 'Code was not stored successfully')
@@ -212,12 +216,13 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
     //   event.reply('open-reset-code-dialog')
     // }
     printFormatted('yellow', 'Assume email is sent...mock... delete this message later.')
+    printFormatted('yellow', 'code:',code)
     event.reply('open-reset-code-dialog')//IMPORTANT - DELETE LATER
   }
   else//send them back to step 1) the form to input their email to be checked
   {
     printFormatted('green', 'Email did not match stored email.')
-    event.reply('reset-password-confirm-prompt', message)
+    event.reply('open-reset-password-confirm-prompt', message)
   }
 })
 
@@ -232,12 +237,15 @@ async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
   if(codesMatch)
   {
     printFormatted('green', 'Yes. code given matches stored code.')
+    printFormatted('green', 'Opening register email password dialog.')
+    printFormatted('green', 'Close reset code dialog')
     //progress to step 3 - open the email password dailog box
-    event.reply('open-email-password-dialog')
+    event.reply('open-register-email-password-dialog')
   }
   else
   {
     printFormatted('red', 'No. code given does not match stored code.')
+    printFormatted('red', 'Opening reset code dialog.')
     //go back to step 2 - open the reset code dialog
     event.reply('open-reset-code-dialog')
   }

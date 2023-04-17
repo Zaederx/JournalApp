@@ -272,7 +272,10 @@ table {
 .login-dialog {
     z-index:10;
 }
-
+.email-password-dialog {
+    height: 500px;
+    top: 50px;
+}
 .message {
     text-align: left;
     margin: 20px;

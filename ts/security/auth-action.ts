@@ -6,7 +6,7 @@ import { printFormatted } from '../other/stringFormatting'
 
 export async function authenticationAction(event:Electron.IpcMainEvent, loggedIn:{is:boolean}, windowJustOpened:{is:boolean})
 {
-  printFormatted('blue','password-reminder-? triggered')
+  printFormatted('blue','authentication-action triggered')
   const passwordExists = await passwordFileExists()
   const jsonStr = false
   const settings:settings = await retrieveSettings(jsonStr)

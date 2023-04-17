@@ -1,4 +1,5 @@
 import { printFormatted } from "../../other/stringFormatting";
+import { submitEnterListener } from "../input-helpers/key-capture";
 
 /**
  * Hide the fragment/element given a selector for the element
@@ -6,11 +7,12 @@ import { printFormatted } from "../../other/stringFormatting";
  */
 export function hideFragment(selector:string, classList:string[])
 {
+    printFormatted('blue', 'function hideFragment called')
     const element = document.querySelector(selector) as HTMLElement;
     classList.forEach((clazz) => {//clazz - because class is a keyword
         element.classList.remove(clazz)
     })
-    element.innerHTML = ''
+    element.innerHTML = ' '
 }
 
 /**
@@ -49,7 +51,7 @@ export async function loadResetCodeDialog()
     const resetCodeDialogHTML = await (await fetch('./fragments/reset-code-dialog.html')).text()
     const resetCodeDialog = document.querySelector('#reset-code-dialog') as HTMLDivElement
     resetCodeDialog!.outerHTML = resetCodeDialogHTML
-    resetCodeDialog.style.display = 'grid'
+    
     return resetCodeDialog
 }
 
@@ -119,13 +121,17 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
         const btn_confirm = customPromptDialog.querySelector('#confirm') as HTMLDivElement
         //set placeholder attribute on dialog
         placeholder ? input.setAttribute('data-placeholder', placeholder) : console.log('no placeholder provided for custom prompt')
+
+        //stop line caret from moving downwards
+        input.addEventListener('keypress', (e) => submitEnterListener(e,()=>{}))
+            
         //get email from div and return the value
         //see link for detail on how this works (https://www.gimtec.io/articles/convert-on-click-to-promise/)
         //@ts-ignore - 
         HTMLElement.prototype.waitForClick = function(this:HTMLDivElement) 
         {
             var element = this
-            return  waitForClickPromise(element,input,customPromptDialog)
+            return  waitForClickPromise(element,input)
         }
 
         //@ts-ignore
@@ -142,7 +148,7 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
  * 
  * For details on how this works see [link](https://www.gimtec.io/articles/convert-on-click-to-promise/)
  */
-function waitForClickPromise(element:any,input:HTMLDivElement, promptDialog:HTMLDivElement):Promise<string> 
+function waitForClickPromise(element:any, input:HTMLDivElement):Promise<string> 
 {
     printFormatted('blue', 'function waitForClickPromise called')
     return new Promise((resolve, reject) => 
@@ -154,7 +160,7 @@ function waitForClickPromise(element:any,input:HTMLDivElement, promptDialog:HTML
             {
                 printFormatted('green', 'response:',response)
                 //hide promptDialog & return email
-                promptDialog.style.display = 'none'
+                hideFragment('#custom-prompt', ['dialog'])
                 resolve(response)//returns the response
             }
             else 
@@ -165,3 +171,4 @@ function waitForClickPromise(element:any,input:HTMLDivElement, promptDialog:HTML
         })
     })
 }
+

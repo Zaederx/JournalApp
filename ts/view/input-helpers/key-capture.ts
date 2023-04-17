@@ -14,7 +14,7 @@ export function pasteWithoutStyle(event:any)
     
     if (event.clipboardData && event.clipboardData.getData) {
         event.target.textContent = event.clipboardData.getData('text/plain')
-        // event.preventDefault()
+        event.preventDefault()//prevents it from pasting twice
     }
 }
 
@@ -52,28 +52,6 @@ export async function deleteKeystrokes(event:KeyboardEvent, element:HTMLDivEleme
     if (keyname == 'Backspace')
     {
         keystrokes.keys = element.innerHTML
-        // console.log('backspace pressed')
-        // //get password length
-
-        // if (element.innerText) { var p_length = element.innerText.length-1 }
-        // else {var p_length = 0}//if null - set p_length to zero
-        // var s_length = keystrokes.keys.length
-        // const first_char = 0
-
-        // //password length and stokes (keystrokes length)
-        // console.log('p_length:'+p_length)
-        // console.log('s_length:'+s_length)
-
-        
-        // //remove anything beyong p_length
-        // keystrokes.keys = keystrokes.keys.slice(first_char,p_length)//also needs to be minus 1
-        // var s_length = keystrokes.keys.length
-        // console.log('s_length after slice:'+s_length)
-        
-        // console.log('keystrokes:'+keystrokes.keys)
-        // return new Promise((resolve)=> {
-        //     keystrokes.keys
-        // }) 
     }
 }
 

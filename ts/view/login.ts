@@ -10,8 +10,33 @@ import { customPrompt } from "./fragments/load-fragments"
 passwordReminderOrLogin()
 
 //everytime on focus - doesn't get called on first script load for some reason
-window.onfocus = passwordReminderOrLogin
+window.onfocus = () => 
+{
+    if (window.localStorage.getItem('inDialog') == 'false')
+    {
+        passwordReminderOrLogin()
+    }
+}
 
+
+/* Note: inDialog in localStorage is set to false
+ * in two locations:
+ * - clickLogin (when it logs in successfully)
+ * - clickSubmitResetCode
+ * 
+ * It is set to true whenever one of the dialog is called.
+ * It is there to prevent the window from closing the dialog when the window
+ * goes out of focus and back into focus.
+ */
+
+window.onload = () => {
+    printFormatted('blue','window.onload fired')
+    //enter email verification code button
+    var btn_verify_email = document.querySelector('#btn-verify-email-code') as HTMLDivElement
+    btn_verify_email ?
+    btn_verify_email.onclick = openVerificationCodeDialog :
+    printFormatted('black', 'btn_verify_email is null')
+}
 //SECTION - LOGIN PROCESS
 ipcRenderer.on('open-login-dialog', openLoginDialog)//check
 //OR send reminder to setup login
@@ -27,27 +52,20 @@ ipcRenderer.on('open-reset-code-dialog', openResetCodeDialog)
 //3) open the register email and password dialog box - (register email and password dialog)
 //SECTION - REGISTER EMAIL AND PASSWORDS
 //if password is not set, this is step 1)
-ipcRenderer.on('open-email-password-dialog', openRegisterEmailPasswordDialog)//check
+ipcRenderer.on('open-register-email-password-dialog', openRegisterEmailPasswordDialog)//check
+
+// 2) open verification code dialog
+ipcRenderer.on('open-verification-code-dialog', openVerificationCodeDialog)//check
 
 
-// 2) - 
-ipcRenderer.on('open-verification-code-dialog', openVerificationCodeDialog)
 
-//forgot password button
-var btn_forgot_password = document.querySelector('#btn-forgot-password') as HTMLDivElement
-const m_forgot_password = 'Please enter the email address you registered with.'
-btn_forgot_password ?
-btn_forgot_password.onclick = (event) => openResetPasswordConfirmPrompt(event, m_forgot_password) :
-printFormatted('black', 'btn_forgot_password is null')
 
-//enter email verification code button
-var btn_verify_email = document.querySelector('#btn-verify-email-code') as HTMLDivElement
-btn_verify_email ?
-btn_verify_email.onclick = openVerificationCodeDialog :
-printFormatted('black', 'btn_verify_email is null')
+
+
+
 
 /**
- * Fires an ipc message to `password-reminder-?`.
+ * Fires an ipc message to `authentication-action`.
  * This then diecides what dialog to show the user upon opening the app.
  * Whether it be to login, or to request a reset of the password.
  */
@@ -56,13 +74,36 @@ async function passwordReminderOrLogin()
     printFormatted('blue', 'function passwordReminderOrLogin called')
     console.log('do we need a password setup reminder?')
     console.log('...or should we be asking for authentication?')
-    console.log('so sending password-reminder-? ipc message')
-    ipcRenderer.send('password-reminder-?');
-    
+    console.log('so sending authentication-action ipc message')
+    ipcRenderer.send('authentication-action');
+}
+
+
+
+/**
+ * Opens the reset code dialog
+ */
+async function openResetCodeDialog() 
+{
+    printFormatted('blue', 'function openResetCodeDialog called')
+    window.localStorage.setItem('inDialog', 'true')
+    //display load reset code dialog
+    await fragments.loadResetCodeDialog()
+    var resetCodeDialog = document.querySelector('#reset-code-dialog') as HTMLDivElement
+    resetCodeDialog.style.display = 'grid'
+    //set each editable div to not paste the style of what is copy pasted
+    resetCodeDialog.querySelector('.editable')!.addEventListener('paste', pasteWithoutStyle)
+    //enable reset code dialog
+    const btn_enter_code = document.querySelector('#enter-code') as HTMLDivElement
+    btn_enter_code ? btn_enter_code.onclick = clickSubmitResetCode : console.log('btn_enter_code is null')
 }
 
 /**
- * Click submit on the reset code dialog
+ * Sends ipc message with reset code to 
+ * `does-reset-code-match-?` to check validity.
+ * That handler in turn sends a message to 
+ * `open-email-password-dialog` if code is valid or
+ * back to `open-reset-code-dialog` if it is not.
  */
 async function clickSubmitResetCode() 
 {
@@ -72,37 +113,22 @@ async function clickSubmitResetCode()
     const reset_code_div  = document.querySelector('#reset-code-div') as HTMLDivElement
     //get it's input
     var code = reset_code_div.innerText
-    //send to ipcMain to be checked before opening password dialog
-    ipcRenderer.send('does-reset-code-match-?',code)
     //set inDialog to false
     window.localStorage.setItem('inDialog','false')
+    //hide the fragment
+    fragments.hideFragment('#reset-code-dialog', ['dialog'])
+    //send to ipcMain to be checked before opening password dialog
+    ipcRenderer.send('does-reset-code-match-?',code)
 }
-
-async function openResetCodeDialog() 
-{
-    printFormatted('blue', 'function openResetCodeDialog called')
-    //store whether the user is in a dialog
-    window.localStorage.setItem('inDialog', 'true')
-    //display load reset code dialog
-    var resetCodeDialog = await fragments.loadResetCodeDialog()
-    //set each editable div to not paste the style of what is copy pasted
-    resetCodeDialog.querySelectorAll('.editable').forEach((div) => {
-        div?.addEventListener('paste', pasteWithoutStyle)
-    })
-    //enable reset code dialog
-    const btn_enter_code = document.querySelector('#enter-code') as HTMLDivElement
-    btn_enter_code ? btn_enter_code.onclick = clickSubmitResetCode : console.log('btn_enter_code is null')
-}
-
 
 async function openRegisterEmailPasswordDialog() 
 {
     printFormatted('blue', 'function openRegisterEmailPasswordDialog called')
     //store whether the user is in a dialog
     window.localStorage.setItem('inDialog', 'true')
-    var epDialog = await fragments.loadRegisterEmailPasswordDialog()
+    await fragments.loadRegisterEmailPasswordDialog()
+    var epDialog = document.querySelector('#email-password-dialog') as HTMLDivElement
     epDialog.style.display = 'grid'
-    
 
     //set up toggling password visibility
     var checkbox  = epDialog.querySelector('#p-checkbox') as HTMLInputElement
@@ -161,24 +187,38 @@ function showPassword(p1:HTMLDivElement, p2:HTMLDivElement)
 
 
 /**
- * Open password confirm prompt with a message
- * @param event 
+ * Open password confirm prompt with a message to enter 
+ * the email used to register.
+ * If a valid email is recieved, an ipc message is sent to
+ * `send-reset-password-email` with that email.
+ * That in turn fires at `open-reset-code-dialog` if email matches saved email
+ * or `reset-password-confirm-prompt` if it does not match.
+ * @param
  * @param message message to be sent
  */
-async function openResetPasswordConfirmPrompt(event:any,message:string)
+async function openResetPasswordConfirmPrompt(event:any, message:string)
 {
     printFormatted('blue', 'open-reset-password-confirm-prompt called')
     //store whether the user is in a dialog
     window.localStorage.setItem('inDialog', 'true')
     const placeholder = 'your_email@email.com'
     const email = (await customPrompt(message, placeholder))
+    //close custom prompt
+    
     console.log('email:',email)
     if (validEmail(email))
     {
         console.log('email is valid.')
+        fragments.hideFragment('#custom-prompt', ['dialog'])
         printFormatted('green','sending reset email password via ipcRenderer.send("send-reset-password-email",email)')
         //onclick - send email to ipcMain to have email to be authenticated and have a reset password email sent
         ipcRenderer.send('send-reset-password-email', email)
+    }
+    else
+    {
+        alert('Email was not a valid email. Please enter a valid email.')
+        fragments.hideFragment('#custom-prompt', ['dialog'])
+        openResetPasswordConfirmPrompt(null, message)
     }
 }
 
@@ -233,12 +273,15 @@ async function registerPasswordReminder()
 async function clickLogin() 
 {
     printFormatted('blue', 'function clickLogin called')
+    
     //get password and send to be logged in
     var password = document.querySelector('#password') as HTMLDivElement
     var message = ipcRenderer.invoke('login', password.innerHTML) 
     printFormatted('green','loginPasswordKeystrokes:',password.innerHTML)
     if(await message == 'success') 
     {
+        //inDialog false
+        window.localStorage.setItem('inDialog','false')
         alert('Login successful.')
         closeLoginDialog()//close authentication dialog
         //attempt to enable navigation
@@ -274,19 +317,30 @@ async function openLoginDialog()
     })
     //set btn_login
     const passwordField = document.querySelector('#password') as HTMLDivElement
-    const btn_login = document.querySelector('#login') as HTMLDivElement
+    const btn_login = document.querySelector('#btn-login') as HTMLDivElement
     btn_login.onclick = clickLogin
-    
+
     passwordField.addEventListener('keydown', function loginListener(event) {
     submitEnterListener(event, clickLogin)})
+
+    //set forgot password
+    var btn_forgot_password = document.querySelector('#btn-forgot-password') as HTMLDivElement
+    const message_forgot_password = 'Please enter the email address you registered with.'
+
+    btn_forgot_password ?
+    btn_forgot_password.onclick = (event) => 
+    {
+        printFormatted('blue','btn_forgot_password clicked')
+        closeLoginDialog()
+        openResetPasswordConfirmPrompt(event, message_forgot_password)
+    } :
+    printFormatted('black', 'btn_forgot_password is null')
 }
-
-
 
 function closeLoginDialog()
 {
-    printFormatted('blue', 'function closeAuthDialog called')
-    console.log('closing authentication dialog...')
+    printFormatted('blue', 'function closeLoginDialog called')
+    console.log('closing login dialog...')
     //close login dialog
     var selector = '#login-dialog'
     var classList = ['dialog']
