@@ -28,6 +28,8 @@ I wanted to create an app that would allow people to journal. That meant having 
 
 ## Images
 ## Version 4 - Themes added + Export + Bug fixes
+<img width="918" alt="Screenshot 2023-04-18 at 20 48 03" src="https://user-images.githubusercontent.com/38586415/232874386-1be8b8b3-c827-493c-8a1e-65f4ea472d7c.png">
+<img width="920" alt="Screenshot 2023-04-18 at 20 45 36" src="https://user-images.githubusercontent.com/38586415/232874154-84a409ec-aa93-4763-8868-922c37f07ab2.png">
 
 
 ## Version 3 - Design further updated
