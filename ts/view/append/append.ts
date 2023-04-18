@@ -1,5 +1,5 @@
-import { appendEntries } from "./entry/crud/e-read"
-import { appendTags } from "./tag/crud/t-read"
+import { appendEntries } from "../../entry/crud/e-read"
+import { appendTags } from "../../tag/crud/t-read"
 import * as process from "process"
 
 const allEntries = process.argv[2]

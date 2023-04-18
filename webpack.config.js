@@ -9,7 +9,8 @@ const path = require('path')
 const outputPath = path.resolve(__dirname, 'js', 'view', 'bundle')
 const nodeExternals = require('webpack-node-externals')
 module.exports = {
-    devtool:'source-map',//use this for development mode - comment out for production mode
+    // devtool:'source-map',//use this for development mode - comment out for production mode
+    // devtool: 'eval',
     mode: 'development', //outputs minified js
     // mode: 'development', //outputs non-minified js - doesn't work with electron
     entry : {
@@ -22,7 +23,8 @@ module.exports = {
         settings: './ts/view/settings.ts',
         export: './ts/view/export.ts',
         login: './ts/view/login.ts',
-        nav: './ts/view/nav.ts'
+        nav: './ts/view/nav.ts',
+        append: './ts/view/append/append.ts',
     },
     output: {
         filename: '[name].bundle.js',
