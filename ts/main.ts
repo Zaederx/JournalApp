@@ -20,14 +20,12 @@ import { v4 as uuidv4 } from 'uuid'
 //Other
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
-import { appendEntriesAndTags } from './view/display/append-entries-tags'
+import { appendEntriesAndTags } from './view/append/append-entries-tags'
 import process from 'process'
 import c_process from 'child_process'
-import { passwordFileExists } from './security/auth-crud';
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
 import {retrieveSettings, saveSettingsJson } from './settings/settings-functions'
-import { settings } from './settings/settings-type';
 import { printFormatted } from './other/stringFormatting'
 import { createAllTagDirectory } from './fs-helpers/helpers';
 import createWindow from './other/create-window'

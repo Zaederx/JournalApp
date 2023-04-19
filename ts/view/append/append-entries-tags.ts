@@ -12,9 +12,9 @@ export function appendEntriesAndTags(event:IpcMainEvent)
 {
   printFormatted('blue','window ready-to-show-sidepanel called')
     //fetch addresses
-    const { allEntries, tagDirectory, scripts } = dirs
+    const { allEntries, tagDirectory} = dirs
     //create a child process that fills the side panel with entries and tags
-    var pathToAppendJS = paths.join(scripts, 'append.bundle.js')
+    var pathToAppendJS = paths.join(__dirname, 'append.js')
     console.log('pathToAppendJS:'+pathToAppendJS)
     var childProcess = c_process.spawn('node', [pathToAppendJS, allEntries, tagDirectory], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
     

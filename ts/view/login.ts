@@ -1,6 +1,7 @@
 import { ipcRenderer } from "electron"
 import { blurBackground, unblurBackground } from "./create-entry/background-blur"
-import { openVerificationCodeDialog, clickRegisterEmailPasswordButton } from "./register"
+
+import { clickRegisterEmailPasswordButton } from "./register"
 import * as fragments from './fragments/load-fragments'
 import { printFormatted } from '../other/stringFormatting'
 import { pasteWithoutStyle, submitEnterListener } from "./input-helpers/key-capture"
@@ -9,12 +10,18 @@ import { customPrompt } from "./fragments/load-fragments"
 //once on opening - for first script load
 passwordReminderOrLogin()
 
+//
+
+
 //everytime on focus - doesn't get called on first script load for some reason
 window.onfocus = () => 
 {
+    printFormatted('blue', 'window.onfocus called')
     if (window.localStorage.getItem('inDialog') == 'false')
     {
+        printFormatted('red', 'inDialog is false')
         passwordReminderOrLogin()
+        
     }
 }
 
@@ -29,14 +36,6 @@ window.onfocus = () =>
  * goes out of focus and back into focus.
  */
 
-window.onload = () => {
-    printFormatted('blue','window.onload fired')
-    //enter email verification code button
-    var btn_verify_email = document.querySelector('#btn-verify-email-code') as HTMLDivElement
-    btn_verify_email ?
-    btn_verify_email.onclick = openVerificationCodeDialog :
-    printFormatted('black', 'btn_verify_email is null')
-}
 //SECTION - LOGIN PROCESS
 ipcRenderer.on('open-login-dialog', openLoginDialog)//check
 //OR send reminder to setup login
@@ -61,7 +60,25 @@ ipcRenderer.on('open-verification-code-dialog', openVerificationCodeDialog)//che
 
 
 
-
+/**
+ * Open verify email dialog and send
+ * 'check-verification-code' ipc message
+ * with the verification code on confirm.
+ * 
+ * @return returns whether verification was successful
+ */
+export async function openVerificationCodeDialog():Promise<boolean> {
+    printFormatted('blue', 'function openVerifyEmailDialog called')
+    //load dialog into the DOM
+    const message = 'Please enter your email verification code into the field/box provided.'
+    const placeholder = 'verification code'
+    const verificationCode = await fragments.customPrompt(message, placeholder)
+    //check verification code
+    const valid = await ipcRenderer.invoke('check-verification-code', verificationCode)
+    //authentication action - pick up 
+    ipcRenderer.send('authentication-action')
+    return valid
+}
 
 
 /**
