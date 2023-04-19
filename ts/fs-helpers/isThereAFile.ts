@@ -3,13 +3,13 @@ import * as fs from 'fs'
  * Checks whether the current entry directory exists.
  * @return true or false
  */
-export default async function isThereADirectory(dir:string)
+export default async function isThereAFile(filepath:string)
 {
   var isThere = false
   try 
   {
-    var stat = await fs.promises.stat(dir)
-    return stat.isDirectory()
+    var stat = await fs.promises.stat(filepath)
+    return stat.isFile()
   } catch (error) {
     console.log(error)
     return isThere//false

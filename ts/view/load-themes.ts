@@ -43,7 +43,10 @@ export async function getCurrentCssTheme()
 export async function loadCssTheme()
 {
    var theme = await getCurrentCssTheme()
-   activate(theme)
+   if (theme) 
+   {
+    activate(theme)
+   }
 }
 
 loadCssTheme()

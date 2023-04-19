@@ -35,7 +35,6 @@ I wanted to create an app that would allow people to journal. That meant having 
 ## Version 3 - Design further updated
 <img width="922" alt="image" src="https://user-images.githubusercontent.com/38586415/127141972-c9b7d851-8dd8-4587-b72e-49c0f8d9d7d8.png">
 
-
 ## Version 2 - Design Updated
 <img width="927" alt="image" src="https://user-images.githubusercontent.com/38586415/123151514-71b91700-d45b-11eb-9bc7-6f81ef35a10e.png">
 
@@ -57,7 +56,7 @@ File icon made by  <a href="https://www.flaticon.com/authors/freepik" title="Fre
 
 Export icon from <a href="https://iconmonstr.com/upload-20-svg/" title="iconmonstr">Iconmonstr</a>
 
-Slider buttons attributed to W3Schools who have a tutorail on how to make them.
+Slider buttons attributed to W3Schools who have a tutorial on how to make them.
 ## Technologies
 - [JavaScript](#javascript)
 - [TypeScript](#typescript)
@@ -96,7 +95,7 @@ npm install
 ## Running the Project
 Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then `npm start`. This will generate JavaScript files from the TypeScirpt files that are in the repository (and likewise SASS into CSS) and then it will load up the project on screen.
 
-## Testing
+<!-- ## Testing
 To test the project, make sure to run the application once to get the application binary path file to be generated. Then please run the following commands:
 ```
 npm install
@@ -108,7 +107,7 @@ npm start
 ...then run
 ```
 npm run wdio
-```
+``` -->
 
 ## Project Shortcomings
 I would like to take some time and some point to add a dark mode and some user settings to the project. These projects when working alone without a team do tend to drag on, but I would like to revisit it to add this improvement.
@@ -116,7 +115,7 @@ I would like to take some time and some point to add a dark mode and some user s
 ## Modifications
 Findind a way to improve journal file load times would be something I would also like to change with this project.
 
-## Things learned
+## Things learned - see also [Lesson Notes](./LessonNotes.md) 
 I learned how to use Node and Electron for the first time. I learnt about TypeScript and SASS for the first time too. Also I believe it was this project that was the first time I used  VScode  and I haven't looked back since... :).
 
 Apart from that I've also done some testing in this project with Mocha [in project version 1]. I really wanted to try to make an effort to do some testing with this project as it is something that I struggle with knowing how to do. I was pleased that I was able to start out this project with some testing in a BDD style rather than just adding it in at the end.

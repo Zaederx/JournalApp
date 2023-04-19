@@ -16,7 +16,7 @@ export async function authenticationAction(event:Electron.IpcMainEvent, loggedIn
   if (passwordExists) printFormatted('green','passwordExists:',passwordExists) 
   else printFormatted('red','passwordExists:',passwordExists)
   //print loggedIn.is
-  if (loggedIn.is)printFormatted('green','loggedIn.is:',loggedIn.is)
+  if (loggedIn.is) printFormatted('green','loggedIn.is:',loggedIn.is)
   else printFormatted('red','loggedIn.is:',loggedIn.is)
   //print windowJustOpened
   if (windowJustOpened.is) printFormatted('green','windowJustOpened:',windowJustOpened.is)
