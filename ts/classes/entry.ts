@@ -13,7 +13,8 @@ export default class Entry {
     /**
      * must pass in an object - even if its empty
      */
-    constructor (obj:{cdate?:string, udate?:string, laccess?:string, title?:string, body?:string, tags?:string[]}={}) {
+    constructor (obj:{cdate?:string, udate?:string, laccess?:string, title?:string, body?:string, tags?:string[]}={}) 
+    {
         var d = new Date();
         var day = d.getDate();
         var month = d.getMonth();
@@ -32,20 +33,25 @@ export default class Entry {
         this.body = body ? body : 'default';
         this.tags = tags ? tags : ['all'];
     }
-    tagsToStringCSV(e:Entry=this):string {
+    tagsToStringCSV(e:Entry=this):string 
+    {
         var csv = e ? e.tagsArrToStringCSV() : 'all'
         return csv
     }
-    tagsStringToArr(tagsString:string):string[] {
+    tagsStringToArr(tagsString:string):string[] 
+    {
         var arr:string[] = tagsString.split(',')
         return arr
     }
-    tagsArrToStringCSV(e:Entry=this):string {
+    tagsArrToStringCSV(e:Entry=this):string
+    {
         var entryTags:string = ''
         var firstIteration = true
-        e.tags.forEach((e)=> {
+        e.tags.forEach((e)=> 
+        {
             //start condition - if first iteration - no comma before
-            if (firstIteration){
+            if (firstIteration)
+            {
                 entryTags += e  
                 firstIteration = false
             }
@@ -77,19 +83,25 @@ export default class Entry {
         var jsonStr = JSON.stringify(e)
         return jsonStr
     }
-    tagsToHTML(tags:string[],) {
+    tagsToHTML(tags:string[],) 
+    {
         var tagsHtml = ''
         //if an array of tags is given
         //return tagsHTML with HTML tag info
         if (tags)
         {
-            tags.forEach((tag) => {
+            tags.forEach((tag) => 
+            {
                 //if tag not empty && not hidden file
                 if(tag != '' && tag.charAt(0) != '.')//if empty tag - because of known forEach problems
                 {
                     tagsHtml += '<div>'+tag+'</div>\n'
                 }
             })
+        }
+        else 
+        {
+            tagsHtml += '<div>'+'all'+'</div>\n'
         }
         return tagsHtml
     }
