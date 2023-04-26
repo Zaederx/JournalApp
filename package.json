@@ -1,6 +1,6 @@
 {
-  "name": "journalappversion3",
-  "version": "1.0.0",
+  "name": "the-journal-app",
+  "version": "4.0.0",
   "description": "",
   "main": "js/main.js",
   "scripts": {
