@@ -149,7 +149,7 @@ app.on('browser-window-focus', () => {
    * 
    * Append entries and tags to the side-panel
    */
-ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event))
+ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event,dirs.allEntries,dirs.tagDirectory))
 
   
 const loggedIn = {is:false}
@@ -393,8 +393,9 @@ ipcMain.handle('get-tags-table-rows', async (event) => {
 ipcMain.on('get-tag-entries', async (event, tagName) => {
   //get directories
   const { allEntries, tagDirectory } = dirs
-  //start a child process
-  var childProcess = c_process.spawn('node', ['js/send-entries.js', allEntries, tagDirectory, tagName], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
+  const pathToScript = paths.join(__dirname, 'view', 'append', 'send-entries.js')
+  //start a child proces
+  var childProcess = c_process.fork(pathToScript, [allEntries, tagDirectory, tagName], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
 
   //recieve messages from child process on this the main process & send/forward to renderer process
   childProcess.on('message', (message:any) => {

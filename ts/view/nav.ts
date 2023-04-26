@@ -2,6 +2,7 @@ import { ipcRenderer } from "electron"
 import { activateLoader, deactivateLoader } from "./nav/loader"
 import { makeTagDivClickable, makeEntryDivClickable } from "./nav/clickable"
 
+
 //  Load html fragments
 async function loadFragments()
 {
@@ -13,7 +14,6 @@ async function loadFragments()
     //load side panel
     const side_panel = await (await fetch('./fragments/tags-entries-sidepanel.html')).text()
     document.querySelector('#side-panel')!.outerHTML = side_panel
-    
 }
 
 var promise = loadFragments()

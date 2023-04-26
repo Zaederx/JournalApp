@@ -49,4 +49,4 @@ export async function loadCssTheme()
    }
 }
 
-loadCssTheme()
+window.addEventListener('DOMContentLoaded',loadCssTheme) 

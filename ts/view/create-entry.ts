@@ -4,7 +4,7 @@ import { addSelectedTagsToEntry, removeSelectedTags } from "./clickable-filter-t
 import { loadTagsPopup } from './fragments/load-fragments';
 
 
-console.log('create-entry.js onload called...')
+console.log('create-entry.js called loading...')
 const title = document.querySelector('#entry-title') as HTMLDivElement
 const body = document.querySelector('#entry-body') as HTMLDivElement
 const tags = document.querySelector('#entry-tags') as HTMLDivElement
