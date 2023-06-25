@@ -49,10 +49,14 @@ $before-text-color: rgb(109, 109, 109);
 
 .buttons > div {
     background-color: $body;
+    box-shadow: 5px 5px 5px 5px black;
+    border-radius: 25px;
 }
 
 .buttons > div:hover {
    background-color: $hover;
+   box-shadow: 0px 0px 0px 0px transparent;
+   border-radius: 25px;
 }
 
 .button {
@@ -61,23 +65,31 @@ $before-text-color: rgb(109, 109, 109);
 
 .button:hover {
     background-color: $hover;
+    box-shadow: 0px 0px 0px 0px transparent;
+    border-radius: 25px;
 }
 
 .entry-title {
     background-color: $body;
+    border-radius: 25px;
 }
 
 .entry-body {
     background-color: $body;
+    border-radius: 25px;
 }
 
 .entry-tags {
     background-color: $body;
 }
+
 .entry-tags > div {
     background-color: $panel-tag;
     color: $main;
+    box-shadow: 5px 5px 5px 5px black;
+    border-radius: 25px;
 }
+
 
 .side-panel {
     background-color: $side-panel-gray;
@@ -87,13 +99,15 @@ $before-text-color: rgb(109, 109, 109);
 
 }
 
-.side-panel .tags > div{
+.side-panel .tags > div {
     background-color: $panel-tag;
     color: $main;
 }
+
 .side-panel .tags > div.selected {
     background-color: $selected;
 }
+
 .side-panel .entries {
     background-color: $selected;
 }
@@ -101,6 +115,17 @@ $before-text-color: rgb(109, 109, 109);
 .side-panel .entries > div {
     background-color: $panel-tag;
     color: $main;
+    // box-shadow: none|h-offset v-offset blur spread color |inset|initial|inherit;
+    -webkit-box-shadow: 5px 5px 5px 5px black initial;
+    box-shadow: 5px 5px 5px 5px black;
+    border-radius: 25px;
+}
+
+.side-panel .entries > div:hover {
+    background-color: $hover;
+    color: $main;
+    box-shadow: 0px 0px 0px 0px transparent;
+    border-radius: 25px;
 }
 
 .editable {
@@ -163,17 +188,18 @@ $before-text-color: rgb(109, 109, 109);
     background-color: rgb(219, 107, 107);
 }
 
-.close-btn:hover{
+.close-btn:hover {
     background-color: rgb(226, 57, 57);
 }
 
 
 .table-row {
+
 }
 
 //table cells
 .table-row > td {
- 
+
 }
 
 .tag-searchbar {
@@ -206,6 +232,7 @@ $before-text-color: rgb(109, 109, 109);
     height: 20px;
     cursor: pointer;
 }
+
 .btn-forgot-password:hover {
-    background-color: $hover;
+    background-color:$hover;
 }
