@@ -6,6 +6,7 @@ import * as fragments from './fragments/load-fragments'
 import { printFormatted } from '../other/stringFormatting'
 import { pasteWithoutStyle, submitEnterListener } from "./input-helpers/key-capture"
 import { customPrompt } from "./fragments/load-fragments"
+import { setPasswordProtection } from "./switch/switch"
 
 //once on opening - for first script load
 passwordReminderOrLogin()
@@ -75,6 +76,15 @@ export async function openVerificationCodeDialog():Promise<boolean> {
     const verificationCode = await fragments.customPrompt(message, placeholder)
     //check verification code
     const valid = await ipcRenderer.invoke('check-verification-code', verificationCode)
+
+    if (valid)
+    {
+        printFormatted('green', 'openVerificationCodeDialog returned successful')
+        //set switch to checked
+        const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+        switchInput.checked = true
+        setPasswordProtection('true')
+    }
     //authentication action - pick up 
     ipcRenderer.send('authentication-action')
     return valid
