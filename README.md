@@ -109,8 +109,13 @@ npm start
 npm run wdio
 ``` -->
 
+## Testing
+Version 1 is tested with automated test usnig the Mocha testing framework. Was not able to apply these these test to latter versions because of the change in interface. 
+
 ## Project Shortcomings
 I would like to take some time and some point to add a dark mode and some user settings to the project. These projects when working alone without a team do tend to drag on, but I would like to revisit it to add this improvement.
+### Update - Dark mode
+Dark mode and other and one other theme beside default theme have been added to the application.
 
 ## Modifications
 Findind a way to improve journal file load times would be something I would also like to change with this project.
