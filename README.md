@@ -4,7 +4,7 @@
 
 A journalling project that I made while experiementing and learning about Node and Electron.
 
-## [See YouTube Video Walthrough](https://youtu.be/YHcCa2SDqf0)
+## [See YouTube Video Walthrough- for version 3](https://youtu.be/YHcCa2SDqf0)
 
 <!-- Also be sure to see 
 ## [YOUTUBE WALKTHROUGH](https://www.youtube.com/watch?v=2LTY80dYC0g&t=81s) -->
