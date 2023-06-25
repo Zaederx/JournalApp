@@ -97,10 +97,6 @@ export async function clickRegisterEmailPasswordButton()
         if(success2) 
         {
             printFormatted('green', 'openVerificationCodeDialog returned successful')
-            //set switch to checked
-            const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
-            switchInput.checked = true
-            setPasswordProtection('true')
         } 
         else
         {
@@ -194,6 +190,18 @@ export async function openVerificationCodeDialog():Promise<boolean> {
     const verificationCode = await fragments.customPrompt(message, placeholder)
     //check verification code
     const valid = await ipcRenderer.invoke('check-verification-code', verificationCode)
+    //activate switch if valid
+    if (valid)
+    {
+        printFormatted('green', 'verification code returned successfully')
+        //set switch to checked
+        const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+        if (switchInput) 
+        {
+            switchInput.checked = true
+            setPasswordProtection('true')
+        }
+    }
     //authentication action - pick up 
     ipcRenderer.send('authentication-action')
     return valid

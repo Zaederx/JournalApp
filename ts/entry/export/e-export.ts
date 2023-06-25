@@ -2,7 +2,7 @@
 
 import paths from 'path';
 import * as fs from 'fs';
-import * as dir from '../../directory';
+import * as dirs from '../../directory';
 import path from 'path';
 import PDF from 'pdfkit';
 //@ts-ignore
@@ -22,7 +22,7 @@ import dateStr from '../crud/dateStr';
  */
 export async function getEntry(entry_name: string)
 {
-    var filepath = paths.join(dir.tagDirectory, entry_name)
+    var filepath = paths.join(dirs.tagDirectory, entry_name)
     var entryStr:string = await fs.promises.readFile(filepath,'utf-8')
     var entry:Entry = JSON.parse(entryStr)
     return entry
@@ -120,7 +120,7 @@ export async function exportEntries(entriesFilepathsArr:string[], fileExtension:
     console.log('getEntriesByFilename():'+entries.toString())
     
     //get file directory path
-    var exportDir = path.join(dir.downloads, 'journal-app-export-'+dateStr())
+    var exportDir = path.join(dirs.downloads, 'journal-app-export-'+dateStr())
     console.log('exportDir:'+exportDir)
 
     //create directory
@@ -191,5 +191,17 @@ export function exportToPdf(filepaths:string[])
     exportEntries(filepaths, extension, pdfExportFunc)
 }
 
+export function exportEntryAndTagData()
+{
+    const source = dirs.tagDirectory
+    const destination = dirs.downloads
+    try 
+    {
+        //@ts-ignore
+        fs.promises.cp(source, destination, {preserveTimestamps: true, recursive: true})
+    }
+    catch (error)
+    {
 
-
+    }
+}

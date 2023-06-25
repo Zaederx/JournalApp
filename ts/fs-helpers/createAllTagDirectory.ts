@@ -8,13 +8,15 @@ import { printFormatted } from '../other/stringFormatting'
  */
 export default async function createAllTagDirectory()
 {
+  printFormatted('blue', 'function createAllTagDirectories called')
   //if directory doesn't exist - create directory
   var directory = paths.join(dirs.allEntries)
+  
   if (!fs.existsSync(directory)) 
   {
     try 
     {
-      await fs.promises.mkdir(directory)
+      await fs.promises.mkdir(directory, {recursive:true})
       printFormatted('green','Successfully created directory')
     }
     catch (error:any) 
