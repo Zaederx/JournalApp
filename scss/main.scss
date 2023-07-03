@@ -77,7 +77,7 @@ $before-text-color: rgb(109, 109, 109);
 
 .side-panel .entries > div {
     background-color: $panel-tag;
-    color: $main;
+    color: black;
     // box-shadow: none|h-offset v-offset blur spread color |inset|initial|inherit;
     -webkit-box-shadow: 5px 5px 5px 5px black initial;
     box-shadow: 5px 5px 5px 5px black;
@@ -90,7 +90,6 @@ $before-text-color: rgb(109, 109, 109);
     box-shadow: 0px 0px 0px 0px transparent;
     border-radius: 25px;
 }
-
 
 .editable:empty:before {
     color: $before-text-color;
