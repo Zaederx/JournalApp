@@ -110,6 +110,10 @@ function symlinkEntryTags(entry:Entry, filename:string, targetFilepath:string)
           console.log(e)
         }
       }
+      else if (tag == 'all') 
+      {
+        successful = true
+      }
     })
     return successful
 }
