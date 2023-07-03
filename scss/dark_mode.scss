@@ -97,8 +97,8 @@ $before-text-color: white;
 }
 
 .side-panel .entries > div {
-    background-color: $panel-tag;
-    color: $main;
+    background-color: $body;
+    color: white;
     // box-shadow: none|h-offset v-offset blur spread color |inset|initial|inherit;
     -webkit-box-shadow: 5px 5px 5px 5px black initial;
     box-shadow: 5px 5px 5px 5px black;
@@ -107,7 +107,7 @@ $before-text-color: white;
 
 .side-panel .entries > div:hover {
     background-color: $hover;
-    color: $main;
+    color: white;
     box-shadow: 0px 0px 0px 0px transparent;
     border-radius: 25px;
 }
@@ -126,8 +126,8 @@ $before-text-color: white;
 //loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
 .loader {
     border-color:#f3f3f3;
-    border-top-color: #3498db;
-    border-bottom-color: #3498db;
+    border-top-color: $body!important;
+    border-bottom-color: $body!important;
 }
 
 .edit-tags {
