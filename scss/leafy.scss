@@ -50,14 +50,12 @@ $before-text-color: rgb(109, 109, 109);
 
 .buttons > div {
     background-color: $body;
-    box-shadow: 5px 5px 5px 5px black;
-    border-radius: 25px;
+    
 }
 
 .buttons > div:hover {
    background-color: $hover;
-   box-shadow: 0px 0px 0px 0px transparent;
-   border-radius: 25px;
+   
 }
 
 .button {
@@ -66,18 +64,17 @@ $before-text-color: rgb(109, 109, 109);
 
 .button:hover {
     background-color: $hover;
-    box-shadow: 0px 0px 0px 0px transparent;
-    border-radius: 25px;
+    
 }
 
 .entry-title {
     background-color: $body;
-    border-radius: 25px;
+    
 }
 
 .entry-body {
     background-color: $body;
-    border-radius: 25px;
+    
 }
 
 .entry-tags {
@@ -87,8 +84,7 @@ $before-text-color: rgb(109, 109, 109);
 .entry-tags > div {
     background-color: $panel-tag;
     color: $main;
-    box-shadow: 5px 5px 5px 5px black;
-    border-radius: 25px;
+    
 }
 
 
@@ -117,9 +113,7 @@ $before-text-color: rgb(109, 109, 109);
     background-color: $panel-tag;
     color: $main;
     // box-shadow: none|h-offset v-offset blur spread color |inset|initial|inherit;
-    -webkit-box-shadow: 5px 5px 5px 5px black initial;
-    box-shadow: 5px 5px 5px 5px black;
-    border-radius: 25px;
+    
 }
 
 .side-panel .entries > div:hover {
@@ -143,9 +137,9 @@ $before-text-color: rgb(109, 109, 109);
 
 //loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
 .loader {
-    border-color: #f3f3f3;
-    border-top-color:#3498db;
-    border-bottom-color:#3498db;
+    border-color: #f3f3f3!important;
+    border-top-color:$body!important;
+    border-bottom-color:$body!important;
 }
 .edit-tags {
     background-color: $body;
