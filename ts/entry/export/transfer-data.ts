@@ -51,6 +51,7 @@ export async function copyFolderAndSymlink(source:string,target:string,symlink:b
     //create folder in target directory
     try 
     {
+        //only works if target does not already exist
         fs.promises.mkdir(target)
         targetExists = true
     } 
@@ -85,7 +86,7 @@ export async function copyFolderAndSymlink(source:string,target:string,symlink:b
                     //if newTarget directory does not exist
                     if (!(await fs.promises.stat(target)).isDirectory())
                     {
-                        //create directory
+                        //create newTarget directory
                         fs.promises.mkdir(target, {recursive:true})
                     }
                     
