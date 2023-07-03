@@ -53,6 +53,10 @@
     padding: 10px;
     cursor: pointer;
     z-index: 3;
+
+    // background-color: rgb(190, 202, 192);
+    box-shadow: 5px 5px 5px 5px black;
+    border-radius: 25px;
 }
 
 .buttons > div:hover {
@@ -136,6 +140,9 @@
     margin-bottom: 10px;
     z-index: 1;
     cursor: pointer;
+
+    box-shadow: 5px 5px 5px 5px black;
+    border-radius: 25px;
 }
 
 .editable {
