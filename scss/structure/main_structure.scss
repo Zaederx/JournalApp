@@ -1,4 +1,4 @@
-//only structure
+//main styling to apply across all themes
 .grid-container {
     display: grid;
     grid-template-columns: [nav]100px [main-container]800px;//screen is 900px across (window is 921px)
@@ -71,9 +71,14 @@
     padding: 10px;
     cursor: pointer;
     z-index: 3;
+
+    box-shadow: 5px 5px 5px 5px black;
+    border-radius: 25px;
 }
 
 .buttons > div:hover {
+    box-shadow: 0px 0px 0px 0px transparent;
+    border-radius: 25px;
 }
 
 .button {
@@ -91,16 +96,23 @@
     // padding: 10px;
     // cursor: pointer;
     // z-index: 3;
+    box-shadow: 0px 0px 0px 0px transparent;
+    border-radius: 25px;
 }
 
 .entry-title {
+    padding: 10px;
     grid-column: 2 / span 2;
     grid-row: 4;
+    border-radius: 25px;
 }
 
 .entry-body {
+    padding:10px;
     grid-column: 2 /span 2;
     grid-row: 6;
+    border-radius: 25px;
+    overflow-y: scroll;
 }
 
 .entry-tags {
@@ -112,6 +124,8 @@
     padding: 10px;
     margin: auto;
     margin: 10px;
+    box-shadow: 5px 5px 5px 5px black;
+    border-radius: 25px;
 }
 
 .side-panel {
@@ -156,6 +170,10 @@
     margin-bottom: 10px;
     z-index: 1;
     cursor: pointer;
+
+    -webkit-box-shadow: 5px 5px 5px 5px black initial;
+    box-shadow: 5px 5px 5px 5px black;
+    border-radius: 25px;
 }
 
 .editable {
@@ -175,7 +193,7 @@
 .loader {
     grid-column: 1;
     grid-row: 2;
-    border: 16px solid #f3f3f3;
+    border: 16px solid;
     border-radius: 50%;
     border-top: 16px solid;
     border-bottom: 16px solid;
