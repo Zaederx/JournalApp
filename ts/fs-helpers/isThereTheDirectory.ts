@@ -14,6 +14,4 @@ export default async function isThereADirectory(dir:string)
     console.log(error)
     return isThere//false
   }
-
-  
 }
