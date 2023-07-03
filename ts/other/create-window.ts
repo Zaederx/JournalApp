@@ -8,8 +8,8 @@ export default async function createWindow(integration:boolean=true) {
       ({
         width: 921,
         height: 600,
-        minWidth: 921,
-        minHeight: 478,
+        maxWidth: 921,
+        maxHeight:600,
         webPreferences:
         {
           // worldSafeExecuteJavaScript: true ,

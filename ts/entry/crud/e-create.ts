@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as dir from '../../directory'
 import paths from 'path'
 import Entry from '../../classes/entry';
+import { printFormatted } from '../../other/stringFormatting';
 
 function dateStr():string {
   var date = new Date();
@@ -43,7 +44,7 @@ export async function createEntry(entryJson:string, directory:string=dir.allEntr
     promise = fs.promises.writeFile(filepath,entryJson, 'utf-8')
     message ='File saved successfully'
     //create symlinks at related tag directories
-    promise.then(() => symlinkEntryFileToTagFolders(entryJson,fileName))  
+    promise.then(() => symlinkEntryJsonToTagFolders(entryJson,fileName))  
    } catch (err) {
     message = 'An error occured in saving the new entry:'+err
   }
@@ -61,18 +62,38 @@ export async function createEntry(entryJson:string, directory:string=dir.allEntr
  * @param entryJsonStr json string
  * @param filename filename
  */
-export async function symlinkEntryFileToTagFolders(entryJsonStr:string,filename:string) {
+export async function symlinkEntryJsonToTagFolders(entryJsonStr:string,filename:string) {
   console.log('*** symlinkEntryFile called ***')
   console.log('entryJsonStr:',entryJsonStr)
   var entryJson = JSON.parse(entryJsonStr)
   console.log('entryJson:', entryJson)
   //@ts-ignore
   try {
-    var entry = new Entry(entryJson)
+    var entry = new Entry(entryJson)//to have object methods
     //all entries go into the all directory and then are
     //symlinked into other directories (tags)
     var targetFilepath = paths.join(dir.allEntries,filename)
-    //for each tag - put a symlink into tag folder
+    var successful = symlinkEntryTags(entry, filename, targetFilepath)
+    if (!successful) { throw new Error('Symlinking file was unsucessful')}
+  }
+  catch (error)
+  {
+    printFormatted('red', error)
+  }
+  
+}
+
+/**
+ * @param entry entry object
+ * 
+ * @param filename entry filename
+ * 
+ * @param targetFilepath destination of the new symlink
+ */
+function symlinkEntryTags(entry:Entry, filename:string, targetFilepath:string) 
+{
+  var successful = false
+  //for each tag - put a symlink into tag folder
     //@ts-ignore
     entry.tags.forEach(async (tag: string)=> {
       //if tag is not emptystring or all tag
@@ -83,17 +104,16 @@ export async function symlinkEntryFileToTagFolders(entryJsonStr:string,filename:
         //create a symlink using targetFilepath and symlinkPath
         try {
           await fs.promises.symlink(targetFilepath,symlinkPath)
+          successful = true
         }
         catch (e) {
           console.log(e)
         }
       }
+      else if (tag == 'all') 
+      {
+        successful = true
+      }
     })
-  }
-  catch (err)
-  {
-
-  }
-  
+    return successful
 }
-

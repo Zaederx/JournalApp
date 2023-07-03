@@ -471,7 +471,7 @@ ipcMain.handle('export-entries-json', async () => {
   var dialogPath = dirs.tagDirectory
   dialogPath ? console.log(`dialogPath:${dialogPath}`) : console.log('dialogPath is null or undefined')
   //open dialog window
-  var promise: OpenDialogReturnValue = await dialog.showOpenDialog({ defaultPath: dialogPath, properties: ['openFile', 'multiSelections'] })
+  var promise: OpenDialogReturnValue = await dialog.showOpenDialog({title:'Export Entries', defaultPath:dialogPath, properties:['openFile', 'multiSelections'] })
 
   //if not exited
   if (promise && !promise.canceled) {
@@ -529,4 +529,20 @@ ipcMain.handle('email-stored-boolean', async () => {
   {
     return false
   }
+})
+
+import { importTransferData, exportTransferData } from './entry/export/transfer-data'
+/**
+ * Export for tarnsfer to new another 'The Journal App' journal.
+ * For instance if the computer needs to be backed up or wiped,
+ * you can simply export the entire `tagDirs` folder/directory and all of the tags
+ */
+//IMPORTANT
+ipcMain.handle('export-transfer-data', () => {
+  var target = paths.join(dirs.downloads, 'tagDirs')
+  exportTransferData(dirs.tagDirectory,target)
+})
+
+ipcMain.handle('import-transfer-data', () => {
+  importTransferData(dirs.downloads, dirs.tagDirectory)
 })
