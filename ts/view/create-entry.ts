@@ -18,6 +18,7 @@ const btn_open_tags_popup = document.querySelector('#btn-add-tags') as HTMLDivEl
 //enable create entry button
 btn_create_entry ? btn_create_entry.onclick = () =>  clickCreateEntryBtn(title, body, tags) : console.log('btn_create_entry is null');
 
+const hidden = {bool:true}
 
 //SECTION - TagsPopup
 var promise = loadTagsPopup()
@@ -26,7 +27,7 @@ var promise = loadTagsPopup()
 promise.then(() => {
     console.log('entering then code block...')
     
-    btn_open_tags_popup ? btn_open_tags_popup.onclick = () => toggleTagPopup(main, tagTableBody3) : console.log('btn_open_tags_popup is null')
+    btn_open_tags_popup ? btn_open_tags_popup.onclick = () => toggleTagPopup(main, tagTableBody3, hidden) : console.log('btn_open_tags_popup is null')
     /** Tags popup  */
     const btn_add_tags = document.querySelector('#add-selected-tags') as HTMLDivElement
     var btn_remove_tags = document.querySelector('#remove-selected-tags') as HTMLDivElement
@@ -40,7 +41,7 @@ promise.then(() => {
     //Enable buttons
     btn_add_tags ? btn_add_tags.onclick = () => addSelectedTagsToEntry(tags, tagTableBody3) : console.log('add_tags btn is null')
     btn_remove_tags ? btn_remove_tags.onclick = () => removeSelectedTags(tagTableBody3, title, body, tags) : console.warn('btn_remove_tags is null')
-    btn_close ? btn_close.onclick = () => toggleTagPopup(main, tagTableBody3) : console.warn('popup close_btn is null')
+    btn_close ? btn_close.onclick = () => toggleTagPopup(main, tagTableBody3, hidden) : console.warn('popup close_btn is null')
 })
 
 
