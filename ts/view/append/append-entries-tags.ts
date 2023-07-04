@@ -7,6 +7,8 @@ import paths from 'path'
 /**
  * Append entries and tags.
  * @param event 
+ * @param allEntries path to 'all' entries tag folder
+ * @param tagDirectory path to tag directory 'tagDirs'
  */
 export function appendEntriesAndTags(event:IpcMainEvent, allEntries:string, tagDirectory:string)
 {
