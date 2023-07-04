@@ -16,5 +16,5 @@ export default async function saveNewEntry(title:HTMLDivElement, body:HTMLDivEle
     //send to main to be persisted
     var message = await ipcRenderer.invoke('create-entry', entry.entryToJsonStr())
     //display message
-    messageDiv.innerText = message
+    alert(message)
 }
