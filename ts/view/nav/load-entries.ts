@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron"
 import { activateLoader, deactivateLoader } from "./loader"
-import { makeAllEntriesClickable } from "./clickable"
+// import { makeAllEntriesClickable } from "./clickable"
 
 /**
  * Load entries into sidepanel.
