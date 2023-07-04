@@ -101,14 +101,14 @@
 }
 
 .entry-title {
-    padding: 10px;
+    padding: 10px!important;
     grid-column: 2 / span 2;
     grid-row: 4;
     border-radius: 25px;
 }
 
 .entry-body {
-    padding:10px;
+    padding:10px!important;
     grid-column: 2 /span 2;
     grid-row: 6;
     border-radius: 25px;
