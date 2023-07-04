@@ -153,11 +153,13 @@ $before-text-color: rgb(109, 109, 109);
 }
 
 .edit-tags-popup {
-    background-color: $side-panel;
+    background-color: $hover;
+    color:white;
 }
 
 .edit-tags-popup > * {
-    background-color: $side-panel;
+    background-color: $hover;
+    color:white;
 }
 
 .edit-tags-popup .button {
