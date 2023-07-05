@@ -2,7 +2,7 @@
 
 /* offset-x | offset-y | blur-radius | spread-radius | color */
 $shadow : 5px 5px 5px 0px rgb(32, 32, 32), 5px 5px 5px grey;
-$neumorphic: inset 5px 5px 5px rgb(49, 49, 49), inset 5px 5px 5px grey;
+$neumorphic: inset 5px 5px 5px rgb(49, 49, 49), inset 5px 5px 3px grey;
 .grid-container {
     display: grid;
     grid-template-columns: [nav]100px [main-container]800px;//screen is 900px across (window is 921px)
@@ -81,7 +81,7 @@ $neumorphic: inset 5px 5px 5px rgb(49, 49, 49), inset 5px 5px 5px grey;
 }
 
 .buttons > div:hover {
-    box-shadow: 0px 0px 0px 0px transparent;
+    box-shadow: $neumorphic;
     border-radius: 25px;
 }
 
@@ -100,7 +100,7 @@ $neumorphic: inset 5px 5px 5px rgb(49, 49, 49), inset 5px 5px 5px grey;
     // padding: 10px;
     // cursor: pointer;
     // z-index: 3;
-    box-shadow: 0px 0px 0px 0px transparent;
+    box-shadow: $neumorphic;
     border-radius: 25px;
 }
 
@@ -248,7 +248,7 @@ $neumorphic: inset 5px 5px 5px rgb(49, 49, 49), inset 5px 5px 5px grey;
 }
 
 .edit-tags-popup .button:hover {
-    box-shadow: 0px 0px 0px 0px transparent;
+    box-shadow: $neumorphic;
     border-radius: 25px;
 }
 
@@ -300,6 +300,7 @@ table {
 }
 
 .close-btn:hover{
+    box-shadow: $neumorphic;
 }
 
 .dialog {
