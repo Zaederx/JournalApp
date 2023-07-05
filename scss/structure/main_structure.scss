@@ -225,12 +225,15 @@
     grid-column: 2 / span 2;
     grid-row: 4;
     z-index: 3;
+    border-radius: 5px 5px 5px 5px;
+    padding-bottom: 10px;
 }
 
 .edit-tags-popup > * {
 }
 
 .edit-tags-popup .button {
+    padding: 10px;
     text-align: center;
     cursor: pointer;
     box-shadow: 5px 5px 5px 5px black;
@@ -244,6 +247,7 @@
 
 table {
     width: -webkit-fill-available;
+    border-radius: 0px 0px 5px 5px;
 }
 
 .table-row {
@@ -257,8 +261,14 @@ table {
 }
 
 .tag-searchbar {
-    padding: 15px;
+    padding: 20px;
     text-align: center;
+}
+
+// div containing pop up buttons
+.tag-popup-buttons {
+    padding:20px;
+    padding-left: 20px;
 }
 
 .table-scroll-div {
@@ -277,6 +287,7 @@ table {
     width: 20px;
     height: 20px;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .close-btn:hover{
