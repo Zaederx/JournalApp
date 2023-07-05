@@ -1,10 +1,10 @@
 {
   "name": "the-journal-app",
-  "version": "4.0.0",
+  "version": "4.5.0",
   "description": "",
   "main": "js/main.js",
   "scripts": {
-    "bundle": "npm run sass && npm run tsc && npm run pack;",
+    "bundle": "npm run scss && npm run tsc && npm run pack;",
     "pack": "webpack",
     "tsc": "tsc",
     "scss": "sass --no-source-map ./scss:./css",
