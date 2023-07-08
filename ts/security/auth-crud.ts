@@ -2,7 +2,7 @@ import paths from 'path'
 import * as fs from 'fs' 
 import bcrypt from 'bcryptjs'
 import * as dirs from '../directory'
-import { printFormatted } from '../other/stringFormatting';
+import { printFormatted } from '../other/printFormatted';
 import isThereTheDirectory from '../fs-helpers/isThereTheDirectory';
 
 /**
