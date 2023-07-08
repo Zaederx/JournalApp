@@ -3,7 +3,7 @@ import * as dirs from '../../directory'
 import fs from 'fs'
 import Entry from '../../classes/entry'
 import * as fs_helpers from '../../fs-helpers/helpers'
-import { printFormatted } from '../../other/stringFormatting'
+import { printFormatted } from '../../other/printFormatted'
 
 
 
