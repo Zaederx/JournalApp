@@ -1,7 +1,7 @@
 import fs from 'fs';
 import * as dirs from '../directory'
 import { Settings, settings } from './settings-type'
-import { printFormatted } from '../other/stringFormatting';
+import { printFormatted } from '../other/printFormatted';
 
 /**
  * Write settings to the filesystem.
