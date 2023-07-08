@@ -1,7 +1,7 @@
 import paths from 'path'
 import fs from 'fs'
 import * as dirs from '../directory'
-import { printFormatted } from '../other/stringFormatting'
+import { printFormatted } from '../other/printFormatted'
 
 /**
  * Creates the 'all' tag directory if it does not already exist.
