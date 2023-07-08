@@ -361,3 +361,7 @@ Long story short, if you want a variable to be mutated within a function, either
 
 ## Window :DOMContentLoaded vs window.onload
 [DOMContentLoaded](https://developer.mozilla.org/en-US/docs/Web/API/Window/DOMContentLoaded_event) - from what I understood, just when the HTML has loaded & [Windo on load] happens after everything has loaded with the window
+
+
+## How to create custom test drivers for electron
+see [link](https://www.electronjs.org/docs/latest/tutorial/automated-testing)
