@@ -1,7 +1,7 @@
 import { passwordFileExists } from './auth-crud'
 import { retrieveSettings } from '../settings/settings-functions'
 import { type settings } from '../settings/settings-type'
-import { printFormatted } from '../other/stringFormatting'
+import { printFormatted } from '../other/printFormatted'
 
 
 export async function authenticationAction(event:Electron.IpcMainEvent, loggedIn:{is:boolean}, windowJustOpened:{is:boolean})
