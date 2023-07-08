@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { printFormatted } from '../other/stringFormatting'
+import { printFormatted } from '../other/printFormatted'
 import fs from 'fs'
 import paths from 'path'
 
