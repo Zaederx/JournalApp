@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as dir from '../../directory'
 import paths from 'path'
 import Entry from '../../classes/entry';
-import { printFormatted } from '../../other/stringFormatting';
+import { printFormatted } from '../../other/printFormatted';
 
 function dateStr():string {
   var date = new Date();
