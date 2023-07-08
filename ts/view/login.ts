@@ -3,7 +3,7 @@ import { blurBackground, unblurBackground } from "./create-entry/background-blur
 
 import { clickRegisterEmailPasswordButton } from "./register"
 import * as fragments from './fragments/load-fragments'
-import { printFormatted } from '../other/stringFormatting'
+import { printFormatted } from '../other/printFormatted'
 import { pasteWithoutStyle, submitEnterListener } from "./input-helpers/key-capture"
 import { customPrompt } from "./fragments/load-fragments"
 import { setPasswordProtection } from "./switch/switch"

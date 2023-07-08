@@ -1,7 +1,7 @@
 // *** Function Definitions ***
 import { blurBackground, unblurBackground } from "./background-blur"
 import { fillTagTable, constants as c } from "../clickable-filter-table/table"
-import { printFormatted } from "../../other/stringFormatting"
+import { printFormatted } from "../../other/printFormatted"
 
 //SECTION Toggling Popup
 

@@ -1,4 +1,4 @@
-import { printFormatted } from '../../other/stringFormatting'
+import { printFormatted } from '../../other/printFormatted'
 export type keystrokes = {keys:string}
 
 

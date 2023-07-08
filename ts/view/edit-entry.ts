@@ -4,7 +4,7 @@ import toggleTagPopup, { hideTagPopup } from "./create-entry/tagPopup"
 import { addSelectedTagsToEntry, filterTable, removeSelectedTags } from "./clickable-filter-table/table"
 import Entry from "../classes/entry"
 import updateEntry from "./edit-entry/updateEntry"
-import { printFormatted } from "../other/stringFormatting"
+import { printFormatted } from "../other/printFormatted"
 
 console.info('edit-entry called')
 //Fetch HTML Elements

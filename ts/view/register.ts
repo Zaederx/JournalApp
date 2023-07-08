@@ -7,7 +7,7 @@ import { setPasswordProtection } from './switch/switch';
 import { type settings } from '../settings/settings-type';
 import * as fragments from './fragments/load-fragments'
 import { submitEnterListener } from './input-helpers/key-capture';
-import { printFormatted } from '../other/stringFormatting';
+import { printFormatted } from '../other/printFormatted';
 import { validEmail } from './login';
 
 
