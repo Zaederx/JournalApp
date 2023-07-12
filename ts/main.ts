@@ -26,7 +26,7 @@ import c_process from 'child_process'
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
 import {retrieveSettings, saveSettingsJson } from './settings/settings-functions'
-import { printFormatted } from './other/stringFormatting'
+import { printFormatted } from './other/printFormatted'
 import { createAllTagDirectory } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
 import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-email'
@@ -45,6 +45,8 @@ var integration = true;
 app.whenReady().then(async () => { 
   createAllTagDirectory()
   window = await createWindow(integration)
+  const url = window.webContents.getURL();
+  printFormatted('yellow', 'url:',url)
   
 })
 //SECTION Display HTML Views
@@ -539,10 +541,9 @@ import { importTransferData, exportTransferData } from './entry/export/transfer-
  */
 //IMPORTANT
 ipcMain.handle('export-transfer-data', () => {
-  var target = paths.join(dirs.downloads, 'tagDirs')
-  exportTransferData(dirs.tagDirectory,target)
+  exportTransferData(dirs.allEntries, dirs.downloads)
 })
 
 ipcMain.handle('import-transfer-data', () => {
-  importTransferData(dirs.downloads, dirs.tagDirectory)
+  importTransferData(dirs.downloads, dirs.allEntries)
 })
