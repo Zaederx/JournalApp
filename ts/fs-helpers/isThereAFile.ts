@@ -3,7 +3,7 @@ import * as fs from 'fs'
  * Checks whether the current entry directory exists.
  * @return true or false
  */
-export default async function isThereAFile(filepath:string)
+export async function isThereAFile(filepath:string)
 {
   var isThere = false
   try 
