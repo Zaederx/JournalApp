@@ -7,7 +7,7 @@
  * @param files 
  */
 export function sendTagEntriesToHTML(files:string[], ipcMain:any) {
-    var filesHTML = '';
+    // var filesHTML = '';
     var i = 0;
     files.forEach( (filename) => {
         if (i == 0) {
