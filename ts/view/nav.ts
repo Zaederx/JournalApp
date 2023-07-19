@@ -133,7 +133,7 @@ ipcRenderer.on('recieve-tag-dirname', async (event,message) => {
     console.log('recieve-tag-dirname called')
     const loader = document.querySelector('#loader') as HTMLDivElement
     // activateLoader(loader)
-    const { firstTag, tagDirname } = message
+    const { firstTag, tagDirname, allTag } = message
     const panel_tags = document.querySelector('#tags')
     //clear panel tags on first tag
     if(firstTag && panel_tags)
@@ -143,7 +143,7 @@ ipcRenderer.on('recieve-tag-dirname', async (event,message) => {
     var tagDiv = document.createElement('div')
     tagDiv.innerHTML = tagDirname
     //if first tag
-    if (firstTag) {
+    if (allTag) {
         console.log('active tag set')
         tagDiv.className = 'active tag'
         console.log(tagDiv.className)
