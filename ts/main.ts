@@ -151,7 +151,11 @@ app.on('browser-window-focus', () => {
    * 
    * Append entries and tags to the side-panel
    */
-ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event,dirs.allEntries,dirs.tagDirectory))
+ipcMain.on('ready-to-show-sidepanel', async (event) =>
+{
+  const { allEntries, tagDirectory } = dirs
+  appendEntriesAndTags(event,allEntries,tagDirectory)
+} )
 
   
 const loggedIn = {is:false}
