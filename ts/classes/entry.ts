@@ -10,9 +10,6 @@ export default class Entry {
     body:string;
     tags:string[] = [];
 
-    /**
-     * must pass in an object - even if its empty
-     */
     constructor (obj:{cdate?:string, udate?:string, laccess?:string, title?:string, body?:string, tags?:string[]}={}) 
     {
         var d = new Date();
