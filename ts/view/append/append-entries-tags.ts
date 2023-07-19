@@ -18,6 +18,7 @@ export function appendEntriesAndTags(event:IpcMainEvent, allEntries:string, tagD
     //create a child process that fills the side panel with entries and tags
     var pathToAppendJS = paths.join(__dirname, 'append.js')
     console.log('pathToAppendJS:'+pathToAppendJS)
+    //start child process to append entries and tags
     var childProcess = c_process.fork(pathToAppendJS,[ allEntries, tagDirectory], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
     
     //if successful in creating child process..
