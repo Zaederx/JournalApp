@@ -15,12 +15,13 @@ export async function appendTags(dir:string)
     /* load / append tags to tags list */
     var firstTag = true
     var directory:string[] = await readTagDir(dir);
-    var firstTag = true
     directory.forEach((tag:string) => {
         //if not the .DS_Store file or another invisible file
         if (tag.charAt(0) != '.' && tag != 'current-entry') {
+            var allTag
+            tag == 'all' ? allTag = true : allTag = false
             //if first tag - clear the tags - else don't clear tags when sending tagname
-            (firstTag) ? sendSingleTag(tag, firstTag) : sendSingleTag(tag,firstTag)
+            sendSingleTag(tag,firstTag,allTag)
             firstTag = false
         }
     });
@@ -31,7 +32,7 @@ export async function appendTags(dir:string)
    * 
    * @param dirName the tag name of the directory
    */
-function sendSingleTag(dirName:string, firstTag:boolean)
+function sendSingleTag(dirName:string, firstTag:boolean, allTag?:boolean)
 {
     //send directory name to frontend (to be added to tags list)
     //only if ipc channel is available - send method is available
@@ -39,6 +40,6 @@ function sendSingleTag(dirName:string, firstTag:boolean)
     {
         //message is sent from this (child process)
         //to the parent process
-        process.send({tagDirname:dirName, firstTag:firstTag});
+        process.send({tagDirname:dirName, firstTag:firstTag, allTag:allTag});
     }
 }
