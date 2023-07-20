@@ -20,8 +20,8 @@ export async function appendEntries(dir:string)
     if (entries.length == 0) 
     {
         const entryFilename = 'NO-ENTRIES'
-        const firstTag = true
-        sendSingleEntry(entryFilename, firstTag)
+        const firstEntry = true
+        sendSingleEntry(entryFilename, firstEntry)
     }
     else 
     {
@@ -39,12 +39,12 @@ export async function appendEntries(dir:string)
             //if .DS_Store or other invisible file - ignore
             const char0 = entryDate.name.charAt(0)
             const name = entryDate.name
-            if (char0 != '.' || name != 'undefined')
+            if (char0 != '.' && name != 'undefined')
             //send entry
             {
                 //if first entry clear entries - else don't clear entries
-                (firstEntry) ? sendSingleEntry(entryDate.name, firstEntry) : sendSingleEntry(entryDate.name, firstEntry)
-                firstEntry = false
+                sendSingleEntry(entryDate.name, firstEntry)
+                if (firstEntry) firstEntry = false
             }
         })
     }
