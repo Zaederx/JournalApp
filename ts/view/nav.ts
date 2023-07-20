@@ -70,20 +70,6 @@ ipcRenderer.on('enable-navigation', () => {
     }
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /** Click button functions - ipcRenderer invoking end */
 function clickBtnAddEntry() {
     //open create entry view
