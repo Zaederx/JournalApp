@@ -365,3 +365,20 @@ Long story short, if you want a variable to be mutated within a function, either
 
 ## How to create custom test drivers for electron
 see [link](https://www.electronjs.org/docs/latest/tutorial/automated-testing)
+
+## Difference between types and interfaces in typescript see [link](https://levelup.gitconnected.com/typescript-what-is-the-difference-between-type-and-interface-9085b88ee531#:~:text=Type%20aliases%20and%20interfaces%20are,interface%20which%20is%20always%20extendable.)
+
+Interfaces are extendable, while types are not.
+
+
+## How to make an Nullable type using generics
+see [stackoverflow post](https://stackoverflow.com/a/53453116/9795420)
+```
+type Nullable<T> = T | null;
+
+interface Employee{
+   id: number;
+   name: string;
+   salary: Nullable<number>;
+}
+```
