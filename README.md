@@ -93,8 +93,13 @@ Make sure to install dependecies before running the project.
 npm install
 ```
 ## Running the Project
-Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then `npm start`. This will generate JavaScript files from the TypeScirpt files that are in the repository (and likewise SASS into CSS) and then it will load up the project on screen.
+Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then npm `run bundle` to compile ts file into js bundles, then `npm start` to start electron forge.
 
+```
+npm install
+npm run bundle
+npm start
+```
 <!-- ## Testing
 To test the project, make sure to run the application once to get the application binary path file to be generated. Then please run the following commands:
 ```
