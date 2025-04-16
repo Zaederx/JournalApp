@@ -93,7 +93,7 @@ Make sure to install dependecies before running the project.
 npm install
 ```
 ## Running the Project
-Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then npm `run bundle` to compile ts file into js bundles, then `npm start` to start electron forge.
+Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then `npm run bundle` to compile ts file into js bundles, then `npm start` to start electron forge.
 
 ```
 npm install
