@@ -1,8 +1,12 @@
 # JournalApp - Refactored and Design Update - Version 4
  Jounalling App
- 
 
 A journalling project that I made while experiementing and learning about Node and Electron.
+
+# Most upto date image of the app (need to make a new video.)
+<img width="916" alt="Screenshot 2025-04-17 at 03 30 29" src="https://github.com/user-attachments/assets/8c9300a7-e029-4d0f-b458-5e647c4d28ee" />
+<img width="918" alt="Screenshot 2025-04-17 at 03 32 38" src="https://github.com/user-attachments/assets/a0be97fe-dca7-42b5-9624-83c6e5d457b2" />
+
 
 ## [See YouTube Video Walthrough - for Version 3](https://youtu.be/YHcCa2SDqf0)
 
