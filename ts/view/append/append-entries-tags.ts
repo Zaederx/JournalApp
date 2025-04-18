@@ -10,8 +10,9 @@ import paths from 'path'
  * @param allEntries path to 'all' entries tag folder
  * @param tagDirectory path to tag directory 'tagDirs'
  */
-export function appendEntriesAndTags(event:IpcMainEvent, allEntries:string, tagDirectory:string)
+export function appendEntriesAndTags(event:IpcMainEvent, allEntries:string, tagDirectory:string):boolean
 {
+  var success = false;
   printFormatted('blue','window ready-to-show-sidepanel called')
     //fetch addresses
 
@@ -19,7 +20,7 @@ export function appendEntriesAndTags(event:IpcMainEvent, allEntries:string, tagD
     var pathToAppendJS = paths.join(__dirname, 'append.js')
     console.log('pathToAppendJS:'+pathToAppendJS)
     //start child process to append entries and tags
-    var childProcess = c_process.fork(pathToAppendJS,[ allEntries, tagDirectory], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
+    var childProcess = c_process.fork(pathToAppendJS,[ allEntries, tagDirectory ], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
     
     //if successful in creating child process..
     if (childProcess) 
@@ -60,10 +61,14 @@ export function appendEntriesAndTags(event:IpcMainEvent, allEntries:string, tagD
             event.reply('deactivate-loader')
           }
         })
+        success = true
       }
       catch(error)
       {
         printFormatted('red', 'Error in append-entries-tags.ts:', error)
+        success = false
+        return success
       }
     }
+    return success
 }
