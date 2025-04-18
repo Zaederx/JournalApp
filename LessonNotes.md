@@ -382,3 +382,11 @@ interface Employee{
    salary: Nullable<number>;
 }
 ```
+
+
+## WDIO - Using Chromedriver instead of WDIO
+This is because 'If your app uses a version of Electron which is lower than v26 then you will need to manually configure Chromedriver.' see [link to wdio](https://webdriver.io/docs/wdio-electron-service/#chromedriver-configuration)
+
+The journal app is currently on electron version ^13.6.9 and I don't want to break the application by updating something.
+
+I may update it in the future, but not now while I'm trying to sort out testing. One thing at a time.
