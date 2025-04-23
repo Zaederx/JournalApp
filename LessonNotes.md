@@ -363,7 +363,8 @@ Long story short, if you want a variable to be mutated within a function, either
 [DOMContentLoaded](https://developer.mozilla.org/en-US/docs/Web/API/Window/DOMContentLoaded_event) - from what I understood, just when the HTML has loaded & [Windo on load] happens after everything has loaded with the window
 
 
-## How to create custom test drivers for electron
+## How to create custom test drivers for electron (WDIO testing proves problematic)
+I couldn't seem to get WDIO testing driver to work (something about failing to create a session due to version inconsistencies or something - see wdio logs) so I've looked into creating a custom driver.
 see [link](https://www.electronjs.org/docs/latest/tutorial/automated-testing)
 
 ## Difference between types and interfaces in typescript see [link](https://levelup.gitconnected.com/typescript-what-is-the-difference-between-type-and-interface-9085b88ee531#:~:text=Type%20aliases%20and%20interfaces%20are,interface%20which%20is%20always%20extendable.)
