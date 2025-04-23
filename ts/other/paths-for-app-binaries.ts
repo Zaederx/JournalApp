@@ -3,7 +3,7 @@ import fs from 'fs'
 /**
  * produce electron binary file path for the wdio.config.ts
  */
-export default function pathsForWDIO()
+export default function pathsForAppBinaries()
 {
   const appBinaryPath = app.getPath('exe')
   const appPath = app.getAppPath()
