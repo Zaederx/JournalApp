@@ -3,9 +3,12 @@ import * as process from 'process'//an extension of node:process
 import EntryDate from '../../../classes/entry-date'
 import fetchBtime from './fetch-btime'
 import entryMergeSort from '../../../algorithms/entryMergeSort'
+import SendSingleEntryFunctionMessage from '../../../classes/send-single-entry-function-message'
 
 /**
  * Appends entries to the entry list on the frontend.
+ * Does this by sending a message on this child process
+ *  which can be accessed from the main process which called it
  * @param dir directory 
  */
 export async function appendEntries(dir:string)
@@ -54,6 +57,7 @@ export async function appendEntries(dir:string)
 
 /**
  * Sends a single entry to frontend
+ * where it will be displayed.
  * see [node docs link](https://nodejs.org/api/child_process.html#subprocesssendmessage-sendhandle-options-callback)
  * @param entryFilename entry's filename
  */
@@ -66,11 +70,15 @@ function sendSingleEntry(entryFilename:string, firstEntry:boolean)
     {
         //message is sent from this (child process)
         //to the parent process
-        process.send({entryFilename:entryFilename, firstEntry:firstEntry});
+        process.send(new SendSingleEntryFunctionMessage(entryFilename,firstEntry));
         console.log('sending message')
     }
 }
 
+/**
+ * Sends a message from this process to the
+ * main process to start the loader animation.
+ */
 function startLoader() 
 {
     //send message to start loader
@@ -80,6 +88,10 @@ function startLoader()
     }
 }
 
+/**
+ * Sends a message from this process to the
+ * main process to stop the loader animation.
+ */
 function stopLoader()
 {
     //send message to start loader
