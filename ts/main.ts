@@ -395,12 +395,14 @@ ipcMain.handle('get-tags-table-rows', async (event) => {
 ipcMain.on('get-tag-entries', async (event, tagName) => {
   //get directories
   const { allEntries, tagDirectory } = dirs
+  //the path to the send-entries.js script
   const pathToScript = paths.join(__dirname, 'view', 'append', 'send-entries.js')
   //start a child proces
   var childProcess = c_process.fork(pathToScript, [allEntries, tagDirectory, tagName], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
 
   //recieve messages from child process on this the main process & send/forward to renderer process
-  childProcess.on('message', (message:any) => {
+  childProcess.on('message', (message:SendSingleEntryFunctionMessage|'start-loader'|'stop-loader') => {
+    //@ts-ignore
     if (message.entryFilename) {
       event.reply('recieve-tag-entries', message)
     }
@@ -534,6 +536,7 @@ ipcMain.handle('email-stored-boolean', async () => {
 })
 
 import { importTransferData, exportTransferData } from './entry/export/transfer-data'
+import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
 /**
  * Export for tarnsfer to new another 'The Journal App' journal.
  * For instance if the computer needs to be backed up or wiped,
