@@ -31,6 +31,8 @@ import { createAllTagDirectory } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
 import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-email'
 import { authenticationAction } from './security/auth-action'
+import { importTransferData, exportTransferData } from './entry/export/transfer-data'
+import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system)
 //TODO - option to store file in iCloud
 //TODO - SEND AND EMAIL IN NODE.JS - temporary password for login recovery
@@ -158,7 +160,7 @@ const loggedIn = {is:false}
 ipcMain.handle('login', async (event, password) => {
   printFormatted('blue', 'ipcMain.handle(login) called')
   //authenticate password
-  var authenticated = await authCrud.autheticatePassword(password)
+  var authenticated = await authCrud.authenticatePassword(password)
   if (authenticated) 
   {
     loggedIn.is = true
@@ -197,7 +199,7 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
   printFormatted('blue', 'ipcMain.on(send-reset-password-email)')
   const message = 'Email does not match stored email.\nPlease enter the email used for this application.'
   //if email matches stored email hash
-  const emailAuthenticated = await authCrud.autheticateEmail(email)
+  const emailAuthenticated = await authCrud.authenticateEmail(email)
   //send email with reset code to user email
   if (emailAuthenticated)
   {
@@ -237,7 +239,7 @@ ipcMain.on('does-reset-code-match-?', doesRestCodeMatch)
 async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
 {
   printFormatted('blue', 'does-reset-code-match listener fired')
-  var codesMatch = await authCrud.autheticateResetCode(resetCode)
+  var codesMatch = await authCrud.authenticateResetCode(resetCode)
   printFormatted('white', 'do reset codes match...')
   if(codesMatch)
   {
@@ -258,7 +260,7 @@ async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
 
 ipcMain.handle('check-verification-code', async (event, verificationCode) => {
   printFormatted('blue', 'function checkVerificationCode called')
-  const valid = await authCrud.autheticateVerificationCode(verificationCode)
+  const valid = await authCrud.authenticateVerificationCode(verificationCode)
   printFormatted('green', 'verification code is valid:',valid)
   return valid
 })
@@ -538,8 +540,7 @@ ipcMain.handle('email-stored-boolean', async () => {
   }
 })
 
-import { importTransferData, exportTransferData } from './entry/export/transfer-data'
-import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
+
 /**
  * Export for tarnsfer to new another 'The Journal App' journal.
  * For instance if the computer needs to be backed up or wiped,
