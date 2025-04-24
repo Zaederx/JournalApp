@@ -1,5 +1,13 @@
 # Things learnt during the making of this project
 
+## dir vs filepath
+Note: directory is not the filepath.
+i.e.
+```
+directory = '/path/to/folder'
+filepath = '/path/to/folder/file.txt'
+```
+
 ## forEach loops in javascript are not ASYNC AWAIT aware
 You end up getting unpredicatable behaviour when you use promises inside of forEach loops. Use for loops instead.
 
