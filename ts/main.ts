@@ -180,7 +180,12 @@ ipcMain.handle('logout', () => {
 
 
 
-  //waits for event from create-entry.ts
+
+
+
+
+
+//IMPORTANT:waits for event from create-entry.ts
 ipcMain.on('authentication-action',(event) => authenticationAction(event,loggedIn,windowJustOpened))
 
 
@@ -217,7 +222,7 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
     }
     
    
-    event.reply('open-reset-code-dialog')//IMPORTANT - DELETE LATER
+    //event.reply('open-reset-code-dialog')//IMPORTANT - DELETE LATER
   }
   else//send them back to step 1) the form to input their email to be checked
   {
@@ -370,16 +375,14 @@ ipcMain.handle('get-last-entry', async () => {
   return lastEntry
 })
 
-
+/**
+ * Sets the current entry 
+ */
 ipcMain.handle('set-current-entry', (event, selectedEntryName) => setCurrentEntry(selectedEntryName))
 
 
-ipcMain.handle('get-current-entry-name', async (event) => {
-  const json = false// will return an entry when false
-  const entry = await getCurrentEntry(json) as Entry
-  entry.cdate+'.json'
-})
-
+/** Returns the current entry as a json string.
+ */
 ipcMain.handle('get-current-entry', async (event) => {
   const json = true
   var entryJsonStr = await getCurrentEntry(json) as string
