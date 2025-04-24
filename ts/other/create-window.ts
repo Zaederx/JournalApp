@@ -33,9 +33,9 @@ export default async function createWindow(integration:boolean=true) {
     //Note:don't think it matters but it was... 
     // if (process.env.NODE_ENV === 'test-main') {
     if (process.env.NODE_ENV === 'test') {
-      //produce paths for wdio
+      //open dev tools & produce paths for testing
       window.webContents.openDevTools();
-      pathsForAppBinaries()
+      pathsForAppBinaries()//(writes apps paths to 2 files [was originally made for wdio testing])
     }
       
     
