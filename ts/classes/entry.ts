@@ -1,7 +1,7 @@
 /**
  * Class to describe Journal Entries.
- * Note: you must pass in an object even if it's an empty one, 
- * otherwise it causes problems in the constructor.
+ * Important Note: Each entry's filename is the
+ * creation date (`cdate`) with the file-extension `.json`
  */
 export default class Entry {
     cdate:string; //creation date
@@ -10,9 +10,6 @@ export default class Entry {
     body:string;
     tags:string[] = [];
 
-    /**
-     * must pass in an object - even if its empty
-     */
     constructor (obj:{cdate?:string, udate?:string, laccess?:string, title?:string, body?:string, tags?:string[]}={}) 
     {
         var d = new Date();
@@ -23,26 +20,50 @@ export default class Entry {
         var mins = d.getMinutes();
         var secs = d.getSeconds();
 
+        //month plus 1 (because it's always off by one for some reason)
+        // [turns out because it's zero indexed]
         const dateStr = day + '-' + (month+1) + '-' + year + '-' + hour + '-' + mins + '-' + secs;
     
-        //regular var assignment
-        const { udate, cdate, title, body, tags } = obj
+        //regular var assignment (object deconstruction)
+        const { cdate, udate, title, body, tags } = obj
         this.cdate = cdate ? cdate : dateStr;
         this.udate = udate ? udate : dateStr;
         this.title = title ? title : 'default';
         this.body = body ? body : 'default';
         this.tags = tags ? tags : ['all'];
     }
+    /**
+     * Takes an entry's tags and puts them into 
+     * a csv (Comma Separated Value) string
+     * See class {@link Entry}.
+     * @param e - Entry whose tags you are reading
+     * @returns 
+     */
     tagsToStringCSV(e:Entry=this):string 
     {
         var csv = e ? e.tagsArrToStringCSV() : 'all'
         return csv
     }
-    tagsStringToArr(tagsString:string):string[] 
+    /**
+     * Takes a csv string of tags and turns them
+     * into an array of tags.
+     * See class {@link Entry}.
+     * @param tagsStringCSV 
+     * @returns 
+     */
+    tagsStringToArr(tagsStringCSV:string):string[] 
     {
-        var arr:string[] = tagsString.split(',')
+        var arr:string[] = tagsStringCSV.split(',')
         return arr
     }
+    /**
+     * Takes an array of tags and turn them into
+     * a csv (Comma Separated Value) string of tags.
+     * The functions uses this instance of an 
+     * {@link Entry} by default if not specified.
+     * @param e Entry whose tags are to be read
+     * @returns 
+     */
     tagsArrToStringCSV(e:Entry=this):string
     {
         var entryTags:string = ''
@@ -62,6 +83,12 @@ export default class Entry {
         })
         return entryTags
     }
+    /**
+     * Takes an {@link Entry} and creates a string 
+     * representation of it.
+     * @param e {@link Entry} whose attributes are to be read
+     * @returns 
+     */
     entryToTxt(e:Entry=this)
     {
         var entryTxt = ''
@@ -73,16 +100,26 @@ export default class Entry {
         
         return entryTxt
     }
-    entryToJsonObj(e:Entry=this)
-    {
-        var json = {cdate:e.cdate, title:e.title, body:e.body, tags:e.tags.toString()}
-        return json
-    }
+
+    /**
+     * Returns entry as a json string.
+     * See class {@link Entry}.
+     * @param e entry to be read
+     * @returns 
+     */
     entryToJsonStr(e:Entry=this)
     {
         var jsonStr = JSON.stringify(e)
         return jsonStr
     }
+
+    /**
+     * Returns tags each wrapped in HTML divs
+     * (prepared for use on the frontend).
+     * See class {@link Entry}
+     * @param tags 
+     * @returns 
+     */
     tagsToHTML(tags:string[],) 
     {
         var tagsHtml = ''
@@ -104,5 +141,14 @@ export default class Entry {
             tagsHtml += '<div>'+'all'+'</div>\n'
         }
         return tagsHtml
+    }
+
+    /**
+     * Returns entry as a string.
+     * See class {@link Entry}
+     * @returns entry as a string
+     */
+    toString() {
+        return this.entryToTxt()
     }
 }
