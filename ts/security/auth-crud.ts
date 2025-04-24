@@ -209,7 +209,7 @@ export async function authenticatePassword(password:string)
 /**
  * Checks whether the password file exists or not.
  * This determines whether or not a password is
- * requested on app opening.
+ * requested on app opening (when the app is opened).
  * @returns boolean - whether the password file exists. True if exists.
  */
 export async function passwordFileExists():Promise<boolean>
