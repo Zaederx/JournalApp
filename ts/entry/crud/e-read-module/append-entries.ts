@@ -68,8 +68,9 @@ function sendSingleEntry(entryFilename:string, firstEntry:boolean)
     //only if ipc channel is available - send method is available
     if (process.send)
     {
-        //message is sent from this (child process)
-        //to the parent process
+        /** Message sent on the child process,
+         * which can be accessed on the main process that called it by the`childProcess.on` method.
+         */
         process.send(new SendSingleEntryFunctionMessage(entryFilename,firstEntry));
         console.log('sending message')
     }
