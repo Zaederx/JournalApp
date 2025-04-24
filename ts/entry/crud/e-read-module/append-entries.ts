@@ -6,7 +6,8 @@ import entryMergeSort from '../../../algorithms/entryMergeSort'
 import SendSingleEntryFunctionMessage from '../../../classes/send-single-entry-function-message'
 
 /**
- * Appends entries to the entry list on the frontend.
+ * A backend function that appends entries 
+ * to the entry list on the frontend.
  * Does this by sending a message on this child process
  *  which can be accessed from the main process which called it
  * @param dir directory 
@@ -19,7 +20,9 @@ export async function appendEntries(dir:string)
     //get all entries
     var entries = await readDirFiles(dir)
 
-    //if there are no entries - send message to clear panel and have no entries
+    /* if there are no entries - send message to
+    clear panel (firstTag = true - will clear the
+     panel)and have no entries */
     if (entries.length == 0) 
     {
         const entryFilename = 'NO-ENTRIES'
@@ -77,8 +80,9 @@ function sendSingleEntry(entryFilename:string, firstEntry:boolean)
 }
 
 /**
- * Sends a message from this process to the
- * main process to start the loader animation.
+ * Sends a message on this (child)process which 
+ * is listened for on the main process to 
+ * start the loader animation.
  */
 function startLoader() 
 {
@@ -90,8 +94,9 @@ function startLoader()
 }
 
 /**
- * Sends a message from this process to the
- * main process to stop the loader animation.
+ * Sends a message on this (child)process which 
+ * is listened for on the main process to 
+ * stop the loader animation.
  */
 function stopLoader()
 {
