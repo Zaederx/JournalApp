@@ -1,7 +1,9 @@
 import { app } from 'electron'
 import fs from 'fs'
 /**
- * produce electron binary file path for the wdio.config.ts
+ * Originally made to produce electron binary file path
+ *  for the wdio.config.ts. Now kept just in case this is
+ * useful later.
  */
 export default function pathsForAppBinaries()
 {
