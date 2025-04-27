@@ -3,7 +3,10 @@ import { activateLoader, deactivateLoader } from "./nav/loader"
 import { makeTagDivClickable, makeEntryDivClickable } from "./nav/clickable"
 
 
-//  Load html fragments
+/**
+ * Load html fragments.
+ * 
+ */ 
 async function loadFragments()
 {
     console.log('function loadFragments called')
@@ -21,10 +24,14 @@ var promise = loadFragments()
 //MUST USE PROMISE TO GET BUTTONS AND ACTIVATE AFTER DYNAMIC LOADING OF NAVIGATION
 promise.then(() => {
     console.log("ipcRenderer.send('enable-navigation-?') called")
+    /* check whether the user needs 
+    to login to enable navigation */
     ipcRenderer.send('enable-navigation-?')
 })
 
-
+/**
+ * Enables navigation buttons
+ */
 ipcRenderer.on('enable-navigation', () => {
     const panel_tags = document.querySelector('#tags') as HTMLDivElement
     const panel_entries = document.querySelector('#entries') as HTMLDivElement
@@ -42,6 +49,11 @@ ipcRenderer.on('enable-navigation', () => {
     btn_export ? btn_export.onclick = () => clickBtnExportEntries() : console.log('btn_add_entry is null')
     btn_settings ?  btn_settings.onclick = () => clickBtnSettings() : console.log('btn_settings is null')
     
+
+    /** Functions needed for clickBtnTags.
+     * These functions are only neeed in
+     * the scope of the enclsoing function.
+     */
     function clickBtnTags() {
         toggleSidePanel()
         loadTags(panel_entries, panel_tags)
