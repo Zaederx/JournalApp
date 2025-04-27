@@ -27,13 +27,15 @@ window.onfocus = () =>
 }
 
 
-/* Note: inDialog in localStorage is set to false
+/* IMPORTANT Note: inDialog in localStorage is set to false
  * in two locations:
  * - clickLogin (when it logs in successfully)
  * - clickSubmitResetCode
  * 
- * It is set to true whenever one of the dialog is called.
- * It is there to prevent the window from closing the dialog when the window
+ * It is set to true whenever one of the dialog is called. (The dialog is the pop up window where you
+ * input information).
+ * The variable is there to prevent the window from
+ * closing the dialog when the window
  * goes out of focus and back into focus.
  */
 
@@ -93,8 +95,10 @@ export async function openVerificationCodeDialog():Promise<boolean> {
 
 /**
  * Fires an ipc message to `authentication-action`.
- * This then diecides what dialog to show the user upon opening the app.
- * Whether it be to login, or to request a reset of the password.
+ * This then decides what dialog to show the user upon opening the app (whether it be to login, or to request a reset of the password).
+ * If no password has been set, or if password
+ * authentication is not enabled, this does not
+ * show a dialog
  */
 async function passwordReminderOrLogin()
 {
