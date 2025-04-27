@@ -373,3 +373,19 @@ Long story short, if you want a variable to be mutated within a function, either
 
 ## How to create custom test drivers for electron
 see [link](https://www.electronjs.org/docs/latest/tutorial/automated-testing)
+
+
+## Idea for testing the frontend from test runner
+Idea for testing.
+Send scripts (js) from the from the test suite (main process), to the app (on a child process) recieving these scripts here and executing them.
+```
+process.on('message',(message_func:string) => {
+  printFormatted('yellow','message_func:',message_func)
+  window.webContents.executeJavaScript(message_func)
+})
+```
+Need to find a way to bundle script/message function depedencies before inputing it as a string to be called. Also to find a way of calling the scripts.
+
+Maybe could use webpack to bundle test-runner scripts and then...figure something out...will have to research how these things work...
+
+Maybe I could put the test scripts for different individual test in indivdual files and bundle using webpack. Then I could call these files from the test runner and send there contents on the `message` channel.
