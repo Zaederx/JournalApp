@@ -25,7 +25,7 @@ import process from 'process'
 import c_process from 'child_process'
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
-import {retrieveSettings, saveSettingsJson } from './settings/settings-functions'
+import { Settings } from './settings/settings-type'
 import { printFormatted } from './other/printFormatted'
 import { createAllTagDirectory } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
@@ -81,10 +81,11 @@ ipcMain.handle('settings-view', () => {
 const setInDialogFalse = 'localStorage.setItem("inDialog","false")'
 app.on('window-all-closed', async() => {
   printFormatted('blue', 'app.on(window-all-closed) was called/fired')
-  loggedIn.is = false
+  userCanAccess.is = false
   //quit completely even on darwin (mac) if it is a test
   if (process.env.NODE_ENV === 'test') {
     await window.webContents.executeJavaScript(setInDialogFalse) 
+
     //quit app when done setting the value of inDialog on frontend
     app.quit()
   }
@@ -94,6 +95,8 @@ app.on('window-all-closed', async() => {
     app.quit()
   }
 });
+
+
 
 /**
  * This is need for window to be reopened once closed. (as mac app hang on the dock when closed, waiting to be reopened - from my understanding)
@@ -111,7 +114,7 @@ app.on('activate', async (event) => {
  */
 app.on('before-quit', async() => {
   printFormatted('blue', 'event before-quit was fired')
-  loggedIn.is = false
+  userCanAccess.is = false
   await window.webContents.executeJavaScript(setInDialogFalse) 
   process.exit(0)
 })
@@ -129,7 +132,7 @@ process.on('SIGINT', async () => {
 
 
 app.on('browser-window-blur', () => {
-  loggedIn.is = false
+  userCanAccess.is = false
 })
 
 /**
@@ -156,15 +159,15 @@ app.on('browser-window-focus', () => {
 ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event,dirs.allEntries,dirs.tagDirectory))
 
   
-const loggedIn = {is:false}
+const userCanAccess = {is:false}
 ipcMain.handle('login', async (event, password) => {
   printFormatted('blue', 'ipcMain.handle(login) called')
   //authenticate password
   var authenticated = await authCrud.authenticatePassword(password)
   if (authenticated) 
   {
-    loggedIn.is = true
-    printFormatted('green', 'loggedIn.is:',loggedIn.is)
+    userCanAccess.is = true
+    printFormatted('green', 'loggedIn.is:',userCanAccess.is)
 
     return 'success'
   }
@@ -176,8 +179,8 @@ ipcMain.handle('login', async (event, password) => {
 
 ipcMain.handle('logout', () => {
   printFormatted('blue', 'ipcMain.handle(logout called','logout')
-  loggedIn.is = false
-  printFormatted('red', 'loggedIn.is:',loggedIn.is)
+  userCanAccess.is = false
+  printFormatted('red', 'loggedIn.is:',userCanAccess.is)
 })
 
 
@@ -187,8 +190,8 @@ ipcMain.handle('logout', () => {
 
 
 
-//IMPORTANT:waits for event from create-entry.ts
-ipcMain.on('authentication-action',(event) => authenticationAction(event,loggedIn,windowJustOpened))
+//IMPORTANT:waits for event from ts/view/create-entry/login.ts
+ipcMain.on('authentication-action',(event) => authenticationAction(event,userCanAccess,windowJustOpened))
 
 
 
@@ -311,7 +314,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
 ipcMain.on('enable-navigation-?', (event) => {
   printFormatted('blue', 'ipcMain.on("enable-navigation-?" fired')
   printFormatted('white','enable navigation attempt:')
-  if(loggedIn.is == true) {
+  if(userCanAccess.is == true) {
     printFormatted('green','enabling navigation...')
     event.reply('enable-navigation')
   }
@@ -514,7 +517,7 @@ ipcMain.handle('export-entries-pdf', async () => {
 ipcMain.handle('get-settings-json', async (event)=> {
   printFormatted('blue', 'get-settings-json called')
   const jsonStr = true
-  var settingsJson = await retrieveSettings(jsonStr) as string
+  var settingsJson = await Settings.retrieveSettings(jsonStr) as string
   printFormatted('green','retrieved settings:',settingsJson)
   return settingsJson
 })
@@ -523,7 +526,7 @@ ipcMain.handle('set-settings-json', async (event, settingsJsonStr) => {
   printFormatted('blue', 'set-settings-json called')
   const settings = JSON.parse(settingsJsonStr)
   printFormatted('green','saving settings:',settings)
-  var message = await saveSettingsJson(settings)
+  var message = await Settings.saveSettingsJson(settings)
   return message
 })
 
