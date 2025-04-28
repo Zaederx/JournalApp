@@ -26,6 +26,7 @@ A journalling project that I made while experiementing and learning about Node a
 * [Modifications](#modifications)
 * [Things learned](#things-learned)
 * [Trello Board Original Project](https://trello.com/b/e8hwRTpR/patientapp) & [Trello Board Current Project](https://trello.com/b/pI50op1x/patient-health-rewrite)
+* Also see [Lesson Notes.md](LessonNotes.md)
 
 ## Background
 I wanted to create an app that would allow people to journal. That meant having a system that interacted with the computers file system directly. Hearing about Node, and also being familiar with JavaScript, it became an ideal choice to work with Node and Electron to create this desktop applicaiton (as Node allow you to run JS on the computer system natively rather than just in the browser and electron renders HTML like a browser to produce app with Node.)
