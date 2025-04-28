@@ -1,6 +1,6 @@
 # Things learnt during the making of this project
 
-## dir vs filepath
+## Don't confuse dir vs filepath
 Note: directory is not the filepath.
 i.e.
 ```
@@ -12,7 +12,43 @@ filepath = '/path/to/folder/file.txt'
 You end up getting unpredicatable behaviour when you use promises inside of forEach loops. Use for loops instead.
 
 ## Objects created from json don't have functions attached
-You need to create a whole new object with the attributes copied accross. Sometmes changing between json strings and objects are unavoidable as in the case of passing objects in electron via the ipcRenderer to main. It doesn't handle complex object types (you have to use json)
+Example
+```
+//greeting.ts
+class Greeting {
+  language:'English'|'German'|'Italian'|
+  phrase:string
+  constructor(lang,phrase) {
+    language = lang
+    this.phrase = phrase
+  }
+
+  greet():string {
+    const greeting = 'Language:'this.language+'\n'+
+    'Phrase:'+this.phrase
+    return greeting
+  }
+}
+```
+
+```
+//runnable.ts
+//create greeting
+const greeting1 = new Greeting('English','Hello')
+
+//send greeting to ipcMain via ipcRenderer
+ipcRenderer.send('recieve-greeting', greeting1)
+
+```
+
+```
+//main.ts
+ipcMain.on('recieve-greeting', (event, greeting) => {
+  greeting.greet()// returns an error
+})
+```
+
+You need to create a whole new object with the attributes copied accross. Sometimes changing between json strings and objects are unavoidable as in the case of passing objects in electron via the ipcRenderer to main. It doesn't handle complex object types (you have to use json)
 Exmaple usage
 ```
 file1.ts
@@ -97,10 +133,10 @@ Looking at the previous example, create-entry.js requires entry.js. So entry is 
 
 
 ## Note - Async await is NOT syntactic sugar for promises - online research + personal observations
-You can have instances where async await is not the best choice and standard promises might be the best choice. Things to note:
+You can have instances where `async` `await` is not the best choice and standard promises might be the best choice. Things to note:
 - Async wait does not work within loops
 - Async await is usually best when working with a single promise that returns a result
-- Async await It only puts the dependent line - usually the next line - on hold until, but that does not guarantee that all the code you have written will execute in the order you have written it in (best to use... 
+- Async await It only puts the dependent line - usually the next line - on hold until ready, but that does not guarantee that all the code you have written will execute in the order you have written it in (best to use... 
 ```
     var promise = ipcRenderer.invoke('invocation')
     promise.then((object) =>
@@ -368,7 +404,7 @@ Long story short, if you want a variable to be mutated within a function, either
 
 
 ## Window :DOMContentLoaded vs window.onload
-[DOMContentLoaded](https://developer.mozilla.org/en-US/docs/Web/API/Window/DOMContentLoaded_event) - from what I understood, just when the HTML has loaded & [Windo on load] happens after everything has loaded with the window
+[DOMContentLoaded](https://developer.mozilla.org/en-US/docs/Web/API/Window/DOMContentLoaded_event) - from what I understood, just when the HTML has loaded & [Window.onload] happens after everything has loaded with the window
 
 
 ## How to create custom test drivers for electron
@@ -380,7 +416,7 @@ Idea for testing.
 Send scripts (js) from the from the test suite (main process), to the app (on a child process) recieving these scripts here and executing them.
 ```
 process.on('message',(message_func:string) => {
-  printFormatted('yellow','message_func:',message_func)
+  printFormatted('yellow','message_func:',message_func+'()')
   window.webContents.executeJavaScript(message_func)
 })
 ```
@@ -389,3 +425,18 @@ Need to find a way to bundle script/message function depedencies before inputing
 Maybe could use webpack to bundle test-runner scripts and then...figure something out...will have to research how these things work...
 
 Maybe I could put the test scripts for different individual test in indivdual files and bundle using webpack. Then I could call these files from the test runner and send there contents on the `message` channel.
+
+## Learnt about javascript hoisting
+How variable and function definition are moved to the top of their containing scope. 
+
+`var` allows for variables to be initialised to undefined before they are actually initialised in the code. So calling a `var` declared variable before being decalred or initialised in the code will result in `undefined`.
+
+```
+console.log(x)//Outputs:undefined
+var x = 5
+```
+`const` and `let` declared variables are hoisted, but not initialised with undefined.
+```
+console.log(y); // ReferenceError: Cannot access 'y' before initialization
+let y = 10;
+```
