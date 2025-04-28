@@ -70,10 +70,11 @@ ipcMain.handle('edit-tags', () => {
   window.loadFile('html/edit-tags.html')
 })
 
+//Export Entries
 ipcMain.handle('export-entries', () => {
   window.loadFile('html/export.html')
 })
-
+//Edit settings //TODO - maybe add the theme to the settings file instead of having a separate file for it.
 ipcMain.handle('settings-view', () => {
   window.loadFile('html/settings.html')
 })
@@ -84,6 +85,8 @@ app.on('window-all-closed', async() => {
   userCanAccess.is = false
   //quit completely even on darwin (mac) if it is a test
   if (process.env.NODE_ENV === 'test') {
+    /* means that the dialog popups will not disappear after the window is closed 
+    and reopened */
     await window.webContents.executeJavaScript(setInDialogFalse) 
 
     //quit app when done setting the value of inDialog on frontend
@@ -158,7 +161,16 @@ app.on('browser-window-focus', () => {
    */
 ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event,dirs.allEntries,dirs.tagDirectory))
 
-  
+/**
+ * In short: whether the use can access the app.
+ * A constant object which has a changeble boolean 
+ * value which is evaulated to determine whether a 
+ * user can access the app.
+ * If attribute `is` is true, the user can access the app.
+ * (Making it constant means that you can't change
+ * what type of object it is, but you can still
+ * change attibute values.)
+ */
 const userCanAccess = {is:false}
 ipcMain.handle('login', async (event, password) => {
   printFormatted('blue', 'ipcMain.handle(login) called')
