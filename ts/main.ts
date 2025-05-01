@@ -30,7 +30,7 @@ import { printFormatted } from './other/printFormatted'
 import { createAllTagDirectory } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
 import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-email'
-import { authenticationAction } from './security/auth-action'
+import { authenticationAction, userCanAccessInitially } from './security/auth-action'
 import { importTransferData, exportTransferData } from './entry/export/transfer-data'
 import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system)
@@ -110,6 +110,10 @@ app.on('activate', async (event) => {
   if (BrowserWindow.getAllWindows().length === 0) {
     window = await createWindow(integration);
   }
+  
+  //check whether password protection is enabled
+  //if not user can access app straight away
+  userCanAccess.is = await userCanAccessInitially()
 });
 
 /**
@@ -133,7 +137,11 @@ process.on('SIGINT', async () => {
   process.exit(0)
 })
 
-
+/**
+ * Fired when the window is blurred from the frontend
+ * when a popup is displayed. Popups always are trying to establish some kind of authetication, so 
+ * we set the 
+ */
 app.on('browser-window-blur', () => {
   userCanAccess.is = false
 })
@@ -203,7 +211,7 @@ ipcMain.handle('logout', () => {
 
 
 //IMPORTANT:waits for event from ts/view/create-entry/login.ts
-ipcMain.on('authentication-action',(event) => authenticationAction(event,userCanAccess,windowJustOpened))
+ipcMain.on('authentication-action',(event) => authenticationAction(event,userCanAccess))
 
 
 
@@ -326,6 +334,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
 ipcMain.on('enable-navigation-?', (event) => {
   printFormatted('blue', 'ipcMain.on("enable-navigation-?" fired')
   printFormatted('white','enable navigation attempt:')
+  authenticationAction(event,userCanAccess)
   if(userCanAccess.is == true) {
     printFormatted('green','enabling navigation...')
     event.reply('enable-navigation')
