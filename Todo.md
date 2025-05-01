@@ -1,5 +1,8 @@
 # Todo
 
+## Fix password protection switch
+Make it work. I could habe sworn it used to...
+
 ## Add theme to settings file
 Maybe add the app theme to the settings file instead of having a separate file for it.
 At least make sure that the theme settings file in in the `Application Support/the-journal-app` folder instead of in the css folder.
