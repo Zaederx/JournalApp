@@ -78,8 +78,10 @@ export async function loadRegisterEmailPasswordDialog()
  */
 export async function loadCustomPrompt()
 {
-    //load password dialog - fetching it from files
+    //load custom prompt dialog - fetching it from files
     const customPromptHTML = await (await fetch('./fragments/custom-prompt.html')).text()
+    /*get the custom prompt div (usually empty) on
+    frontend and replace it with a customPromptHtml fragment*/
     var customPrompt = document.querySelector('#custom-prompt') as HTMLDivElement
     customPrompt.outerHTML = customPromptHTML
     
