@@ -3,7 +3,8 @@ export type keystrokes = {keys:string}
 
 
 /**
- * Listener for `paste` events for pasting from clipboard.
+ * A function made to add to a listener for `paste`
+ * events for pasting from clipboard.
  * It makes sure that pasting does not contain styling.
  * @param event keyboard event
  */
@@ -13,6 +14,8 @@ export function pasteWithoutStyle(event:any)
     console.log('typeof e:',typeof event)
     
     if (event.clipboardData && event.clipboardData.getData) {
+        /* pastes text from clipboard into selected
+         div. (Either entry title or body divs) */
         event.target.textContent = event.clipboardData.getData('text/plain')
         event.preventDefault()//prevents it from pasting twice
     }
@@ -39,8 +42,12 @@ export function captureKeystrokes(event:KeyboardEvent, keystrokes:keystrokes)
  * Deletes keys from var `captureKeystrokes` when characters are deleted
  * from password div.
  * Characters in password div are all the same circle and cannot be used for passwords.
- * To capture actually key press character, the captureKeystrokes function is used.
- * To delete these acurally requires the use of this `deleteKeystrokes` function
+ * To capture actually key press characters, the 
+ * captureKeystrokes function is used to store the
+ * actual characters in the `keystrokes` object.
+ * To delete these stored keystrokes 
+ * (which are in the keystored object), 
+ * it actually requires the use of this `deleteKeystrokes` function on an event listener.
  * @param event keyboard event
  */
 export async function deleteKeystrokes(event:KeyboardEvent, element:HTMLDivElement, keystrokes:keystrokes)
