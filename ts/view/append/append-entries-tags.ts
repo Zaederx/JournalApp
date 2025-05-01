@@ -10,6 +10,12 @@ import paths from 'path'
  * Does this by running the script `append.js` (`append.ts`)
  * `append.js` calls the functions `appendEntries` and
  * `appendTags` which both 
+ * 
+ * To be called by an event listner in `main ts.`:
+ * ```
+ * ipcMain.on('ready-to-show-sidepanel', async (event) =>
+ * appendEntriesAndTags(event,dirs.allEntries,dirs.tagDirectory))
+ * ```
  * @param event 
  * @param allEntries path to 'all' entries tag folder
  * @param tagDirectory path to tag directory 'tagDirs'
@@ -40,14 +46,16 @@ export function appendEntriesAndTags(event:IpcMainEvent, allEntries:string, tagD
           printFormatted('yellow', 'exit code: ', code, '\nsignal:',signal)
         })
         //reply to the event with...
-        childProcess.on('message', (message:any) => 
+        childProcess.on('message', (message:{entryFilename:string}|{tagDirname:string}|'start-loader'|'stop-loader') => 
         {
+          //@ts-ignore
           if (message.entryFilename) 
           {
-            //the entry filename
+            //the entry filename (sent to the frontend)
             console.log('message.entryFilename -> present')
             event.reply('recieve-tag-entries', message)
           }
+          //@ts-ignore
           else if (message.tagDirname) 
           {
             //the tagDirname - relates to nav.ts
