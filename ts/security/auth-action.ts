@@ -8,7 +8,7 @@ import { printFormatted } from '../other/printFormatted'
  * @param userCanAccess object for checking whether the user is allowed to access the app or loggedIn
  * @param windowJustOpened an object for checking whether the window just opened
  */
-export async function authenticationAction(event:Electron.IpcMainEvent, userCanAccess:{is:boolean}, windowJustOpened:{is:boolean})
+export async function authenticationAction(event:Electron.IpcMainEvent, userCanAccess:{is:boolean})
 {
   printFormatted('blue','authentication-action triggered')
   const passwordExists:boolean = await passwordFileExists()
@@ -22,9 +22,7 @@ export async function authenticationAction(event:Electron.IpcMainEvent, userCanA
   //print userCanAccess.is
   if (userCanAccess.is == true) printFormatted('green','userCanAccess.is:',userCanAccess.is)
   else printFormatted('red','userCanAccess.is:',userCanAccess.is)
-  //print windowJustOpened
-  if (windowJustOpened.is) printFormatted('green','windowJustOpened:',windowJustOpened.is)
-  else printFormatted('red','windowJustOpened:',windowJustOpened.is)
+ 
 
   //open authentication dialog
   if (passwordExists && settings['password-protection'] == 'true' && userCanAccess.is == false)
@@ -68,5 +66,27 @@ export async function authenticationAction(event:Electron.IpcMainEvent, userCanA
 
     printFormatted('yellow', 'Alerting user of missing password file and reset mesaures.')
     event.reply('open-reset-password-confirm-prompt', message)
+  }
+}
+
+/**
+ * Checks whether the user can access the app initially.
+ * Basically, at the start if no password protection is enabled,
+ * it can give the user access right away without checking credentials.
+ * @param userCanAccess 
+ */
+export async function userCanAccessInitially() {
+  printFormatted('blue','authentication-action triggered')
+  const passwordExists:boolean = await passwordFileExists()
+  const jsonStr = false
+  const settings:settings = await Settings.retrieveSettings(jsonStr) as settings
+
+  printFormatted('green','settings:',settings)
+
+  if(passwordExists && settings['password-protection'] == 'true') {
+    return false
+  }
+  else {
+    return true
   }
 }
