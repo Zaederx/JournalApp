@@ -79,6 +79,13 @@ ipcMain.handle('settings-view', () => {
   window.loadFile('html/settings.html')
 })
 
+/**
+ * JavaScript for setting inDialog local storage item to false.
+ * Item/variable is used to know whether a popup dialog is open.
+ * These are used for things to do with authentication and can't
+ * disappear when the window is closed and reopened.
+ * This helps to make sure the dialogs don't disappear.
+ */
 const setInDialogFalse = 'localStorage.setItem("inDialog","false")'
 app.on('window-all-closed', async() => {
   printFormatted('blue', 'app.on(window-all-closed) was called/fired')
@@ -120,7 +127,7 @@ app.on('activate', async (event) => {
  * before quit 
  */
 app.on('before-quit', async() => {
-  printFormatted('blue', 'event before-quit was fired')
+  printFormatted('blue', 'event "before-quit" was fired')
   userCanAccess.is = false
   await window.webContents.executeJavaScript(setInDialogFalse) 
   process.exit(0)
@@ -132,15 +139,16 @@ app.on('before-quit', async() => {
  * or force quit.
  */
 process.on('SIGINT', async () => {
-  printFormatted('blue', 'event SIGINT was fired')
+  printFormatted('blue', 'event "SIGINT" was fired')
   await window.webContents.executeJavaScript(setInDialogFalse) 
-  process.exit(0)
+  process.exit(0)//0 means it exited successfully
 })
 
 /**
  * Fired when the window is blurred from the frontend
- * when a popup is displayed. Popups always are trying to establish some kind of authetication, so 
- * we set the 
+ * when a popup is displayed. These popups always are trying to 
+ * establish some kind of authetication, so 
+ * we set the `userCanAccess.is` to false
  */
 app.on('browser-window-blur', () => {
   userCanAccess.is = false
@@ -150,7 +158,7 @@ app.on('browser-window-blur', () => {
  * important in determining whether to present
  * password dialog
  */
-const windowJustOpened = {is:false}
+// const windowJustOpened = {is:false}
 app.on('browser-window-focus', () => {
   printFormatted('blue','app.on("browser-window-focus") has been triggered')
   // loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
@@ -187,7 +195,7 @@ ipcMain.handle('login', async (event, password) => {
   if (authenticated) 
   {
     userCanAccess.is = true
-    printFormatted('green', 'loggedIn.is:',userCanAccess.is)
+    printFormatted('green', 'userCanAccess.is:',userCanAccess.is)
 
     return 'success'
   }
@@ -213,7 +221,7 @@ ipcMain.handle('logout', () => {
 //IMPORTANT:waits for event from ts/view/create-entry/login.ts
 ipcMain.on('authentication-action',(event) => authenticationAction(event,userCanAccess))
 
-
+//SECTION - Set Password Protection - True or False
 
 
 //SECTION - Reset Password - 3 parts
@@ -259,7 +267,7 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
 //2 do codes match
 ipcMain.on('does-reset-code-match-?', doesRestCodeMatch)
 
-async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
+async function doesRestCodeMatch(event:IpcMainEvent, resetCode:string)
 {
   printFormatted('blue', 'does-reset-code-match listener fired')
   var codesMatch = await authCrud.authenticateResetCode(resetCode)
@@ -274,7 +282,7 @@ async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
   }
   else
   {
-    printFormatted('red', 'No. code given does not match stored code.')
+    printFormatted('red', 'No. Code given does not match stored code.')
     printFormatted('red', 'Opening reset code dialog.')
     //go back to step 2 - open the reset code dialog
     event.reply('open-reset-code-dialog')
@@ -331,10 +339,10 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
   return response
 })
 
-ipcMain.on('enable-navigation-?', (event) => {
+ipcMain.on('enable-navigation-?', async (event) => {
   printFormatted('blue', 'ipcMain.on("enable-navigation-?" fired')
   printFormatted('white','enable navigation attempt:')
-  authenticationAction(event,userCanAccess)
+  await authenticationAction(event,userCanAccess)
   if(userCanAccess.is == true) {
     printFormatted('green','enabling navigation...')
     event.reply('enable-navigation')
@@ -535,17 +543,15 @@ ipcMain.handle('export-entries-pdf', async () => {
 
 
 //SECTION - SETTINGS 
-ipcMain.handle('get-settings-json', async (event)=> {
-  printFormatted('blue', 'get-settings-json called')
-  const jsonStr = true
-  var settingsJson = await Settings.retrieveSettings(jsonStr) as string
-  printFormatted('green','retrieved settings:',settingsJson)
-  return settingsJson
+ipcMain.handle('get-settings', async (event, jsonStr:boolean=false)=> {
+  printFormatted('blue', 'handle "get-settings" called')
+  var settings = await Settings.retrieveSettings(jsonStr) as string
+  printFormatted('green','retrieved settings:',settings)
+  return settings
 })
 
-ipcMain.handle('set-settings-json', async (event, settingsJsonStr) => {
-  printFormatted('blue', 'set-settings-json called')
-  const settings = JSON.parse(settingsJsonStr)
+ipcMain.handle('set-settings', async (event, settings) => {
+  printFormatted('blue', 'handle "set-settings" called')
   printFormatted('green','saving settings:',settings)
   var message = await Settings.saveSettingsJson(settings)
   return message

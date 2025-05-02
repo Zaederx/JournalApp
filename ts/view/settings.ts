@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { activate } from './load-themes';
+import { setPasswordProtection } from './switch/switch'; 
 
 //SECTION - Theme Buttons
 /** Constants */ //these are relative to the html page 'settings.html'
@@ -40,3 +41,10 @@ function enableButton(button:HTMLDivElement, theme:string)
 }
 
 
+
+//SECTION - Password Protection 
+
+
+
+
+//SECTION - Verify Email Address

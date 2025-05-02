@@ -66,10 +66,13 @@ export class Settings {
 
     /**
      * Retrieve settings from the system.
+     * jsonStr boolean set to false by default.
+     * @param jsonStr - Whether to return the settings as a json string or object. 
+     * Selects string if true. Set to false by default. 
      */
-    static async retrieveSettings(jsonStr:boolean):Promise<string|settings>
+    static async retrieveSettings(jsonStr:boolean=false):Promise<string|settings>
     {
-    printFormatted('blue','retrieveSettingsJson called')
+    printFormatted('blue','function retrieveSettingsJson called')
     //check if file exists
     try 
     {

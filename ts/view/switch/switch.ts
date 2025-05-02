@@ -10,19 +10,16 @@ export async function setPasswordProtection(bool:'true'|'false')
     
     try 
     {
-        //retrieve settings as json string
-        var settingsJsonStr:string = await ipcRenderer.invoke('get-settings-json')
+        //retrieve settings as a settings object
+        var settings:settings = await ipcRenderer.invoke('get-settings')
         //if settings exist / not undefined or empty
-        if (settingsJsonStr) 
+        if (settings) 
         {
-            //parse into an object
-            var settings:settings = JSON.parse(settingsJsonStr)
             //change settings
             settings['password-protection'] = bool
-            //turn back into json string
-            var settingsJson = JSON.stringify(settings)
+
             //send settings back to main to be saved/persisted
-            ipcRenderer.invoke('set-settings-json', settingsJson)
+            ipcRenderer.invoke('set-settings', settings)
         }
     }
     //if there's an error
@@ -32,9 +29,12 @@ export async function setPasswordProtection(bool:'true'|'false')
         console.warn('Problem setting password protection to '+bool+ ':'+error)
         //if settings don't exist - use default settings
         var settings:settings = Settings.defaults
-        //turn settings into json string
-        var settingsJson = JSON.stringify(settings)
         //send to main to be saved /persisted
-        ipcRenderer.invoke('set-settings-json', settingsJson)
+        ipcRenderer.invoke('set-settings', settings)
     }
+}
+
+
+export async function checkPasswordProtection() {
+   const settings:settings =  await ipcRenderer.invoke('get-settings')
 }
