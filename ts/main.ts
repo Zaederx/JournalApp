@@ -27,17 +27,19 @@ import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
 import { Settings } from './settings/settings-type'
 import { printFormatted } from './other/printFormatted'
-import { createAllTagDirectory } from './fs-helpers/helpers';
+import { createAllTagDirectory, isThereAFile } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
 import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-email'
 import { authenticationAction, userCanAccessInitially } from './security/auth-action'
 import { importTransferData, exportTransferData } from './entry/export/transfer-data'
 import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
-//IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system)
+import { setEmailVerifiedTxt, getEmailVerifiedTxt } from './verify-email/verify-email'
+//IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system). Could save a birthtime.json with the filename nad the original birthtime. Maybe an EntryDate stored as json.
+
 //TODO - option to store file in iCloud
 //TODO - SEND AND EMAIL IN NODE.JS - temporary password for login recovery
 
-//NOTE - `ipcMain.handle` works with `ipcRenderer.invoke`
+//NOTE - `ipcMain.handle` works with `ipcRenderer.invoke`. `ipcMain.on` works with `ipcRenderer.send`
 // `on` (from ipcMain, ipcRenderer and window.webContents) works with `send` (from ipcMain `event.reply`, ipcRenderer and window.webContents)
 
 let window: BrowserWindow;
@@ -289,10 +291,22 @@ async function doesRestCodeMatch(event:IpcMainEvent, resetCode:string)
   }
 }
 
+/**
+ * Checks validity of verification code.
+ * Verifies the email address by checking the verification
+ * code.
+ */
 ipcMain.handle('check-verification-code', async (event, verificationCode) => {
   printFormatted('blue', 'function checkVerificationCode called')
-  const valid = await authCrud.authenticateVerificationCode(verificationCode)
-  printFormatted('green', 'verification code is valid:',valid)
+  const valid = await authCrud.authenticateEmailVerificationCode(verificationCode)
+  
+  if (valid) {
+    setEmailVerifiedTxt('true')
+    printFormatted('green', 'verification code is valid')
+  }
+  else {
+    printFormatted('green', 'verification code is invalid')
+  }
   return valid
 })
 //step 3
@@ -339,6 +353,17 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
   return response
 })
 
+
+
+/**
+ * Returns whether the email has been verified.
+ * Returns a boolean.
+ */
+ipcMain.handle('email-is-verified', async () => {
+  return await getEmailVerifiedTxt()
+})
+
+
 ipcMain.on('enable-navigation-?', async (event) => {
   printFormatted('blue', 'ipcMain.on("enable-navigation-?" fired')
   printFormatted('white','enable navigation attempt:')
@@ -353,6 +378,8 @@ ipcMain.on('enable-navigation-?', async (event) => {
   }
 })
 
+
+//
 
 
 
