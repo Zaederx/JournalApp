@@ -6,7 +6,7 @@ import * as fragments from './fragments/load-fragments'
 import { printFormatted } from '../other/printFormatted'
 import { pasteWithoutStyle, submitEnterListener } from "./input-helpers/key-capture"
 import { customPrompt } from "./fragments/load-fragments"
-import { setPasswordProtection } from "./switch/switch"
+import { setPasswordProtection } from "./switch/password-switch"
 
 //call this once on opening - for first script load
 passwordReminderOrLogin()

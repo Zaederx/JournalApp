@@ -3,7 +3,7 @@
  * Your password can also be toggled on and off using a switch (also handled in this file).
  */
 import { ipcRenderer } from 'electron'
-import { setPasswordProtection } from './switch/switch';
+import { setPasswordProtection } from './switch/password-switch';
 import { type settings } from '../settings/settings-type';
 import * as fragments from './fragments/load-fragments'
 import { submitEnterListener } from './input-helpers/key-capture';

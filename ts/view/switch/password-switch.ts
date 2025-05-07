@@ -34,7 +34,20 @@ export async function setPasswordProtection(bool:'true'|'false')
     }
 }
 
-
+/**
+ * Checks that password protection settings and 
+ * then sets the switch to match the settings
+ * (whether on or off).
+ */
 export async function checkPasswordProtection() {
    const settings:settings =  await ipcRenderer.invoke('get-settings')
+   const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement
+   if (settings["password-protection"] == 'false') {
+    //turn switch to off position
+    switchInput.checked == false
+   }
+   else {
+    //turn siwtch to on position
+    switchInput.checked == true
+   }
 }

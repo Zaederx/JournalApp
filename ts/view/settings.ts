@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { activate } from './load-themes';
-import { setPasswordProtection } from './switch/switch'; 
+import { setPasswordProtection } from './switch/password-switch'; 
 
 //SECTION - Theme Buttons
 /** Constants */ //these are relative to the html page 'settings.html'
