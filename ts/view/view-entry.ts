@@ -8,9 +8,7 @@ const tags = document.querySelector('#entry-tags') as HTMLDivElement
 const btn_edit_entry = document.querySelector('#edit-entry') as HTMLDivElement
 const btn_delete_entry = document.querySelector('#delete-entry') as HTMLDivElement
 
-
 displayCurrentEntry(title,body,tags)
-
 
 //EDIT ENTRY
 btn_edit_entry ? btn_edit_entry.onclick = () => editEntryView() : console.log('btn_edit_entry is null')

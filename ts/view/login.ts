@@ -1,43 +1,48 @@
 import { ipcRenderer } from "electron"
 import { blurBackground, unblurBackground } from "./create-entry/background-blur"
-import { openVerificationCodeDialog, clickRegisterEmailPasswordButton } from "./register"
+
+import { clickRegisterEmailPasswordButton } from "./register"
 import * as fragments from './fragments/load-fragments'
-import { printFormatted } from '../other/stringFormatting'
+import { printFormatted } from '../other/printFormatted'
 import { pasteWithoutStyle, submitEnterListener } from "./input-helpers/key-capture"
 import { customPrompt } from "./fragments/load-fragments"
+import { setPasswordProtection } from "./switch/password-switch"
 
-//once on opening - for first script load
+//call this once on opening - for first script load
 passwordReminderOrLogin()
 
-//everytime on focus - doesn't get called on first script load for some reason
-window.onfocus = () => 
-{
-    if (window.localStorage.getItem('inDialog') == 'false')
-    {
-        passwordReminderOrLogin()
-    }
-}
 
-
-/* Note: inDialog in localStorage is set to false
+/* IMPORTANT Note: inDialog in localStorage is set to false
  * in two locations:
  * - clickLogin (when it logs in successfully)
  * - clickSubmitResetCode
  * 
- * It is set to true whenever one of the dialog is called.
- * It is there to prevent the window from closing the dialog when the window
+ * Used to know when a dialog
+ * (text prompt and input fields) is still open.
+ * It is set to true whenever one of the dialogs is called. (The dialog is the pop up window where you
+ * input information).
+ * The variable is there to prevent the window from
+ * closing the dialog when the window
  * goes out of focus and back into focus.
+ * 
+ * 
  */
 
-window.onload = () => {
-    printFormatted('blue','window.onload fired')
-    //enter email verification code button
-    var btn_verify_email = document.querySelector('#btn-verify-email-code') as HTMLDivElement
-    btn_verify_email ?
-    btn_verify_email.onclick = openVerificationCodeDialog :
-    printFormatted('black', 'btn_verify_email is null')
+//everytime on focus - doesn't get called on first script load for some reason
+window.onfocus = () => 
+{
+    printFormatted('blue', 'window.onfocus called')
+    if (window.localStorage.getItem('inDialog') == 'false')
+    {
+        printFormatted('red', 'inDialog is false')
+        passwordReminderOrLogin()
+        
+    }
 }
-//SECTION - LOGIN PROCESS
+
+
+
+//SECTION - LOGIN PROCESS - initialted by passwordOrLoging function call at the top of this script
 ipcRenderer.on('open-login-dialog', openLoginDialog)//check
 //OR send reminder to setup login
 ipcRenderer.on('register-password-reminder', registerPasswordReminder)//check
@@ -54,6 +59,7 @@ ipcRenderer.on('open-reset-code-dialog', openResetCodeDialog)
 //if password is not set, this is step 1)
 ipcRenderer.on('open-register-email-password-dialog', openRegisterEmailPasswordDialog)//check
 
+//or 1) and then
 // 2) open verification code dialog
 ipcRenderer.on('open-verification-code-dialog', openVerificationCodeDialog)//check
 
@@ -61,13 +67,42 @@ ipcRenderer.on('open-verification-code-dialog', openVerificationCodeDialog)//che
 
 
 
+/**
+ * Open verify email dialog and send
+ * 'check-verification-code' ipc message
+ * with the verification code on confirm.
+ * 
+ * @return returns whether verification was successful
+ */
+export async function openVerificationCodeDialog():Promise<boolean> {
+    printFormatted('blue', 'function openVerifyEmailDialog called')
+    //load dialog into the DOM
+    const message = 'Please enter your email verification code into the field/box provided.'
+    const placeholder = 'verification code'
+    const verificationCode = await fragments.customPrompt(message, placeholder)
+    //check verification code
+    const valid = await ipcRenderer.invoke('check-verification-code', verificationCode)
 
+    if (valid)
+    {
+        printFormatted('green', 'openVerificationCodeDialog returned successful')
+        //set switch to checked
+        const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+        switchInput.checked = true
+        setPasswordProtection('true')
+    }
+    //authentication action - pick up 
+    ipcRenderer.send('authentication-action')
+    return valid
+}
 
 
 /**
  * Fires an ipc message to `authentication-action`.
- * This then diecides what dialog to show the user upon opening the app.
- * Whether it be to login, or to request a reset of the password.
+ * This then decides what dialog to show the user upon opening the app (whether it be to login, or to request a reset of the password).
+ * If no password has been set, or if password
+ * authentication is not enabled, this does not
+ * show a dialog
  */
 async function passwordReminderOrLogin()
 {
@@ -183,7 +218,7 @@ function showPassword(p1:HTMLDivElement, p2:HTMLDivElement)
     p2?.classList.remove('password')
 }
 
-//TODO - add boolean option for password visibility
+
 
 
 /**
@@ -233,12 +268,16 @@ export function validEmail(email:string)
     return validate.test(email)
 }
 
+/**
+ * Displays register password reminder prompt.
+ */
 async function registerPasswordReminder() 
 {
     printFormatted('blue', 'function registerPasswordReminder called')
     console.log('registering password reminder...')
     const message = 'Please go to settings to password protect your application. Otherwise please enter "disable reminder" and click ok to remove password reminder.'
-    var response = await customPrompt(message)//TODO USE CUSTOM PROMPT
+    var response = await customPrompt(message)
+
     if (response == 'disable reminder')
     {
         printFormatted('green', 'disabling reminder message')
@@ -312,6 +351,10 @@ async function openLoginDialog()
     var loginDialog = document.querySelector('#login-dialog') as HTMLDivElement
     loginDialog.style.display = 'grid'
     
+    /**
+     * Sets the editable divs (email and password divs) 
+     * to not paste
+     */
     document.querySelectorAll('.editable').forEach((div) => {
         div.addEventListener('paste', pasteWithoutStyle)
     })
@@ -320,6 +363,7 @@ async function openLoginDialog()
     const btn_login = document.querySelector('#btn-login') as HTMLDivElement
     btn_login.onclick = clickLogin
 
+    //allows login button to be clicked on pressing `enter` while in the password field
     passwordField.addEventListener('keydown', function loginListener(event) {
     submitEnterListener(event, clickLogin)})
 
@@ -337,6 +381,9 @@ async function openLoginDialog()
     printFormatted('black', 'btn_forgot_password is null')
 }
 
+/**
+ * Closes the loging dialog
+ */
 function closeLoginDialog()
 {
     printFormatted('blue', 'function closeLoginDialog called')

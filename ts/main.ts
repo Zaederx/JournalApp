@@ -20,19 +20,19 @@ import { v4 as uuidv4 } from 'uuid'
 //Other
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
-import { appendEntriesAndTags } from './view/display/append-entries-tags'
+import { appendEntriesAndTags } from './view/append/append-entries-tags'
 import process from 'process'
 import c_process from 'child_process'
-import { passwordFileExists } from './security/auth-crud';
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
-import {retrieveSettings, saveSettingsJson } from './settings/settings-functions'
-import { settings } from './settings/settings-type';
-import { printFormatted } from './other/stringFormatting'
+import { Settings } from './settings/settings-type'
+import { printFormatted } from './other/printFormatted'
 import { createAllTagDirectory } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
 import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-email'
-import { authenticationAction } from './security/auth-action'
+import { authenticationAction, userCanAccessInitially } from './security/auth-action'
+import { importTransferData, exportTransferData } from './entry/export/transfer-data'
+import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system)
 //TODO - option to store file in iCloud
 //TODO - SEND AND EMAIL IN NODE.JS - temporary password for login recovery
@@ -47,6 +47,8 @@ var integration = true;
 app.whenReady().then(async () => { 
   createAllTagDirectory()
   window = await createWindow(integration)
+  const url = window.webContents.getURL();
+  printFormatted('yellow', 'url:',url)
   
 })
 //SECTION Display HTML Views
@@ -68,21 +70,32 @@ ipcMain.handle('edit-tags', () => {
   window.loadFile('html/edit-tags.html')
 })
 
+//Export Entries
 ipcMain.handle('export-entries', () => {
   window.loadFile('html/export.html')
 })
-
+//Edit settings //TODO - maybe add the theme to the settings file instead of having a separate file for it.
 ipcMain.handle('settings-view', () => {
   window.loadFile('html/settings.html')
 })
 
+/**
+ * JavaScript for setting inDialog local storage item to false.
+ * Item/variable is used to know whether a popup dialog is open.
+ * These are used for things to do with authentication and can't
+ * disappear when the window is closed and reopened.
+ * This helps to make sure the dialogs don't disappear.
+ */
 const setInDialogFalse = 'localStorage.setItem("inDialog","false")'
 app.on('window-all-closed', async() => {
   printFormatted('blue', 'app.on(window-all-closed) was called/fired')
-  loggedIn.is = false
+  userCanAccess.is = false
   //quit completely even on darwin (mac) if it is a test
   if (process.env.NODE_ENV === 'test') {
+    /* means that the dialog popups will not disappear after the window is closed 
+    and reopened */
     await window.webContents.executeJavaScript(setInDialogFalse) 
+
     //quit app when done setting the value of inDialog on frontend
     app.quit()
   }
@@ -93,6 +106,8 @@ app.on('window-all-closed', async() => {
   }
 });
 
+
+
 /**
  * This is need for window to be reopened once closed. (as mac app hang on the dock when closed, waiting to be reopened - from my understanding)
  * "Emitted when the application is activated. Various actions can trigger this event, such as launching the application for the first time, attempting to re-launch the application when it's already running, or clicking on the application's dock or taskbar icon." - electronjs.org
@@ -102,14 +117,18 @@ app.on('activate', async (event) => {
   if (BrowserWindow.getAllWindows().length === 0) {
     window = await createWindow(integration);
   }
+  
+  //check whether password protection is enabled
+  //if not user can access app straight away
+  userCanAccess.is = await userCanAccessInitially()
 });
 
 /**
  * before quit 
  */
 app.on('before-quit', async() => {
-  printFormatted('blue', 'event before-quit was fired')
-  loggedIn.is = false
+  printFormatted('blue', 'event "before-quit" was fired')
+  userCanAccess.is = false
   await window.webContents.executeJavaScript(setInDialogFalse) 
   process.exit(0)
 })
@@ -120,21 +139,26 @@ app.on('before-quit', async() => {
  * or force quit.
  */
 process.on('SIGINT', async () => {
-  printFormatted('blue', 'event SIGINT was fired')
+  printFormatted('blue', 'event "SIGINT" was fired')
   await window.webContents.executeJavaScript(setInDialogFalse) 
-  process.exit(0)
+  process.exit(0)//0 means it exited successfully
 })
 
-
+/**
+ * Fired when the window is blurred from the frontend
+ * when a popup is displayed. These popups always are trying to 
+ * establish some kind of authetication, so 
+ * we set the `userCanAccess.is` to false
+ */
 app.on('browser-window-blur', () => {
-  loggedIn.is = false
+  userCanAccess.is = false
 })
 
 /**
  * important in determining whether to present
  * password dialog
  */
-const windowJustOpened = {is:false}
+// const windowJustOpened = {is:false}
 app.on('browser-window-focus', () => {
   printFormatted('blue','app.on("browser-window-focus") has been triggered')
   // loggedIn.is = false //setting loggedin to false allows auth-dailog to appear
@@ -151,18 +175,27 @@ app.on('browser-window-focus', () => {
    * 
    * Append entries and tags to the side-panel
    */
-ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event))
+ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event,dirs.allEntries,dirs.tagDirectory))
 
-  
-const loggedIn = {is:false}
+/**
+ * In short: whether the use can access the app.
+ * A constant object which has a changeble boolean 
+ * value which is evaulated to determine whether a 
+ * user can access the app.
+ * If attribute `is` is true, the user can access the app.
+ * (Making it constant means that you can't change
+ * what type of object it is, but you can still
+ * change attibute values.)
+ */
+const userCanAccess = {is:false}
 ipcMain.handle('login', async (event, password) => {
   printFormatted('blue', 'ipcMain.handle(login) called')
   //authenticate password
-  var authenticated = await authCrud.autheticatePassword(password)
+  var authenticated = await authCrud.authenticatePassword(password)
   if (authenticated) 
   {
-    loggedIn.is = true
-    printFormatted('green', 'loggedIn.is:',loggedIn.is)
+    userCanAccess.is = true
+    printFormatted('green', 'userCanAccess.is:',userCanAccess.is)
 
     return 'success'
   }
@@ -174,16 +207,21 @@ ipcMain.handle('login', async (event, password) => {
 
 ipcMain.handle('logout', () => {
   printFormatted('blue', 'ipcMain.handle(logout called','logout')
-  loggedIn.is = false
-  printFormatted('red', 'loggedIn.is:',loggedIn.is)
+  userCanAccess.is = false
+  printFormatted('red', 'loggedIn.is:',userCanAccess.is)
 })
 
 
 
-  //waits for event from create-entry.ts
-ipcMain.on('authentication-action',(event) => authenticationAction(event,loggedIn,windowJustOpened))
 
 
+
+
+
+//IMPORTANT:waits for event from ts/view/create-entry/login.ts
+ipcMain.on('authentication-action',(event) => authenticationAction(event,userCanAccess))
+
+//SECTION - Set Password Protection - True or False
 
 
 //SECTION - Reset Password - 3 parts
@@ -192,7 +230,7 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
   printFormatted('blue', 'ipcMain.on(send-reset-password-email)')
   const message = 'Email does not match stored email.\nPlease enter the email used for this application.'
   //if email matches stored email hash
-  const emailAuthenticated = await authCrud.autheticateEmail(email)
+  const emailAuthenticated = await authCrud.authenticateEmail(email)
   //send email with reset code to user email
   if (emailAuthenticated)
   {
@@ -217,7 +255,7 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
     }
     
    
-    event.reply('open-reset-code-dialog')//IMPORTANT - DELETE LATER
+    //event.reply('open-reset-code-dialog')//IMPORTANT - DELETE LATER
   }
   else//send them back to step 1) the form to input their email to be checked
   {
@@ -229,10 +267,10 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
 //2 do codes match
 ipcMain.on('does-reset-code-match-?', doesRestCodeMatch)
 
-async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
+async function doesRestCodeMatch(event:IpcMainEvent, resetCode:string)
 {
   printFormatted('blue', 'does-reset-code-match listener fired')
-  var codesMatch = await authCrud.autheticateResetCode(resetCode)
+  var codesMatch = await authCrud.authenticateResetCode(resetCode)
   printFormatted('white', 'do reset codes match...')
   if(codesMatch)
   {
@@ -244,7 +282,7 @@ async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
   }
   else
   {
-    printFormatted('red', 'No. code given does not match stored code.')
+    printFormatted('red', 'No. Code given does not match stored code.')
     printFormatted('red', 'Opening reset code dialog.')
     //go back to step 2 - open the reset code dialog
     event.reply('open-reset-code-dialog')
@@ -253,7 +291,7 @@ async function doesRestCodeMatch(event:IpcMainEvent,resetCode:string)
 
 ipcMain.handle('check-verification-code', async (event, verificationCode) => {
   printFormatted('blue', 'function checkVerificationCode called')
-  const valid = await authCrud.autheticateVerificationCode(verificationCode)
+  const valid = await authCrud.authenticateVerificationCode(verificationCode)
   printFormatted('green', 'verification code is valid:',valid)
   return valid
 })
@@ -301,10 +339,11 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
   return response
 })
 
-ipcMain.on('enable-navigation-?', (event) => {
+ipcMain.on('enable-navigation-?', async (event) => {
   printFormatted('blue', 'ipcMain.on("enable-navigation-?" fired')
   printFormatted('white','enable navigation attempt:')
-  if(loggedIn.is == true) {
+  await authenticationAction(event,userCanAccess)
+  if(userCanAccess.is == true) {
     printFormatted('green','enabling navigation...')
     event.reply('enable-navigation')
   }
@@ -370,16 +409,14 @@ ipcMain.handle('get-last-entry', async () => {
   return lastEntry
 })
 
-
+/**
+ * Sets the current entry 
+ */
 ipcMain.handle('set-current-entry', (event, selectedEntryName) => setCurrentEntry(selectedEntryName))
 
 
-ipcMain.handle('get-current-entry-name', async (event) => {
-  const json = false// will return an entry when false
-  const entry = await getCurrentEntry(json) as Entry
-  entry.cdate+'.json'
-})
-
+/** Returns the current entry as a json string.
+ */
 ipcMain.handle('get-current-entry', async (event) => {
   const json = true
   var entryJsonStr = await getCurrentEntry(json) as string
@@ -395,11 +432,14 @@ ipcMain.handle('get-tags-table-rows', async (event) => {
 ipcMain.on('get-tag-entries', async (event, tagName) => {
   //get directories
   const { allEntries, tagDirectory } = dirs
-  //start a child process
-  var childProcess = c_process.spawn('node', ['js/send-entries.js', allEntries, tagDirectory, tagName], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
+  //the path to the send-entries.js script
+  const pathToScript = paths.join(__dirname, 'view', 'append', 'send-entries.js')
+  //start a child proces
+  var childProcess = c_process.fork(pathToScript, [allEntries, tagDirectory, tagName], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
 
   //recieve messages from child process on this the main process & send/forward to renderer process
-  childProcess.on('message', (message:any) => {
+  childProcess.on('message', (message:SendSingleEntryFunctionMessage|'start-loader'|'stop-loader') => {
+    //@ts-ignore
     if (message.entryFilename) {
       event.reply('recieve-tag-entries', message)
     }
@@ -472,7 +512,7 @@ ipcMain.handle('export-entries-json', async () => {
   var dialogPath = dirs.tagDirectory
   dialogPath ? console.log(`dialogPath:${dialogPath}`) : console.log('dialogPath is null or undefined')
   //open dialog window
-  var promise: OpenDialogReturnValue = await dialog.showOpenDialog({ defaultPath: dialogPath, properties: ['openFile', 'multiSelections'] })
+  var promise: OpenDialogReturnValue = await dialog.showOpenDialog({title:'Export Entries', defaultPath:dialogPath, properties:['openFile', 'multiSelections'] })
 
   //if not exited
   if (promise && !promise.canceled) {
@@ -503,19 +543,17 @@ ipcMain.handle('export-entries-pdf', async () => {
 
 
 //SECTION - SETTINGS 
-ipcMain.handle('get-settings-json', async (event)=> {
-  printFormatted('blue', 'get-settings-json called')
-  const jsonStr = true
-  var settingsJson = await retrieveSettings(jsonStr) as string
-  printFormatted('green','retrieved settings:',settingsJson)
-  return settingsJson
+ipcMain.handle('get-settings', async (event, jsonStr:boolean=false)=> {
+  printFormatted('blue', 'handle "get-settings" called')
+  var settings = await Settings.retrieveSettings(jsonStr) as string
+  printFormatted('green','retrieved settings:',settings)
+  return settings
 })
 
-ipcMain.handle('set-settings-json', async (event, settingsJsonStr) => {
-  printFormatted('blue', 'set-settings-json called')
-  const settings = JSON.parse(settingsJsonStr)
+ipcMain.handle('set-settings', async (event, settings) => {
+  printFormatted('blue', 'handle "set-settings" called')
   printFormatted('green','saving settings:',settings)
-  var message = await saveSettingsJson(settings)
+  var message = await Settings.saveSettingsJson(settings)
   return message
 })
 
@@ -530,4 +568,19 @@ ipcMain.handle('email-stored-boolean', async () => {
   {
     return false
   }
+})
+
+
+/**
+ * Export for tarnsfer to new another 'The Journal App' journal.
+ * For instance if the computer needs to be backed up or wiped,
+ * you can simply export the entire `tagDirs` folder/directory and all of the tags
+ */
+//IMPORTANT
+ipcMain.handle('export-transfer-data', () => {
+  exportTransferData(dirs.allEntries, dirs.downloads)
+})
+
+ipcMain.handle('import-transfer-data', () => {
+  importTransferData(dirs.downloads, dirs.allEntries)
 })

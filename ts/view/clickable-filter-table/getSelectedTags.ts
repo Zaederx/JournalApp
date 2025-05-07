@@ -1,7 +1,11 @@
 import { clicked } from "./constants"
 
 /**
- * Get Selected Tags
+ * Get selected (highlighted) tags from a the tag table body.
+ * Any row where the tag is the clicked colour,
+ * it's tag will be added to the list of tags.
+ * Used for the `edit-tags` view. 
+ * See `html/edit-tags.html` and `ts/view/edit-tags.ts`
  * @param tagTableBody tableBody to get rows from
  * @returns 
  */

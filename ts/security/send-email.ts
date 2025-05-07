@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { printFormatted } from '../other/stringFormatting'
+import { printFormatted } from '../other/printFormatted'
 import fs from 'fs'
 import paths from 'path'
 
@@ -28,7 +28,7 @@ async function getTransport()
 /**
  * Send the reset password email to users.
  * @param recipientEmail user's email address
- * @param resetCode the code for the address
+ * @param resetCode the reset code to be sent to the user's email address
  */
 export async function sendResetPasswordEmail(recipientEmail:string, resetCode:string)
 {

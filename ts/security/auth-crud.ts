@@ -2,12 +2,13 @@ import paths from 'path'
 import * as fs from 'fs' 
 import bcrypt from 'bcryptjs'
 import * as dirs from '../directory'
-import { printFormatted } from '../other/stringFormatting';
+import { printFormatted } from '../other/printFormatted';
 import isThereTheDirectory from '../fs-helpers/isThereTheDirectory';
 
 /**
  * Hashes password
  * @param str password to be hashed
+ * @return a hashed string
  */
 export function hash(str:string)
 {
@@ -20,6 +21,7 @@ export function hash(str:string)
  * Stores the hashed email in a given directory.
  * @param filepath directory and filename to store the hash
  * @param filecontent the content to be stored in the file
+ * @returns boolean - whether the file was stored successfully. True if successful.
  */
 export async function store(filepath:string,filecontent:string)
 {
@@ -33,6 +35,7 @@ export async function store(filepath:string,filecontent:string)
     }
     //write password to path
     await fs.promises.writeFile(filepath, filecontent)
+    //return whether the file was stored
     return response = true
   } catch (error:any) {
     printFormatted('red', error.message)
@@ -40,11 +43,21 @@ export async function store(filepath:string,filecontent:string)
   return response
 }
 
+/**
+ * Stores the email verification code hash.
+ * @param codeHash email verification code hash to be stored
+ * @returns boolean - whether code was stored successfully
+ */
 export async function storeVerificationCodeHash(codeHash:string)
 {
   return store(dirs.verificationCodeHash, codeHash)
 }
 
+/**
+ * 
+ * @param codeHash the reset code hash
+ * @returns boolean - whether code was stored successfully
+ */
 export async function storeResetCodeHash(codeHash:string)
 {
   return store(dirs.resetCodeHash, codeHash)
@@ -54,6 +67,7 @@ export async function storeResetCodeHash(codeHash:string)
  * Stores the hashed email in a given directory.
  * @param dir directory to store the hash in
  * @param emailHash the email to be stored that has already been hashed
+ * @returns boolean - whether the email was stored successfully. True if successful.
  */
 export async function storeEmailHash(emailHash:string)
 {
@@ -62,14 +76,8 @@ export async function storeEmailHash(emailHash:string)
 
 /**
  * Stores password hash.
- * Note: directory is not the filepath.
- * i.e.
- * ```
- * directory = '/path/to/folder'
- * filepath = '/path/to/folder/file.txt'
- * ```
- * @param dir directory to store password into
  * @param passwordHash password to be store
+ * @returns boolean - whether the email was stored succesfully. True if successful.
  */
 export function storePasswordHash(passwordHash:string)
 {
@@ -77,21 +85,23 @@ export function storePasswordHash(passwordHash:string)
 }
 
 /**
- * Function fo retrieveing file contents.
+ * Function fo retrieving file contents.
  * @param filepath filepath of the file you wish to get contents from.
+ * @returns Promise<string> (file contents) or Promise<undefined>
  */
 async function retrieve(filepath:string):Promise<string|undefined>
 {
   try {
-    const passwordHash = await fs.promises.readFile(filepath, 'utf-8')
-    return passwordHash
+    const file_contents = await fs.promises.readFile(filepath, 'utf-8')
+    return file_contents
    } catch (error:any) {
      printFormatted('red', error.message)
      return undefined
    }
 }
 /**
- * Retrieve reset code hash from a stored file.
+ * Retrieves reset code hash from a stored file.
+ * @returns Promise<string> (reset code hash) or Promise<undefined>
  */
 export async function retrieveResetCodeHash()
 {
@@ -101,6 +111,7 @@ export async function retrieveResetCodeHash()
 
 /**
  * Retrieve reset code hash from a stored file.
+ * @returns Promise<string> (verification code hash) or Promise<undefined>
  */
 export async function retrieveVerificationCodeHash()
 {
@@ -109,6 +120,7 @@ export async function retrieveVerificationCodeHash()
 
 /**
  * Retrieve email hash from a stored file.
+ * @returns Promise<string> (email hash) or Promise<undefined>
  */
 export async function retrieveEmailHash()
 {
@@ -117,6 +129,7 @@ export async function retrieveEmailHash()
 
 /**
  * Retrieve password hash from a stored file.
+ * @returns Promise<string> (password hash) or Promise<undefined>
  */
 export async function retrievePasswordHash()
 {
@@ -129,8 +142,9 @@ export async function retrievePasswordHash()
 /**
  * Authenticates verification code against stored the verification code hash
  * @param verificationCode password to be authenticated against stored password hash
+ * @returns boolean - whether the verification code matches the stored verification code hash. True if successful / they match.
  */
-export async function autheticateVerificationCode(verificationCode:string)
+export async function authenticateVerificationCode(verificationCode:string)
 {
   const hash = await retrieveVerificationCodeHash()
   if(hash)
@@ -143,8 +157,11 @@ export async function autheticateVerificationCode(verificationCode:string)
 /**
  * Authenticates reset code against stored the reset code hash
  * @param resetCode password to be authenticated against stored password hash
+ * @returns boolean - whether the reset code 
+ * matches the stored reset code hash.
+ * True if successful / they match.
  */
-export async function autheticateResetCode(resetCode:string)
+export async function authenticateResetCode(resetCode:string)
 {
   const hash = await retrieveResetCodeHash()
   if(hash)
@@ -157,8 +174,11 @@ export async function autheticateResetCode(resetCode:string)
 /**
  * Authenticates password against stored password hash
  * @param email password to be authenticated against stored password hash
+ * @returns boolean - whether the email
+ * matches the stored email hash.
+ * True if successful / they match.
  */
-export async function autheticateEmail(email:string)
+export async function authenticateEmail(email:string)
 {
   const hash = await retrieveEmailHash()
   if(hash)
@@ -171,8 +191,11 @@ export async function autheticateEmail(email:string)
 /**
  * Authenticates password against stored password hash
  * @param password password to be authenticated against stored password hash
+ * @returns boolean - whether the password
+ * matches the password hash.
+ * True if successful / they match.
  */
-export async function autheticatePassword(password:string)
+export async function authenticatePassword(password:string)
 {
   const hash = await retrievePasswordHash()
   if(hash)
@@ -186,18 +209,22 @@ export async function autheticatePassword(password:string)
 /**
  * Checks whether the password file exists or not.
  * This determines whether or not a password is
- * requested or app opening.
+ * requested on app opening (when the app is opened).
+ * @returns boolean - whether the password file exists. True if exists.
  */
 export async function passwordFileExists():Promise<boolean>
 {
   var exists = false
   try
   {
+    //gets details/info of the file
     var stats = await fs.promises.stat(dirs.passwordHash)
+    //check details/info object is present & then if the file exists
     if(stats && stats.isFile())
     {
       exists = true
     }
+    //return whether the file exists or not
     return exists
   }
   catch (error)

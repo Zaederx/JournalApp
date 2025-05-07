@@ -25,8 +25,10 @@ export default function fetchBtime(directory:string,filename:string, arr:EntryDa
     //Addtionally - %B inserts File BirthTime (Creation Date)
       var path = paths.join(directory,filename);
       var stat_birth = c_process.spawnSync('stat',['-f','%B', '-L', path]);
-      //\x1b[32m - change output colour to green, %s string = string, %s again means then another string, then \x1b[0m changes the color back to white
-      var stringFormatting = '\x1b[32m%s%s\x1b[0m'
+      //\x1b[32m - change output colour to green, %s string = string, %s again means then another string, then \x1b[0m changes the color back to default
+      var green = '\x1b[32m'
+      var default_colour = '\x1b[0m'
+      var stringFormatting = green + '%s%s' + default_colour
       console.log(stringFormatting,'stat_birth.output:',stat_birth.output);
   
       //get file birthtime as str -> number

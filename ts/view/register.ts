@@ -3,11 +3,11 @@
  * Your password can also be toggled on and off using a switch (also handled in this file).
  */
 import { ipcRenderer } from 'electron'
-import { setPasswordProtection } from './switch/switch';
+import { setPasswordProtection } from './switch/password-switch';
 import { type settings } from '../settings/settings-type';
 import * as fragments from './fragments/load-fragments'
 import { submitEnterListener } from './input-helpers/key-capture';
-import { printFormatted } from '../other/stringFormatting';
+import { printFormatted } from '../other/printFormatted';
 import { validEmail } from './login';
 
 
@@ -17,6 +17,11 @@ checkedStatus.then(enableSwitch)
 //load registration dialog ready for when user clicks the switch
 fragments.loadRegisterEmailPasswordDialog()
 
+//enter email verification code button
+var btn_verify_email = document.querySelector('#btn-verify-email-code') as HTMLDivElement
+btn_verify_email ?
+btn_verify_email.onclick = openVerificationCodeDialog
+: printFormatted('black', 'btn_verify_email is null');
 
 function enableSwitch()
 {
@@ -92,10 +97,6 @@ export async function clickRegisterEmailPasswordButton()
         if(success2) 
         {
             printFormatted('green', 'openVerificationCodeDialog returned successful')
-            //set switch to checked
-            const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
-            switchInput.checked = true
-            setPasswordProtection('true')
         } 
         else
         {
@@ -107,25 +108,7 @@ export async function clickRegisterEmailPasswordButton()
         printFormatted('blue', 'clickRegisterEmailPasswordButton unsuccessful')
     }
 }
-/**
- * Open verify email dialog and send
- * 'check-verification-code' ipc message
- * with the verification code on confirm.
- * 
- * @return returns whether verification was successful
- */
-export async function openVerificationCodeDialog():Promise<boolean> {
-    printFormatted('blue', 'function openVerifyEmailDialog called')
-    //load dialog into the DOM
-    const message = 'Please enter your email verification code into the field/box provided.'
-    const placeholder = 'verification code'
-    const verificationCode = await fragments.customPrompt(message, placeholder)
-    //check verification code
-    const valid = await ipcRenderer.invoke('check-verification-code', verificationCode)
-    //authentication action - pick up 
-    ipcRenderer.send('authentication-action')
-    return valid
-}
+
 
 /**
  * Checks the settings status for password protection
@@ -192,3 +175,34 @@ export async function registerEmailPassword()
     return false
 }
 
+/**
+ * Open verify email dialog and send
+ * 'check-verification-code' ipc message
+ * with the verification code on confirm.
+ * 
+ * @return returns whether verification was successful
+ */
+export async function openVerificationCodeDialog():Promise<boolean> {
+    printFormatted('blue', 'function openVerifyEmailDialog called')
+    //load dialog into the DOM
+    const message = 'Please enter your email verification code into the field/box provided.'
+    const placeholder = 'verification code'
+    const verificationCode = await fragments.customPrompt(message, placeholder)
+    //check verification code
+    const valid = await ipcRenderer.invoke('check-verification-code', verificationCode)
+    //activate switch if valid
+    if (valid)
+    {
+        printFormatted('green', 'verification code returned successfully')
+        //set switch to checked
+        const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+        if (switchInput) 
+        {
+            switchInput.checked = true
+            setPasswordProtection('true')
+        }
+    }
+    //authentication action - pick up 
+    ipcRenderer.send('authentication-action')
+    return valid
+}

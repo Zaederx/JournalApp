@@ -1,5 +1,10 @@
 import { BrowserWindow } from 'electron'
-import pathsForWDIO from './paths-for-wdio'
+import pathsForAppBinaries from './paths-for-app-binaries'
+/**
+ * Creates a window for the app and returns it
+ * @param integration - whether to enable node integration
+ * @return BrowserWindow for the app
+ */
 export default async function createWindow(integration:boolean=true) {
 
     
@@ -8,8 +13,8 @@ export default async function createWindow(integration:boolean=true) {
       ({
         width: 921,
         height: 600,
-        minWidth: 921,
-        minHeight: 478,
+        maxWidth: 921,
+        maxHeight:600,
         webPreferences:
         {
           // worldSafeExecuteJavaScript: true ,
@@ -25,10 +30,12 @@ export default async function createWindow(integration:boolean=true) {
   
     await window.webContents.executeJavaScript('localStorage.setItem("inDialog","false")')
   
-    if (process.env.NODE_ENV === 'test-main') {
-      //produce paths for wdio
+    //Note:don't think it matters but it was... 
+    // if (process.env.NODE_ENV === 'test-main') {
+    if (process.env.NODE_ENV === 'test') {
+      //open dev tools & produce paths for testing
       window.webContents.openDevTools();
-      pathsForWDIO()
+      pathsForAppBinaries()//(writes apps paths to 2 files [was originally made for wdio testing])
     }
       
     

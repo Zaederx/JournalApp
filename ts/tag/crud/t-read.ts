@@ -5,8 +5,8 @@ import { readAllTags } from './t-read-module/read-all-tags'
 import { readDir } from './t-read-module/read-dir'
 import { readTagDir } from './t-read-module/read-tag-dir'
 import { readTagEntries } from './t-read-module/read-tag-entries'
-import { sendTagEntriesToHTML } from './t-read-module/send-tag-entries-to-html'
+// import { sendTagEntriesToHTML } from './t-read-module/send-tag-entries-to-html'
 import { tagFilesToHTML } from './t-read-module/tag-files-to-html'
 import { appendTags } from './t-read-module/append-tags'
 
-export { getTagCreationDate, getTagEntryCount, getTagsEntryCountCreationDate, readAllTags, readDir, readTagDir, readTagEntries, sendTagEntriesToHTML, tagFilesToHTML, appendTags }
+export { getTagCreationDate, getTagEntryCount, getTagsEntryCountCreationDate, readAllTags, readDir, readTagDir, readTagEntries, tagFilesToHTML, appendTags }

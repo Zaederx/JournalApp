@@ -1,29 +1,31 @@
 import { passwordFileExists } from './auth-crud'
-import { retrieveSettings } from '../settings/settings-functions'
-import { type settings } from '../settings/settings-type'
-import { printFormatted } from '../other/stringFormatting'
+import { Settings, settings } from '../settings/settings-type'
+import { printFormatted } from '../other/printFormatted'
 
-
-export async function authenticationAction(event:Electron.IpcMainEvent, loggedIn:{is:boolean}, windowJustOpened:{is:boolean})
+/**
+ * 
+ * @param event IpcMainEvent
+ * @param userCanAccess object for checking whether the user is allowed to access the app or loggedIn
+ * @param windowJustOpened an object for checking whether the window just opened
+ */
+export async function authenticationAction(event:Electron.IpcMainEvent, userCanAccess:{is:boolean})
 {
   printFormatted('blue','authentication-action triggered')
-  const passwordExists = await passwordFileExists()
+  const passwordExists:boolean = await passwordFileExists()
   const jsonStr = false
-  const settings:settings = await retrieveSettings(jsonStr)
+  const settings:settings = await Settings.retrieveSettings(jsonStr) as settings
 
   printFormatted('green','settings:',settings)
   //print passwordExists
   if (passwordExists) printFormatted('green','passwordExists:',passwordExists) 
   else printFormatted('red','passwordExists:',passwordExists)
-  //print loggedIn.is
-  if (loggedIn.is)printFormatted('green','loggedIn.is:',loggedIn.is)
-  else printFormatted('red','loggedIn.is:',loggedIn.is)
-  //print windowJustOpened
-  if (windowJustOpened.is) printFormatted('green','windowJustOpened:',windowJustOpened.is)
-  else printFormatted('red','windowJustOpened:',windowJustOpened.is)
+  //print userCanAccess.is
+  if (userCanAccess.is == true) printFormatted('green','userCanAccess.is:',userCanAccess.is)
+  else printFormatted('red','userCanAccess.is:',userCanAccess.is)
+ 
 
   //open authentication dialog
-  if (passwordExists && settings['password-protection'] == 'true' && loggedIn.is == false)
+  if (passwordExists && settings['password-protection'] == 'true' && userCanAccess.is == false)
   {
     printFormatted('green','password file exists')
     printFormatted('green','password protection is set to true')
@@ -32,16 +34,15 @@ export async function authenticationAction(event:Electron.IpcMainEvent, loggedIn
     // windowJustOpened.is = false
     event.reply('open-login-dialog')
   }
-  //send reminder and enable navigation - set loggedIn.is to true
+  //send reminder and enable navigation - set userCanAccess.is to true
   else if(settings['password-protection'] == 'false' && settings['password-reminder'] == 'true')
   {
-    loggedIn.is = true//enable login - they are effectively logged in if there is no password set up
-    
+    userCanAccess.is = true//enable login - they are effectively logged in if there is no password set up
     if (!passwordExists) 
     {
       printFormatted('yellow','password file does not exist') 
     }
-    printFormatted('green','loggedIn.is now set to:'+loggedIn.is)
+    printFormatted('green','userCanAccess.is now set to:'+userCanAccess.is)
     printFormatted('green','Showing password reminder and enabling navigation...')
     
     //show reminder
@@ -52,7 +53,7 @@ export async function authenticationAction(event:Electron.IpcMainEvent, loggedIn
   else if (settings['password-protection'] == 'false' && settings['password-reminder'] == 'false') {
     printFormatted('green','Enabling navigation...')
     // windowJustOpened.is = false
-    loggedIn.is = true
+    userCanAccess.is = true
     event.reply('enable-navigation')//send message to nav.ts to enable
   }
   //if password does not exist and password protection is true - tampering has most likely occured - alert user and prompt to reset password via email
@@ -65,5 +66,27 @@ export async function authenticationAction(event:Electron.IpcMainEvent, loggedIn
 
     printFormatted('yellow', 'Alerting user of missing password file and reset mesaures.')
     event.reply('open-reset-password-confirm-prompt', message)
+  }
+}
+
+/**
+ * Checks whether the user can access the app initially.
+ * Basically, at the start if no password protection is enabled,
+ * it can give the user access right away without checking credentials.
+ * @param userCanAccess 
+ */
+export async function userCanAccessInitially() {
+  printFormatted('blue','authentication-action triggered')
+  const passwordExists:boolean = await passwordFileExists()
+  const jsonStr = false
+  const settings:settings = await Settings.retrieveSettings(jsonStr) as settings
+
+  printFormatted('green','settings:',settings)
+
+  if(passwordExists && settings['password-protection'] == 'true') {
+    return false
+  }
+  else {
+    return true
   }
 }

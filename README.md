@@ -1,10 +1,14 @@
-# JournalApp - Refactored and Design Update
+# JournalApp - Refactored and Design Update - Version 4
  Jounalling App
- 
 
 A journalling project that I made while experiementing and learning about Node and Electron.
 
-## [See YouTube Video Walthrough](https://youtu.be/YHcCa2SDqf0)
+# Most upto date image of the app (need to make a new video.)
+<img width="916" alt="Screenshot 2025-04-17 at 03 30 29" src="https://github.com/user-attachments/assets/8c9300a7-e029-4d0f-b458-5e647c4d28ee" />
+<img width="918" alt="Screenshot 2025-04-17 at 03 32 38" src="https://github.com/user-attachments/assets/a0be97fe-dca7-42b5-9624-83c6e5d457b2" />
+
+
+## [See YouTube Video Walthrough - for Version 3](https://youtu.be/YHcCa2SDqf0)
 
 <!-- Also be sure to see 
 ## [YOUTUBE WALKTHROUGH](https://www.youtube.com/watch?v=2LTY80dYC0g&t=81s) -->
@@ -22,17 +26,19 @@ A journalling project that I made while experiementing and learning about Node a
 * [Modifications](#modifications)
 * [Things learned](#things-learned)
 * [Trello Board Original Project](https://trello.com/b/e8hwRTpR/patientapp) & [Trello Board Current Project](https://trello.com/b/pI50op1x/patient-health-rewrite)
+* Also see [Lesson Notes.md](LessonNotes.md)
 
 ## Background
 I wanted to create an app that would allow people to journal. That meant having a system that interacted with the computers file system directly. Hearing about Node, and also being familiar with JavaScript, it became an ideal choice to work with Node and Electron to create this desktop applicaiton (as Node allow you to run JS on the computer system natively rather than just in the browser and electron renders HTML like a browser to produce app with Node.)
 
 ## Images
 ## Version 4 - Themes added + Export + Bug fixes
+<img width="918" alt="Screenshot 2023-04-18 at 20 48 03" src="https://user-images.githubusercontent.com/38586415/232874386-1be8b8b3-c827-493c-8a1e-65f4ea472d7c.png">
+<img width="920" alt="Screenshot 2023-04-18 at 20 45 36" src="https://user-images.githubusercontent.com/38586415/232874154-84a409ec-aa93-4763-8868-922c37f07ab2.png">
 
 
 ## Version 3 - Design further updated
 <img width="922" alt="image" src="https://user-images.githubusercontent.com/38586415/127141972-c9b7d851-8dd8-4587-b72e-49c0f8d9d7d8.png">
-
 
 ## Version 2 - Design Updated
 <img width="927" alt="image" src="https://user-images.githubusercontent.com/38586415/123151514-71b91700-d45b-11eb-9bc7-6f81ef35a10e.png">
@@ -55,7 +61,7 @@ File icon made by  <a href="https://www.flaticon.com/authors/freepik" title="Fre
 
 Export icon from <a href="https://iconmonstr.com/upload-20-svg/" title="iconmonstr">Iconmonstr</a>
 
-Slider buttons attributed to W3Schools who have a tutorail on how to make them.
+Slider buttons attributed to W3Schools who have a tutorial on how to make them.
 ## Technologies
 - [JavaScript](#javascript)
 - [TypeScript](#typescript)
@@ -92,9 +98,14 @@ Make sure to install dependecies before running the project.
 npm install
 ```
 ## Running the Project
-Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then `npm start`. This will generate JavaScript files from the TypeScirpt files that are in the repository (and likewise SASS into CSS) and then it will load up the project on screen.
+Clone or download the repository then `cd` to that folder in the commandline / terminal. From that root directory, then enter `npm install` (for node_modules to install) then `npm run bundle` to compile ts file into js bundles, then `npm start` to start electron forge.
 
-## Testing
+```
+npm install
+npm run bundle
+npm start
+```
+<!-- ## Testing
 To test the project, make sure to run the application once to get the application binary path file to be generated. Then please run the following commands:
 ```
 npm install
@@ -106,15 +117,20 @@ npm start
 ...then run
 ```
 npm run wdio
-```
+``` -->
+
+## Testing
+Version 1 is tested with automated test usnig the Mocha testing framework. Was not able to apply these these test to latter versions because of the change in interface. 
 
 ## Project Shortcomings
 I would like to take some time and some point to add a dark mode and some user settings to the project. These projects when working alone without a team do tend to drag on, but I would like to revisit it to add this improvement.
+### Update - Dark mode
+Dark mode and other and one other theme beside default theme have been added to the application.
 
 ## Modifications
 Findind a way to improve journal file load times would be something I would also like to change with this project.
 
-## Things learned
+## Things learned - see also [Lesson Notes](./LessonNotes.md) 
 I learned how to use Node and Electron for the first time. I learnt about TypeScript and SASS for the first time too. Also I believe it was this project that was the first time I used  VScode  and I haven't looked back since... :).
 
 Apart from that I've also done some testing in this project with Mocha [in project version 1]. I really wanted to try to make an effort to do some testing with this project as it is something that I struggle with knowing how to do. I was pleased that I was able to start out this project with some testing in a BDD style rather than just adding it in at the end.

@@ -2,7 +2,8 @@ import { ipcRenderer } from "electron"
 import { activateLoader, deactivateLoader } from "./loader"
 
 /**
- * 
+ * Makes a tag div clickable.
+ * (refering to the tag buttons in the sidepanel)
  * @param tagDiv the tag div to be make clickable
  * @param loader the loader that is activated and deactivated at the start and end of the function
  * @param panel_entries panel_entries 

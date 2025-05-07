@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import paths from 'path'
 import * as dir from '../../directory'
-import { printFormatted } from '../../other/stringFormatting';
+import { printFormatted } from '../../other/printFormatted';
 
 /**
  * Deletes a tag matching the speficied name

@@ -1,7 +1,11 @@
+/**
+ * This script is made to be run as it's own child process.
+ * 
+ */
 import * as process from 'process'
 import paths from 'path'
-import { appendEntries } from './entry/crud/e-read'
-import { printFormatted } from './other/stringFormatting'
+import { appendEntries } from '../../entry/crud/e-read'
+import { printFormatted } from '../../other/printFormatted'
 
 printFormatted('blue', 'send-entries process started')
 

@@ -1,5 +1,5 @@
 $light-limey-green: rgb(190, 202, 192);
-$side-panel-gray: #6F7871;
+$side-panel-green: #6F7871;
 
 //@at-root
 $main : rgb(72, 74, 78);
@@ -9,6 +9,7 @@ $selected : $main;//used for nav hover
 $hover : rgb(135, 170, 140);;//must not be body color
 $side-panel : rgb(111, 115, 120);
 $before-text-color: rgb(109, 109, 109);
+
 .grid-container {
 
 }
@@ -49,10 +50,12 @@ $before-text-color: rgb(109, 109, 109);
 
 .buttons > div {
     background-color: $body;
+    
 }
 
 .buttons > div:hover {
    background-color: $hover;
+   
 }
 
 .button {
@@ -61,39 +64,47 @@ $before-text-color: rgb(109, 109, 109);
 
 .button:hover {
     background-color: $hover;
+    
 }
 
 .entry-title {
     background-color: $body;
+    
 }
 
 .entry-body {
     background-color: $body;
+    
 }
 
 .entry-tags {
     background-color: $body;
 }
+
 .entry-tags > div {
     background-color: $panel-tag;
     color: $main;
+    
 }
 
+
 .side-panel {
-    background-color: $side-panel-gray;
+    background-color: $side-panel-green;
 }
 
 .side-panel .tags {
 
 }
 
-.side-panel .tags > div{
+.side-panel .tags > div {
     background-color: $panel-tag;
     color: $main;
 }
+
 .side-panel .tags > div.selected {
     background-color: $selected;
 }
+
 .side-panel .entries {
     background-color: $selected;
 }
@@ -101,6 +112,15 @@ $before-text-color: rgb(109, 109, 109);
 .side-panel .entries > div {
     background-color: $panel-tag;
     color: $main;
+    // box-shadow: none|h-offset v-offset blur spread color |inset|initial|inherit;
+    
+}
+
+.side-panel .entries > div:hover {
+    background-color: $hover;
+    color: $main;
+    box-shadow: 0px 0px 0px 0px transparent;
+    border-radius: 25px;
 }
 
 .editable {
@@ -117,9 +137,9 @@ $before-text-color: rgb(109, 109, 109);
 
 //loader from w3Schools tutorial - https://www.w3schools.com/howto/howto_css_loader.asp
 .loader {
-    border-color: #f3f3f3;
-    border-top-color:#3498db;
-    border-bottom-color:#3498db;
+    border-color: #f3f3f3!important;
+    border-top-color:$body!important;
+    border-bottom-color:$body!important;
 }
 .edit-tags {
     background-color: $body;
@@ -133,11 +153,13 @@ $before-text-color: rgb(109, 109, 109);
 }
 
 .edit-tags-popup {
-    background-color: $side-panel;
+    background-color: $hover;
+    color:white;
 }
 
 .edit-tags-popup > * {
-    background-color: $side-panel;
+    background-color: $hover;
+    color:white;
 }
 
 .edit-tags-popup .button {
@@ -163,17 +185,18 @@ $before-text-color: rgb(109, 109, 109);
     background-color: rgb(219, 107, 107);
 }
 
-.close-btn:hover{
+.close-btn:hover {
     background-color: rgb(226, 57, 57);
 }
 
 
 .table-row {
+
 }
 
 //table cells
 .table-row > td {
- 
+
 }
 
 .tag-searchbar {
@@ -206,6 +229,7 @@ $before-text-color: rgb(109, 109, 109);
     height: 20px;
     cursor: pointer;
 }
+
 .btn-forgot-password:hover {
-    background-color: $hover;
+    background-color:$hover;
 }

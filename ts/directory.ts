@@ -52,7 +52,9 @@ const settingsFile = paths.join(app.getPath('userData'), 'settings', 'settings.j
  * path relative to the html files to css themes.
  * Please see css folder.
  */
-const themeFilepath = paths.join('css', 'theme.txt')
+const themeFilepath = paths.join(app.getPath('userData'), 'settings', 'theme.txt')
 
+
+const scripts = paths.join(app.getPath('userData'), 'scripts')
 export { allEntries, tagDirectory, currentEntryDir, downloads, secureFolder, verificationCodeHash, resetCodeHash, passwordHash, emailHash, settingsFolder, settingsFile, themeFilepath }
 

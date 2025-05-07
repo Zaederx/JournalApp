@@ -17,5 +17,7 @@ external/fontawesome-free-5.15.1-web/
 out
 #CSS files
 css/
-gmail.json
+
 reset-code.txt
+
+out/

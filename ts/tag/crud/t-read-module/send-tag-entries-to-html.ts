@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+
 
 /**
  * Sends single entries to the files.
@@ -6,7 +6,7 @@ import { ipcMain } from "electron";
  * sends via ipcMain.
  * @param files 
  */
-export function sendTagEntriesToHTML(files:string[]) {
+export function sendTagEntriesToHTML(files:string[], ipcMain:any) {
     var filesHTML = '';
     var i = 0;
     files.forEach( (filename) => {

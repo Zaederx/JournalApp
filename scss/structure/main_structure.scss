@@ -1,4 +1,8 @@
-//only structure
+//main styling to apply across all themes
+
+/* offset-x | offset-y | blur-radius | spread-radius | color */
+$shadow : 5px 5px 5px 0px rgb(32, 32, 32), 5px 5px 5px grey;
+$neumorphic: inset 5px 5px 5px rgb(49, 49, 49), inset 5px 5px 3px grey;
 .grid-container {
     display: grid;
     grid-template-columns: [nav]100px [main-container]800px;//screen is 900px across (window is 921px)
@@ -71,9 +75,14 @@
     padding: 10px;
     cursor: pointer;
     z-index: 3;
+
+    box-shadow: $shadow;
+    border-radius: 25px;
 }
 
 .buttons > div:hover {
+    box-shadow: $neumorphic;
+    border-radius: 25px;
 }
 
 .button {
@@ -91,27 +100,39 @@
     // padding: 10px;
     // cursor: pointer;
     // z-index: 3;
+    box-shadow: $neumorphic;
+    border-radius: 25px;
 }
 
 .entry-title {
+    padding: 20px!important;
     grid-column: 2 / span 2;
     grid-row: 4;
+    border-radius: 25px;
+    box-shadow: $neumorphic;
 }
 
 .entry-body {
+    padding:20px!important;
     grid-column: 2 /span 2;
     grid-row: 6;
+    border-radius: 25px;
+    overflow-y: scroll;
+    box-shadow: $neumorphic;
 }
 
 .entry-tags {
     grid-column: 5;
     grid-row: 4 / span 3;
 }
+
 .entry-tags > div {
     text-align: center;
     padding: 10px;
     margin: auto;
     margin: 10px;
+    box-shadow: $shadow;
+    border-radius: 25px;
 }
 
 .side-panel {
@@ -127,7 +148,7 @@
     overflow-y: scroll;
 }
 
-.side-panel .tags > div{
+.side-panel .tags > div {
     margin-top: 10px;
     margin-left: 10px;
     margin-bottom: 10px;
@@ -156,6 +177,10 @@
     margin-bottom: 10px;
     z-index: 1;
     cursor: pointer;
+
+    -webkit-box-shadow: $shadow initial;
+    box-shadow: $shadow;
+    border-radius: 25px;
 }
 
 .editable {
@@ -175,7 +200,7 @@
 .loader {
     grid-column: 1;
     grid-row: 2;
-    border: 16px solid #f3f3f3;
+    border: 16px solid;
     border-radius: 50%;
     border-top: 16px solid;
     border-bottom: 16px solid;
@@ -205,24 +230,31 @@
 .edit-tags-popup {
     display: none;
     grid-column: 2 / span 2;
-    grid-row: 5;
+    grid-row: 4;
     z-index: 3;
+    border-radius: 5px 5px 5px 5px;
+    padding-bottom: 10px;
 }
 
 .edit-tags-popup > * {
 }
 
 .edit-tags-popup .button {
+    padding: 10px;
     text-align: center;
     cursor: pointer;
+    box-shadow: $shadow;
+    border-radius: 25px;
 }
 
 .edit-tags-popup .button:hover {
-
+    box-shadow: $neumorphic;
+    border-radius: 25px;
 }
 
 table {
     width: -webkit-fill-available;
+    border-radius: 0px 0px 5px 5px;
 }
 
 .table-row {
@@ -236,7 +268,15 @@ table {
 }
 
 .tag-searchbar {
-    padding: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: $neumorphic;
+}
+
+// div containing pop up buttons
+.tag-popup-buttons {
+    padding:20px;
+    padding-left: 20px;
 }
 
 .table-scroll-div {
@@ -245,7 +285,8 @@ table {
 }
 
 .tag-table-body {
-
+    box-shadow: $shadow;
+    height: 100%;
 }
 
 //popup table close btn
@@ -255,9 +296,11 @@ table {
     width: 20px;
     height: 20px;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .close-btn:hover{
+    box-shadow: $neumorphic;
 }
 
 .dialog {
