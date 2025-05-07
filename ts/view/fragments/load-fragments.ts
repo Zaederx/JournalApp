@@ -88,6 +88,10 @@ export async function loadCustomPrompt()
     return customPrompt
 }
 
+/**
+ * Loads/Displays and returns the custom prompt dialog div object.
+ * @returns customPrompt dialog div
+ */
 export async function loadVerifyEmailDialog() {
     //load password dialog - fetching it from files
     const verificationCodeHTML = await (await fetch('./fragments/verification-code.html')).text()
