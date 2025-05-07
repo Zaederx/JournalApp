@@ -113,7 +113,7 @@ export async function retrieveResetCodeHash()
  * Retrieve reset code hash from a stored file.
  * @returns Promise<string> (verification code hash) or Promise<undefined>
  */
-export async function retrieveVerificationCodeHash()
+export async function retrieveEmailVerificationCodeHash()
 {
   return retrieve(dirs.verificationCodeHash)
 }
@@ -144,9 +144,9 @@ export async function retrievePasswordHash()
  * @param verificationCode password to be authenticated against stored password hash
  * @returns boolean - whether the verification code matches the stored verification code hash. True if successful / they match.
  */
-export async function authenticateVerificationCode(verificationCode:string)
+export async function authenticateEmailVerificationCode(verificationCode:string)
 {
-  const hash = await retrieveVerificationCodeHash()
+  const hash = await retrieveEmailVerificationCodeHash()
   if(hash)
   {
     return bcrypt.compareSync(verificationCode, hash);
