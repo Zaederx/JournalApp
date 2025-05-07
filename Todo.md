@@ -1,7 +1,10 @@
 # Todo
 
 ## Fix password protection switch
-Make it work. I could habe sworn it used to...
+Make it work. I could have sworn it used to...
+
+## Fix User Access
+login.ts should be called at the start of loading the app to make sure that you can login.
 
 ## Add theme to settings file
 Maybe add the app theme to the settings file instead of having a separate file for it.
@@ -38,5 +41,3 @@ Check the openLoginDialog funtion in `login.ts` and add the code for it. Somethi
 Make sure that blurring the screen isn't linked to authentication/ logging out the user any more. Just in case you want to blur the screen for any other reason, the app shouldn't 
 
 
-## Fix User Access
-login.ts should be called at the start of loading the app to make sure that you can login.
