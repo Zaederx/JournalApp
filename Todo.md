@@ -1,11 +1,8 @@
 # Todo
 Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
 
-## Fix password protection switch
-Make it work. I could have sworn it used to...
-
-## Change details to be inside of a profile.json????
-Currently email, password and verification are stored in separate files. Should I store them all in one json...There's really no need to but maybe it would be neater... Something to consider.
+## Reset password
+Put reset password functionality.
 
 ## Fix User Access
 login.ts should be called at the start of loading the app to make sure that you can login.
