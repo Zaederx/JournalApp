@@ -6,6 +6,12 @@ import { printFormatted } from '../other/printFormatted'
 /**
  * A functions for main.ts (ipcMain) that decides what dialog to open
  * based on the password protection settings.
+ * There are 4 scenarios:
+ * - Open the login/authentication dialog popup (if password proection is enabled and the user is not already logged in/userCanAccess.is = false)
+ * - Login the user without password (if password protection not enabled), but display a password setup reminder (if reminders are enabled)
+ * - Login the user without a password, but don't display a reminder
+ * - Don't login in the user
+ * 
  * @param event IpcMainEvent
  * @param userCanAccess object for checking whether the user is allowed to access the app or loggedIn
  * @param windowJustOpened an object for checking whether the window just opened
@@ -80,7 +86,7 @@ export async function authenticationAction(event:Electron.IpcMainEvent, userCanA
  * @param userCanAccess 
  */
 export async function userCanAccessInitially() {
-  printFormatted('blue','authentication-action triggered')
+  printFormatted('blue','function userCanAccessInitially called')
   const passwordExists:boolean = await passwordFileExists()
   const jsonStr = false
   const settings:settings = await Settings.retrieveSettings(jsonStr) as settings
