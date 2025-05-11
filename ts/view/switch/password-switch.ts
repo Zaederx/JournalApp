@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import { Settings, settings } from "../../settings/settings-type";
+import { settings, defaults } from "../../settings/settings-type";
 
 /**
  * A function to help turn the password-protection setting on or off.
@@ -28,7 +28,7 @@ export async function setPasswordProtection(bool:'true'|'false')
         //log the error
         console.warn('Problem setting password protection to '+bool+ ':'+error)
         //if settings don't exist - use default settings
-        var settings:settings = Settings.defaults
+        var settings:settings = defaults
         //send to main to be saved /persisted
         ipcRenderer.invoke('set-settings', settings)
     }
