@@ -25,15 +25,15 @@ import process from 'process'
 import c_process from 'child_process'
 import Entry from './classes/entry';
 import { setCurrentEntry, getCurrentEntry } from './view/create-entry/current-entry'
-import { Settings } from './settings/settings-type'
+import { Settings } from './settings/settings'
 import { printFormatted } from './other/printFormatted'
 import { createAllTagDirectory, isThereAFile } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
-import { sendResetPasswordEmail, sendVerificationEmail } from './security/send-email'
+import { sendResetPasswordEmail, sendVerificationEmail } from './email/send-email'
 import { authenticationAction, userCanAccessInitially } from './security/auth-action'
 import { importTransferData, exportTransferData } from './entry/export/transfer-data'
 import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
-import { setEmailVerifiedTxt, getEmailVerifiedTxt } from './verify-email/verify-email'
+import { setEmailVerifiedTxt, emailIsVerified } from './verify-email/verify-email'
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system). Could save a birthtime.json with the filename nad the original birthtime. Maybe an EntryDate stored as json.
 
 //TODO - option to store file in iCloud
@@ -313,26 +313,27 @@ ipcMain.handle('check-verification-code', async (event, verificationCode) => {
 //SECTION -REGISTER EMAIL AND PASSWORDS
 //or step 1 if email and password are not set
 ipcMain.handle('register-email-password', async (event, email, password1, password2) => {
-  var response = {emailHashStored:false, passwordHashStored:false, codeHashStored:false,error:''}
+  var response = {emailStored:false, passwordHashStored:false, codeHashStored:false,error:''}
   if(email && password1 == password2) 
   {
     try 
     {
-      //hash email and password
-      var emailHash = authCrud.hash(email)
+      //hash password
       var passwordHash = authCrud.hash(password1)
 
-      //send email to verify address
+      //generate code and hash it
       var code = uuidv4()
       var codeHash = authCrud.hash(code)
+
+      //send email to verify address (with unhashed code inside)
       sendVerificationEmail(email, code)
 
       //store email and password hashes
-      const emailHashStored = await authCrud.storeEmailHash(emailHash)
+      const emailStored = await authCrud.storeEmail(email)
       const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
       const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
       printFormatted('yellow', 'verification code:',code)
-      return response = {emailHashStored, passwordHashStored, codeHashStored, error:''}
+      return response = { emailStored, passwordHashStored, codeHashStored, error:'' }
     } 
     catch (error:any) 
     {
@@ -342,8 +343,8 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
   }
   if (!email) 
   { 
-    response.emailHashStored = false
-    response.error = 'Email not present'
+    response.emailStored = false
+    response.error = 'Email not present.'
   }
   if (!(password1 == password2)) 
   { 
@@ -360,7 +361,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
  * Returns a boolean.
  */
 ipcMain.handle('email-is-verified', async () => {
-  return await getEmailVerifiedTxt()
+  return await emailIsVerified()
 })
 
 
