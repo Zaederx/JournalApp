@@ -2,6 +2,8 @@ import { ipcRenderer } from 'electron';
 import { activate } from './load-themes';
 import { checkPasswordProtection, setPasswordProtection } from './switch/password-switch'; 
 import { loadRegisterEmailPasswordDialog } from './fragments/load-fragments';
+import { emailIsVerified } from 'ts/verify-email/verify-email';
+import { passwordFileExists as passwordIsSet } from 'ts/security/auth-crud';
 
 //SECTION - Theme Buttons
 /** Constants */ //these are relative to the html page 'settings.html'
@@ -43,26 +45,3 @@ function enableThemeButton(button:HTMLDivElement, theme:string)
 {
     button.onclick = () => activate(theme);
 }
-
-
-
-//SECTION - Password Protection 
-checkPasswordProtection()//whether or not password protection switch should be checked
-
-const btn_password_protection_false = document.querySelector('#no-password') as HTMLDivElement
-const btn_password_protection_true = document.querySelector('#password-protection') as HTMLDivElement
-btn_password_protection_false.onclick = () =>  setPasswordProtection('false')
-btn_password_protection_true.onclick = () =>  { 
-    //set password protection to true if email is already 
-    if (emailIsVerified() && passwordIsSet()) {
-        setPasswordProtection('true') 
-    }
-    else {
-        //take user password input
-        loadRegisterEmailPasswordDialog()
-        saveEmailPasswordInput()
-        //NOTE:will verify the user password when they click the verify email button
-    }   
-}
-
-//SECTION - Verify Email Address
