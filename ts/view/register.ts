@@ -26,6 +26,8 @@ btn_verify_email.onclick = openVerificationCodeDialog
 function enableSwitch()
 {
     printFormatted('blue', 'function enableSwitch called')
+    //set switch to checked or unchecked
+    
     const btn_no_password_protection = document.querySelector('#no-password') as HTMLDivElement
     const btn_password_protection = document.querySelector('#password-protection') as HTMLDivElement
     
@@ -115,17 +117,22 @@ export async function clickRegisterEmailPasswordButton()
  * and then updates the switch accordingly.
  * If password protection is set to false, it will set
  * the switch to unchecked.
+ * @return - settings['password-protection'] {@link settings}
  */
-async function checkUpdateSwitchStatus()
+async function checkUpdateSwitchStatus():Promise<'true'|'false'>
 {
-    const settingsJson:string = await ipcRenderer.invoke('get-settings-json')
-    var settings = JSON.parse(settingsJson) as settings
+    const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+        
+    var settings:settings = await ipcRenderer.invoke('get-settings')
     if (settings['password-protection'] == 'false') { 
         //set visual switch to false
-        const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
         switchInput.checked = false
      }
-    return settings['password-protection']
+     //switch set to true by default in the HTML - but this doesn't hurt
+     else {
+        switchInput.checked = true
+     }
+    return settings['password-protection'] as 'true'|'false'
 }
 
 //TODO - HOW TO PASSWORD PROTECT A FOLDER THROUGH ELECTRON - maybe chmod
@@ -154,9 +161,9 @@ export async function registerEmailPassword()
     else if (validEmail(email) && p1 == p2) //IMPORTANT add password validator
     {
         const response =  await ipcRenderer.invoke('register-email-password', email, p1, p2)
-        const { emailHashStored, passwordHashStored, error } = response
+        const { emailStored, passwordHashStored, error } = response
         if (error) { alert(error)}
-        else if (emailHashStored && passwordHashStored) 
+        else if (emailStored && passwordHashStored) 
         { 
             alert('Email and password registered successfully. Please remember this password and email for future use.')
             //remove dialog
