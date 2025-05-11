@@ -266,6 +266,11 @@ $neumorphic: inset 5px 5px 5px rgb(49, 49, 49), inset 5px 5px 3px grey;
     top: 100px;
 }
 
+.email-password-dialog {
+    height: 500px;
+    top: 30px;
+}
+
 .login-dialog {
     z-index:10;
     height: 400px;
@@ -278,7 +283,7 @@ $neumorphic: inset 5px 5px 5px rgb(49, 49, 49), inset 5px 5px 3px grey;
     padding-top: 30px;
     height: 50px;
 }
-
+//TODO add password-field for field properties and keep passsord just for the webkit-text-security:disc
 .password {
     -webkit-text-security: disc;
     text-align: center;
