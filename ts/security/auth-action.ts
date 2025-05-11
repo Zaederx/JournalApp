@@ -1,9 +1,11 @@
 import { passwordFileExists } from './auth-crud'
-import { Settings, settings } from '../settings/settings-type'
+import { settings } from '../settings/settings-type'
+import { Settings } from '../settings/settings'
 import { printFormatted } from '../other/printFormatted'
-
+//IMPORTANT - double check the logic in authentication action and account for more senarios if needed.
 /**
- * 
+ * A functions for main.ts (ipcMain) that decides what dialog to open
+ * based on the password protection settings.
  * @param event IpcMainEvent
  * @param userCanAccess object for checking whether the user is allowed to access the app or loggedIn
  * @param windowJustOpened an object for checking whether the window just opened
@@ -22,6 +24,8 @@ export async function authenticationAction(event:Electron.IpcMainEvent, userCanA
   //print userCanAccess.is
   if (userCanAccess.is == true) printFormatted('green','userCanAccess.is:',userCanAccess.is)
   else printFormatted('red','userCanAccess.is:',userCanAccess.is)
+ 
+
  
 
   //open authentication dialog
