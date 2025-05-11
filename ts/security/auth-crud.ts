@@ -69,7 +69,7 @@ export async function storeResetCodeHash(codeHash:string)
  * @param emailHash the email to be stored that has already been hashed
  * @returns boolean - whether the email was stored successfully. True if successful.
  */
-export async function storeEmailHash(emailHash:string)
+export async function storeEmail(emailHash:string)
 {
   return store(dirs.emailHash, emailHash)
 }
@@ -155,7 +155,9 @@ export async function authenticateEmailVerificationCode(verificationCode:string)
 }
 
 /**
- * Authenticates reset code against stored the reset code hash
+ * Authenticates reset code against stored the reset code hash.
+ * Note: This function deals iwth the 'reset code'. 
+ * Don't confuse this with authenticating email verification code.
  * @param resetCode password to be authenticated against stored password hash
  * @returns boolean - whether the reset code 
  * matches the stored reset code hash.
@@ -208,8 +210,7 @@ export async function authenticatePassword(password:string)
 
 /**
  * Checks whether the password file exists or not.
- * This determines whether or not a password is
- * requested on app opening (when the app is opened).
+ * If the password file exists, that password has been set.
  * @returns boolean - whether the password file exists. True if exists.
  */
 export async function passwordFileExists():Promise<boolean>
