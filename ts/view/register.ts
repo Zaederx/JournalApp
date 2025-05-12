@@ -161,9 +161,9 @@ export async function registerEmailPassword()
     else if (validEmail(email) && p1 == p2) //IMPORTANT add password validator
     {
         const response =  await ipcRenderer.invoke('register-email-password', email, p1, p2)
-        const { emailStored, passwordHashStored, error } = response
+        const { emailHashStored, passwordHashStored, error } = response
         if (error) { alert(error)}
-        else if (emailStored && passwordHashStored) 
+        else if (emailHashStored && passwordHashStored) 
         { 
             alert('Email and password registered successfully. Please remember this password and email for future use.')
             //remove dialog

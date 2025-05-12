@@ -179,6 +179,8 @@ app.on('browser-window-focus', () => {
    */
 ipcMain.on('ready-to-show-sidepanel', async (event) => appendEntriesAndTags(event,dirs.allEntries,dirs.tagDirectory))
 
+
+//SECTION - AUTHENTICATION
 /**
  * In short: whether the use can access the app.
  * A constant object which has a changeble boolean 
@@ -313,12 +315,13 @@ ipcMain.handle('check-verification-code', async (event, verificationCode) => {
 //SECTION -REGISTER EMAIL AND PASSWORDS
 //or step 1 if email and password are not set
 ipcMain.handle('register-email-password', async (event, email, password1, password2) => {
-  var response = {emailStored:false, passwordHashStored:false, codeHashStored:false,error:''}
+  var response = {emailHashStored:false, passwordHashStored:false, codeHashStored:false, error:''}
   if(email && password1 == password2) 
   {
     try 
     {
-      //hash password
+      //hash email and password
+      var emailHash = authCrud.hash(email)
       var passwordHash = authCrud.hash(password1)
 
       //generate code and hash it
@@ -329,11 +332,11 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
       sendVerificationEmail(email, code)
 
       //store email and password hashes
-      const emailStored = await authCrud.storeEmail(email)
+      const emailHashStored = await authCrud.storeEmailHash(emailHash)
       const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
       const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
       printFormatted('yellow', 'verification code:',code)
-      return response = { emailStored, passwordHashStored, codeHashStored, error:'' }
+      return response = { emailHashStored, passwordHashStored, codeHashStored, error:'' }
     } 
     catch (error:any) 
     {
@@ -343,7 +346,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
   }
   if (!email) 
   { 
-    response.emailStored = false
+    response.emailHashStored = false
     response.error = 'Email not present.'
   }
   if (!(password1 == password2)) 
