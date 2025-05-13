@@ -11,15 +11,17 @@ const nodeExternals = require('webpack-node-externals')
 module.exports = {
     devtool:'source-map',//use this for development mode - comment out for production mode
     // devtool: 'eval',
-    mode: 'development', //outputs minified js
-    // mode: 'development', //outputs non-minified js - doesn't work with electron
+    mode: 'development',
+    // mode: 'development', //outputs non-minified js
+    //mode:'production', //outputs minified js
     entry : {
+        alert:'./ts/view/alert.ts',
         'create-entry': './ts/view/create-entry.ts',
         'edit-entry': './ts/view/edit-entry.ts',
         'edit-tags': './ts/view/edit-tags.ts',
         'view-entry': './ts/view/view-entry.ts',
         'load-themes': './ts/view/load-themes.ts',
-        'register': './ts/view/register.ts',
+        register: './ts/view/register.ts',
         settings: './ts/view/settings.ts',
         export: './ts/view/export.ts',
         login: './ts/view/login.ts',
