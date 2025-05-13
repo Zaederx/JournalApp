@@ -1,9 +1,10 @@
 import { ipcRenderer } from 'electron';
 import { activate } from './load-themes';
 import { checkPasswordProtection, setPasswordProtection } from './switch/password-switch'; 
-import { loadRegisterEmailPasswordDialog } from './fragments/load-fragments';
-import { emailIsVerified } from 'ts/verify-email/verify-email';
+import { loadRegisterEmailPasswordDialog, customPrompt } from './fragments/load-fragments';
+import { emailIsVerified } from 'ts/email/verify-email';
 import { passwordFileExists as passwordIsSet } from 'ts/security/auth-crud';
+import { printFormattedv2 } from 'printformatted-js';
 
 //SECTION - Theme Buttons
 /** Constants */ //these are relative to the html page 'settings.html'
@@ -44,4 +45,33 @@ console.warn('btn_leafy_theme is null')
 function enableThemeButton(button:HTMLDivElement, theme:string)
 {
     button.onclick = () => activate(theme);
+}
+
+//Code for password protection switch, verify email button and everything to do with authentication is in register.ts
+
+var btn_reset_password = document.querySelector('#btn-reset-password') as HTMLDivElement
+
+btn_reset_password.onclick = async () => {
+    var node = false
+    var trace = false
+    printFormattedv2(node,trace, 'blue', '#btn-reset-password pressed')
+    //open customPrompt- to enter email and then retrieve email from it
+    var message = 'Enter email to send reset code'
+    var placeholder = 'email@email.com'
+    var email = await customPrompt(message, placeholder) 
+    //if email not empty and matches saved email, send email
+    if (email != '') {
+        if (await emailMacthesEmailHash(email)) {
+            ipcRenderer.send('send-reset-password-email', email)
+            //and then
+            //ipcRenderer.on('open-reset-password-confirm-prompt', openResetPasswordConfirmPrompt) - is in login.ts
+        }
+        else {//if email doesn't match
+            alert('Wrong email entered. Email does not match stored email for user.')
+        }
+    }
+}
+async function emailMacthesEmailHash(email:string) {
+    var matches = await ipcRenderer.invoke('email-matches-email-hash',email)
+    return matches
 }
