@@ -33,7 +33,8 @@ import { sendResetPasswordEmail, sendVerificationEmail } from './email/send-emai
 import { authenticationAction, userCanAccessInitially } from './security/auth-action'
 import { importTransferData, exportTransferData } from './entry/export/transfer-data'
 import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
-import { setEmailVerifiedTxt, emailIsVerified } from './verify-email/verify-email'
+import { setEmailVerifiedTxt, emailIsVerified } from './email/verify-email'
+import { emailMatchesStoredHash } from './email/email-matches'
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system). Could save a birthtime.json with the filename nad the original birthtime. Maybe an EntryDate stored as json.
 
 //TODO - option to store file in iCloud
@@ -357,7 +358,10 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
   return response
 })
 
-
+ipcMain.handle('email-matches-email-hash', async (event, email) => {
+  var matches = await emailMatchesStoredHash(email)
+  return matches
+})
 
 /**
  * Returns whether the email has been verified.
