@@ -1,8 +1,14 @@
 # Todo
 Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
 
+## Clean up unwanted HTML dialogs that aren't used
+Because I used the the general purpose custom prompt for single response prompting, I've not used some of the HTML dialogs fragments that I've made. Need to remove the ones that I don't use.
+
 ## Reset password
 Put reset password functionality.
+
+
+## Make sure that password can be hidden
 
 ## Fix User Access
 login.ts should be called at the start of loading the app to make sure that you can login.
