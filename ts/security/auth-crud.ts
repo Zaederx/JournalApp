@@ -69,7 +69,7 @@ export async function storeResetCodeHash(codeHash:string)
  * @param emailHash the email to be stored that has already been hashed
  * @returns boolean - whether the email was stored successfully. True if successful.
  */
-export async function storeEmail(emailHash:string)
+export async function storeEmailHash(emailHash:string)
 {
   return store(dirs.emailHash, emailHash)
 }
