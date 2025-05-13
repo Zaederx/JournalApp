@@ -440,3 +440,14 @@ var x = 5
 console.log(y); // ReferenceError: Cannot access 'y' before initialization
 let y = 10;
 ```
+
+## Code injection problems - javascript
+When you have scripts inside of an HTML file and those are injected into the existing HTML DOM (Domain Object Model), then the scripts on those file do not get exectued because of some of Electrons script policies. I'm looking for a way to get the scripts in `html/fragments/email-password-dialog.html` to be run when it's added to the DOM dynamically throught javascript, but I'm not sure if there's a way to do what it is that I am attempting to do.
+
+
+I have two options that I can think of. Either do 'hide and display' on HTML entire fragments like the `email-password-dialog` which would need to be included in 'html/settings.html' but display hidden 
+
+OR Maybe..
+
+You could have the scripts for the html already loaded, but the problem with that is that I don't think/believe that the listeners for the HTML element events would be triggered, because the elements would not have been added to the DOM before that javascript is executed.
+
