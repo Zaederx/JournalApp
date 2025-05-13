@@ -1,10 +1,12 @@
 import fs from 'fs'
-import * as dirs from '../directory'
+import * as dirs from '../directory.js'
 import { printFormatted } from 'printformatted-js';
 import isThereAFile from '../fs-helpers/isThereAFile.js';
+import { ipcMain } from 'electron';
 /**
- * Make email-verified.txt with value true
- * @param verified 
+ *  Write to email-verified.txt and set it's text to true or false.
+ * @param verified true or false - whether it the user's email
+ * has been verified or not.
  */
 export async function setEmailVerifiedTxt(verified:'true'|'false') {
     await fs.promises.writeFile(dirs.emailVerifiedTxt,verified)
@@ -26,10 +28,10 @@ export async function emailIsVerified():Promise<boolean> {
         }
     }
     catch (error:any) {
+        setEmailVerifiedTxt('false')//because currently not true of false
         printFormatted('red', error.message)
-        setEmailVerifiedTxt('false')
-        //do you want to ask user to re-verify email in this case?
-        printFormatted('yellow','Please re-verify email.')//TODO put this in a frontend popup
+        //alert pop up on frontend - ask user to re-verify email in this case
+        ipcMain.emit('alert', 'Please re-verify email.')
         return false
     }
     //if all that fails - return false
