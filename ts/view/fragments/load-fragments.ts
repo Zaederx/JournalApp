@@ -1,14 +1,21 @@
-import { printFormatted } from "../../other/printFormatted";
+import { printFormattedv2 } from "printformatted-js";
 import { submitEnterListener } from "../input-helpers/key-capture";
 
+const node = false
+const trace = false
+function print(colour:any, ...args:string[]) {
+    printFormattedv2(node,trace,colour, args)
+}
 /**
  * Hide the fragment/element given a selector for the element
  * @param selector selector for the fragment
  */
 export function hideFragment(selector:string, classList:string[])
 {
-    printFormatted('blue', 'function hideFragment called')
+    print('blue', 'function hideFragment called')
     const element = document.querySelector(selector) as HTMLElement;
+
+    //TODO check if forEach is necessary - think you can just classList.remove
     classList.forEach((clazz) => {//clazz - because class is a keyword
         element.classList.remove(clazz)
     })
@@ -32,10 +39,10 @@ export async function loadTagsPopup()
  */
 export async function loadLoginDialog()
 {
-    console.log('loading authentication dialog...')
+    console.log('loading login dialog...')
     //load password dialog - fetching it from files
     const loginDialogHTML = await (await fetch('./fragments/login-dialog.html')).text()
-    console.log('authDialog:'+loginDialogHTML)
+    console.log('loginDialog:'+loginDialogHTML)
     var loginDialog = document.querySelector('#login-dialog') as HTMLDivElement
     loginDialog.outerHTML = loginDialogHTML
     return loginDialog
@@ -47,6 +54,7 @@ export async function loadLoginDialog()
  */
 export async function loadResetCodeDialog()
 {
+    console.log('loading reset code dialog...')
     //load password dialog - fetching it from files
     const resetCodeDialogHTML = await (await fetch('./fragments/reset-code-dialog.html')).text()
     const resetCodeDialog = document.querySelector('#reset-code-dialog') as HTMLDivElement
@@ -68,7 +76,8 @@ export async function loadRegisterEmailPasswordDialog()
     const response =  await fetch('./fragments/email-password-dialog.html')
     var emailPasswordDialogHTML = await response.text()
     document.querySelector('#email-password-dialog')!.outerHTML = emailPasswordDialogHTML 
-    return epDialog
+    // return document.querySelector('#email-password-dialog') - maybe this is better?
+    return emailPasswordDialogHTML
 }
 
 /**
@@ -84,7 +93,8 @@ export async function loadCustomPrompt()
     frontend and replace it with a customPromptHtml fragment*/
     var customPrompt = document.querySelector('#custom-prompt') as HTMLDivElement
     customPrompt.outerHTML = customPromptHTML
-    
+    //because it's not empty anymore - maybe you need to query selector again
+    // return document.querySelector('#custom-prompt')
     return customPrompt
 }
 
@@ -111,7 +121,7 @@ export async function loadVerifyEmailDialog() {
  */
 export function customPrompt(message:string, placeholder?:string):Promise<Promise<string>>
 {
-    printFormatted('blue', 'function customPrompt called')
+    print('blue', 'function customPrompt called')
     var loadPrompt = loadCustomPrompt()
 
     return loadPrompt.then(() => 
@@ -128,7 +138,7 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
         //set placeholder attribute on dialog
         placeholder ? input.setAttribute('data-placeholder', placeholder) : console.log('no placeholder provided for custom prompt')
 
-        //stop line caret from moving downwards
+        //stop line caret from moving downwards - submits on enter instead
         input.addEventListener('keypress', (e) => submitEnterListener(e,()=>{}))
             
         //get email from div and return the value
@@ -156,7 +166,7 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
  */
 function waitForClickPromise(element:any, input:HTMLDivElement):Promise<string> 
 {
-    printFormatted('blue', 'function waitForClickPromise called')
+    print('blue', 'function waitForClickPromise called')
     return new Promise((resolve, reject) => 
     {
         element.addEventListener('click', () => {
@@ -164,7 +174,7 @@ function waitForClickPromise(element:any, input:HTMLDivElement):Promise<string>
             const response = input.innerText
             if (response) 
             {
-                printFormatted('green', 'response:',response)
+                print('green', 'response:',response)
                 //hide promptDialog & return email
                 hideFragment('#custom-prompt', ['dialog'])
                 resolve(response)//returns the response
