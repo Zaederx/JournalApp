@@ -42,7 +42,7 @@ export default function fetchBtime(directory:string,filename:string, arr:EntryDa
   
       //console logging errors
       var err:string = stat_birth.stderr;
-      err != '' ? console.error('File Birthtime error:',err) : null;
+      err != '' ? console.error('File Birthtime error:', err) : null;
   
       //console logging status
       var code:number|null = stat_birth.status;
