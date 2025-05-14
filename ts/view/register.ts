@@ -109,6 +109,8 @@ export async function clickRegisterEmailPasswordButton()
     {
         printFormatted('blue', 'clickRegisterEmailPasswordButton unsuccessful')
     }
+    //no longer in dialog
+    window.localStorage.setItem('inDialog', 'true')
 }
 
 
@@ -169,7 +171,7 @@ export async function registerEmailPassword()
             //remove dialog
             const selector = '#email-password-dialog'
             const classList = ['dialog', 'email-password-dialog']
-            fragments.hideFragment(selector, classList)
+            fragments.removeFragment(selector, classList)
             var success = true
             return success
         }
