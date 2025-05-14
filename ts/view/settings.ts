@@ -5,6 +5,7 @@ import { loadRegisterEmailPasswordDialog, customPrompt } from './fragments/load-
 import { emailIsVerified } from 'ts/email/verify-email';
 import { passwordFileExists as passwordIsSet } from 'ts/security/auth-crud';
 import { printFormattedv2 } from 'printformatted-js';
+import { openResetCodeDialog } from './login';
 
 //SECTION - Theme Buttons
 /** Constants */ //these are relative to the html page 'settings.html'
@@ -50,8 +51,11 @@ function enableThemeButton(button:HTMLDivElement, theme:string)
 //Code for password protection switch, verify email button and everything to do with authentication is in register.ts
 
 var btn_reset_password = document.querySelector('#btn-reset-password') as HTMLDivElement
+var btn_verify_reset_code = document.querySelector('#btn-verify-password-reset-code') as HTMLDivElement //TODO //IMPORTANT
+btn_reset_password.onclick = clickButtonResetPassword
+btn_verify_reset_code.onclick = openResetCodeDialog
 
-btn_reset_password.onclick = async () => {
+async function clickButtonResetPassword() {
     var node = false
     var trace = false
     printFormattedv2(node,trace, 'blue', '#btn-reset-password pressed')
