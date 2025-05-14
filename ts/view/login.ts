@@ -114,25 +114,40 @@ async function passwordReminderOrLogin()
 }
 
 
+//TODO - make sure that all inputs pastWithoutStyle -   
+//set each editable div to not paste the style of what is copy pasted
+// dialog.querySelector('.editable')!.addEventListener('paste', pasteWithoutStyle)
 
+// async function openResetCodeDialog() 
+// {
+//     printFormatted('blue', 'function openResetCodeDialog called')
+//     window.localStorage.setItem('inDialog', 'true')
+//     //display load reset code dialog
+//     await fragments.loadResetCodeDialog()
+//     var resetCodeDialog = document.querySelector('#reset-code-dialog') as HTMLDivElement
+//     resetCodeDialog.style.display = 'grid'
+//     //set each editable div to not paste the style of what is copy pasted
+//     resetCodeDialog.querySelector('.editable')!.addEventListener('paste', pasteWithoutStyle)
+//     //enable reset code dialog
+//     const btn_enter_code = document.querySelector('#enter-code') as HTMLDivElement
+//     btn_enter_code ? btn_enter_code.onclick = clickSubmitResetCode : console.log('btn_enter_code is null')
+// }
 /**
- * Opens the reset code dialog
+ * Opens the reset code dialog, where you can enter the code
+ * to reset your password.
  */
-async function openResetCodeDialog() 
-{
+export async function openResetCodeDialog() {
     printFormatted('blue', 'function openResetCodeDialog called')
     window.localStorage.setItem('inDialog', 'true')
     //display load reset code dialog
-    await fragments.loadResetCodeDialog()
-    var resetCodeDialog = document.querySelector('#reset-code-dialog') as HTMLDivElement
-    resetCodeDialog.style.display = 'grid'
-    //set each editable div to not paste the style of what is copy pasted
-    resetCodeDialog.querySelector('.editable')!.addEventListener('paste', pasteWithoutStyle)
-    //enable reset code dialog
-    const btn_enter_code = document.querySelector('#enter-code') as HTMLDivElement
-    btn_enter_code ? btn_enter_code.onclick = clickSubmitResetCode : console.log('btn_enter_code is null')
+    var message = 'Enter password reset code.'
+    var placeholder = 'reset code'
+    var code = await fragments.customPrompt(message,placeholder)
+    clickSubmitResetCode
+    //send to ipcMain to be checked before opening password dialog
+    ipcRenderer.send('does-reset-code-match-?', code)
+    window.localStorage.setItem('inDialog', 'false')
 }
-
 /**
  * Sends ipc message with reset code to 
  * `does-reset-code-match-?` to check validity.
@@ -151,7 +166,7 @@ async function clickSubmitResetCode()
     //set inDialog to false
     window.localStorage.setItem('inDialog','false')
     //hide the fragment
-    fragments.hideFragment('#reset-code-dialog', ['dialog'])
+    fragments.removeFragment('#reset-code-dialog', ['dialog'])
     //send to ipcMain to be checked before opening password dialog
     ipcRenderer.send('does-reset-code-match-?',code)
 }
@@ -244,7 +259,7 @@ async function openResetPasswordConfirmPrompt(event:any, message:string)
     if (validEmail(email))
     {
         console.log('email is valid.')
-        fragments.hideFragment('#custom-prompt', ['dialog'])
+        fragments.removeFragment('#custom-prompt', ['dialog'])
         printFormatted('green','sending reset email password via ipcRenderer.send("send-reset-password-email",email)')
         //onclick - send email to ipcMain to have email to be authenticated and have a reset password email sent
         ipcRenderer.send('send-reset-password-email', email)
@@ -252,7 +267,7 @@ async function openResetPasswordConfirmPrompt(event:any, message:string)
     else
     {
         alert('Email was not a valid email. Please enter a valid email.')
-        fragments.hideFragment('#custom-prompt', ['dialog'])
+        fragments.removeFragment('#custom-prompt', ['dialog'])
         openResetPasswordConfirmPrompt(null, message)
     }
 }
@@ -391,7 +406,7 @@ function closeLoginDialog()
     //close login dialog
     var selector = '#login-dialog'
     var classList = ['dialog']
-    fragments.hideFragment(selector, classList)
+    fragments.removeFragment(selector, classList)
     //blur background
     const main = document.querySelector('#main') as HTMLBodyElement
     unblurBackground(main)
