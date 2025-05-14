@@ -53,7 +53,9 @@ export async function sendResetPasswordEmail(recipientEmail:string, resetCode:st
   try 
   {
     const response =  await transporter.sendMail(mailOptions)
-    printFormatted('green', 'Email sent successfully:'+response)
+    const message = 'Email sent successfully:'+response.response
+    printFormatted('green', message)
+    return message
   } catch (error:any) 
   {
     printFormatted('red', error.message)
