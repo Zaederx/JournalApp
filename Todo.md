@@ -1,6 +1,11 @@
 # Todo
 Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
 
+## Make sure that the verify reset code button works
+
+## Make sure that verification email isn't resent when resetting password
+If email doesn't match the email you have stored and verified, then send the verification email again. If an email has been verified and the email given matches the stored email hash, then don't send the verification email again.
+
 ## Clean up unwanted HTML dialogs that aren't used
 Because I used the the general purpose custom prompt for single response prompting, I've not used some of the HTML dialogs fragments that I've made. Need to remove the ones that I don't use.
 
@@ -36,12 +41,12 @@ export function validEmail(email:string)
 }
 ```
 
-## Maybe add boolean option for password visibility in login prompt 
-
+## Maybe add boolean option for password visibility in login dialog 
+Put javascript for dealing with password visibility after dialog has been loaded into the HTML DOM.
 
 
 ## Check that the keystrokes of the password field gets deleted when you hit backspace. - login.ts and key-capture.ts
-Check the openLoginDialog funtion in `login.ts` and add the code for it. Something along the lines of an event lisenter on the password field, with the function `deleteKeyStrokes`
+Check the openLoginDialog funtion in `login.ts` and add the code for it. Something along the lines of an event listener on the password field, with the function `deleteKeyStrokes`
 
 
 ## Remember: You might need to change 'on blur' response for authentication
