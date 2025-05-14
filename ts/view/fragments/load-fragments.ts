@@ -1,16 +1,25 @@
-import { printFormattedv2 } from "printformatted-js";
-import { submitEnterListener } from "../input-helpers/key-capture";
+import { printFormattedv2, colour } from "printformatted-js";
+import { pasteWithoutStyle, submitEnterListener } from "../input-helpers/key-capture";
 
 const node = false
 const trace = false
-function print(colour:any, ...args:string[]) {
+/**
+ * A convinience method for printing with printFormatted with specific settings.
+ * (Set to print to on frontend in the console, not node - uses difference colour code to node. Also stack trace is set to false.)
+ * 
+ * @param colour - The colours that you can choose from:
+ * "green" | "red" | "yellow" | "white" | "black" | "blue"
+ * @param args - Things you want to print. Can be as many variables as you like
+ */
+function print(colour:colour, ...args:string[]) {
     printFormattedv2(node,trace,colour, args)
 }
 /**
- * Hide the fragment/element given a selector for the element
+ * Removes the fragment/element inner HTML. Also removes CSS classes
+ * from the outer HTML given a selector for the fragment/element.
  * @param selector selector for the fragment
  */
-export function hideFragment(selector:string, classList:string[])
+export function removeFragment(selector:string, classList:string[])
 {
     print('blue', 'function hideFragment called')
     const element = document.querySelector(selector) as HTMLElement;
@@ -19,6 +28,7 @@ export function hideFragment(selector:string, classList:string[])
     classList.forEach((clazz) => {//clazz - because class is a keyword
         element.classList.remove(clazz)
     })
+    //clear the inner HTML
     element.innerHTML = ' '
 }
 
@@ -76,6 +86,29 @@ export async function loadRegisterEmailPasswordDialog()
     const response =  await fetch('./fragments/email-password-dialog.html')
     var emailPasswordDialogHTML = await response.text()
     document.querySelector('#email-password-dialog')!.outerHTML = emailPasswordDialogHTML 
+
+    //for checkbox hide and display password
+    var p1 = document.querySelector('#password1')
+    var p2 = document.querySelector('#password2')
+    var p_checkbox = document.querySelector('#p-checkbox') as HTMLInputElement
+
+    p1 ? print('green','p1 is initialised') : print('green','p1 is null')
+    p2 ? print('green','p2 is initialised') : print('green','p2 is null')
+    p_checkbox ? print('green','p_checkbox is initialised') : print('green','p_checkbox is null')
+    
+    p_checkbox.oninput = () => {
+      console.log('p-checkbox clicked')
+     //show password
+      if (p1 && p2 && p_checkbox.checked) {
+         p1.classList.remove('password')
+         p2.classList.remove('password')
+      }
+      //hide password
+      else if (p1 && p2){
+         p1.classList.add('password')
+         p2.classList.add('password')
+      }
+    }
     // return document.querySelector('#email-password-dialog') - maybe this is better?
     return emailPasswordDialogHTML
 }
@@ -138,20 +171,20 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
         //set placeholder attribute on dialog
         placeholder ? input.setAttribute('data-placeholder', placeholder) : console.log('no placeholder provided for custom prompt')
 
-        //stop line caret from moving downwards - submits on enter instead
-        input.addEventListener('keypress', (e) => submitEnterListener(e,()=>{}))
-            
+        
+        //set input to not paste the style of what is copy pasted
+        input.addEventListener('paste', pasteWithoutStyle)
         //get email from div and return the value
         //see link for detail on how this works (https://www.gimtec.io/articles/convert-on-click-to-promise/)
         //@ts-ignore - 
-        HTMLElement.prototype.waitForClick = function(this:HTMLDivElement) 
+        HTMLElement.prototype.waitForInputSubmission = function(this:HTMLDivElement):Promise<string> 
         {
             var element = this
-            return  waitForClickPromise(element,input)
+            return  waitForClickOrEnter(element,input)
         }
 
         //@ts-ignore
-        return btn_confirm.waitForClick()
+        return btn_confirm.waitForInputSubmission()
     })
 }
 
@@ -164,11 +197,12 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
  * 
  * For details on how this works see [link](https://www.gimtec.io/articles/convert-on-click-to-promise/)
  */
-function waitForClickPromise(element:any, input:HTMLDivElement):Promise<string> 
+function waitForClickOrEnter(element:any, input:HTMLDivElement):Promise<string> 
 {
     print('blue', 'function waitForClickPromise called')
     return new Promise((resolve, reject) => 
     {
+        //if user click on the button element - return/resolve response
         element.addEventListener('click', () => {
             console.log('btn_confirm is clicked')
             const response = input.innerText
@@ -176,7 +210,7 @@ function waitForClickPromise(element:any, input:HTMLDivElement):Promise<string>
             {
                 print('green', 'response:',response)
                 //hide promptDialog & return email
-                hideFragment('#custom-prompt', ['dialog'])
+                removeFragment('#custom-prompt', ['dialog'])
                 resolve(response)//returns the response
             }
             else 
@@ -185,6 +219,23 @@ function waitForClickPromise(element:any, input:HTMLDivElement):Promise<string>
                 reject(); 
             }
         })
+        //stop line caret from moving downwards & submits response on pressing enter instead
+        input.addEventListener('keypress', (e) => submitEnterListener(e,()=> {
+            console.log('btn_confirm is clicked')
+            const response = input.innerText
+            if (response) 
+            {
+                print('green', 'response:',response)
+                //hide promptDialog & return email
+                removeFragment('#custom-prompt', ['dialog'])
+                resolve(response)//returns the response
+            }
+            else 
+            { 
+                alert('Please do not leave the field blank.'); 
+                reject(); 
+            }
+        }))
     })
 }
 
