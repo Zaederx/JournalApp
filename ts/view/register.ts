@@ -10,6 +10,9 @@ import { submitEnterListener } from './input-helpers/key-capture';
 import { printFormattedv2, colour } from 'printformatted-js';
 import { validEmail } from './login';
 
+/**Convienece printing method
+ * Set up printFormattedv2 for use in js console
+ */
 function print (colour:colour, ...args:string[]) {
     const node = false
     const trace = false
@@ -27,6 +30,10 @@ btn_verify_email ?
 btn_verify_email.onclick = openVerificationCodeDialog
 : print('black', 'btn_verify_email is null');
 
+/**
+ * Enables the password protection switch.
+ * (Makes it so that the switch works when you toggle it.)
+ */
 function enableSwitch()
 {
     print('blue', 'function enableSwitch called')
@@ -47,6 +54,9 @@ function enableSwitch()
  
 //define functionality
 //SECTION Toggle Password Protection
+/**
+ * Toggles/switches the password protection switch.
+ */
 function toggleSwitch() 
 {
     print('blue', 'function toggleSwitch called')
@@ -55,6 +65,9 @@ function toggleSwitch()
     else { checkSwitch() } //only checks switch of registration is successful
 }
 
+/**
+ * Disables password protection switch.
+ */
 async function uncheckSwitch() 
 {
     print('blue', 'function uncheckSwitch called')
@@ -65,6 +78,7 @@ async function uncheckSwitch()
 }
 //called outside the function as fetch always seems to load after expected
 /**
+ * Attemps to turn on password protection.
  * Displays the register email password dialog
  * and if registration is successful, checked the switch.
  */
@@ -90,7 +104,10 @@ async function checkSwitch()
     
 }
 
-
+/**
+ * Provides the code which must be executed when the
+ * register email and password button is click.
+ */
 export async function clickRegisterEmailPasswordButton() 
 {
     print('blue', 'function clickRegisterEmailPasswordButton called')
@@ -120,33 +137,12 @@ export async function clickRegisterEmailPasswordButton()
     window.localStorage.setItem('inDialog', 'false')
 }
 
-
 /**
- * Checks the settings status for password protection
- * and then updates the switch accordingly.
- * If password protection is set to false, it will set
- * the switch to unchecked.
- * @return - settings['password-protection'] {@link settings}
+ * One of the functions called within `clickRegisterEmailPasswordButton`.
+ * Thid function is the one which registers the email and password.
+ * @returns response:{ success:boolean, openVCDialog:boolean }
  */
-async function checkUpdateSwitchStatus():Promise<'true'|'false'>
-{
-    const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
-        
-    var settings:settings = await ipcRenderer.invoke('get-settings')
-    if (settings['password-protection'] == 'false') { 
-        //set visual switch to false
-        switchInput.checked = false
-     }
-     //switch set to true by default in the HTML - but this doesn't hurt
-     else {
-        switchInput.checked = true
-     }
-    return settings['password-protection'] as 'true'|'false'
-}
-
-//TODO - HOW TO PASSWORD PROTECT A FOLDER THROUGH ELECTRON - maybe chmod
-
-export async function registerEmailPassword()
+export async function registerEmailPassword():Promise<{success:boolean, openVCDialog:boolean}>
 {
     print('blue', 'function clickRegisterEmailPasswordButton called')
     //get email and both password divs
@@ -186,7 +182,7 @@ export async function registerEmailPassword()
             var openVCDialog = false
             return {success, openVCDialog}
         }
-        else if (emailHashStored && passwordHashStored) 
+        else if (!emailAlreadyVerified && emailHashStored && passwordHashStored) 
         { 
             alert('Email and password saved. Verify email to enable password protection.')
             //remove dialog
@@ -204,7 +200,7 @@ export async function registerEmailPassword()
             return {success, openVCDialog}
         }
     }
-    else if (!validEmail(email)){//not vali
+    else if (!validEmail(email)){
         alert('Invalid Email.')
     }
     var success = false
@@ -243,3 +239,31 @@ export async function openVerificationCodeDialog():Promise<boolean> {
     ipcRenderer.send('authentication-action')
     return valid
 }
+/**
+ * Checks the settings status for password protection
+ * and then updates the switch accordingly.
+ * If password protection is set to false, it will set
+ * the switch to unchecked. If password protection is set to true,
+ * it sill set the swithc to checked.
+ * @return - settings['password-protection'] {@link settings}
+ */
+async function checkUpdateSwitchStatus():Promise<'true'|'false'>
+{
+    const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+        
+    var settings:settings = await ipcRenderer.invoke('get-settings')
+    if (settings['password-protection'] == 'false') { 
+        //set visual switch to false
+        switchInput.checked = false
+     }
+     //switch set to true by default in the HTML - but this doesn't hurt
+     else {
+        switchInput.checked = true
+     }
+    return settings['password-protection'] as 'true'|'false'
+}
+
+//TODO - HOW TO PASSWORD PROTECT A FOLDER THROUGH ELECTRON
+
+
+
