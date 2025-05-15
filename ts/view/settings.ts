@@ -55,11 +55,14 @@ var btn_verify_reset_code = document.querySelector('#btn-verify-password-reset-c
 btn_reset_password.onclick = clickButtonResetPassword
 btn_verify_reset_code.onclick = openResetCodeDialog
 
+/**
+ * Code to be executed when the reset password buttom is clicked.
+ */
 async function clickButtonResetPassword() {
     var node = false
     var trace = false
     printFormattedv2(node,trace, 'blue', '#btn-reset-password pressed')
-    //open customPrompt- to enter email and then retrieve email from it
+    //open customPrompt - to enter email and then retrieve email from it
     var message = 'Enter email to send reset code'
     var placeholder = 'email@email.com'
     var email = await customPrompt(message, placeholder) 
