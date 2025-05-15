@@ -35,6 +35,8 @@ import { importTransferData, exportTransferData } from './entry/export/transfer-
 import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
 import { setEmailVerifiedTxt, emailIsVerified } from './email/verify-email'
 import { emailMatchesStoredHash } from './email/email-matches'
+import bcrypt  from 'bcryptjs'
+import { setPasswordProtection } from './view/switch/password-switch';
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system). Could save a birthtime.json with the filename nad the original birthtime. Maybe an EntryDate stored as json.
 
 //TODO - option to store file in iCloud
@@ -313,31 +315,66 @@ ipcMain.handle('check-verification-code', async (event, verificationCode) => {
   return valid
 })
 //step 3
-//SECTION -REGISTER EMAIL AND PASSWORDS
+//SECTION REGISTER EMAIL AND PASSWORDS
 //or step 1 if email and password are not set
+//also used to reset the password
 ipcMain.handle('register-email-password', async (event, email, password1, password2) => {
-  var response = {emailHashStored:false, passwordHashStored:false, codeHashStored:false, error:''}
+  /**
+   * emailAlreadyVerified is whether to set password protection without waiting for
+   * email verification code to be enter (like in the case that email has already be verified)
+   */
+  var response = {emailHashStored:false, passwordHashStored:false, codeHashStored:false, emailAlreadyVerified:false,error:''}
   if(email && password1 == password2) 
   {
     try 
     {
-      //hash email and password
-      var emailHash = authCrud.hash(email)
-      var passwordHash = authCrud.hash(password1)
-
       //generate code and hash it
       var code = uuidv4()
       var codeHash = authCrud.hash(code)
+      //hash password
+      var passwordHash = authCrud.hash(password1)
+      //check if email has already been stored
+      var storedEmailHash = await authCrud.retrieveEmailHash()
+      //initialise other variables
+      var emailAlreadyStored = false
+      var newEmailHash = ''
 
-      //send email to verify address (with unhashed code inside)
-      sendVerificationEmail(email, code)
-
-      //store email and password hashes
-      const emailHashStored = await authCrud.storeEmailHash(emailHash)
-      const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
-      const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
-      printFormatted('yellow', 'verification code:',code)
-      return response = { emailHashStored, passwordHashStored, codeHashStored, error:'' }
+      if (storedEmailHash) {
+        //if email and stored email hash match - then the email has already been stored
+        emailAlreadyStored = await bcrypt.compare(email,storedEmailHash)
+      }
+      if (!emailAlreadyStored) {
+        //hash email and send verification email with code
+        newEmailHash = authCrud.hash(email)
+        //store email and password hashes + store verification code hash
+        const emailHashStored = await authCrud.storeEmailHash(newEmailHash)
+        const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
+        const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
+        //send verification email
+        sendVerificationEmail(email, code)
+        printFormatted('yellow', 'verification code:',code)
+        //return response
+        return response = { emailHashStored, passwordHashStored, codeHashStored, emailAlreadyVerified:false, error:'' }
+        
+      }
+      else {//if emailAlreadyStored 
+        /** Note:In case this is being used to reset password, check if the email has
+         *  already been verified. If so, don't sent the verification code again */
+        if(!(await emailIsVerified())) {//...and email is not verified - send verification email
+          sendVerificationEmail(email, code)
+          printFormatted('yellow', 'verification code:',code)
+          //email is already stored...
+          // store new password hash and verification code hash
+          const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
+          const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
+          return response = { emailHashStored: emailAlreadyStored, passwordHashStored, codeHashStored, emailAlreadyVerified:false, error:''}
+        }
+        //if emailAlreadyStored and email has been verified - store new password
+        const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
+        const codeHashStored = false
+        return response = { emailHashStored: emailAlreadyStored, passwordHashStored, codeHashStored, emailAlreadyVerified:true, error:''}
+      }
+      
     } 
     catch (error:any) 
     {

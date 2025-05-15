@@ -7,10 +7,14 @@ import { setPasswordProtection } from './switch/password-switch';
 import { type settings } from '../settings/settings-type';
 import * as fragments from './fragments/load-fragments'
 import { submitEnterListener } from './input-helpers/key-capture';
-import { printFormatted } from '../other/printFormatted';
+import { printFormattedv2, colour } from 'printformatted-js';
 import { validEmail } from './login';
 
-
+function print (colour:colour, ...args:string[]) {
+    const node = false
+    const trace = false
+    printFormattedv2(node,trace,colour,args)
+}
 //check switch status and then enable switch
 var checkedStatus = checkUpdateSwitchStatus()//don't use `window.onload` - because script uses `defer`
 checkedStatus.then(enableSwitch)
@@ -21,11 +25,11 @@ fragments.loadRegisterEmailPasswordDialog()
 var btn_verify_email = document.querySelector('#btn-verify-email-code') as HTMLDivElement
 btn_verify_email ?
 btn_verify_email.onclick = openVerificationCodeDialog
-: printFormatted('black', 'btn_verify_email is null');
+: print('black', 'btn_verify_email is null');
 
 function enableSwitch()
 {
-    printFormatted('blue', 'function enableSwitch called')
+    print('blue', 'function enableSwitch called')
     //set switch to checked or unchecked
     
     const btn_no_password_protection = document.querySelector('#no-password') as HTMLDivElement
@@ -33,7 +37,7 @@ function enableSwitch()
     
     const p_switch = document.querySelector('#password-switch') as HTMLDivElement
     var epDialog = document.querySelector('#email-password-dialog') as HTMLDivElement
-    printFormatted('green', 'epDialog:', epDialog)
+    print('green', 'epDialog:', epDialog.outerHTML)
     //assign element functionality
     p_switch.onclick = toggleSwitch
     btn_no_password_protection.onclick = uncheckSwitch
@@ -45,7 +49,7 @@ function enableSwitch()
 //SECTION Toggle Password Protection
 function toggleSwitch() 
 {
-    printFormatted('blue', 'function toggleSwitch called')
+    print('blue', 'function toggleSwitch called')
     const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
     if (switchInput.checked) { uncheckSwitch()}
     else { checkSwitch() } //only checks switch of registration is successful
@@ -53,7 +57,7 @@ function toggleSwitch()
 
 async function uncheckSwitch() 
 {
-    printFormatted('blue', 'function uncheckSwitch called')
+    print('blue', 'function uncheckSwitch called')
     //set switch to unchecked
     const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
     switchInput.checked = false
@@ -67,7 +71,7 @@ async function uncheckSwitch()
 async function checkSwitch() 
 {
     await fragments.loadRegisterEmailPasswordDialog()
-    printFormatted('blue', 'function checkSwitch called')
+    print('blue', 'function checkSwitch called')
     //display the already loaded email password dialog
     var epDialog = document.querySelector('#email-password-dialog') as HTMLDivElement
     epDialog.style.display = 'grid'
@@ -89,28 +93,31 @@ async function checkSwitch()
 
 export async function clickRegisterEmailPasswordButton() 
 {
-    printFormatted('blue', 'function clickRegisterEmailPasswordButton called')
-    var success = await registerEmailPassword()
+    print('blue', 'function clickRegisterEmailPasswordButton called')
+    var {success, openVCDialog} = await registerEmailPassword()
         
-    if (success)
+    if (success && openVCDialog)
     {
-        printFormatted('green','clickRegisterEmailPasswordButton returned successful')
+        print('green','clickRegisterEmailPasswordButton returned successful')
         var success2 = await openVerificationCodeDialog()
         if(success2) 
         {
-            printFormatted('green', 'openVerificationCodeDialog returned successful')
+            print('green', 'openVerificationCodeDialog returned successful')
         } 
         else
         {
-            printFormatted('green', 'openVerificationCodeDialog returned unsuccessful')
+            print('red', 'openVerificationCodeDialog returned unsuccessful')
         }   
+    }
+    else if (success && !openVCDialog) {
+        print('green', 'Password updated successfully.')
     }
     else 
     {
-        printFormatted('blue', 'clickRegisterEmailPasswordButton unsuccessful')
+        print('red', 'clickRegisterEmailPasswordButton unsuccessful')
     }
     //no longer in dialog
-    window.localStorage.setItem('inDialog', 'true')
+    window.localStorage.setItem('inDialog', 'false')
 }
 
 
@@ -141,15 +148,16 @@ async function checkUpdateSwitchStatus():Promise<'true'|'false'>
 
 export async function registerEmailPassword()
 {
-    printFormatted('blue', 'function clickRegisterEmailPasswordButton called')
+    print('blue', 'function clickRegisterEmailPasswordButton called')
     //get email and both password divs
     const emailDiv = document.querySelector('#email') as HTMLDivElement
     
     //take content of each div
     const email = emailDiv.innerText
-    const p1 = document.querySelector('#password1')?.innerHTML
-    const p2 = document.querySelector('#password2')?.innerHTML
-    printFormatted('green', 'email:', email, '\np1:', p1, '\np2:', p2)
+    const p1 = document.querySelector('#password1')?.innerHTML as string
+    const p2 = document.querySelector('#password2')?.innerHTML as string
+    const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+    print('green', 'email:', email, '\np1:', p1, '\np2:', p2)
     //alert if there is no email
     if(!email) {alert('No email present')}
 
@@ -162,26 +170,46 @@ export async function registerEmailPassword()
     //register passwords if the do match and alert the user
     else if (validEmail(email) && p1 == p2) //IMPORTANT add password validator
     {
-        const response =  await ipcRenderer.invoke('register-email-password', email, p1, p2)
-        const { emailHashStored, passwordHashStored, error } = response
+        const response:{emailHashStored:boolean, passwordHashStored:boolean, codeHashStored:boolean, emailAlreadyVerified:boolean, error:string} =  await ipcRenderer.invoke('register-email-password', email, p1, p2)
+        const { emailHashStored, passwordHashStored, codeHashStored, emailAlreadyVerified, error } = response
         if (error) { alert(error)}
-        else if (emailHashStored && passwordHashStored) 
-        { 
-            alert('Email and password registered successfully. Please remember this password and email for future use.')
+        //if someone was just updating their password
+        else if (emailAlreadyVerified && passwordHashStored) {
+            switchInput.checked = true
+            setPasswordProtection('true')
+            alert('Password updated.')
             //remove dialog
             const selector = '#email-password-dialog'
             const classList = ['dialog', 'email-password-dialog']
             fragments.removeFragment(selector, classList)
             var success = true
-            return success
+            var openVCDialog = false
+            return {success, openVCDialog}
+        }
+        else if (emailHashStored && passwordHashStored) 
+        { 
+            alert('Email and password saved. Verify email to enable password protection.')
+            //remove dialog
+            const selector = '#email-password-dialog'
+            const classList = ['dialog', 'email-password-dialog']
+            fragments.removeFragment(selector, classList)
+            var success = true
+            var openVCDialog = true
+            return {success, openVCDialog}
         }
         else 
         { 
             var success = false
-            return success 
+            var openVCDialog = false
+            return {success, openVCDialog}
         }
     }
-    return false
+    else if (!validEmail(email)){//not vali
+        alert('Invalid Email.')
+    }
+    var success = false
+    var openVCDialog = false
+    return {success, openVCDialog}
 }
 
 /**
@@ -192,7 +220,7 @@ export async function registerEmailPassword()
  * @return returns whether verification was successful
  */
 export async function openVerificationCodeDialog():Promise<boolean> {
-    printFormatted('blue', 'function openVerifyEmailDialog called')
+    print('blue', 'function openVerifyEmailDialog called')
     //load dialog into the DOM
     const message = 'Please enter your email verification code into the field/box provided.'
     const placeholder = 'verification code'
@@ -202,7 +230,7 @@ export async function openVerificationCodeDialog():Promise<boolean> {
     //activate switch if valid
     if (valid)
     {
-        printFormatted('green', 'verification code returned successfully')
+        print('green', 'verification code returned successfully')
         //set switch to checked
         const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
         if (switchInput) 

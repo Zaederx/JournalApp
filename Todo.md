@@ -1,24 +1,28 @@
 # Todo
 Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
 
-## Make sure that the verify reset code button works
+## Make an editable function - npm package
+Make a function with css for changing divs into editable divs.
 
-## Make sure that verification email isn't resent when resetting password
+## Make sure that dialogs have a close button / x
+Currently dialogs don't have a close button, so they remain open until either used of you click on something in the navigation.
+
+## ✅ Make sure that verification email isn't resent when resetting password
 If email doesn't match the email you have stored and verified, then send the verification email again. If an email has been verified and the email given matches the stored email hash, then don't send the verification email again.
 
 ## Clean up unwanted HTML dialogs that aren't used
 Because I used the the general purpose custom prompt for single response prompting, I've not used some of the HTML dialogs fragments that I've made. Need to remove the ones that I don't use.
 
-## Reset password
+## ✅ Reset password functionality 
 Put reset password functionality.
 
 
 ## Make sure that password can be hidden
 
-## Fix User Access
+## ✅ Fix User Access 
 login.ts should be called at the start of loading the app to make sure that you can login.
 
-## Add theme to settings file
+## Add theme to settings file???
 Maybe add the app theme to the settings file instead of having a separate file for it.
 At least make sure that the theme settings file in in the `Application Support/the-journal-app` folder instead of in the css folder.
 
@@ -45,11 +49,8 @@ export function validEmail(email:string)
 Put javascript for dealing with password visibility after dialog has been loaded into the HTML DOM.
 
 
-## Check that the keystrokes of the password field gets deleted when you hit backspace. - login.ts and key-capture.ts
-Check the openLoginDialog funtion in `login.ts` and add the code for it. Something along the lines of an event listener on the password field, with the function `deleteKeyStrokes`
 
-
-## Remember: You might need to change 'on blur' response for authentication
+## Remember: You might need to change 'on blur' response for authentication...
 Make sure that blurring the screen isn't linked to authentication/ logging out the user any more. Just in case you want to blur the screen for any other reason, the app shouldn't 
 
 

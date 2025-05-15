@@ -2,7 +2,9 @@ import { ipcRenderer } from "electron";
 import { settings, defaults } from "../../settings/settings-type";
 
 /**
- * A function to help turn the password-protection setting on or off.
+ * A function to help turn the password-protection setting on or off
+ * on the backend.
+ * Does not change switch on the frontend.
  * @param bool a string either 'true' or 'false'
  */
 export async function setPasswordProtection(bool:'true'|'false')

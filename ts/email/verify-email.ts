@@ -19,7 +19,7 @@ export async function emailIsVerified():Promise<boolean> {
     printFormatted('blue', 'function emailIsVerified called' )
     try {
         if (await isThereAFile(dirs.emailVerifiedTxt)) {
-            var verified:'true'|'false' = fs.promises.readFile(dirs.emailVerifiedTxt).toString() as 'true'|'false'
+            var verified:'true'|'false' = await fs.promises.readFile(dirs.emailVerifiedTxt,{encoding:'utf-8'}) as 'true'|'false'
             if (verified == 'true') { return true; }
             else if (verified == 'false') { return false }
             else { 
@@ -29,7 +29,7 @@ export async function emailIsVerified():Promise<boolean> {
     }
     catch (error:any) {
         setEmailVerifiedTxt('false')//because currently not true of false
-        printFormatted('red', error.message)
+        printFormatted('red', 'Error in function emailIsVerified:',error.message)
         //alert pop up on frontend - ask user to re-verify email in this case
         ipcMain.emit('alert', 'Please re-verify email.')
         return false
