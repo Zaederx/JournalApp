@@ -232,7 +232,7 @@ function waitForClickOrEnter(element:any, input:HTMLDivElement):Promise<string>
             }
             else 
             { 
-                alert('Please do not leave the field blank.'); 
+                alert('Please do not leave the field blank. Try again.'); 
                 reject(); 
             }
         }))
