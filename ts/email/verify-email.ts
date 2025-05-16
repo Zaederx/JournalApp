@@ -2,7 +2,6 @@ import fs from 'fs'
 import * as dirs from '../directory.js'
 import { printFormatted } from 'printformatted-js';
 import isThereAFile from '../fs-helpers/isThereAFile.js';
-import { ipcMain } from 'electron';
 import { BrowserWindow } from 'electron';
 /**
  *  Write to email-verified.txt and set it's text to true or false.
