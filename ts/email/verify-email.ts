@@ -3,6 +3,7 @@ import * as dirs from '../directory.js'
 import { printFormatted } from 'printformatted-js';
 import isThereAFile from '../fs-helpers/isThereAFile.js';
 import { ipcMain } from 'electron';
+import { BrowserWindow } from 'electron';
 /**
  *  Write to email-verified.txt and set it's text to true or false.
  * @param verified true or false - whether it the user's email
@@ -19,6 +20,8 @@ export async function emailIsVerified():Promise<boolean> {
     printFormatted('blue', 'function emailIsVerified called' )
     try {
         if (await isThereAFile(dirs.emailVerifiedTxt)) {
+
+            //@ts-ignore
             var verified:'true'|'false' = await fs.promises.readFile(dirs.emailVerifiedTxt,{encoding:'utf-8'}) as 'true'|'false'
             if (verified == 'true') { return true; }
             else if (verified == 'false') { return false }
@@ -31,7 +34,7 @@ export async function emailIsVerified():Promise<boolean> {
         setEmailVerifiedTxt('false')//because currently not true of false
         printFormatted('red', 'Error in function emailIsVerified:',error.message)
         //alert pop up on frontend - ask user to re-verify email in this case
-        ipcMain.emit('alert', 'Please re-verify email.')
+        BrowserWindow.getFocusedWindow()?.webContents.send('alert', 'Please re-verify email.')
         return false
     }
     //if all that fails - return false

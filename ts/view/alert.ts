@@ -7,7 +7,7 @@ import { ipcRenderer } from "electron";
 import { printFormattedv2 } from "printformatted-js";
 
 ipcRenderer.on('alert', (event, alertMessage:string) => {
-    //print to console
+    //print to console without stack trace
     var node = false
     var trace = false
     printFormattedv2(node, trace, 'yellow', alertMessage)
