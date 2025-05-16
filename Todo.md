@@ -1,6 +1,8 @@
 # Todo
 Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
 
+## Get emailIsVerified function to send alerts to frontend
+
 ## Make an editable function - npm package
 Make a function with css for changing divs into editable divs.
 
