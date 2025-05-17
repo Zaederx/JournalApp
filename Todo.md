@@ -16,8 +16,10 @@ If email doesn't match the email you have stored and verified, then send the ver
 Because I used the the general purpose custom prompt for single response prompting, I've not used some of the HTML dialogs fragments that I've made. Need to remove the ones that I don't use.
 
 ## ✅ Reset password functionality 
-Put reset password functionality.
+Put reset password functionality. (When you want to change your password from settings.)
 
+## Forgot password functionality
+When your about to login but have forgotten your password, there should be a 'forgot your password' button and functionality. (mainly in login.ts). Currently `forgot password` button takes you to settings.html if not already there, but hte login dialog pop up again. Need to make that stop popping up and go straight to custom prompt.
 
 ## Make sure that password can be hidden
 
