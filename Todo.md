@@ -1,7 +1,10 @@
 # Todo
 Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
 
-## Get emailIsVerified function to send alerts to frontend
+## Make email password registration use new email-verified.json file
+Make sure that you are checking that the email against email stored in email-verified.json instead of against the email hash. New email-verified.json replaces verified.txt and eamil.txt/email-hash.txt. Reason for this is because sometimes you could have an old verified.txt with a new email. Whereas if the email-verified.json is updated all at one everytime an email is submitted, it resolves the problem.
+
+## ✅ Get emailIsVerified function to send alerts to frontend
 
 ## Make an editable function - npm package
 Make a function with css for changing divs into editable divs.
