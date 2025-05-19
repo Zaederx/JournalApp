@@ -2,6 +2,10 @@
 Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
 
 ## Should have to enter password to turn off password protection
+Wasn't a problem before, because you couldnt get to the settings page without first logging in.
+
+## Make sure login dialog doesn't pop up when you click forgot password
+Login dialog pops up when you click forgot password, as it takes you to settings.
 
 ## Make email password registration use new email-verified.json file - see ipcMain.handle('register-email-password',)
 Make sure that you are checking that the email against email stored in email-verified.json instead of against the email hash. New email-verified.json replaces verified.txt and eamil.txt/email-hash.txt. Reason for this is because sometimes you could have an old verified.txt with a new email. Whereas if the email-verified.json is updated all at one everytime an email is submitted, it resolves the problem.
