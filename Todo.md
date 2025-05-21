@@ -1,6 +1,12 @@
 # Todo
 Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
 
+## Make sure that email actually gets saved in email-verified.json
+So far when attempting to save email in and password, the email does not get stored in `email-verified.json`. Still think there's a bit of code saving it to `email.txt` or something.
+
+## Change printformatted-js to only return a formatted string which you can then print to console.
+This is because printing from the package as it is, hides when the log is comming from. Console usually tells you which line of a file a print comses from, but it just says the the print comes from the package printFormatted.js file in the package, which isnt helpful.
+
 ## Should have to enter password to turn off password protection
 Wasn't a problem before, because you couldnt get to the settings page without first logging in.
 
@@ -60,7 +66,6 @@ export function validEmail(email:string)
 
 ## Maybe add boolean option for password visibility in login dialog 
 Put javascript for dealing with password visibility after dialog has been loaded into the HTML DOM.
-
 
 
 ## Remember: You might need to change 'on blur' response for authentication...
