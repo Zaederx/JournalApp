@@ -38,13 +38,15 @@ const passwordHash = paths.join(app.getPath('userData'), 'secure', 'password.txt
  * The hash of the user's email.
  * Stored in email.txt.
  */
-const emailHash = paths.join(app.getPath('userData'), 'secure', 'email.txt')
+const emailHash = paths.join(app.getPath('userData'), 'secure', 'email-hash.txt')
+
+const verifiedFolder = paths.join(app.getPath('userData'), 'verified')
 
 /**
  * A text file that states whether the email is verified or not.
  * Stored in email-verified.txts
  */
-const emailVerified = paths.join(app.getPath('userData'), 'email-verified.txt')
+const emailVerified = paths.join(app.getPath('userData'), 'verified', 'email-verified.json')
 
 /**
  * Folder that contains the settings json file
@@ -68,5 +70,5 @@ const themeFilepath = paths.join(app.getPath('userData'), 'settings', 'theme.txt
 // think I needed it for making the code base into an executable (couldn't run code from within the app like append.ts in it's child process)
 // Need to double check all this.
 const scripts = paths.join(app.getPath('userData'), 'scripts')
-export { allEntries, tagDirectory, currentEntryDir, downloads, secureFolder, verificationCodeHash, resetCodeHash, passwordHash, emailHash, emailVerified as emailVerifiedTxt, settingsFolder, settingsFile, themeFilepath }
+export { allEntries, tagDirectory, currentEntryDir, downloads, secureFolder, verificationCodeHash, resetCodeHash, passwordHash, emailHash, verifiedFolder, emailVerified, settingsFolder, settingsFile, themeFilepath }
 
