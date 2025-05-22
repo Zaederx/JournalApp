@@ -85,8 +85,8 @@ export async function authenticationAction(event:Electron.IpcMainEvent, userCanA
  * it can give the user access right away without checking credentials.
  * @param userCanAccess 
  */
-export async function userCanAccessInitially() {
-  printFormatted('blue','function userCanAccessInitially called')
+export async function userCanAccessInitiallyBeforeLogin() {
+  printFormatted('blue','function userCanAccessInitiallyBeforeLogin called')
   const passwordExists:boolean = await passwordFileExists()
   const jsonStr = false
   const settings:settings = await Settings.retrieveSettings(jsonStr) as settings
