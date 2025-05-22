@@ -30,13 +30,14 @@ import { printFormatted } from './other/printFormatted'
 import { createAllTagDirectory, isThereAFile } from './fs-helpers/helpers';
 import createWindow from './other/create-window'
 import { sendResetPasswordEmail, sendVerificationEmail } from './email/send-email'
-import { authenticationAction, userCanAccessInitially } from './security/auth-action'
+import { authenticationAction, userCanAccessInitiallyBeforeLogin } from './security/auth-action'
 import { importTransferData, exportTransferData } from './entry/export/transfer-data'
 import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
-import { setEmailVerifiedTxt, emailIsVerified } from './email/verify-email'
+import * as emailVerify from './email/verify-email'
 import { emailMatchesStoredHash } from './email/email-matches'
 import bcrypt  from 'bcryptjs'
 import { setPasswordProtection } from './view/switch/password-switch';
+import { settings } from './settings/settings-type';
 //IMPORTANT - Add birthtime (number) to entry files - so that when an entry is is transfered across systems it still load in correct order (as system btime is dependent on file creation date within that specific system). Could save a birthtime.json with the filename nad the original birthtime. Maybe an EntryDate stored as json.
 
 //TODO - option to store file in iCloud
@@ -48,6 +49,7 @@ import { setPasswordProtection } from './view/switch/password-switch';
 let window: BrowserWindow;
 
 var integration = true;
+var inDialog = false
 
 app.whenReady().then(async () => { 
   createAllTagDirectory()
@@ -125,8 +127,41 @@ app.on('activate', async (event) => {
   
   //check whether password protection is enabled
   //if not user can access app straight away
-  userCanAccess.is = await userCanAccessInitially()
+  userCanAccess.is = await userCanAccessInitiallyBeforeLogin()
 });
+/**
+ * Whether the app has just initially been activated.
+ * Used because app.on('activate') has not been working.
+ */
+var isFirstActivated = true
+/* don't want authentication action to fire everytime enable naviagation is fired.
+so that when view reloads when you clicking forgot password and going to settings view,
+the login pop up doesn't occur in between */
+ipcMain.on('enable-navigation-?', async (event) => {
+  printFormatted('blue', 'ipcMain.on("enable-navigation-?" fired')
+  printFormatted('white','enable navigation attempt:')
+  const jsonStr = false
+  var settings:settings = await Settings.retrieveSettings(jsonStr) as settings
+  if(isFirstActivated) {
+    isFirstActivated = false
+    userCanAccess.is = await userCanAccessInitiallyBeforeLogin()
+  }
+  if(userCanAccess.is == true) {
+    isFirstActivated = false
+    printFormatted('green','enabling navigation...')
+    event.reply('enable-navigation')
+  }
+  else if (userCanAccess.is == false && settings['password-protection'] == 'true' )
+  {
+    printFormatted('red','declining to enable navigation...')
+    //alert pop up on frontend - ask user to re-verify email in this case
+    BrowserWindow.getFocusedWindow()?.webContents.send('alert', 'Please login to access The Journal App.')
+  }
+  else if (userCanAccess.is == false && settings['password-protection'] == 'false') {
+    printFormatted('green','enabling navigation...')
+    event.reply('enable-navigation')
+  }
+})
 
 /**
  * before quit 
@@ -264,7 +299,7 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
    
     //event.reply('open-reset-code-dialog')//IMPORTANT - DELETE LATER
   }
-  else//send them back to step 1) the form to input their email to be checked
+  else//if email doesn't match - send them back to step 1) the form to input their email to be checked
   {
     printFormatted('green', 'Email did not match stored email.')
     event.reply('open-reset-password-confirm-prompt', message)
@@ -301,13 +336,14 @@ async function doesRestCodeMatch(event:IpcMainEvent, resetCode:string)
  * Verifies the email address by checking the verification
  * code.
  */
-ipcMain.handle('check-verification-code', async (event, verificationCode) => {
+ipcMain.handle('check-verification-code', async (event, verificationCode, email) => {
   printFormatted('blue', 'function checkVerificationCode called')
+  printFormatted('yellow', 'email:',email)
   const valid = await authCrud.authenticateEmailVerificationCode(verificationCode)
   
   if (valid) {
-    setEmailVerifiedTxt('true')
     printFormatted('green', 'verification code is valid')
+    emailVerify.setEmailVerified('true', email)
   }
   else {
     printFormatted('green', 'verification code is invalid')
@@ -319,11 +355,12 @@ ipcMain.handle('check-verification-code', async (event, verificationCode) => {
 //or step 1 if email and password are not set
 //also used to reset the password
 ipcMain.handle('register-email-password', async (event, email, password1, password2) => {
+  printFormatted('blue', 'handler "register-email-password" called')
   /**
    * emailAlreadyVerified is whether to set password protection without waiting for
    * email verification code to be enter (like in the case that email has already be verified)
    */
-  var response = {emailHashStored:false, passwordHashStored:false, codeHashStored:false, emailAlreadyVerified:false,error:''}
+  var response = { emailStored:false, passwordHashStored:false, codeHashStored:false, emailAlreadyVerified:false, error:'' }
   if(email && password1 == password2) 
   {
     try 
@@ -334,47 +371,46 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
       //hash password
       var passwordHash = authCrud.hash(password1)
       //check if email has already been stored
-      var storedEmailHash = await authCrud.retrieveEmailHash()
+      var stored = await emailVerify.getEmailVerified()
+
       //initialise other variables
       var emailAlreadyStored = false
-      var newEmailHash = ''
 
-      if (storedEmailHash) {
-        //if email and stored email hash match - then the email has already been stored
-        emailAlreadyStored = await bcrypt.compare(email,storedEmailHash)
+      if (stored.email) {
+        printFormatted('yellow', 'an email is already stored')
       }
-      if (!emailAlreadyStored) {
-        //hash email and send verification email with code
-        newEmailHash = authCrud.hash(email)
-        //store email and password hashes + store verification code hash
-        const emailHashStored = await authCrud.storeEmailHash(newEmailHash)
+      
+      if (stored.email != email) {//if email not already stored
+        printFormatted('yellow', 'stored email does not matche this given email:',email)
+        //store email (but not verify) and store password hashes + verification code hash
+        var emailStored = await emailVerify.setEmailVerified('false', email)
         const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
         const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
         //send verification email
         sendVerificationEmail(email, code)
         printFormatted('yellow', 'verification code:',code)
+        //TODO //IMPORTANT - set 30 min time out for verification password use.
         //return response
-        return response = { emailHashStored, passwordHashStored, codeHashStored, emailAlreadyVerified:false, error:'' }
+        return response = { emailStored, passwordHashStored, codeHashStored, emailAlreadyVerified:false, error:'' }
         
       }
-      else {//if emailAlreadyStored 
+      else if (stored.email == email) {//if email already stored 
         /** Note:In case this is being used to reset password, check if the email has
          *  already been verified. If so, don't sent the verification code again */
-        if(!(await emailIsVerified())) {//...and email is not verified - send verification email
+        if(!(await emailVerify.emailIsVerified(email))) {//...and email is not verified - send verification email
           sendVerificationEmail(email, code)
           printFormatted('yellow', 'verification code:',code)
           //email is already stored...
           // store new password hash and verification code hash
           const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
           const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
-          return response = { emailHashStored: emailAlreadyStored, passwordHashStored, codeHashStored, emailAlreadyVerified:false, error:''}
+          return response = { emailStored: emailAlreadyStored, passwordHashStored, codeHashStored, emailAlreadyVerified:false, error:'' }
         }
-        //if emailAlreadyStored and email has been verified - store new password
+        //else if emailAlreadyStored and email has been verified - store new password
         const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
         const codeHashStored = false
-        return response = { emailHashStored: emailAlreadyStored, passwordHashStored, codeHashStored, emailAlreadyVerified:true, error:''}
+        return response = { emailStored: emailAlreadyStored, passwordHashStored, codeHashStored, emailAlreadyVerified:true, error: '' }
       }
-      
     } 
     catch (error:any) 
     {
@@ -384,7 +420,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
   }
   if (!email) 
   { 
-    response.emailHashStored = false
+    response.emailStored = false
     response.error = 'Email not present.'
   }
   if (!(password1 == password2)) 
@@ -393,6 +429,11 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
     response.error += 'Passwords do not match.' 
   }
   return response
+})
+
+ipcMain.handle('get-email', async () => {
+  var verifiedJson = await emailVerify.getEmailVerified()
+  return verifiedJson.email
 })
 
 ipcMain.handle('email-matches-email-hash', async (event, email) => {
@@ -404,24 +445,12 @@ ipcMain.handle('email-matches-email-hash', async (event, email) => {
  * Returns whether the email has been verified.
  * Returns a boolean.
  */
-ipcMain.handle('email-is-verified', async () => {
-  return await emailIsVerified()
+ipcMain.handle('email-is-verified', async (event, email) => {
+  return await emailVerify.emailIsVerified(email)
 })
 
 
-ipcMain.on('enable-navigation-?', async (event) => {
-  printFormatted('blue', 'ipcMain.on("enable-navigation-?" fired')
-  printFormatted('white','enable navigation attempt:')
-  await authenticationAction(event,userCanAccess)
-  if(userCanAccess.is == true) {
-    printFormatted('green','enabling navigation...')
-    event.reply('enable-navigation')
-  }
-  else
-  {
-    printFormatted('red','declining to enable navigation...')
-  }
-})
+
 
 
 //
@@ -631,7 +660,7 @@ ipcMain.handle('set-settings', async (event, settings) => {
 
 ipcMain.handle('email-stored-boolean', async () => {
   printFormatted('blue', 'email-stored-boolean called/fired')
-  var emailHashStored:string|undefined = await authCrud.retrieveEmailHash()
+  var emailHashStored:string|undefined =  (await emailVerify.getEmailVerified()).email
   if(emailHashStored) 
   {
     return true
