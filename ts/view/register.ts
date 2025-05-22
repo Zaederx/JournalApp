@@ -24,11 +24,8 @@ checkedStatus.then(enableSwitch)
 //load registration dialog ready for when user clicks the switch
 fragments.loadRegisterEmailPasswordDialog()
 
-//enter email verification code button
-var btn_verify_email = document.querySelector('#btn-verify-email-code') as HTMLDivElement
-btn_verify_email ?
-btn_verify_email.onclick = openVerificationCodeDialog
-: print('black', 'btn_verify_email is null');
+
+
 
 /**
  * Enables the password protection switch.
@@ -111,7 +108,7 @@ async function checkSwitch()
 export async function clickRegisterEmailPasswordButton() 
 {
     print('blue', 'function clickRegisterEmailPasswordButton called')
-    var {success, openVCDialog} = await registerEmailPassword()
+    var {success, openVCDialog, email} = await registerEmailPassword()
         
     if (success && openVCDialog)
     {
@@ -142,7 +139,7 @@ export async function clickRegisterEmailPasswordButton()
  * Thid function is the one which registers the email and password.
  * @returns response:{ success:boolean, openVCDialog:boolean }
  */
-export async function registerEmailPassword():Promise<{success:boolean, openVCDialog:boolean}>
+export async function registerEmailPassword():Promise<{success:boolean, openVCDialog:boolean, email:string}>
 {
     print('blue', 'function clickRegisterEmailPasswordButton called')
     //get email and both password divs
@@ -166,8 +163,8 @@ export async function registerEmailPassword():Promise<{success:boolean, openVCDi
     //register passwords if the do match and alert the user
     else if (validEmail(email) && p1 == p2) //IMPORTANT add password validator
     {
-        const response:{emailHashStored:boolean, passwordHashStored:boolean, codeHashStored:boolean, emailAlreadyVerified:boolean, error:string} =  await ipcRenderer.invoke('register-email-password', email, p1, p2)
-        const { emailHashStored, passwordHashStored, codeHashStored, emailAlreadyVerified, error } = response
+        const response:{ emailStored:boolean, passwordHashStored:boolean, codeHashStored:boolean, emailAlreadyVerified:boolean, error:string } =  await ipcRenderer.invoke('register-email-password', email, p1, p2)
+        const { emailStored, passwordHashStored, codeHashStored, emailAlreadyVerified, error } = response
         if (error) { alert(error)}
         //if someone was just updating their password
         else if (emailAlreadyVerified && passwordHashStored) {
@@ -179,10 +176,10 @@ export async function registerEmailPassword():Promise<{success:boolean, openVCDi
             const classList = ['dialog', 'email-password-dialog']
             fragments.removeFragment(selector, classList)
             var success = true
-            var openVCDialog = false
-            return {success, openVCDialog}
+            var openVCDialog = false //open verification code dialog
+            return {success, openVCDialog, email}
         }
-        else if (!emailAlreadyVerified && emailHashStored && passwordHashStored) 
+        else if (!emailAlreadyVerified && emailStored && passwordHashStored) 
         { 
             alert('Email and password saved. Verify email to enable password protection.')
             //remove dialog
@@ -190,22 +187,22 @@ export async function registerEmailPassword():Promise<{success:boolean, openVCDi
             const classList = ['dialog', 'email-password-dialog']
             fragments.removeFragment(selector, classList)
             var success = true
-            var openVCDialog = true
-            return {success, openVCDialog}
+            var openVCDialog = true //open verification code dialog
+            return {success, openVCDialog, email}
         }
         else 
         { 
             var success = false
-            var openVCDialog = false
-            return {success, openVCDialog}
+            var openVCDialog = false //open verification code dialog
+            return {success, openVCDialog, email}
         }
     }
     else if (!validEmail(email)){
         alert('Invalid Email.')
     }
     var success = false
-    var openVCDialog = false
-    return {success, openVCDialog}
+    var openVCDialog = false //open verification code dialog
+    return {success, openVCDialog, email}
 }
 
 /**
@@ -221,8 +218,10 @@ export async function openVerificationCodeDialog():Promise<boolean> {
     const message = 'Please enter your email verification code into the field/box provided.'
     const placeholder = 'verification code'
     const verificationCode = await fragments.customPrompt(message, placeholder)
+    var email = await ipcRenderer.invoke('get-email') as string
+    console.log('email:',email)
     //check verification code
-    const valid = await ipcRenderer.invoke('check-verification-code', verificationCode)
+    const valid = await ipcRenderer.invoke('check-verification-code', verificationCode, email)
     //activate switch if valid
     if (valid)
     {
