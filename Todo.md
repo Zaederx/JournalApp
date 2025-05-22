@@ -1,14 +1,17 @@
 # Todo
 Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
 
+## Make sure to restyle the email password dialog
+The 'x' for closing the email password dialog is in a long red block, because the dialog has display set to grid. It works and looks ok, but I'd prefer it to be `display:block` so that the x can `float:right`, but that means I'll need to reposition all the other stuff in the dialog.
+
 ## Make sure that email actually gets saved in email-verified.json
-So far when attempting to save email in and password, the email does not get stored in `email-verified.json`. Still think there's a bit of code saving it to `email.txt` or something.
+So far when attempting to save email and password, the email does not get stored in `email-verified.json`. Still think there's a bit of code saving it to `email.txt` or something.
 
 ## Change printformatted-js to only return a formatted string which you can then print to console.
 This is because printing from the package as it is, hides when the log is comming from. Console usually tells you which line of a file a print comses from, but it just says the the print comes from the package printFormatted.js file in the package, which isnt helpful.
 
 ## Should have to enter password to turn off password protection
-Wasn't a problem before, because you couldnt get to the settings page without first logging in.
+Wasn't a problem before, because you couldn't get to the settings page without first logging in.
 
 ## Make sure login dialog doesn't pop up when you click forgot password
 Login dialog pops up when you click forgot password, as it takes you to settings.
@@ -21,7 +24,7 @@ Make sure that you are checking that the email against email stored in email-ver
 ## Make an editable function - npm package
 Make a function with css for changing divs into editable divs.
 
-## Make sure that dialogs have a close button / x
+## ✅ Make sure that dialogs have a close button / x
 Currently dialogs don't have a close button, so they remain open until either used of you click on something in the navigation.
 
 ## ✅ Make sure that verification email isn't resent when resetting password
