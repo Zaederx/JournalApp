@@ -109,8 +109,16 @@ export async function loadRegisterEmailPasswordDialog()
          p2.classList.add('password')
       }
     }
+
+    //close prompt code
+    var x = document.querySelector('#email-password-close-x') as HTMLSpanElement
+    x ? x.onclick = closeEmailPasswordDialog: console.log('the #prompt-close-x "x" button is null')
     // return document.querySelector('#email-password-dialog') - maybe this is better?
     return emailPasswordDialogHTML
+}
+
+function closeEmailPasswordDialog () {
+    removeFragment('#email-password-dialog', ['dialog'])
 }
 
 /**
@@ -161,17 +169,18 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
     {
         //display custom prompt dialog
         var customPromptDialog = document.querySelector('#custom-prompt') as HTMLDivElement
-        customPromptDialog.style.display = 'grid'
+        customPromptDialog.style.display = 'block'
         //set message in message div
         const messageDiv = document.querySelector('#prompt-message') as HTMLDivElement
         messageDiv.innerText = message
         //get email div and confirm button
         const input = customPromptDialog.querySelector('#input') as HTMLDivElement
         const btn_confirm = customPromptDialog.querySelector('#confirm') as HTMLDivElement
+        //close prompt code
+        var x = document.querySelector('#prompt-close-x') as HTMLSpanElement
+        x ? x.onclick = closeCustomPrompt: console.log('the #prompt-close-x "x" button is null')
         //set placeholder attribute on dialog
         placeholder ? input.setAttribute('data-placeholder', placeholder) : console.log('no placeholder provided for custom prompt')
-
-        
         //set input to not paste the style of what is copy pasted
         input.addEventListener('paste', pasteWithoutStyle)
         //get email from div and return the value
@@ -188,6 +197,10 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
     })
 }
 
+function closeCustomPrompt() {
+    //hide promptDialog & return email
+    removeFragment('#custom-prompt', ['dialog'])
+}
 
 /**
  * Ensures that the dialog waits submit to be pressed to take in input.
