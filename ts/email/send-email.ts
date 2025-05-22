@@ -71,6 +71,7 @@ export async function sendResetPasswordEmail(recipientEmail:string, resetCode:st
 export async function sendVerificationEmail(recipientEmail:string, verificationCode:string)
 {
   printFormatted('blue', 'function sendVerificationEmail called')
+  printFormatted('yellow', 'sending verification email...')
   const transport = await getTransport();
   const filepath = paths.join(__dirname, '..','..','html','email','verification-email.html')
   const html = await fs.promises.readFile(filepath,'utf-8')
