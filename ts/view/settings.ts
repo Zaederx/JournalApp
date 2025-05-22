@@ -1,12 +1,7 @@
-import { ipcRenderer } from 'electron';
 import { activate } from './load-themes';
-import { checkPasswordProtection, setPasswordProtection } from './switch/password-switch'; 
-import { loadRegisterEmailPasswordDialog, customPrompt } from './fragments/load-fragments';
-import { emailIsVerified } from 'ts/email/verify-email';
-import { passwordFileExists as passwordIsSet } from 'ts/security/auth-crud';
-import { printFormattedv2 } from 'printformatted-js';
-import { openResetCodeDialog } from './login';
-
+import { clickButtonResetPassword, openResetCodeDialog } from './login';
+import { openVerificationCodeDialog } from './register';
+//Note:Code for password protection switch and everything to do with authentication is in register.ts
 //SECTION - Theme Buttons
 /** Constants */ //these are relative to the html page 'settings.html'
 const DARK_THEME = "../css/dark_mode.css"
@@ -48,38 +43,12 @@ function enableThemeButton(button:HTMLDivElement, theme:string)
     button.onclick = () => activate(theme);
 }
 
-//Code for password protection switch, verify email button and everything to do with authentication is in register.ts
 
+//declare buttons authentication buttons
+var btn_verify_email_code = document.querySelector('#btn-verify-email-code') as HTMLDivElement
 var btn_reset_password = document.querySelector('#btn-reset-password') as HTMLDivElement
-var btn_verify_reset_code = document.querySelector('#btn-verify-password-reset-code') as HTMLDivElement //TODO //IMPORTANT
-btn_reset_password.onclick = clickButtonResetPassword
-btn_verify_reset_code.onclick = openResetCodeDialog
-
-/**
- * Code to be executed when the reset password buttom is clicked.
- * Pulls up a prompt fir 
- */
-async function clickButtonResetPassword() {
-    var node = false
-    var trace = false
-    printFormattedv2(node, trace, 'blue', '#btn-reset-password pressed')
-    //open customPrompt - to enter email and then retrieve email from it
-    var message = 'Enter email to send reset code'
-    var placeholder = 'email@email.com'
-    var email = await customPrompt(message, placeholder) 
-    //if email not empty and matches saved email, send email
-    if (email != '') {
-        if (await emailMacthesEmailHash(email)) {
-            ipcRenderer.send('send-reset-password-email', email)
-            //and then
-            //ipcRenderer.on('open-reset-password-confirm-prompt', openResetPasswordConfirmPrompt) - is in login.ts
-        }
-        else {//if email doesn't match
-            alert('Wrong email entered. Email does not match stored email for user.')
-        }
-    }
-}
-async function emailMacthesEmailHash(email:string) {
-    var matches = await ipcRenderer.invoke('email-matches-email-hash',email)
-    return matches
-}
+var btn_verify_reset_code = document.querySelector('#btn-verify-password-reset-code') as HTMLDivElement
+//enable authentication buttons - if buttons are null, print message
+btn_verify_email_code ? btn_verify_email_code.onclick = openVerificationCodeDialog: console.log('btn_verify_email_code is null')
+btn_reset_password ? btn_reset_password.onclick = clickButtonResetPassword : console.log('btn_reset_password is null')
+btn_verify_reset_code ? btn_verify_reset_code.onclick = openResetCodeDialog : console.log('btn_verify_reset_code is null')
