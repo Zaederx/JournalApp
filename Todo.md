@@ -1,10 +1,18 @@
 # Todo
-Main/big todo's that should be noted down so that something can be down about, and also not to forget what each issue is about.
+Main/big todo's that should be noted down so that something can be done about them, and also not to forget what each issue is about.
+
+## Set 30 min time out for verification password use.
+Set a timer to remove the stored verification password, so that it can't be used after a period of time. You don't want a stored code being unused and then being used years later by someone who have hacked into an account. The hacker would then be able to set a password of their choice to the user's app.
+
+## Work on setting up different users??? Maybe...
+
+## Add password validation - at least make sure that the password is not saved empty
+On the email password dialog, make sure that there is some validation on the frontend to ensure that the password is strong.
 
 ## Make sure to restyle the email password dialog
 The 'x' for closing the email password dialog is in a long red block, because the dialog has display set to grid. It works and looks ok, but I'd prefer it to be `display:block` so that the x can `float:right`, but that means I'll need to reposition all the other stuff in the dialog.
 
-## Make sure that email actually gets saved in email-verified.json
+## ✅ Make sure that email actually gets saved in email-verified.json
 So far when attempting to save email and password, the email does not get stored in `email-verified.json`. Still think there's a bit of code saving it to `email.txt` or something.
 
 ## Change printformatted-js to only return a formatted string which you can then print to console.
