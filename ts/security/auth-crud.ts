@@ -234,3 +234,22 @@ export async function passwordFileExists():Promise<boolean>
   }
   return exists
 }
+
+export async function deleteVerificationCodeHash() {
+  try {
+    await fs.promises.unlink(dirs.verificationCodeHash)
+  }
+  catch(error:any) {
+    printFormatted('red', 'function `deleteVerificationCodeHash` - Problem deleting verification code hash. Possible no file existed before trying to delete:\n'+error.message)
+  }
+}
+
+export async function deleteResetCodeHash() {
+  try {
+    await fs.promises.unlink(dirs.resetCodeHash)
+  }
+  catch(error:any) {
+    printFormatted('red', 'function `deleteVerificationCodeHash` - Problem deleting verification code hash. Possible no file existed before trying to delete:\n'+error.message)
+  }
+}
+
