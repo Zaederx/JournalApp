@@ -1,7 +1,7 @@
 # Todo
 Main/big todo's that should be noted down so that something can be done about them, and also not to forget what each issue is about.
 
-## Set 30 min time out for verification password use.
+## ✅ Set 30 min time out for verification password use.
 Set a timer to remove the stored verification password, so that it can't be used after a period of time. You don't want a stored code being unused and then being used years later by someone who have hacked into an account. The hacker would then be able to set a password of their choice to the user's app.
 
 ## Work on setting up different users??? Maybe...
