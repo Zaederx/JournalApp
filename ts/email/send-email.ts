@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer'
 import { printFormatted } from '../other/printFormatted'
 import fs from 'fs'
 import paths from 'path'
+import * as authCrud from '../security/auth-crud'
 
 
 /**
@@ -27,16 +28,20 @@ async function getTransport()
 // See https://miracleio.me/snippets/use-gmail-with-nodemailer/#enable-2-step-verification
 /**
  * Send the reset password email to users.
+ * Also deletes the reset code file after 30 mins.
  * @param recipientEmail user's email address
  * @param resetCode the reset code to be sent to the user's email address
  */
 export async function sendResetPasswordEmail(recipientEmail:string, resetCode:string)
 {
+  //get transport object setup
   const transport = await getTransport();
+
+  //read HTML email file
   const filepath = paths.join(__dirname, '..','..','html','email','reset-password-email.html')
- 
   const html = await fs.promises.readFile(filepath,'utf-8')
   
+  //set other mailing options
   let mailOptions = 
   {
     from:'"The Journal App" <do-not-reply@the-journal-app.com>',
@@ -48,23 +53,34 @@ export async function sendResetPasswordEmail(recipientEmail:string, resetCode:st
     'Code for logging in:'+resetCode,
     html:html+'\n<p>Code for reseting password:'+resetCode+'</p>'
   }
+  //create the transport object 
   let transporter = nodemailer.createTransport(transport)
 
+  //try sending the email with the mail options
   try 
   {
     const response =  await transporter.sendMail(mailOptions)
     const message = 'Email sent successfully:'+response.response
     printFormatted('green', message)
     return message
-  } catch (error:any) 
-  {
-    printFormatted('red', error.message)
   }
-  
+  //handle errors
+  catch (error:any) 
+  {
+    printFormatted('red', 'Problem sending reset password email:\n'+error.message)
+  }
+  //delete verification code after 30 mins
+  finally {
+    const THIRY_MINS = 60*30
+    setTimeout(() => {
+      authCrud.deleteResetCodeHash()
+    }, THIRY_MINS)
+  }
 }
 
 /**
  * Send verification email to users.
+ * Also deletes the verification code file after 30 mins.
  * @param recipientEmail email to recieve our email
  * @param verificationCode code to help verify the recipient email
  */
@@ -96,7 +112,14 @@ export async function sendVerificationEmail(recipientEmail:string, verificationC
     return message
   } catch (error:any) 
   {
-    printFormatted('red', error.message)
+    printFormatted('red', 'Problem sending verification email:\n'+error.message)
+  }
+  finally {
+    //delete verification code after 30 mins
+    const THIRY_MINS = 60*30
+    setTimeout(() => {
+      authCrud.deleteVerificationCodeHash()
+    }, THIRY_MINS)
   }
   
 }
