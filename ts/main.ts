@@ -87,6 +87,14 @@ ipcMain.handle('settings-view', () => {
 })
 
 /**
+ * Convinience method for displaying an alert on the frontend.
+ * @param message message to display in an alert on frontend
+ */
+function alert(message:string) {
+  BrowserWindow.getFocusedWindow()?.webContents.send('alert', message)
+}
+
+/**
  * JavaScript for setting inDialog local storage item to false.
  * Item/variable is used to know whether a popup dialog is open.
  * These are used for things to do with authentication and can't
@@ -155,7 +163,7 @@ ipcMain.on('enable-navigation-?', async (event) => {
   {
     printFormatted('red','declining to enable navigation...')
     //alert pop up on frontend - ask user to re-verify email in this case
-    BrowserWindow.getFocusedWindow()?.webContents.send('alert', 'Please login to access The Journal App.')
+    alert('Please login to access The Journal App.')
   }
   else if (userCanAccess.is == false && settings['password-protection'] == 'false') {
     printFormatted('green','enabling navigation...')
@@ -308,7 +316,6 @@ ipcMain.on('send-reset-password-email', async (event, email) => {
 
 //2 do codes match
 ipcMain.on('does-reset-code-match-?', doesRestCodeMatch)
-
 async function doesRestCodeMatch(event:IpcMainEvent, resetCode:string)
 {
   printFormatted('blue', 'does-reset-code-match listener fired')
@@ -381,23 +388,37 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
       }
       
       if (stored.email != email) {//if email not already stored
-        printFormatted('yellow', 'stored email does not matche this given email:',email)
+        printFormatted('yellow', 'stored email does not match this given email:',email)
         //store email (but not verify) and store password hashes + verification code hash
         var emailStored = await emailVerify.setEmailVerified('false', email)
         const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
         const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
-        //send verification email
-        sendVerificationEmail(email, code)
-        printFormatted('yellow', 'verification code:',code)
+        //send verification email and delete code after 30 mins
+        if (emailStored && passwordHashStored && codeHashStored) {
+          sendVerificationEmail(email, code)
+          printFormatted('yellow', 'verification code:',code)
+        }
+        else if (!emailAlreadyStored){
+          printFormatted('red', 'email not stored')
+          alert('Problem storing email. Please contact developers.')
+        }
+        else if (!passwordHashStored) {
+          printFormatted('red', 'password hash not stored')
+          alert('Problem storing password. Please contact developers.')
+        }
+        else if (!codeHashStored){
+          alert('Problem storing verification code. Please contact developers.')
+        }
+        
         //TODO //IMPORTANT - set 30 min time out for verification password use.
         //return response
         return response = { emailStored, passwordHashStored, codeHashStored, emailAlreadyVerified:false, error:'' }
         
       }
-      else if (stored.email == email) {//if email already stored 
+      else if (stored.email == email) {//if AN email already stored 
         /** Note:In case this is being used to reset password, check if the email has
          *  already been verified. If so, don't sent the verification code again */
-        if(!(await emailVerify.emailIsVerified(email))) {//...and email is not verified - send verification email
+        if(!(await emailVerify.emailIsVerified(email))) {//...and THIS email is not verified - send verification email
           sendVerificationEmail(email, code)
           printFormatted('yellow', 'verification code:',code)
           //email is already stored...
