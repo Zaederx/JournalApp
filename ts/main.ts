@@ -33,7 +33,7 @@ import { sendResetPasswordEmail, sendVerificationEmail } from './email/send-emai
 import { authenticationAction, userCanAccessInitiallyBeforeLogin } from './security/auth-action'
 import { importTransferData, exportTransferData } from './entry/export/transfer-data'
 import SendSingleEntryFunctionMessage from './classes/send-single-entry-function-message';
-import * as emailVerify from './email/verify-email'
+import * as emailVerifier from './email/verify-email'
 import { emailMatchesStoredHash } from './email/email-matches'
 import bcrypt  from 'bcryptjs'
 import { setPasswordProtection } from './view/switch/password-switch';
@@ -350,7 +350,7 @@ ipcMain.handle('check-verification-code', async (event, verificationCode, email)
   
   if (valid) {
     printFormatted('green', 'verification code is valid')
-    emailVerify.setEmailVerified('true', email)
+    emailVerifier.setEmailVerified('true', email)
   }
   else {
     printFormatted('green', 'verification code is invalid')
@@ -378,7 +378,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
       //hash password
       var passwordHash = authCrud.hash(password1)
       //check if email has already been stored
-      var stored = await emailVerify.getEmailVerified()
+      var stored = await emailVerifier.getEmailVerified()
 
       //initialise other variables
       var emailAlreadyStored = false
@@ -390,7 +390,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
       if (stored.email != email) {//if email not already stored
         printFormatted('yellow', 'stored email does not match this given email:',email)
         //store email (but not verify) and store password hashes + verification code hash
-        var emailStored = await emailVerify.setEmailVerified('false', email)
+        var emailStored = await emailVerifier.setEmailVerified('false', email)
         const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
         const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
         //send verification email and delete code after 30 mins
@@ -418,7 +418,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
       else if (stored.email == email) {//if AN email already stored 
         /** Note:In case this is being used to reset password, check if the email has
          *  already been verified. If so, don't sent the verification code again */
-        if(!(await emailVerify.emailIsVerified(email))) {//...and THIS email is not verified - send verification email
+        if(!(await emailVerifier.emailIsVerified(email))) {//...and THIS email is not verified - send verification email
           sendVerificationEmail(email, code)
           printFormatted('yellow', 'verification code:',code)
           //email is already stored...
@@ -453,7 +453,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
 })
 
 ipcMain.handle('get-email', async () => {
-  var verifiedJson = await emailVerify.getEmailVerified()
+  var verifiedJson = await emailVerifier.getEmailVerified()
   return verifiedJson.email
 })
 
@@ -467,7 +467,7 @@ ipcMain.handle('email-matches-email-hash', async (event, email) => {
  * Returns a boolean.
  */
 ipcMain.handle('email-is-verified', async (event, email) => {
-  return await emailVerify.emailIsVerified(email)
+  return await emailVerifier.emailIsVerified(email)
 })
 
 
@@ -681,7 +681,7 @@ ipcMain.handle('set-settings', async (event, settings) => {
 
 ipcMain.handle('email-stored-boolean', async () => {
   printFormatted('blue', 'email-stored-boolean called/fired')
-  var emailHashStored:string|undefined =  (await emailVerify.getEmailVerified()).email
+  var emailHashStored:string|undefined =  (await emailVerifier.getEmailVerified()).email
   if(emailHashStored) 
   {
     return true
