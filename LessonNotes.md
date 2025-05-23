@@ -451,3 +451,5 @@ OR Maybe..
 
 You could have the scripts for the html already loaded, but the problem with that is that I don't think/believe that the listeners for the HTML element events would be triggered, because the elements would not have been added to the DOM before that javascript is executed.
 
+## Regex is not the same in each programming language.
+Just something I looked up because I was curios. I mostly use javascript regex in my projects for password validation, but that's about it. I don't use it too often, so I don't know the specifics of certain expressions, just the general idea of how it works.
