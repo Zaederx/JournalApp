@@ -4,6 +4,10 @@ import fs from 'fs'
 import paths from 'path'
 import * as authCrud from '../security/auth-crud'
 
+/**
+ * Thirty mins in milliseconds
+ */
+const THIRY_MINS = 1000*60*30
 
 /**
  * Returns the transport object needed for nodemailer
@@ -71,7 +75,6 @@ export async function sendResetPasswordEmail(recipientEmail:string, resetCode:st
   }
   //delete verification code after 30 mins
   finally {
-    const THIRY_MINS = 60*30
     setTimeout(() => {
       authCrud.deleteResetCodeHash()
     }, THIRY_MINS)
@@ -116,7 +119,6 @@ export async function sendVerificationEmail(recipientEmail:string, verificationC
   }
   finally {
     //delete verification code after 30 mins
-    const THIRY_MINS = 60*30
     setTimeout(() => {
       authCrud.deleteVerificationCodeHash()
     }, THIRY_MINS)
