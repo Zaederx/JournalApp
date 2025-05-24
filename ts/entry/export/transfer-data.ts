@@ -105,7 +105,7 @@ export async function exportTransferData(source:string, defaultTarget:string)
 
 /**
  * Import Transfer Data
- * @param dialogPath default path that you want the dialog to file browser to open on
+ * @param dialogPath default path that you want the dialog file browser to open on
  * @param target the destination that you want to import the data to.
  */
 export async function importTransferData(dialogPathDefault:string, target:string) 
