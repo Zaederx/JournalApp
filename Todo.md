@@ -1,6 +1,11 @@
 # Todo
 Main/big todo's that should be noted down so that something can be done about them, and also not to forget what each issue is about.
 
+## make sure that if more than one verification code is sent that the timer resets and does not delete the new code before time.
+For example if you register your email again after your registered it just before. Maybe there should be a timer for when you can register your email, so that you can't register with 30 mins of each other as long as the email was sent sucessfully.
+
+## Make sure email - password registration dialog closes when clicking register or pressing enter
+
 ## ✅ Set 30 min time out for verification password use.
 Set a timer to remove the stored verification password, so that it can't be used after a period of time. You don't want a stored code being unused and then being used years later by someone who have hacked into an account. The hacker would then be able to set a password of their choice to the user's app.
 
@@ -16,7 +21,7 @@ The 'x' for closing the email password dialog is in a long red block, because th
 So far when attempting to save email and password, the email does not get stored in `email-verified.json`. Still think there's a bit of code saving it to `email.txt` or something.
 
 ## Change printformatted-js to only return a formatted string which you can then print to console.
-This is because printing from the package as it is, hides when the log is comming from. Console usually tells you which line of a file a print comses from, but it just says the the print comes from the package printFormatted.js file in the package, which isnt helpful.
+This is because printing from the package as it is, hides when the log is comming from. Console usually tells you which line of a file a print comes from, but it just says the the print comes from the package printFormatted.js file in the package, which isnt helpful.
 
 ## Should have to enter password to turn off password protection
 Wasn't a problem before, because you couldn't get to the settings page without first logging in.
