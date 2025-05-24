@@ -122,7 +122,7 @@ export async function clickRegisterEmailPasswordButton()
 {
     print('blue', 'function clickRegisterEmailPasswordButton called')
     var {success, openVCDialog, email} = await registerEmailPassword()
-        
+    console.log('success:',success, '\n','openVCDialog:',openVCDialog, '\n', 'email:',email)
     if (success && openVCDialog)
     {
         print('green','clickRegisterEmailPasswordButton returned successful')
@@ -139,9 +139,10 @@ export async function clickRegisterEmailPasswordButton()
     else if (success && !openVCDialog) {
         print('green', 'Password updated successfully.')
     }
-    else 
+    else //if success || openVCDialog = false
     {
         print('red', 'clickRegisterEmailPasswordButton unsuccessful')
+        alert('Problem with your submission. Please try entering your information again.')
     }
     //no longer in dialog
     window.localStorage.setItem('inDialog', 'false')
@@ -164,6 +165,7 @@ export async function registerEmailPassword():Promise<{success:boolean, openVCDi
     const p2 = document.querySelector('#password2')?.innerHTML as string
     const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
     print('green', 'email:', email, '\np1:', p1, '\np2:', p2)
+
     //alert if there is no email
     if(!email) {alert('No email present')}
 
@@ -174,35 +176,51 @@ export async function registerEmailPassword():Promise<{success:boolean, openVCDi
     }
 
     //validate password
-    
-    
     const password = validator.validPassword(p1)
+
     //register passwords if the do match and alert the user
-    if (validator.validEmail(email) && p1 == p2 && password.valid) //IMPORTANT add password validator
+    if (validator.validEmail(email) && p1 == p2 && password.valid) 
     {
+        console.log('registering email and password...')
         const response:{ emailStored:boolean, passwordHashStored:boolean, codeHashStored:boolean, emailAlreadyVerified:boolean, error:string } =  await ipcRenderer.invoke('register-email-password', email, p1, p2)
+
+        //deconstruct response object
         const { emailStored, passwordHashStored, codeHashStored, emailAlreadyVerified, error } = response
+        console.log('response:',response)
+
+        //display error message if exists
         if (error) { alert(error)}
+
         //if someone was just updating their password
         else if (emailAlreadyVerified && passwordHashStored) {
+            //notify user 
+            alert('Email was already verified. Password updated.')
+
+            //check switch
             switchInput.checked = true
             setPasswordProtection('true')
-            alert('Password updated.')
+
             //remove dialog
             const selector = '#email-password-dialog'
             const classList = ['dialog', 'email-password-dialog']
             fragments.removeFragment(selector, classList)
+
+            //return response object
             var success = true
             var openVCDialog = false //open verification code dialog
             return {success, openVCDialog, email}
         }
         else if (!emailAlreadyVerified && emailStored && passwordHashStored) 
         { 
+            //notify user of status
             alert('Email and password saved. Verify email to enable password protection.')
+
             //remove dialog
             const selector = '#email-password-dialog'
             const classList = ['dialog', 'email-password-dialog']
             fragments.removeFragment(selector, classList)
+
+            //return response object
             var success = true
             var openVCDialog = true //open verification code dialog
             return { success, openVCDialog, email }
@@ -214,32 +232,32 @@ export async function registerEmailPassword():Promise<{success:boolean, openVCDi
             return { success, openVCDialog, email }
         }
     }
-    else if (!validator.validEmail(email)){
+    else if (!validator.validEmail(email)) {
         alert('Invalid Email.')
     }
     var pMessage = ''//Password Message
     if (!(password.valid)) {
         if(!(password.hasLowerCaseLetter)) {
-            pMessage += '- Missing lower case letter\n'
+            pMessage += '❌ Missing lower case letter\n'
         }
         if(!(password.hasUpperCaseLetter)){
-            pMessage += '- Missing uppercase letter\n'
+            pMessage += '❌ Missing uppercase letter\n'
         }
         if(!(password.hasSpecialCharacter)) {
-            pMessage += '- Missing special character\n'
+            pMessage += '❌ Missing special character\n'
         }
         if(!(password.hasNumber)) {
-            pMessage += '- Missing a number\n'
+            pMessage += '❌ Missing a number\n'
         }
         if(!(password.is8CharLong)) {
-            pMessage += '- Passwords must be at least 8 characters long\n'
+            pMessage += '❌ Passwords must be at least 8 characters long\n'
         }
         alert(pMessage)
     }
     
     var success = false
     var openVCDialog = false //open verification code dialog
-    return {success, openVCDialog, email}
+    return { success, openVCDialog, email }
 }
 
 /**
