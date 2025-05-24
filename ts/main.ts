@@ -425,7 +425,7 @@ ipcMain.handle('register-email-password', async (event, email, password1, passwo
           // store new password hash and verification code hash
           const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
           const codeHashStored = await authCrud.storeVerificationCodeHash(codeHash)
-          return response = { emailStored: emailAlreadyStored, passwordHashStored, codeHashStored, emailAlreadyVerified:false, error:'' }
+          return response = { emailStored:true, passwordHashStored, codeHashStored, emailAlreadyVerified:false, error:'' }
         }
         //else if emailAlreadyStored and email has been verified - store new password
         const passwordHashStored = await authCrud.storePasswordHash(passwordHash)
