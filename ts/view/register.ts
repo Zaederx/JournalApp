@@ -68,10 +68,23 @@ function toggleSwitch()
 async function uncheckSwitch() 
 {
     print('blue', 'function uncheckSwitch called')
-    //set switch to unchecked
-    const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
-    switchInput.checked = false
-    setPasswordProtection('false')
+    //ask for password
+    var message = 'Please enter your password.'
+    var placeholder = 'StrongPassword&92'
+    var password = await fragments.customPrompt(message,placeholder)
+    //check if password is correct
+    var loginMessage = await ipcRenderer.invoke('login', password)
+    if (loginMessage == 'success') {
+        //set switch to unchecked if password is correct
+        const switchInput = document.querySelector('#password-switch-input') as HTMLInputElement;
+        switchInput.checked = false
+        setPasswordProtection('false')
+        alert('Password protection switched off.')
+    }
+    else {
+        alert('Password is incorrect.')
+    }
+    
 }
 //called outside the function as fetch always seems to load after expected
 /**
