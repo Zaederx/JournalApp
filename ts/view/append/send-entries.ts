@@ -8,7 +8,9 @@ import { appendEntries } from '../../entry/crud/e-read'
 import { printFormatted } from '../../other/printFormatted'
 
 printFormatted('blue', 'send-entries process started')
-
+/*
+ * Note: argv[0] = {path to node} and argv[1] = {script-name}//'send-entries.js' 
+ */
 const allEntries = process.argv[2]
 const tagDirectory = process.argv[3]
 const tagName = process.argv[4]
