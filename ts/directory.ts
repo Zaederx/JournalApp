@@ -43,8 +43,8 @@ const emailHash = paths.join(app.getPath('userData'), 'secure', 'email-hash.txt'
 const verifiedFolder = paths.join(app.getPath('userData'), 'verified')
 
 /**
- * A text file that states whether the email is verified or not.
- * Stored in email-verified.txts
+ * A json file that states whether the email is verified or not.
+ * Stored in `email-verified.json`.
  */
 const emailVerified = paths.join(app.getPath('userData'), 'verified', 'email-verified.json')
 
