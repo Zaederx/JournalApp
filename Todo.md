@@ -1,8 +1,11 @@
 # Todo
 Main/big todo's that should be noted down so that something can be done about them, and also not to forget what each issue is about.
 
-## make sure that if more than one verification code is sent that the timer resets and does not delete the new code before time.
-For example if you register your email again after your registered it just before. Maybe there should be a timer for when you can register your email, so that you can't register with 30 mins of each other as long as the email was sent sucessfully.
+## ✅ Make sure that emailStored variable is used when saving email and password
+
+
+## make sure that if more than one verification code is sent that the timer resets and does not delete the new code before time. - 
+For example if you register your email again after your registered it just before. Maybe there should be a timer for when you can register your email, so that you can't register with 30 mins of each other as long as the email was sent sucessfully. I'm not really sure how to approach this one.
 
 ## Make sure email - password registration dialog closes when clicking register or pressing enter
 
@@ -23,7 +26,7 @@ So far when attempting to save email and password, the email does not get stored
 ## Change printformatted-js to only return a formatted string which you can then print to console.
 This is because printing from the package as it is, hides when the log is comming from. Console usually tells you which line of a file a print comes from, but it just says the the print comes from the package printFormatted.js file in the package, which isnt helpful.
 
-## Should have to enter password to turn off password protection
+## ✅ Should have to enter password to turn off password protection
 Wasn't a problem before, because you couldn't get to the settings page without first logging in.
 
 ## ✅ Make sure login dialog doesn't pop up when you click forgot password
