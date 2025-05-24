@@ -33,13 +33,13 @@ export async function getEmailVerified():Promise<verified> {
         if (await isThereAFile(dirs.emailVerified)) {
 
             //@ts-ignore
-            var verifiedJson:string = await fs.promises.readFile(dirs.emailVerifiedTxt,{encoding:'utf-8'}) as 'true'|'false'
+            var verifiedJson:string = await fs.promises.readFile(dirs.emailVerified,{encoding:'utf-8'})
             var emailVerified:verified = JSON.parse(verifiedJson)
             return emailVerified
         }
     }
     catch (error:any) {
-       printFormatted('red', 'Error reading email-verified.json')
+       printFormatted('red', 'Error reading email-verified.json:'+error.message)
        //if error occurs - return empty verified object
        var emailVerified:verified = {verified:'', email:''}
        return emailVerified
@@ -50,6 +50,8 @@ export async function getEmailVerified():Promise<verified> {
 }
 /**
  * Returns the text that is stored in email-verified.txt
+ * This is the backend version of this function. There is a frontend 
+ * version which send a message to ipcMain for email verification.
  */
 export async function emailIsVerified(email:string):Promise<boolean> {
     printFormatted('blue', 'function emailIsVerified called' )
