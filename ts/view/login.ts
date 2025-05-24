@@ -152,7 +152,8 @@ async function openRegisterEmailPasswordDialog()
         div.addEventListener('paste', pasteWithoutStyle)
     })
 
-    epDialog.querySelector('#password2')
+    //click register email password button onpressing enter in password 2 field
+    p2.addEventListener('keypress', (e) => submitEnterListener(e,clickRegisterEmailPasswordButton))
 
     //enable register password button from email-password dialog
     //invokes register-email-password dialog onclick if fields are valid
