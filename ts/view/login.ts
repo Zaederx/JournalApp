@@ -1,14 +1,12 @@
 import { ipcRenderer } from "electron"
 import { blurBackground, unblurBackground } from "./create-entry/background-blur"
-
 import { clickRegisterEmailPasswordButton } from "./register"
 import * as fragments from './fragments/load-fragments'
 import { printFormatted } from '../other/printFormatted'
 import { pasteWithoutStyle, submitEnterListener } from "./input-helpers/key-capture"
 import { customPrompt } from "./fragments/load-fragments"
-import { setPasswordProtection } from "./switch/password-switch"
-import { printFormattedv2, colour} from "printformatted-js"
-
+import { printFormattedv2 } from "printformatted-js"
+import * as validator from './validate/validator'
 //call this once on opening - for first script load
 // passwordReminderOrLogin()
 
@@ -94,20 +92,6 @@ async function passwordReminderOrLogin()
 //set each editable div to not paste the style of what is copy pasted
 // dialog.querySelector('.editable')!.addEventListener('paste', pasteWithoutStyle)
 
-// async function openResetCodeDialog() 
-// {
-//     printFormatted('blue', 'function openResetCodeDialog called')
-//     window.localStorage.setItem('inDialog', 'true')
-//     //display load reset code dialog
-//     await fragments.loadResetCodeDialog()
-//     var resetCodeDialog = document.querySelector('#reset-code-dialog') as HTMLDivElement
-//     resetCodeDialog.style.display = 'grid'
-//     //set each editable div to not paste the style of what is copy pasted
-//     resetCodeDialog.querySelector('.editable')!.addEventListener('paste', pasteWithoutStyle)
-//     //enable reset code dialog
-//     const btn_enter_code = document.querySelector('#enter-code') as HTMLDivElement
-//     btn_enter_code ? btn_enter_code.onclick = clickSubmitResetCode : console.log('btn_enter_code is null')
-// }
 /**
  * Opens the reset code dialog, where you can enter the code
  * to reset your password.
@@ -234,7 +218,7 @@ async function openResetPasswordConfirmPrompt(event:any, message:string)
     window.localStorage.setItem('inDialog', 'false')
     //close custom prompt
     console.log('email:',email)
-    if (validEmail(email))
+    if (validator.validEmail(email))
     {
         console.log('email is valid.')
         fragments.removeFragment('#custom-prompt', ['dialog'])
@@ -251,15 +235,8 @@ async function openResetPasswordConfirmPrompt(event:any, message:string)
 }
 
 
-/**
- * Check whether an email is valid or not.
- * @param email email to be tested
- */
-export function validEmail(email:string)
-{
-    const validate = new RegExp('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')
-    return validate.test(email)
-}
+
+
 
 /**
  * Displays register password reminder prompt.
@@ -292,7 +269,6 @@ async function registerPasswordReminder()
             var message2 = await ipcRenderer.invoke('set-settings-json', settingsJson)
             printFormatted('green',message2)
         })
-        
     }
 }
 
