@@ -8,7 +8,7 @@ import { type settings } from '../settings/settings-type';
 import * as fragments from './fragments/load-fragments'
 import { submitEnterListener } from './input-helpers/key-capture';
 import { printFormattedv2, colour } from 'printformatted-js';
-import { validEmail } from './login';
+import * as validator from './validate/validator'
 
 /**Convienece printing method
  * Set up printFormattedv2 for use in js console
@@ -160,8 +160,12 @@ export async function registerEmailPassword():Promise<{success:boolean, openVCDi
         alert('Passwords do not match. Please enter the same password twice.')
     }
 
+    //validate password
+    
+    
+    const password = validator.validPassword(p1)
     //register passwords if the do match and alert the user
-    else if (validEmail(email) && p1 == p2) //IMPORTANT add password validator
+    if (validator.validEmail(email) && p1 == p2 && password.valid) //IMPORTANT add password validator
     {
         const response:{ emailStored:boolean, passwordHashStored:boolean, codeHashStored:boolean, emailAlreadyVerified:boolean, error:string } =  await ipcRenderer.invoke('register-email-password', email, p1, p2)
         const { emailStored, passwordHashStored, codeHashStored, emailAlreadyVerified, error } = response
@@ -188,18 +192,38 @@ export async function registerEmailPassword():Promise<{success:boolean, openVCDi
             fragments.removeFragment(selector, classList)
             var success = true
             var openVCDialog = true //open verification code dialog
-            return {success, openVCDialog, email}
+            return { success, openVCDialog, email }
         }
         else 
         { 
             var success = false
             var openVCDialog = false //open verification code dialog
-            return {success, openVCDialog, email}
+            return { success, openVCDialog, email }
         }
     }
-    else if (!validEmail(email)){
+    else if (!validator.validEmail(email)){
         alert('Invalid Email.')
     }
+    var pMessage = ''//Password Message
+    if (!(password.valid)) {
+        if(!(password.hasLowerCaseLetter)) {
+            pMessage += '- Missing lower case letter\n'
+        }
+        if(!(password.hasUpperCaseLetter)){
+            pMessage += '- Missing uppercase letter\n'
+        }
+        if(!(password.hasSpecialCharacter)) {
+            pMessage += '- Missing special character\n'
+        }
+        if(!(password.hasNumber)) {
+            pMessage += '- Missing a number\n'
+        }
+        if(!(password.is8CharLong)) {
+            pMessage += '- Passwords must be at least 8 characters long\n'
+        }
+        alert(pMessage)
+    }
+    
     var success = false
     var openVCDialog = false //open verification code dialog
     return {success, openVCDialog, email}
