@@ -1,13 +1,16 @@
 # Todo
 Main/big todo's that should be noted down so that something can be done about them, and also not to forget what each issue is about.
 
+## Make sure dialog for entering password before turning password protection has characters hidden
+The dialog for entering you password before turning of password protection does not have the characters hidden currently. Need to fix that. Either use the login dialog of modify the customPrompt dialog.
+
 ## ✅ Make sure that emailStored variable is used when saving email and password
 
 
 ## make sure that if more than one verification code is sent that the timer resets and does not delete the new code before time. - 
 For example if you register your email again after your registered it just before. Maybe there should be a timer for when you can register your email, so that you can't register with 30 mins of each other as long as the email was sent sucessfully. I'm not really sure how to approach this one.
 
-## Make sure email - password registration dialog closes when clicking register or pressing enter
+## ✅ Make sure email-password registration dialog closes when clicking register or pressing enter
 
 ## ✅ Set 30 min time out for verification password use.
 Set a timer to remove the stored verification password, so that it can't be used after a period of time. You don't want a stored code being unused and then being used years later by someone who have hacked into an account. The hacker would then be able to set a password of their choice to the user's app.
