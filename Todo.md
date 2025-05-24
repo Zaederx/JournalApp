@@ -21,10 +21,10 @@ This is because printing from the package as it is, hides when the log is commin
 ## Should have to enter password to turn off password protection
 Wasn't a problem before, because you couldn't get to the settings page without first logging in.
 
-## Make sure login dialog doesn't pop up when you click forgot password
+## ✅ Make sure login dialog doesn't pop up when you click forgot password
 Login dialog pops up when you click forgot password, as it takes you to settings.
 
-## Make email password registration use new email-verified.json file - see ipcMain.handle('register-email-password',)
+## ✅ Make email password registration use new email-verified.json file - see ipcMain.handle('register-email-password',)
 Make sure that you are checking that the email against email stored in email-verified.json instead of against the email hash. New email-verified.json replaces verified.txt and eamil.txt/email-hash.txt. Reason for this is because sometimes you could have an old verified.txt with a new email. Whereas if the email-verified.json is updated all at one everytime an email is submitted, it resolves the problem.
 
 ## ✅ Get emailIsVerified function to send alerts to frontend
@@ -44,7 +44,7 @@ Because I used the the general purpose custom prompt for single response prompti
 ## ✅ Reset password functionality 
 Put reset password functionality. (When you want to change your password from settings.)
 
-## Forgot password functionality
+## ✅ Forgot password functionality
 When your about to login but have forgotten your password, there should be a 'forgot your password' button and functionality. (mainly in login.ts). Currently `forgot password` button takes you to settings.html if not already there, but hte login dialog pop up again. Need to make that stop popping up and go straight to custom prompt.
 
 ## Make sure that password can be hidden
