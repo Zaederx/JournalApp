@@ -5,7 +5,7 @@ Main/big todo's that should be noted down so that something can be done about th
 Thought this was sorted long ago, but seemed to find a bug where this does not apply. Need to make sure that this is always the top folder in every case.
 
 ## Make sure dialog for entering password before turning off password protection has characters hidden
-The dialog for entering your password before turning of password protection does not have the characters hidden currently. Need to fix that. Either use the login dialog of modify the customPrompt dialog.
+The dialog for entering your password before turning off password protection does not have the characters hidden currently. Need to fix that. Either use the login dialog or modify the customPrompt dialog.
 
 ## ✅ Make sure that emailStored variable is used when saving email and password
 
