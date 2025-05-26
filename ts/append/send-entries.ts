@@ -4,8 +4,8 @@
  */
 import * as process from 'process'
 import paths from 'path'
-import { appendEntries } from '../../entry/crud/e-read'
-import { printFormatted } from '../../other/printFormatted'
+import { appendEntries } from '../entry/crud/e-read'
+import { printFormatted } from '../other/printFormatted'
 
 printFormatted('blue', 'send-entries process started')
 /*

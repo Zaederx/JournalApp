@@ -1,7 +1,7 @@
 import c_process from 'child_process'
 import { IpcMainEvent } from 'electron'
-import * as dirs from '../../directory'
-import { printFormatted } from '../../other/printFormatted'
+import * as dirs from '../directory'
+import { printFormatted } from 'printformatted-js'
 import paths from 'path'
 
 /**

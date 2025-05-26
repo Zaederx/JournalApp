@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from 'uuid'
 //Other
 import * as theme from './theme/theme'
 import dateStr from './entry/crud/dateStr'
-import { appendEntriesAndTags } from './view/append/append-entries-tags'
+import { appendEntriesAndTags } from './append/append-entries-tags'
 import process from 'process'
 import c_process from 'child_process'
 import Entry from './classes/entry';
