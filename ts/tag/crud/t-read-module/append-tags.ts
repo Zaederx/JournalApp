@@ -1,5 +1,6 @@
 import EntryDate from '../../../classes/entry-date';
-import { readTagDir } from './read-tag-dir'
+import { readAllTags } from './read-all-tags';
+
 
 
 /**
@@ -14,7 +15,7 @@ export async function appendTags(dir:string)
 {
     /* load / append tags to tags list */
     var firstTag = true
-    var directory:string[] = await readTagDir(dir);
+    var directory:string[] = await readAllTags(dir);
     var firstTag = true
     directory.forEach((tag:string) => {
         //if not the .DS_Store file or another invisible file

@@ -31,6 +31,6 @@ export async function getTagsEntryCountCreationDate(dir:string):Promise<string> 
         console.log('t:',t)
         tagsHTML += t
     })
-    console.log('tagsHTML',tagsHTML)
+    console.log('tagsHTML:',tagsHTML)
     return tagsHTML
 }

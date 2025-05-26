@@ -8,13 +8,15 @@ import { readTagDir } from '../t-read-module/read-tag-dir'
  * loop or recurse through directory contents (so that 
  * the operation does have to be performed twice)
  * @return tags directoryContents with system files
- * (files beginning with '.') removed.
+ * (files beginning with '.') removed and all tag being first.
  */
 export async function readAllTags(dir:string):Promise<string[]> {
     var directory:string[] = await readTagDir(dir);
     var tags:string[] = [];
+    //make sure the all tag is first
+    tags.push('all')
     directory.forEach((tag:string) => {
-        if (tag.charAt(0) != '.'){
+        if (tag.charAt(0) != '.' && tag != 'all'){
             tags.push(tag);
         }
     });
