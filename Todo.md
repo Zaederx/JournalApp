@@ -1,6 +1,8 @@
 # Todo
 Main/big todo's that should be noted down so that something can be done about them, and also not to forget what each issue is about.
 
+## Remove the `.json` extension from entries in the entry list.
+
 ## ✅ Make 'all' tag always the top when opening the app
 Thought this was sorted long ago, but seemed to find a bug where this does not apply. Need to make sure that this is always the top folder in every case.
 
