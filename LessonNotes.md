@@ -453,3 +453,6 @@ You could have the scripts for the html already loaded, but the problem with tha
 
 ## Regex is not the same in each programming language.
 Just something I looked up because I was curios. I mostly use javascript regex in my projects for password validation, but that's about it. I don't use it too often, so I don't know the specifics of certain expressions, just the general idea of how it works.
+
+## div.innerText vs div.innerHTML
+`div.innerText` doesn't work with hidden text (i.e. when using `-webkit-text-security: disc;` on a div element). Use `div.innerHTML` with this instead.
