@@ -59,20 +59,6 @@ export async function loadLoginDialog()
     return loginDialog
 }
 
-/**
- * Loads the dailog box for entering the reset code
- * Contains single input field and an enter button
- */
-export async function loadResetCodeDialog()
-{
-    console.log('loading reset code dialog...')
-    //load password dialog - fetching it from files
-    const resetCodeDialogHTML = await (await fetch('./fragments/reset-code-dialog.html')).text()
-    const resetCodeDialog = document.querySelector('#reset-code-dialog') as HTMLDivElement
-    resetCodeDialog!.outerHTML = resetCodeDialogHTML
-    
-    return resetCodeDialog
-}
 
 /**
  * Loads the dialog for registering email and password.
@@ -137,18 +123,6 @@ export async function loadCustomPrompt()
     customPrompt.outerHTML = customPromptHTML
     //because it's not empty anymore - maybe you need to query selector again
     // return document.querySelector('#custom-prompt')
-    return customPrompt
-}
-
-/**
- * Loads/Displays and returns the custom prompt dialog div object.
- * @returns customPrompt dialog div
- */
-export async function loadVerifyEmailDialog() {
-    //load password dialog - fetching it from files
-    const verificationCodeHTML = await (await fetch('./fragments/verification-code.html')).text()
-    var customPrompt = document.querySelector('#verification-code-dialog') as HTMLDivElement
-    customPrompt.outerHTML = verificationCodeHTML
     return customPrompt
 }
 
