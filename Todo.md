@@ -55,7 +55,7 @@ Currently dialogs don't have a close button, so they remain open until either us
 ## ✅ Make sure that verification email isn't resent when resetting password
 If email doesn't match the email you have stored and verified, then send the verification email again. If an email has been verified and the email given matches the stored email hash, then don't send the verification email again.
 
-## Clean up unwanted HTML dialogs that aren't used
+## ✅ Clean up unwanted HTML dialogs that aren't used
 Because I used the the general purpose custom prompt for single response prompting, I've not used some of the HTML dialogs fragments that I've made. Need to remove the ones that I don't use.
 
 ## ✅ Reset password functionality 
@@ -64,7 +64,8 @@ Put reset password functionality. (When you want to change your password from se
 ## ✅ Forgot password functionality
 When your about to login but have forgotten your password, there should be a 'forgot your password' button and functionality. (mainly in login.ts). Currently `forgot password` button takes you to settings.html if not already there, but hte login dialog pop up again. Need to make that stop popping up and go straight to custom prompt.
 
-## Make sure that password can be hidden
+## ✅ Make sure that password can be hidden
+## Make sure passwords can be displayed
 
 ## ✅ Fix User Access 
 login.ts should be called at the start of loading the app to make sure that you can login.
