@@ -555,7 +555,7 @@ ipcMain.on('get-tag-entries', async (event, tagName) => {
   //get directories
   const { allEntries, tagDirectory } = dirs
   //the path to the send-entries.js script
-  const pathToScript = paths.join(__dirname, 'view', 'append', 'send-entries.js')
+  const pathToScript = paths.join(__dirname, 'append', 'send-entries.js')
   //start a child proces
   var childProcess = c_process.fork(pathToScript, [allEntries, tagDirectory, tagName], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] })
 
