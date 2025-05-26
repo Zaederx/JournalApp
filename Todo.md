@@ -1,9 +1,8 @@
 # Todo
 Main/big todo's that should be noted down so that something can be done about them, and also not to forget what each issue is about.
-
  
 ## ✅ Remove the `.json` extension from entries in the entry list.
-Need to make sure that entries can still be opened though, because you will need to add back the extension somehwere before reading the file (cause it search for the file that matches the name and extension) based on the name no the tag.
+Need to make sure that entries can still be opened though, because you will need to add back the extension somewhere before reading the file (cause it search for the file that matches the name and extension) based on the name no the tag.
 
 ## ✅ Make 'all' tag always the top when opening the app
 Thought this was sorted long ago, but seemed to find a bug where this does not apply. Need to make sure that this is always the top folder in every case.
