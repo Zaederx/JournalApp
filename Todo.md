@@ -13,7 +13,7 @@ The dialog for entering your password before turning off password protection doe
 
 ## ✅ Make sure that emailStored variable is used when saving email and password
 
-## Make sure that if more than one verification code is sent that the timer resets and does not delete the new code before time. - 
+## Make sure that if more than one verification code is sent that the timer resets and does not delete the new code before time.
 For example if you register your email again after your registered it just before. Maybe there should be a timer for when you can register your email, so that you can't register with 30 mins of each other as long as the email was sent sucessfully. I'm not really sure how to approach this one.
 
 ## ✅ Make sure email-password registration dialog closes when clicking register or pressing enter
@@ -47,7 +47,7 @@ Make sure that you are checking that the email against email stored in email-ver
 ## ✅ Get emailIsVerified function to send alerts to frontend
 
 ## Make an editable function - npm package
-Make a function with css for changing divs into editable divs.
+Take the function with css for changing divs into editable divs and make it into an npm package.
 
 ## ✅ Make sure that dialogs have a close button / x
 Currently dialogs don't have a close button, so they remain open until either used of you click on something in the navigation.
