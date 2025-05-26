@@ -71,7 +71,8 @@ async function uncheckSwitch()
     //ask for password
     var message = 'Please enter your password.'
     var placeholder = 'StrongPassword&92'
-    var password = await fragments.customPrompt(message,placeholder)
+    var hideText = true
+    var password = await fragments.customPrompt(message,placeholder,hideText)
     //check if password is correct
     var loginMessage = await ipcRenderer.invoke('login', password)
     if (loginMessage == 'success') {

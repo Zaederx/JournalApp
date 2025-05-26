@@ -33,7 +33,8 @@ export function removeFragment(selector:string, classList:string[])
 }
 
 /**
- * Loads the tags popup
+ * Loads the tags popup (the popup used for
+ * adding tags to an entry).
  */
 export async function loadTagsPopup()
 {
@@ -160,7 +161,7 @@ export async function loadVerifyEmailDialog() {
  * @param message message to be presented
  * @param placeholder placeholder text (optional)
  */
-export function customPrompt(message:string, placeholder?:string):Promise<Promise<string>>
+export function customPrompt(message:string, placeholder?:string, hideText?:boolean):Promise<Promise<string>>
 {
     print('blue', 'function customPrompt called')
     var loadPrompt = loadCustomPrompt()
@@ -175,6 +176,10 @@ export function customPrompt(message:string, placeholder?:string):Promise<Promis
         messageDiv.innerText = message
         //get email div and confirm button
         const input = customPromptDialog.querySelector('#input') as HTMLDivElement
+        if(hideText) {
+            input.classList.add('password')//to hide text
+        }
+        
         const btn_confirm = customPromptDialog.querySelector('#confirm') as HTMLDivElement
         //close prompt code
         var x = document.querySelector('#prompt-close-x') as HTMLSpanElement
@@ -218,7 +223,7 @@ function waitForClickOrEnter(element:any, input:HTMLDivElement):Promise<string>
         //if user click on the button element - return/resolve response
         element.addEventListener('click', () => {
             console.log('btn_confirm is clicked')
-            const response = input.innerText
+            const response = input.innerHTML//use inner HTML instead of Inner Text. Inner text doesn't work for hidden text it seems.
             if (response) 
             {
                 print('green', 'response:',response)
@@ -235,7 +240,7 @@ function waitForClickOrEnter(element:any, input:HTMLDivElement):Promise<string>
         //stop line caret from moving downwards & submits response on pressing enter instead
         input.addEventListener('keypress', (e) => submitEnterListener(e,()=> {
             console.log('btn_confirm is clicked')
-            const response = input.innerText
+            const response = input.innerHTML//use innerHTML instead of Inner Text. Inner text doesn't work for hidden text it seems.
             if (response) 
             {
                 print('green', 'response:',response)
