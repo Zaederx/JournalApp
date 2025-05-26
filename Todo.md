@@ -8,7 +8,7 @@ Need to make sure that entries can still be opened though, because you will need
 ## ✅ Make 'all' tag always the top when opening the app
 Thought this was sorted long ago, but seemed to find a bug where this does not apply. Need to make sure that this is always the top folder in every case.
 
-## Make sure dialog for entering password before turning off password protection has characters hidden
+## ✅ Make sure dialog for entering password before turning off password protection has characters hidden
 The dialog for entering your password before turning off password protection does not have the characters hidden currently. Need to fix that. Either use the login dialog or modify the customPrompt dialog.
 
 ## ✅ Make sure that emailStored variable is used when saving email and password
@@ -23,7 +23,7 @@ Set a timer to remove the stored verification password, so that it can't be used
 
 ## Work on setting up different users??? Maybe...
 
-## Add password validation - at least make sure that the password is not saved empty
+## ✅ Add password validation - at least make sure that the password is not saved empty
 On the email password dialog, make sure that there is some validation on the frontend to ensure that the password is strong.
 
 ## Make sure to restyle the email password dialog
