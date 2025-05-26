@@ -55,7 +55,7 @@ export function makeEntryDivClickable(entryDiv:HTMLDivElement, loader:HTMLDivEle
                 var selectedEntryName = entryDiv.innerText
                 //set current entry to be read as selected
                 console.log('entry '+selectedEntryName+' clicked')
-                var entrySet = ipcRenderer.invoke('set-current-entry', selectedEntryName)
+                var entrySet = ipcRenderer.invoke('set-current-entry', selectedEntryName+'.json')//must add file extension back here
                 
                 entrySet.then(() => {
                     //open the entry view

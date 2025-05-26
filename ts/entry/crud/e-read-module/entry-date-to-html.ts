@@ -10,12 +10,14 @@ export function entryDateToHtml(arr:EntryDate[]) {
     var filesHTML = ''
     var i:number = 0;
     arr.forEach(entryDate => {
+      //name without file extension
+      var entryName = entryDate.name.split('.')[0]
       if (i == 0) {
-        filesHTML += '<div class="active entry">'+entryDate.name+'</div>\n';//class must be active entry!
+        filesHTML += '<div class="active entry">'+entryName+'</div>\n';//class must be active entry!
         i++;
       } 
       else {
-        filesHTML += '<div>'+entryDate.name+'</div>\n';
+        filesHTML += '<div>'+entryName+'</div>\n';
       }
     });
     return filesHTML
